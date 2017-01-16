@@ -6,9 +6,9 @@ Created on 27 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_dfe.gas.pid_calib import PIDCalib
-
 from scs_core.common.json import JSONify
+
+from scs_dfe.gas.pid_calib import PIDCalib
 
 
 # --------------------------------------------------------------------------------------------------------------------

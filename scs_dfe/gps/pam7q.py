@@ -25,7 +25,6 @@ $GPGSV,3,3,12,27,04,013,13,28,39,126,37,30,60,068,26,33,30,200,44*74
 $GPGLL,5049.36953,N,00007.38514,W,152926.00,A,D*7B
 '''
 
-from scs_host.sys.host_serial import HostSerial
 from scs_core.location.gpgga import GPGGA
 from scs_core.location.gpgll import GPGLL
 from scs_core.location.gpgsa import GPGSA
@@ -33,6 +32,8 @@ from scs_core.location.gpgsv import GPGSV
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gpvtg import GPVTG
 from scs_core.location.nmea_sentence import NMEASentence
+
+from scs_host.sys.host_serial import HostSerial
 
 
 # TODO: add specialised object for message collection

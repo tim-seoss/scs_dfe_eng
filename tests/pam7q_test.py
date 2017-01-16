@@ -6,13 +6,14 @@ Created on 4 Jul 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_dfe.gps.pam7q import PAM7Q
 from scs_core.location.gpgga import GPGGA
 from scs_core.location.gpgll import GPGLL
 from scs_core.location.gpgsa import GPGSA
 from scs_core.location.gpgsv import GPGSV
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gpvtg import GPVTG
+
+from scs_dfe.gps.pam7q import PAM7Q
 
 
 # --------------------------------------------------------------------------------------------------------------------

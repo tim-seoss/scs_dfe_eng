@@ -6,18 +6,15 @@ Created on 19 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_dfe.gas.afe_conf import AFEConf
-from scs_dfe.gas.afe_datum import AFEDatum
-
-from scs_dfe.gas.pid_datum import PIDDatum
-
-from scs_dfe.gas.pt1000_datum import Pt1000Datum
+from scs_core.common.json import JSONify
 
 from scs_dfe.gas.a4_datum import A4Datum
+from scs_dfe.gas.afe_conf import AFEConf
+from scs_dfe.gas.afe_datum import AFEDatum
+from scs_dfe.gas.pid_datum import PIDDatum
+from scs_dfe.gas.pt1000_datum import Pt1000Datum
 
 from scs_host.sys.host import Host
-
-from scs_core.common.json import JSONify
 
 
 # --------------------------------------------------------------------------------------------------------------------

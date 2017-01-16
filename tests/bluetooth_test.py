@@ -6,12 +6,11 @@ Created on 27 Oct 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
+from scs_core.common.json import JSONify
+from scs_core.monitor.monitor_response import MonitorResponse
+
 from scs_dfe.network.bluetooth_connection import BluetoothConnection
 from scs_dfe.network.bluetooth_serial import BluetoothSerial
-
-from scs_core.common.json import JSONify
-
-from scs_core.monitor.monitor_response import MonitorResponse
 
 
 # --------------------------------------------------------------------------------------------------------------------

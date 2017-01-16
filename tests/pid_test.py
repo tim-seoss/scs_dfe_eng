@@ -11,8 +11,8 @@ import time
 from scs_dfe.bus.i2c import I2C
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
-
 from scs_dfe.gas.sensor import Sensor
+
 from scs_host.sys.host import Host
 
 

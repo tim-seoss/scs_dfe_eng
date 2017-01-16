@@ -8,16 +8,14 @@ Created on 15 Aug 2016
 
 import time
 
-from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.afe_conf import AFEConf
-
-from scs_dfe.gas.pt1000_calib import Pt1000Calib
+from scs_core.common.json import JSONify
 
 from scs_dfe.bus.i2c import I2C
+from scs_dfe.gas.afe import AFE
+from scs_dfe.gas.afe_conf import AFEConf
+from scs_dfe.gas.pt1000_calib import Pt1000Calib
 
 from scs_host.sys.host import Host
-
-from scs_core.common.json import JSONify
 
 
 # --------------------------------------------------------------------------------------------------------------------

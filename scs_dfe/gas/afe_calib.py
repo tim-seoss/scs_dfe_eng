@@ -9,12 +9,12 @@ example JSON:
 
 from collections import OrderedDict
 
+from scs_core.common.datum import Datum
+from scs_core.common.json import PersistentJSONable
+
 from scs_dfe.gas.a4_calib import A4Calib
 from scs_dfe.gas.pid_calib import PIDCalib
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
-
-from scs_core.common.datum import Datum
-from scs_core.common.json import PersistentJSONable
 
 
 # --------------------------------------------------------------------------------------------------------------------

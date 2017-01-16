@@ -5,7 +5,6 @@ Created on 30 Sep 2016
 '''
 
 from scs_dfe.gas.pid_datum import PIDDatum
-
 from scs_dfe.gas.sensor import Sensor
 
 

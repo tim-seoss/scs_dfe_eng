@@ -13,9 +13,8 @@ dtoverlay i2c-gpio i2c_gpio_sda=0 i2c_gpio_scl=1
 
 import time
 
-from scs_dfe.bus.i2c import I2C
-
 from scs_dfe.board.eeprom_image import EEPROMImage
+from scs_dfe.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------

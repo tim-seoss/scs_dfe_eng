@@ -9,11 +9,11 @@ example JSON:
 
 from collections import OrderedDict
 
+from scs_core.common.json import PersistentJSONable
+
 from scs_dfe.gas.afe_calib import AFECalib
 
 from scs_host.sys.host import Host
-
-from scs_core.common.json import PersistentJSONable
 
 
 # --------------------------------------------------------------------------------------------------------------------

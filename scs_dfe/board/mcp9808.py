@@ -7,7 +7,6 @@ Created on 6 Aug 2016
 import time
 
 from scs_dfe.board.board_datum import BoardDatum
-
 from scs_dfe.bus.i2c import I2C
 
 

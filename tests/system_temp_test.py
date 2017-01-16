@@ -6,13 +6,14 @@ Created on 10 Jan 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_dfe.bus.i2c import I2C
-
-from scs_dfe.board.mcp9808 import MCP9808
-from scs_host.sys.host import Host
 from scs_core.common.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 from scs_core.sys.system_temp import SystemTemp
+
+from scs_dfe.board.mcp9808 import MCP9808
+from scs_dfe.bus.i2c import I2C
+
+from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------

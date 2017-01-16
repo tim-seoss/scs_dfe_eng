@@ -6,10 +6,10 @@ Created on 18 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_dfe.particulate.pmx_datum import PMxDatum
+from scs_core.common.json import JSONify
 
 from scs_dfe.particulate.opc_datum import OPCDatum
-from scs_core.common.json import JSONify
+from scs_dfe.particulate.pmx_datum import PMxDatum
 
 
 # --------------------------------------------------------------------------------------------------------------------

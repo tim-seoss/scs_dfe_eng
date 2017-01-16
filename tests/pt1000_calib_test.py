@@ -8,11 +8,11 @@ Created on 30 Sep 2016
 
 import json
 
+from scs_core.common.json import JSONify
+
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
 
 from scs_host.sys.host import Host
-
-from scs_core.common.json import JSONify
 
 
 # --------------------------------------------------------------------------------------------------------------------

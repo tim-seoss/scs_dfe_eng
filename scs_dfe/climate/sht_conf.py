@@ -9,8 +9,9 @@ example JSON:
 
 from collections import OrderedDict
 
-from scs_dfe.climate.sht31 import SHT31
 from scs_core.common.json import PersistentJSONable
+
+from scs_dfe.climate.sht31 import SHT31
 
 
 # --------------------------------------------------------------------------------------------------------------------
