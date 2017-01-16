@@ -50,7 +50,7 @@ class Interface(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def __config(cls, name = '-a'):
+    def __config(cls, name='-a'):
         interfaces = []
         interface = None
 
@@ -98,7 +98,7 @@ class Interface(JSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, name = None, scope = None, hw_addr = None, inet_addr = None, inet6_addr = None):
+    def __init__(self, name=None, scope=None, hw_addr=None, inet_addr=None, inet6_addr=None):
         """
         Constructor
         """
