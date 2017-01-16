@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+'''
+Created on 29 Sep 2016
+
+@author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+'''
+
+from scs_dfe.gas.afe_calib import AFECalib
+
+from scs_host.sys.host import Host
+
+from scs_core.common.json import JSONify
+
+
+# --------------------------------------------------------------------------------------------------------------------
+
+calib = AFECalib.load(Host)
+print(calib)
+print("-")
+
+pt1000_calib = calib.pt100_calib
+print(pt1000_calib)
+print("-")
+
+sensor_types = calib.sensor_types()
+print("sensor_types:%s" % sensor_types)
+print("-")
+
+jstr = JSONify.dumps(calib)
+print(jstr)
+print("-")
+
