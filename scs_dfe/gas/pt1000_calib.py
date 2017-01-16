@@ -10,8 +10,8 @@ example JSON:
 from collections import OrderedDict
 from datetime import date
 
-from scs_core.common.datum import Datum
-from scs_core.common.json import PersistentJSONable
+from scs_core.data.datum import Datum
+from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.gas.pt1000 import Pt1000
 

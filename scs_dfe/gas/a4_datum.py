@@ -6,8 +6,8 @@ Created on 18 Sep 2016
 
 from collections import OrderedDict
 
-from scs_core.common.datum import Datum
-from scs_core.common.json import JSONable
+from scs_core.data.datum import Datum
+from scs_core.data.json import JSONable
 
 
 # --------------------------------------------------------------------------------------------------------------------

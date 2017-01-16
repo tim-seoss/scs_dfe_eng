@@ -6,7 +6,7 @@ Created on 24 Sep 2016
 
 from collections import OrderedDict
 
-from scs_core.common.datum import Datum
+from scs_core.data.datum import Datum
 
 from scs_dfe.gas.sensor_calib import SensorCalib
 

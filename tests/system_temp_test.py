@@ -6,7 +6,7 @@ Created on 10 Jan 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_core.common.json import JSONify
+from scs_core.data.json import JSONify
 from scs_core.sys.exception_report import ExceptionReport
 from scs_core.sys.system_temp import SystemTemp
 

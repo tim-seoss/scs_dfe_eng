@@ -6,7 +6,7 @@ Created on 30 Sep 2016
 
 from abc import abstractmethod
 
-from scs_core.common.json import JSONable
+from scs_core.data.json import JSONable
 
 from scs_dfe.gas.sensor import Sensor
 

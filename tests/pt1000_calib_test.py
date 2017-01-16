@@ -8,7 +8,7 @@ Created on 30 Sep 2016
 
 import json
 
-from scs_core.common.json import JSONify
+from scs_core.data.json import JSONify
 
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
 

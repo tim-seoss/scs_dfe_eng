@@ -9,8 +9,8 @@ example JSON:
 
 from collections import OrderedDict
 
-from scs_core.common.datum import Datum
-from scs_core.common.json import PersistentJSONable
+from scs_core.data.datum import Datum
+from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.gas.a4_calib import A4Calib
 from scs_dfe.gas.pid_calib import PIDCalib

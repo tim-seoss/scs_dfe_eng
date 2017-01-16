@@ -6,8 +6,8 @@ Created on 22 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 '''
 
-from scs_core.common.json import JSONify
-from scs_core.common.localized_datetime import LocalizedDatetime
+from scs_core.data.json import JSONify
+from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.sample.sample_datum import SampleDatum
 
 from scs_dfe.gas.a4_datum import A4Datum

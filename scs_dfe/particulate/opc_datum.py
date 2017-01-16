@@ -6,7 +6,7 @@ Created on 18 Sep 2016
 
 from collections import OrderedDict
 
-from scs_core.common.datum import Datum
+from scs_core.data.datum import Datum
 
 from scs_dfe.particulate.pmx_datum import PMxDatum
 

@@ -8,7 +8,7 @@ Created on 15 Aug 2016
 
 import time
 
-from scs_core.common.json import JSONify
+from scs_core.data.json import JSONify
 
 from scs_dfe.bus.i2c import I2C
 from scs_dfe.gas.afe import AFE
