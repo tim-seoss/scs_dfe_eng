@@ -32,7 +32,7 @@ class OPCN2(object):
     __FAN_UP_TIME =                     10
     __FAN_DOWN_TIME =                   2
 
-    __PERIOD_CONVERSION =               45360       # sould be 12000 (1/12MHz * 1000), but found by experiment
+    __PERIOD_CONVERSION =               45360       # should be 12000 (1/12MHz * 1000), but found by experiment
 
     __CMD_POWER =                       0x03
     __CMD_POWER_ON =                    0x00        # 0x03, 0x00
