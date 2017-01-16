@@ -1,8 +1,8 @@
-'''
+"""
 Created on 27 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import os
 import pty
@@ -15,9 +15,9 @@ from multiprocessing import Process
 # --------------------------------------------------------------------------------------------------------------------
 
 class BluetoothConnection(Process):
-    '''
+    """
     classdocs
-    '''
+    """
 
     WAITING = 1
     CONNECTED = 2

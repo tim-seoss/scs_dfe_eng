@@ -1,8 +1,8 @@
-'''
+"""
 Created on 18 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from collections import OrderedDict
 
@@ -14,16 +14,16 @@ from scs_dfe.particulate.pmx_datum import PMxDatum
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCDatum(PMxDatum):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, pm1, pm2p5, pm10, period, bins, bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof):
-        '''
+        """
         Constructor
-        '''
+        """
         PMxDatum.__init__(self, pm1, pm2p5, pm10)
 
         self.__period = Datum.float(period, 1)              # seconds

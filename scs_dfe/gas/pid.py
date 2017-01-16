@@ -1,8 +1,8 @@
-'''
+"""
 Created on 30 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from scs_dfe.gas.pid_datum import PIDDatum
 from scs_dfe.gas.sensor import Sensor
@@ -13,16 +13,16 @@ from scs_dfe.gas.sensor import Sensor
 # --------------------------------------------------------------------------------------------------------------------
 
 class PID(Sensor):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, sensor_type, gas_name, adc_gain):
-        '''
+        """
         Constructor
-        '''
+        """
         Sensor.__init__(self, sensor_type, gas_name, adc_gain)
 
 

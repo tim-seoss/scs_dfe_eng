@@ -1,8 +1,8 @@
-'''
+"""
 Created on 4 Aug 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import struct
 import time
@@ -15,9 +15,9 @@ from scs_host.lock.lock import Lock
 # --------------------------------------------------------------------------------------------------------------------
 
 class MCP3425(object):
-    '''
+    """
     Microchip Technology MCP3425 ADC
-    '''
+    """
 
     GAIN_1 =            0x00        # ---- --00
     GAIN_2 =            0x01        # ---- --01    (default)
@@ -63,9 +63,9 @@ class MCP3425(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, gain, rate):
-        '''
+        """
         initialise ADC with given gain and rate
-        '''
+        """
         # fields...
         self.__gain = gain
         self.__rate = rate
@@ -84,9 +84,9 @@ class MCP3425(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def start_conversion(self):
-        '''
+        """
         start single-shot conversion
-        '''
+        """
         start = MCP3425.__START | self.__config
 
         self.obtain_lock()
@@ -94,10 +94,10 @@ class MCP3425(object):
 
 
     def read_conversion(self):
-        '''
+        """
         read most recent conversion
         returned value is voltage
-        '''
+        """
         try:
             i2c = I2C.start_tx(MCP3425.__ADDR)
             v, config = self.__read(i2c)
@@ -113,11 +113,11 @@ class MCP3425(object):
 
 
     def convert(self):
-        '''
+        """
         start single-shot conversion, wait for ready, then read
         warning: creates high level of I2C traffic
         returned value is voltage
-        '''
+        """
         self.start_conversion()
 
         try:

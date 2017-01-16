@@ -1,8 +1,8 @@
-'''
+"""
 Created on 22 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import struct
 import time
@@ -15,9 +15,9 @@ from scs_host.lock.lock import Lock
 # --------------------------------------------------------------------------------------------------------------------
 
 class ADS1115(object):
-    '''
+    """
     Texas Instruments ADS1115 ADC
-    '''
+    """
     ADDR_WRK =          0x49
     ADDR_AUX =          0x48
 
@@ -106,9 +106,9 @@ class ADS1115(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, addr, rate):
-        '''
+        """
         initialise ADC with given gain and rate
-        '''
+        """
         # fields...
         self.__addr = addr
         self.__rate = rate
@@ -128,10 +128,10 @@ class ADS1115(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def start_conversion(self, mux, gain):
-        '''
+        """
         start single-shot conversion
         wait for conv_time before reading
-        '''
+        """
         self.__gain = gain
 
         start = ADS1115.__OS_START | mux | gain | self.__config
@@ -141,10 +141,10 @@ class ADS1115(object):
 
 
     def read_conversion(self):
-        '''
+        """
         read most recent conversion
         returned value is voltage
-        '''
+        """
         try:
             config = self.__read_config()
 
@@ -160,11 +160,11 @@ class ADS1115(object):
 
 
     def convert(self, mux, gain):
-        '''
+        """
         start single-shot conversion, waits for ready, then reads
         warning: creates a high level of I2C traffic
         returned value is voltage
-        '''
+        """
         try:
             self.start_conversion(mux, gain)
 

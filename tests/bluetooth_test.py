@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Created on 27 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from scs_core.data.json import JSONify
 from scs_core.monitor.monitor_response import MonitorResponse
@@ -16,9 +16,9 @@ from scs_dfe.network.bluetooth_serial import BluetoothSerial
 # --------------------------------------------------------------------------------------------------------------------
 
 class EchoHandler(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 

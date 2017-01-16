@@ -1,8 +1,8 @@
-'''
+"""
 Created on 18 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from collections import OrderedDict
 
@@ -13,9 +13,9 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class A4Datum(JSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -51,9 +51,9 @@ class A4Datum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, weV, aeV, weC=None, cnc=None):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__weV = Datum.float(weV, 6)        # uncorrected working electrode voltage
         self.__aeV = Datum.float(aeV, 6)        # uncorrected auxiliary electrode voltage
 

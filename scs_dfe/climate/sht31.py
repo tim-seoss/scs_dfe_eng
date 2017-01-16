@@ -1,8 +1,8 @@
-'''
+"""
 Created on 5 Jul 2016
 
 https://github.com/raspberrypi/weather-station/blob/master/SHT31.py
-'''
+"""
 
 import time
 
@@ -14,9 +14,9 @@ from scs_dfe.climate.sht_datum import SHTDatum
 
 
 class SHT31(object):
-    '''
+    """
     classdocs
-    '''
+    """
     __CMD_RESET =           0x30a2
     __CMD_CLEAR =           0x3041
 
@@ -43,9 +43,9 @@ class SHT31(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, addr):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__addr = addr
 
         self.__raw_temperature = None

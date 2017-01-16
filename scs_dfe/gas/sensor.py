@@ -1,8 +1,8 @@
-'''
+"""
 Created on 30 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from abc import abstractmethod
 
@@ -12,9 +12,9 @@ from scs_dfe.gas.ads1115 import ADS1115
 # --------------------------------------------------------------------------------------------------------------------
 
 class Sensor(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     CO_A4 =     'CO-A4'
     H2S_A4 =    'H2S-A4'
@@ -56,7 +56,7 @@ class Sensor(object):
         if sensor_type is None:
             return None
 
-        if not sensor_type in cls.__GAS:
+        if sensor_type not in cls.__GAS:
             raise ValueError("Sensor.find: unrecognised sensor type: %s." % sensor_type)
 
         return cls.__GAS[sensor_type]
@@ -64,10 +64,10 @@ class Sensor(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, sensor_type, gas_name, adc_gain, calib = None):
-        '''
+    def __init__(self, sensor_type, gas_name, adc_gain, calib=None):
+        """
         Constructor
-        '''
+        """
         self.__sensor_type = sensor_type
 
         self.__gas_name = gas_name

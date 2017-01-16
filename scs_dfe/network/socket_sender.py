@@ -1,8 +1,8 @@
-'''
+"""
 Created on 20 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import socket
 import time
@@ -11,9 +11,9 @@ import time
 # --------------------------------------------------------------------------------------------------------------------
 
 class SocketSender(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __TIMEOUT =         4.0         # seconds
     __BUFFER_SIZE =     1024        # bytes
@@ -23,10 +23,10 @@ class SocketSender(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, host, port, verbose = False):
-        '''
+    def __init__(self, host, port, verbose=False):
+        """
         Constructor
-        '''
+        """
         self.__verbose = verbose
 
         self.__address = (host, port)

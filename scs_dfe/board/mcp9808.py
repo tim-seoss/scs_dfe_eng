@@ -1,8 +1,8 @@
-'''
+"""
 Created on 6 Aug 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import time
 
@@ -13,9 +13,9 @@ from scs_dfe.bus.i2c import I2C
 # --------------------------------------------------------------------------------------------------------------------
 
 class MCP9808(object):
-    '''
+    """
     Microchip Technology MCP9808 temperature sensor
-    '''
+    """
 
     __ADDR =                0x1f
 
@@ -37,9 +37,9 @@ class MCP9808(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, running):
-        '''
+        """
         initialise with conversion status
-        '''
+        """
         self.__running = None
 
         # write config...
@@ -49,9 +49,9 @@ class MCP9808(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def sample(self):
-        '''
+        """
         returned value is centigrade
-        '''
+        """
         if not self.__running:
             raise ValueError("MCP9808:sense: conversion not running.")
 
@@ -93,9 +93,9 @@ class MCP9808(object):
 
     @running.setter
     def running(self, running):
-        '''
+        """
         sleeps for 250 mS if conversion is being switched on
-        '''
+        """
         config = MCP9808.__CONV_CONT if running else MCP9808.__CONV_SHUT
         self.__write_config(config)
 

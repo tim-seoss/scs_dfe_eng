@@ -1,8 +1,8 @@
-'''
+"""
 Created on 18 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from collections import OrderedDict
 
@@ -13,16 +13,16 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class PMxDatum(JSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, pm1, pm2p5, pm10):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__pm1 = Datum.float(pm1, 1)            # PM1
         self.__pm2p5 = Datum.float(pm2p5, 1)        # PM2.5
         self.__pm10 = Datum.float(pm10, 1)          # PM10

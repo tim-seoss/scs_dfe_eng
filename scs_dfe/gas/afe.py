@@ -1,8 +1,8 @@
-'''
+"""
 Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import time
 
@@ -14,9 +14,9 @@ from scs_dfe.gas.mcp3425 import MCP3425
 # --------------------------------------------------------------------------------------------------------------------
 
 class AFE(object):
-    '''
+    """
     Alphasense Analogue Front-End (AFE) with Ti ADS1115 ADC (gases), Microchip Technology MCP3425 ADC (temp)
-    '''
+    """
     __RATE = ADS1115.RATE_8
 
     __MUX = (ADS1115.MUX_A3_GND, ADS1115.MUX_A2_GND, ADS1115.MUX_A1_GND, ADS1115.MUX_A0_GND)
@@ -25,9 +25,9 @@ class AFE(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, pt1000, sensors):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__pt1000 = pt1000
         self.__sensors = sensors
 

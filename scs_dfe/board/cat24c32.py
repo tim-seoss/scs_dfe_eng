@@ -1,4 +1,4 @@
-'''
+"""
 Created on 5 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
@@ -9,7 +9,7 @@ in /boot/config.txt
 # dtparam=i2c_vc=on
 
 dtoverlay i2c-gpio i2c_gpio_sda=0 i2c_gpio_scl=1
-'''
+"""
 
 import time
 
@@ -20,9 +20,9 @@ from scs_dfe.bus.i2c import I2C
 # --------------------------------------------------------------------------------------------------------------------
 
 class CAT24C32(object):
-    '''
+    """
     Semiconductor Components Industries CAT24C32 Serial EEPROM
-    '''
+    """
 
     SIZE =              0x1000       # 4096 bytes
 
@@ -35,9 +35,9 @@ class CAT24C32(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        '''
+        """
         initialise with current EEPROM contents
-        '''
+        """
         self.__image = self.__read_addr(0, CAT24C32.SIZE)
 
 

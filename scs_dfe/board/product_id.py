@@ -1,8 +1,8 @@
-'''
+"""
 Created on 26 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import os.path
 
@@ -16,9 +16,9 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class ProductID(JSONable):
-    '''
+    """
     classdocs
-    '''
+    """
     __DIR =         '/proc/device-tree/hat/'
 
 
@@ -43,9 +43,9 @@ class ProductID(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__name = ProductID.__read('name')
 
         self.__vendor = ProductID.__read('vendor')

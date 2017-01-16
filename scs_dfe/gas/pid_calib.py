@@ -1,8 +1,8 @@
-'''
+"""
 Created on 24 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from collections import OrderedDict
 
@@ -14,9 +14,9 @@ from scs_dfe.gas.sensor_calib import SensorCalib
 # --------------------------------------------------------------------------------------------------------------------
 
 class PIDCalib(SensorCalib):
-    '''
+    """
     classdocs
-    '''
+    """
 
     @classmethod
     def construct_from_jdict(cls, jdict):
@@ -35,9 +35,9 @@ class PIDCalib(SensorCalib):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, serial_number, sensor_type, pidELC, pidSENS):
-        '''
+        """
         Constructor
-        '''
+        """
         SensorCalib.__init__(self, serial_number, sensor_type)
 
         self.__pidELC = Datum.int(pidELC)                 # PID electronic zero                   mV

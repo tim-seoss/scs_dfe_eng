@@ -2,8 +2,12 @@
 
 # invoke with ./test/pty_example.py > /dev/null
 
-import pty, sys, os
+import os
+import pty
+import sys
 
+
+# --------------------------------------------------------------------------------------------------------------------
 
 class PTYTest(object):
 

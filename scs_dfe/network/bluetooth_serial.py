@@ -1,8 +1,8 @@
-'''
+"""
 Created on 29 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import os
 import pty
@@ -16,9 +16,9 @@ from multiprocessing import Process
 # --------------------------------------------------------------------------------------------------------------------
 
 class BluetoothSerial(Process):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __serial = None
 

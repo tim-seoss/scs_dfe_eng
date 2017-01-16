@@ -1,4 +1,4 @@
-'''
+"""
 Created on 1 Nov 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
@@ -6,7 +6,7 @@ Created on 1 Nov 2016
 https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
 
 sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-'''
+"""
 
 import os
 import re
@@ -18,9 +18,9 @@ from scs_dfe.network.wpa_supplicant import WPASupplicant
 # --------------------------------------------------------------------------------------------------------------------
 
 class WPASupplicantFile(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __TMP_DIR =         "/tmp/southcoastscience/"
     __LIVE_DIR =        "/etc/wpa_supplicant/"
@@ -31,10 +31,10 @@ class WPASupplicantFile(object):
 
     @classmethod
     def init(cls):
-        '''
+        """
         Establish the /tmp/southcoastscience/ root.
         Should be invoked on class load.
-        '''
+        """
         try:
             os.makedirs(cls.__TMP_DIR)
         except FileExistsError:
@@ -74,9 +74,9 @@ class WPASupplicantFile(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, headers, supplicants):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__headers = headers                # array of string
         self.__supplicants = supplicants        # dictionary of ssid: WPASupplicant
 

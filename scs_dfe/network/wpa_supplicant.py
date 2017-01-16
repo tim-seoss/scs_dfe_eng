@@ -1,4 +1,4 @@
-'''
+"""
 Created on 1 Nov 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
@@ -6,7 +6,7 @@ Created on 1 Nov 2016
 https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
 
 sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-'''
+"""
 
 import re
 
@@ -18,7 +18,7 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class WPASupplicant(JSONable):
-    '''
+    """
     classdocs
 
     network={
@@ -30,7 +30,7 @@ class WPASupplicant(JSONable):
         auth_alg=OPEN
         }
 
-    '''
+    """
 
     KEY_MGMT = "WPA-PSK"
 
@@ -50,9 +50,9 @@ class WPASupplicant(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, ssid, psk, key_mgmt):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__ssid = ssid
         self.__psk = psk
         self.__key_mgmt = key_mgmt

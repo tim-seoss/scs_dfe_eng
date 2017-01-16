@@ -1,8 +1,8 @@
-'''
+"""
 Created on 19 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from collections import OrderedDict
 
@@ -13,9 +13,9 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class Pt1000Datum(JSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -45,10 +45,10 @@ class Pt1000Datum(JSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, v, temp = None):
-        '''
+    def __init__(self, v, temp=None):
+        """
         Constructor
-        '''
+        """
         self.__v = Datum.float(v, 6)                # Volts
         self.__temp = Datum.float(temp, 1)          # temperature ºC
 

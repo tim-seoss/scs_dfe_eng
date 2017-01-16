@@ -1,11 +1,11 @@
-'''
+"""
 Created on 30 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 example JSON:
 {"v20": 0.322802, "calibrated_on": "2016-10-11"}
-'''
+"""
 
 from collections import OrderedDict
 from datetime import date
@@ -19,9 +19,9 @@ from scs_dfe.gas.pt1000 import Pt1000
 # --------------------------------------------------------------------------------------------------------------------
 
 class Pt1000Calib(PersistentJSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __FILENAME = "pt1000_calib.json"
 
@@ -46,9 +46,9 @@ class Pt1000Calib(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, calibrated_on, v20):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__calibrated_on = calibrated_on        # date
         self.__v20 = Datum.float(v20, 6)            # voltage at 20 ºC
 

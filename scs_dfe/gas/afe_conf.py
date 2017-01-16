@@ -1,11 +1,11 @@
-'''
+"""
 Created on 17 Aug 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 example JSON:
 {"type": "810-0022-01", "sn1": "NO2-A43F", "sn2": "OX-A431", "sn3": "NO-A4", "sn4": "CO-A4"}
-'''
+"""
 
 from collections import OrderedDict
 
@@ -19,9 +19,9 @@ from scs_host.sys.host import Host
 # --------------------------------------------------------------------------------------------------------------------
 
 class AFEConf(PersistentJSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __FILENAME = "afe_conf.json"
 
@@ -50,9 +50,9 @@ class AFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, afe_type, sensor_types):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__afe_type = afe_type
         self.__sensor_types = sensor_types          # array of string
 

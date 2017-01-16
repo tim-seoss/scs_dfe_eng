@@ -1,11 +1,11 @@
-'''
+"""
 Created on 13 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 example JSON:
 {"int": null, "ext": "0x44"}
-'''
+"""
 
 from collections import OrderedDict
 
@@ -17,9 +17,9 @@ from scs_dfe.climate.sht31 import SHT31
 # --------------------------------------------------------------------------------------------------------------------
 
 class SHTConf(PersistentJSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __FILENAME = "sht_conf.json"
 
@@ -57,9 +57,9 @@ class SHTConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, int_addr, ext_addr):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__int_addr = int_addr          # int       I2C address of SHT in A4 package
         self.__ext_addr = ext_addr          # int       I2C address of SHT exposed to air
 

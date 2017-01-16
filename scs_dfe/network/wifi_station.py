@@ -1,4 +1,4 @@
-'''
+"""
 Created on 31 Oct 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
@@ -7,7 +7,7 @@ http://www.codefoster.com/pi-wifi/
 https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
 
 sudo iwlist wlan0 scan
-'''
+"""
 
 import re
 import subprocess
@@ -21,7 +21,7 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class WiFiStation(JSONable):
-    '''
+    """
     classdocs
 
           Cell 01 - Address: 42:B8:9A:BD:6A:BB
@@ -44,7 +44,7 @@ class WiFiStation(JSONable):
                     IE: Unknown: 2F0100
                     IE: IEEE 802.11i/WPA2 Version 1
 
-    '''
+    """
 
     @classmethod
     def find_all(cls):
@@ -156,9 +156,9 @@ class WiFiStation(JSONable):
 
     @classmethod
     def __find_connected_ssid(cls):
-        '''
+        """
         also: sudo iwlist wlan0 scan
-        '''
+        """
         p = subprocess.Popen(['iwgetid', '-r'], stdout=subprocess.PIPE)
         response = p.communicate()
 
@@ -172,10 +172,10 @@ class WiFiStation(JSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, ssid = None, encryption = None, quality = None, security = None, is_connected = None):
-        '''
+    def __init__(self, ssid=None, encryption=None, quality=None, security=None, is_connected=None):
+        """
         Constructor
-        '''
+        """
         self.__ssid = ssid
         self.__encryption = encryption
         self.__quality = quality

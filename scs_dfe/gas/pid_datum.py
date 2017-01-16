@@ -1,8 +1,8 @@
-'''
+"""
 Created on 19 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from collections import OrderedDict
 
@@ -13,16 +13,16 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class PIDDatum(JSONable):
-    '''
+    """
     classdocs
-    '''
+    """
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, weT, cnc = None):
-        '''
+    def __init__(self, weT, cnc=None):
+        """
         Constructor
-        '''
+        """
         self.__weT = Datum.float(weT, 6)        # uncorrected working electrode output         Volts
         self.__cnc = cnc                        # gas concentration                            ppb (d)
 

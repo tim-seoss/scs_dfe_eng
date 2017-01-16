@@ -1,4 +1,4 @@
-'''
+"""
 Created on 30 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
@@ -23,7 +23,7 @@ $GPGSV,3,1,12,05,61,203,40,07,26,057,31,08,05,050,,09,00,101,*7D
 $GPGSV,3,2,12,13,58,287,22,15,26,285,35,20,41,297,29,21,13,321,*71
 $GPGSV,3,3,12,27,04,013,13,28,39,126,37,30,60,068,26,33,30,200,44*74
 $GPGLL,5049.36953,N,00007.38514,W,152926.00,A,D*7B
-'''
+"""
 
 from scs_core.location.gpgga import GPGGA
 from scs_core.location.gpgll import GPGLL
@@ -41,9 +41,9 @@ from scs_host.sys.host_serial import HostSerial
 # --------------------------------------------------------------------------------------------------------------------
 
 class PAM7Q(object):
-    '''
+    """
     u-blox 7 GPS Antenna Module
-    '''
+    """
 
     UART = 1
 

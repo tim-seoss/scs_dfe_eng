@@ -1,8 +1,8 @@
-'''
+"""
 Created on 25 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 import struct
 
@@ -10,11 +10,11 @@ import struct
 # --------------------------------------------------------------------------------------------------------------------
 
 class EEPROMImage(object):
-    '''
+    """
     Load a .eep file
-    '''
+    """
     @classmethod
-    def construct_from_file(cls, filename, min_size = 0):
+    def construct_from_file(cls, filename, min_size=0):
         content = []
 
         # file content...
@@ -29,7 +29,7 @@ class EEPROMImage(object):
 
                 content.append(struct.unpack('B', byte)[0])
 
-        except:
+        except RuntimeError:
             return None
 
         finally:
@@ -45,9 +45,9 @@ class EEPROMImage(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, content):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__content = content
 
 
@@ -72,12 +72,12 @@ class EEPROMImage(object):
         addr = 0
 
         while addr < len(self.__content):
-            values = self.__content[addr : addr + width]
+            values = self.__content[addr: addr + width]
 
             hexs = ' '.join(["%02x" % value for value in values])
             hexs = hexs.ljust(width * 3)
 
-            chrs = ''.join(chr(value) if 31 < value < 129  else '.' for value in values)         # non-printable codes are '.'
+            chrs = ''.join(chr(value) if 31 < value < 129 else '.' for value in values)         # non-printable codes are '.'
 
             print("0x%04x: %s        %s" % (addr, hexs, chrs))
 

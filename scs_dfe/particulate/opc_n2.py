@@ -1,11 +1,11 @@
-'''
+"""
 Created on 4 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
     __CMD_POWER                        0x03
     __CMD_POWER_ON                     0x00        //    0x03, 0x00
-'''
+"""
 
 import struct
 import time
@@ -21,9 +21,9 @@ from scs_host.sys.host_spi import HostSPI
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN2(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __FLOW_RATE_VERSION =               16
 
@@ -66,9 +66,9 @@ class OPCN2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__spi = HostSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
         # self.__spi = BBIOSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
 

@@ -1,4 +1,4 @@
-'''
+"""
 Created on 4 Nov 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
@@ -7,7 +7,7 @@ https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md
 http://unix.stackexchange.com/questions/92799/connecting-to-wifi-network-through-command-line
 
 sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-'''
+"""
 
 import re
 import subprocess
@@ -20,13 +20,13 @@ from scs_core.data.json import JSONable
 # --------------------------------------------------------------------------------------------------------------------
 
 class Interface(JSONable):
-    '''
+    """
     classdocs
 
     eth0      Link encap:Ethernet  HWaddr b8:27:eb:a1:f8:b9
               inet addr:192.168.1.9  Bcast:192.168.1.255  Mask:255.255.255.0
               inet6 addr: fe80::26fa:583e:7d87:e803/64 Scope:Link
-    '''
+    """
 
     WIFI = "wlan0"          # TODO: needs to be in a file or something
 
@@ -99,9 +99,9 @@ class Interface(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, name = None, scope = None, hw_addr = None, inet_addr = None, inet6_addr = None):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__name = name
         self.__scope = scope
         self.__hw_addr = hw_addr
@@ -126,9 +126,9 @@ class Interface(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def connect(self, supplicant):
-        '''
+        """
         sudo iwconfig wlan0 essid Wifi2Home key s:ABCDE12345
-        '''
+        """
         pass        # TODO: implement connect(..)
 
 

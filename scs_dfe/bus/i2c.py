@@ -1,4 +1,4 @@
-'''
+"""
 Created on 5 Jul 2016
 
 https://www.raspberrypi.org/forums/viewtopic.php?f=32&t=134997
@@ -9,7 +9,7 @@ speed: /etc/modprobe.d/i2c.conf
 
 http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/
 file: i2c-tools-3.1.1/include/linux/i2c-dev.h
-'''
+"""
 
 import fcntl
 import io
@@ -20,9 +20,9 @@ from scs_host.lock.lock import Lock
 # --------------------------------------------------------------------------------------------------------------------
 
 class I2C(object):
-    '''
+    """
     I2C bus abstraction over UNIX /dev/i2c-n
-    '''
+    """
     __I2C_SLAVE =           0x0703
 
     __I2C_SLAVE_FORCE =     0x0706
@@ -43,8 +43,8 @@ class I2C(object):
         if cls.__FR is not None and cls.__FW is not None:
             return
 
-        cls.__FR = io.open("/dev/i2c-%d" % bus, "rb", buffering = 0)
-        cls.__FW = io.open("/dev/i2c-%d" % bus, "wb", buffering = 0)
+        cls.__FR = io.open("/dev/i2c-%d" % bus, "rb", buffering=0)
+        cls.__FW = io.open("/dev/i2c-%d" % bus, "wb", buffering=0)
 
 
     @classmethod

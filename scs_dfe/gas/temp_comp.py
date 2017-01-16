@@ -1,8 +1,8 @@
-'''
+"""
 Created on 22 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-'''
+"""
 
 from scs_dfe.gas.sensor import Sensor
 
@@ -10,9 +10,9 @@ from scs_dfe.gas.sensor import Sensor
 # --------------------------------------------------------------------------------------------------------------------
 
 class TempComp(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     __MIN_TEMP =        -30
     __MAX_TEMP =         50
@@ -37,7 +37,7 @@ class TempComp(object):
 
     @classmethod
     def find(cls, sensor_type):
-        if not sensor_type in cls.__COMP:
+        if sensor_type not in cls.__COMP:
             raise ValueError("TempComp.find: unrecognised sensor type: %s." % sensor_type)
 
         return cls.__COMP[sensor_type]
@@ -54,9 +54,9 @@ class TempComp(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, algorithm, factor, values):
-        '''
+        """
         Constructor
-        '''
+        """
         length = (TempComp.__MAX_TEMP - TempComp.__MIN_TEMP) // TempComp.__INTERVAL + 1
 
         if len(values) != length:
@@ -70,9 +70,9 @@ class TempComp(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def correct(self, calib, temp, weT, aeT):
-        '''
+        """
         Find corrected we.
-        '''
+        """
         if not TempComp.in_range(temp):
             return None
 
@@ -120,9 +120,9 @@ class TempComp(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def cfT(self, temp):
-        '''
+        """
         Find the linear-interpolated temperature compensation factor.
-        '''
+        """
         index = int((temp - TempComp.__MIN_TEMP) // TempComp.__INTERVAL)        # index of start of interval
 
         # on boundary...
