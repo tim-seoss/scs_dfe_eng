@@ -34,6 +34,32 @@ class CAT24C32(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def __read_addr(cls, addr, count):
+        try:
+            i2c = I2C.start_tx(cls.__ADDR)
+
+            i2c.write16(addr)
+            content = i2c.read(count)
+
+            return EEPROMImage(content)
+        finally:
+            I2C.end_tx()
+
+
+    @classmethod
+    def __write_addr(cls, addr, values):       # max 32 values
+        try:
+            i2c = I2C.start_tx(cls.__ADDR)
+
+            i2c.write_addr(addr, *values)
+            time.sleep(cls.__TWR)
+        finally:
+            I2C.end_tx()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self):
         """
         initialise with current EEPROM contents
@@ -60,30 +86,6 @@ class CAT24C32(object):
 
         # reload...
         self.__image = self.__read_addr(0, CAT24C32.SIZE)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __read_addr(self, addr, count):
-        try:
-            i2c = I2C.start_tx(CAT24C32.__ADDR)
-
-            i2c.write16(addr)
-            content = i2c.read(count)
-
-            return EEPROMImage(content)
-        finally:
-            I2C.end_tx()
-
-
-    def __write_addr(self, addr, values):       # max 32 values
-        try:
-            i2c = I2C.start_tx(CAT24C32.__ADDR)
-
-            i2c.write_addr(addr, *values)
-            time.sleep(CAT24C32.__TWR)
-        finally:
-            I2C.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------
