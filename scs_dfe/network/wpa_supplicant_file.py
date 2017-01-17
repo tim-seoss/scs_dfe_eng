@@ -22,8 +22,8 @@ class WPASupplicantFile(object):
     classdocs
     """
 
-    __TMP_DIR =         "/tmp/southcoastscience/"
-    __LIVE_DIR =        "/etc/wpa_supplicant/"
+    __TMP_DIR =         "/tmp/southcoastscience/"           # hard-coded path
+    __LIVE_DIR =        "/etc/wpa_supplicant/"              # hard-coded path
 
     __FILE =            "wpa_supplicant.conf"
 

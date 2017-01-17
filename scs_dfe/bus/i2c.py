@@ -43,8 +43,8 @@ class I2C(object):
         if cls.__FR is not None and cls.__FW is not None:
             return
 
-        cls.__FR = io.open("/dev/i2c-%d" % bus, "rb", buffering=0)
-        cls.__FW = io.open("/dev/i2c-%d" % bus, "wb", buffering=0)
+        cls.__FR = io.open("/dev/i2c-%d" % bus, "rb", buffering=0)      # hard-coded path
+        cls.__FW = io.open("/dev/i2c-%d" % bus, "wb", buffering=0)      # hard-coded path
 
 
     @classmethod
