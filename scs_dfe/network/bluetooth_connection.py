@@ -33,10 +33,10 @@ class BluetoothConnection(Process):
     @classmethod
     def enable(cls):
         # enable scan...
-        p = subprocess.call(['sudo', 'hciconfig', 'hci0', 'piscan'], stdout=subprocess.PIPE)
+        subprocess.call(['sudo', 'hciconfig', 'hci0', 'piscan'], stdout=subprocess.PIPE)
 
         # add sp service..
-        p = subprocess.call(['sudo', 'sdptool', 'add', 'sp'], stdout=subprocess.PIPE)
+        subprocess.call(['sudo', 'sdptool', 'add', 'sp'], stdout=subprocess.PIPE)
 
 
     @classmethod
@@ -58,7 +58,7 @@ class BluetoothConnection(Process):
                 state = output.recv()
 
                 if state == BluetoothConnection.FAILED:
-                    # BluetoothConnection.__conn.terminate()          # this causes a problem in a use case that I can't remember
+                    # BluetoothConnection.__conn.terminate() - this causes a problem in a use case that I can't remember
                     print("monitor: failed")
                     break
 
