@@ -8,8 +8,6 @@ from scs_dfe.gas.pid_datum import PIDDatum
 from scs_dfe.gas.sensor import Sensor
 
 
-# TODO: we need to know if this is ppb or ppm
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class PID(Sensor):
