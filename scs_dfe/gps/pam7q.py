@@ -74,7 +74,7 @@ class PAM7Q(object):
                 line = self.__serial.read_line("\r\n", 1)
                 s = NMEASentence.construct(line)
 
-                if s.field(0) == message_class.MESSAGE_ID:
+                if s.str(0) == message_class.MESSAGE_ID:
                     return message_class.construct(s)
 
             except (UnicodeDecodeError, ValueError):
