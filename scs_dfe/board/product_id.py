@@ -19,7 +19,9 @@ class ProductID(JSONable):
     """
     classdocs
     """
-    __DIR =         '/proc/device-tree/hat/'
+    # TODO: put __DIR on Host
+
+    __DIR =         "/proc/device-tree/hat/"                   # hard-coded path
 
 
     # ----------------------------------------------------------------------------------------------------------------

@@ -11,6 +11,7 @@ import sys
 from multiprocessing import Process
 
 
+# TODO: put device references in Host
 # TODO: handle the case when going from CONNECTED to STOPPED
 
 # --------------------------------------------------------------------------------------------------------------------

@@ -35,7 +35,7 @@ print("-")
 
 # --------------------------------------------------------------------------------------------------------------------
 
-file_image = EEPROMImage.construct_from_file('/home/pi/hats/eepromutils/myhat.eep', CAT24C32.SIZE)
+file_image = EEPROMImage.construct_from_file('/home/pi/hats/eepromutils/myhat.eep', CAT24C32.SIZE)    # hard-coded path
 
 file_image.formatted(32)
 
