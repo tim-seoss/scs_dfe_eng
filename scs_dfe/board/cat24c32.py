@@ -13,8 +13,11 @@ dtoverlay i2c-gpio i2c_gpio_sda=0 i2c_gpio_scl=1
 
 import time
 
-from scs_dfe.board.eeprom_image import EEPROMImage
+from scs_core.sys.eeprom_image import EEPROMImage
+
 from scs_dfe.bus.i2c import I2C
+
+from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -26,8 +29,6 @@ class CAT24C32(object):
 
     SIZE =              0x1000       # 4096 bytes
 
-    __ADDR =            0x50
-
     __BUFFER_SIZE =     32
     __TWR =             0.005        # seconds
 
@@ -37,7 +38,7 @@ class CAT24C32(object):
     @classmethod
     def __read_addr(cls, addr, count):
         try:
-            i2c = I2C.start_tx(cls.__ADDR)
+            i2c = I2C.start_tx(Host.DFE_EEPROM_ADDR)
 
             i2c.write16(addr)
             content = i2c.read(count)
@@ -50,7 +51,7 @@ class CAT24C32(object):
     @classmethod
     def __write_addr(cls, addr, values):       # max 32 values
         try:
-            i2c = I2C.start_tx(cls.__ADDR)
+            i2c = I2C.start_tx(Host.DFE_EEPROM_ADDR)
 
             i2c.write_addr(addr, *values)
             time.sleep(cls.__TWR)
