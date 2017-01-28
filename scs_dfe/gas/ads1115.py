@@ -187,8 +187,8 @@ class ADS1115(object):
 
     def __read_config(self):
         try:
-            i2c = I2C.start_tx(self.__addr)
-            msb, lsb = i2c.read_cmd(ADS1115.__REG_CONFIG, 2)
+            I2C.start_tx(self.__addr)
+            msb, lsb = I2C.read_cmd(ADS1115.__REG_CONFIG, 2)
         finally:
             I2C.end_tx()
 
@@ -198,16 +198,16 @@ class ADS1115(object):
 
     def __write_config(self, config):
         try:
-            i2c = I2C.start_tx(self.__addr)
-            i2c.write(ADS1115.__REG_CONFIG, config >> 8, config & 0xff)
+            I2C.start_tx(self.__addr)
+            I2C.write(ADS1115.__REG_CONFIG, config >> 8, config & 0xff)
         finally:
             I2C.end_tx()
 
 
     def __read_conv(self):
         try:
-            i2c = I2C.start_tx(self.__addr)
-            msb, lsb = i2c.read_cmd(ADS1115.__REG_CONV, 2)
+            I2C.start_tx(self.__addr)
+            msb, lsb = I2C.read_cmd(ADS1115.__REG_CONV, 2)
         finally:
             I2C.end_tx()
 

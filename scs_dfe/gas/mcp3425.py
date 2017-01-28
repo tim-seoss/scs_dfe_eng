@@ -99,7 +99,7 @@ class MCP3425(object):
         returned value is voltage
         """
         try:
-            i2c = I2C.start_tx(MCP3425.__ADDR)
+            I2C.start_tx(MCP3425.__ADDR)
             v, config = self.__read(i2c)
 
         finally:
@@ -121,7 +121,7 @@ class MCP3425(object):
         self.start_conversion()
 
         try:
-            i2c = I2C.start_tx(MCP3425.__ADDR)
+            I2C.start_tx(MCP3425.__ADDR)
 
             while True:
                 v, config = self.__read(i2c)
@@ -142,7 +142,7 @@ class MCP3425(object):
 
     def __read(self, i2c):
         # get data...
-        msb, lsb, config = i2c.read(3)
+        msb, lsb, config = I2C.read(3)
 
         unsigned = (msb << 8) | lsb
 
@@ -156,8 +156,8 @@ class MCP3425(object):
 
     def __write(self, config):
         try:
-            i2c = I2C.start_tx(MCP3425.__ADDR)
-            i2c.write(config)
+            I2C.start_tx(MCP3425.__ADDR)
+            I2C.write(config)
 
         finally:
             I2C.end_tx()

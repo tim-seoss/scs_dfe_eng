@@ -49,5 +49,5 @@ print(conf)
 print("-")
 
 sensors = conf.sensors()
-print('\n\n'.join([str(sensor) for sensor in sensors]))
+print('\n\n'.join(str(sensor) for sensor in sensors))
 print("-")

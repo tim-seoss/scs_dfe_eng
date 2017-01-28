@@ -5,7 +5,7 @@ https://www.raspberrypi.org/forums/viewtopic.php?f=32&t=134997
 https://github.com/raspberrypi/weather-station/blob/master/i2c_base.py
 
 https://blogs.ncl.ac.uk/francisfranklin/2014/03/23/using-i2c-with-the-raspberry-pi-step-1-modules-and-packages/
-speed: /etc/modprobe.d/i2c.conf
+speed: /etc/modprobe.d/I2C.conf
 
 http://ftp.de.debian.org/debian/pool/main/i/i2c-tools/
 file: i2c-tools-3.1.1/include/linux/i2c-dev.h
@@ -65,49 +65,46 @@ class I2C(object):
         if cls.__FR is None or cls.__FW is None:
             raise RuntimeError("I2C.start_tx: bus is not open.")
 
-        Lock.acquire(cls.__name__, 1.0, False)
+        Lock.acquire(I2C.__name__, 1.0, False)
 
         fcntl.ioctl(cls.__FR, I2C.__I2C_SLAVE, device)
         fcntl.ioctl(cls.__FW, I2C.__I2C_SLAVE, device)
 
-        return I2C()
-
 
     @classmethod
     def end_tx(cls):
-        Lock.release(cls.__name__)
+        Lock.release(I2C.__name__)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
-        pass
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def read(self, count):
+    @classmethod
+    def read(cls, count):
         read_bytes = list(I2C.__FR.read(count))
         return read_bytes[0] if count == 1 else read_bytes
 
 
-    def read_cmd(self, cmd, count):
-        self.write(cmd)
-        return self.read(count)
+    @classmethod
+    def read_cmd(cls, cmd, count):
+        cls.write(cmd)
+        return cls.read(count)
 
 
-    def read_cmd16(self, cmd16, count):
-        self.write16(cmd16)
-        return self.read(count)
+    @classmethod
+    def read_cmd16(cls, cmd16, count):
+        cls.write16(cmd16)
+        return cls.read(count)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def write(self, *values):
+    @classmethod
+    def write(cls, *values):
         I2C.__FW.write(bytearray(values))
 
 
-    def write16(self, *value16s):
+    @classmethod
+    def write16(cls, *value16s):
         write_bytes = bytearray()
 
         for value16 in value16s:
@@ -117,7 +114,13 @@ class I2C(object):
         I2C.__FW.write(write_bytes)
 
 
-    def write_addr(self, addr, *values):
+    @classmethod
+    def write_addr(cls, addr, *values):
+        I2C.__FW.write(bytearray([addr]) + bytearray(values))
+
+
+    @classmethod
+    def write_addr16(cls, addr, *values):
         addr_msb = addr >> 8
         addr_lsb = addr & 0xff
 

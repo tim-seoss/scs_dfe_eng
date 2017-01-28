@@ -90,7 +90,7 @@ class WPASupplicantFile(object):
         content += '\n\n'
 
         # entries...
-        content += '\n\n'.join([supplicant.as_entry() for supplicant in self.supplicants])
+        content += '\n\n'.join(supplicant.as_entry() for supplicant in self.supplicants)
         content += '\n'
 
         # file...
@@ -132,7 +132,7 @@ class WPASupplicantFile(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        supplicants = '[' + ', '.join([str(supplicant) for supplicant in self.supplicants]) + ']'
+        supplicants = '[' + ', '.join(str(supplicant) for supplicant in self.supplicants) + ']'
 
         return "WPASupplicantFile:{headers:%s, supplicants:%s}" % (self.headers, supplicants)
 

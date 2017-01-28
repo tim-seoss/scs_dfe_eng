@@ -23,25 +23,38 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class CAT24C32(object):
+class AT24MAC402(object):
     """
-    Semiconductor Components Industries CAT24C32 32-Kb Serial EEPROM
+    Atmel AT24MAC402 2-Kbit Serial EEPROM plus Embedded Unique 128-bit Serial Number
     """
 
-    SIZE =              0x1000       # 4096 bytes
+    SIZE =                  0x0100       # 256 bytes
 
-    __BUFFER_SIZE =     32
-    __TWR =             0.005        # seconds
+    __BUFFER_SIZE =         32
+    __TWR =                 0.005        # seconds
+
+    __SERIAL_NUMBER_ADDR =  0x80
+    __EUI_ADDR =            0x9a
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def __read_image(cls, addr, count):
+    def __read_array(cls, device_addr, memory_addr, count):
+        try:
+            I2C.start_tx(device_addr)
+
+            return I2C.read_cmd(memory_addr, count)
+        finally:
+            I2C.end_tx()
+
+
+    @classmethod
+    def __read_image(cls, memory_addr, count):
         try:
             I2C.start_tx(Host.DFE_EEPROM_ADDR)
 
-            content = I2C.read_cmd16(addr, count)
+            content = I2C.read_cmd(memory_addr, count)
 
             return EEPROMImage(content)
         finally:
@@ -49,11 +62,11 @@ class CAT24C32(object):
 
 
     @classmethod
-    def __write_image(cls, addr, values):       # max 32 values
+    def __write_image(cls, memory_addr, values):       # max 32 values
         try:
             I2C.start_tx(Host.DFE_EEPROM_ADDR)
 
-            I2C.write_addr16(addr, *values)
+            I2C.write_addr(memory_addr, *values)
             time.sleep(cls.__TWR)
         finally:
             I2C.end_tx()
@@ -65,31 +78,45 @@ class CAT24C32(object):
         """
         initialise with current EEPROM contents
         """
-        self.__image = self.__read_image(0, CAT24C32.SIZE)
+        self.__serial_number = self.__read_array(Host.DFE_EEPROM_ADDR + 8, AT24MAC402.__SERIAL_NUMBER_ADDR, 16)
+        self.__eui = self.__read_array(Host.DFE_EEPROM_ADDR + 8, AT24MAC402.__EUI_ADDR, 6)
+
+        # self.__image = self.__read_image(0, AT24MAC402.SIZE)
+        self.__image = None
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def write(self, image):
         # verify...
-        if len(image) != CAT24C32.SIZE:
-            raise ValueError("CAT24C32.write: image has incorrect length.")
+        if len(image) != AT24MAC402.SIZE:
+            raise ValueError("AT24MAC402.write: image has incorrect length.")
 
         addr = 0
 
         # write...
         while addr < len(image.content):
-            values = image.content[addr: addr + CAT24C32.__BUFFER_SIZE]
+            values = image.content[addr: addr + AT24MAC402.__BUFFER_SIZE]
 
             self.__write_image(addr, values)
 
-            addr += CAT24C32.__BUFFER_SIZE
+            addr += AT24MAC402.__BUFFER_SIZE
 
         # reload...
-        self.__image = self.__read_image(0, CAT24C32.SIZE)
+        self.__image = self.__read_image(0, AT24MAC402.SIZE)
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def serial_number(self):
+        return ''.join("%02x" % item for item in self.__serial_number)
+
+
+    @property
+    def eui(self):
+        return ':'.join("%02x" % item for item in self.__eui)
+
 
     @property
     def image(self):
@@ -99,4 +126,4 @@ class CAT24C32(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "CAT24C32:{image:%s}" % self.image
+        return "AT24MAC402:{serial_number:%s, eui:%s, image:%s}" % (self.serial_number, self.eui, self.image)

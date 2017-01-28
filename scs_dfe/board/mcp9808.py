@@ -62,16 +62,16 @@ class MCP9808(object):
 
     def __write_config(self, config):
         try:
-            i2c = I2C.start_tx(MCP9808.__ADDR)
-            i2c.write(MCP9808.__REG_CONFIG, config >> 8, config & 0xff)
+            I2C.start_tx(MCP9808.__ADDR)
+            I2C.write(MCP9808.__REG_CONFIG, config >> 8, config & 0xff)
         finally:
             I2C.end_tx()
 
 
     def __read_temp(self):
         try:
-            i2c = I2C.start_tx(MCP9808.__ADDR)
-            msb, lsb = i2c.read_cmd(MCP9808.__REG_TEMP, 2)
+            I2C.start_tx(MCP9808.__ADDR)
+            msb, lsb = I2C.read_cmd(MCP9808.__REG_TEMP, 2)
         finally:
             I2C.end_tx()
 

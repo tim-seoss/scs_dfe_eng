@@ -130,7 +130,7 @@ class AFE(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        sensors = '[' + ', '.join([str(sensor) for sensor in self.__sensors]) + ']'
+        sensors = '[' + ', '.join(str(sensor) for sensor in self.__sensors) + ']'
 
         return "AFE:{pt1000:%s, sensors:%s, tconv:%0.3f, wrk:%s, aux:%s, temp:%s}" % \
             (self.__pt1000, sensors, self.__tconv, self.__wrk, self.__aux, self.__temp)
