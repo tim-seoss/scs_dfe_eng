@@ -5,6 +5,7 @@ Created on 5 Sep 2016
 
 in /boot/config.txt
 
+# RPi...
 # Uncomment for i2c-0 & i2c-3 access (EEPROM programming)
 # dtparam=i2c_vc=on
 

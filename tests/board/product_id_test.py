@@ -8,12 +8,12 @@ Created on 26 Sep 2016
 
 from scs_core.data.json import JSONify
 
-from scs_dfe.board.product_id import ProductID
+from scs_dfe.board.dfe_product_id import DFEProductID
 
  
 # --------------------------------------------------------------------------------------------------------------------
 
-product_id = ProductID()
+product_id = DFEProductID()
 print(product_id)
 print("-")
 

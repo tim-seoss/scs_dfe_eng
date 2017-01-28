@@ -11,11 +11,9 @@ from collections import OrderedDict
 from scs_core.data.json import JSONable
 
 
-# TODO: find out what happens when there is more than one hat
-
 # --------------------------------------------------------------------------------------------------------------------
 
-class ProductID(JSONable):
+class DFEProductID(JSONable):
     """
     classdocs
     """
@@ -48,13 +46,13 @@ class ProductID(JSONable):
         """
         Constructor
         """
-        self.__name = ProductID.__read('name')
+        self.__name = DFEProductID.__read('name')
 
-        self.__vendor = ProductID.__read('vendor')
-        self.__product = ProductID.__read('product')
-        self.__product_id = ProductID.__read('product_id')
-        self.__product_ver = ProductID.__read('product_ver')
-        self.__uuid = ProductID.__read('uuid')
+        self.__vendor = DFEProductID.__read('vendor')
+        self.__product = DFEProductID.__read('product')
+        self.__product_id = DFEProductID.__read('product_id')
+        self.__product_ver = DFEProductID.__read('product_ver')
+        self.__uuid = DFEProductID.__read('uuid')
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -106,5 +104,5 @@ class ProductID(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "ProductID:{name:%s, product:%s, product_id:%s, product_ver:%s, uuid:%s, vendor:%s}" % \
+        return "DFEProductID:{name:%s, product:%s, product_id:%s, product_ver:%s, uuid:%s, vendor:%s}" % \
                     (self.name, self.product, self.product_id, self.product_ver, self.uuid, self.vendor)
