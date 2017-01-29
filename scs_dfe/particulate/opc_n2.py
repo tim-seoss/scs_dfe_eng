@@ -174,7 +174,9 @@ class OPCN2(object):
                 time.sleep(OPCN2.__TRANSFER_DELAY)
                 read_bytes.extend(self.__spi.read_bytes(1))
 
-            return '' . join(chr(b) for b in read_bytes)
+            report = '' . join(chr(b) for b in read_bytes)
+
+            return report.strip('\0')
 
         finally:
             time.sleep(OPCN2.__CMD_DELAY)
