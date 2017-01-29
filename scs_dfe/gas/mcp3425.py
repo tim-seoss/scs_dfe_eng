@@ -100,7 +100,7 @@ class MCP3425(object):
         """
         try:
             I2C.start_tx(MCP3425.__ADDR)
-            v, config = self.__read(i2c)
+            v, config = self.__read()
 
         finally:
             I2C.end_tx()
@@ -124,7 +124,7 @@ class MCP3425(object):
             I2C.start_tx(MCP3425.__ADDR)
 
             while True:
-                v, config = self.__read(i2c)
+                v, config = self.__read()
 
                 if not (config & MCP3425.__START):
                     break
@@ -140,7 +140,7 @@ class MCP3425(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __read(self, i2c):
+    def __read(self):
         # get data...
         msb, lsb, config = I2C.read(3)
 
