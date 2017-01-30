@@ -176,7 +176,7 @@ class OPCN2(object):
 
             report = '' . join(chr(b) for b in read_bytes)
 
-            return report.strip('\0')
+            return report.strip('\0\xff')
 
         finally:
             time.sleep(OPCN2.__CMD_DELAY)
