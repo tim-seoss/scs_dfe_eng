@@ -11,7 +11,7 @@ from scs_core.sys.exception_report import ExceptionReport
 from scs_core.sys.system_temp import SystemTemp
 
 from scs_dfe.board.mcp9808 import MCP9808
-from scs_dfe.bus.i2c import I2C
+from scs_host.bus import I2C
 
 from scs_host.sys.host import Host
 

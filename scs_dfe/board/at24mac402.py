@@ -16,8 +16,7 @@ import time
 
 from scs_core.sys.eeprom_image import EEPROMImage
 
-from scs_dfe.bus.i2c import I2C
-
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 

@@ -1,13 +1,16 @@
 """
 Created on 5 Jul 2016
 
+@author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
 https://github.com/raspberrypi/weather-station/blob/master/SHT31.py
 """
 
 import time
 
-from scs_dfe.bus.i2c import I2C
 from scs_dfe.climate.sht_datum import SHTDatum
+
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------

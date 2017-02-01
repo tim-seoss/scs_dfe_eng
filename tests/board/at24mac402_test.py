@@ -7,7 +7,7 @@ Created on 25 Sep 2016
 """
 
 from scs_dfe.board.at24mac402 import AT24MAC402
-from scs_dfe.bus.i2c import I2C
+from scs_host.bus import I2C
 
 from scs_host.sys.host import Host
 

@@ -7,8 +7,7 @@ Created on 4 Aug 2016
 import struct
 import time
 
-from scs_dfe.bus.i2c import I2C
-
+from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
