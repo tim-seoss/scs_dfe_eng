@@ -9,8 +9,8 @@ Created on 25 Sep 2016
 from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.board.cat24c32 import CAT24C32
-from scs_host.bus import I2C
 
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 

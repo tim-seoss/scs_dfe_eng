@@ -9,7 +9,8 @@ Created on 1 Oct 2016
 from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
-from scs_host.bus import I2C
+
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
