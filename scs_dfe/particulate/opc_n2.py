@@ -13,8 +13,8 @@ import time
 from scs_dfe.particulate.opc_datum import OPCDatum
 
 from scs_host.lock.lock import Lock
-# from scs_host.sys.host_spi import HostSPI
-from scs_host.sys.bbio_spi import BBIOSPI
+from scs_host.sys.host_spi import HostSPI
+
 
 # TODO: unreliable start-up - command timing problem?
 
@@ -75,8 +75,7 @@ class OPCN2(object):
         """
         Constructor
         """
-        # self.__spi = HostSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
-        self.__spi = BBIOSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
+        self.__spi = HostSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
