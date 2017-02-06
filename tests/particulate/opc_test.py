@@ -18,6 +18,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
+io = None
 opc = None
 
 try:
@@ -51,10 +52,10 @@ except KeyboardInterrupt as ex:
 
 finally:
     if opc:
-        time.sleep(1)
         opc.off()
 
-    io.opc_power = False
+    if io:
+        io.opc_power = False
 
     I2C.close()
 

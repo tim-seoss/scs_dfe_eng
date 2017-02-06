@@ -16,6 +16,15 @@ class PCA8574(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def construct(cls, addr):
+        device = PCA8574(addr)
+
+        # TODO: test, return None if not present
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self, addr):
         """
         Constructor
@@ -29,6 +38,7 @@ class PCA8574(object):
         try:
             I2C.start_tx(self.__addr)
             byte = I2C.read(1)
+
         finally:
             I2C.end_tx()
 
@@ -39,6 +49,7 @@ class PCA8574(object):
         try:
             I2C.start_tx(self.__addr)
             I2C.write(byte)
+
         finally:
             I2C.end_tx()
 

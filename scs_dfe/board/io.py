@@ -22,7 +22,6 @@ class IO(object):
     """
     NXP PCA8574 remote 8-bit I/O expander
     """
-
     __MASK_GPS =        0x01            # 0000 0001
     __MASK_OPC =        0x02            # 0000 0010
     __MASK_NDIR =       0x04            # 0000 0100
@@ -30,9 +29,9 @@ class IO(object):
     __MASK_LED_RED =    0x40            # 0100 0000
     __MASK_LED_GREEN =  0x80            # 1000 0000
 
-    __ADDR =  0x3f
+    __ADDR =            0x3f
 
-    __LOCK =            "IO"
+    __LOCK =            "DFE_IO"
     __LOCK_TIMEOUT =    2.0
 
 
@@ -49,7 +48,7 @@ class IO(object):
         """
         Constructor
         """
-        self.__device = PCA8574(IO.__ADDR)
+        self.__device = PCA8574(IO.__ADDR)      # device is none if it can't be read
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -60,7 +59,7 @@ class IO(object):
 
 
     @gps_power.setter
-    def gps_power(self, on):                    # TODO: could delay if was off and now on
+    def gps_power(self, on):
         self.__set_state(IO.__MASK_GPS, on)
 
 
@@ -83,6 +82,8 @@ class IO(object):
     def ndir_power(self, on):
         self.__set_state(IO.__MASK_NDIR, on)
 
+
+    # ----------------------------------------------------------------------------------------------------------------
 
     @property
     def led_red(self):
@@ -131,6 +132,7 @@ class IO(object):
             else:
                 byte &= ~mask
 
+            # TODO: if no device, skip...
             self.__device.write(byte)
 
             state.byte = byte
@@ -190,7 +192,7 @@ class IOState(PersistentJSONable):
         """
         Constructor
         """
-        self.__byte = byte                  # 8-bit int
+        self.__byte = byte                  # int
 
 
     # ----------------------------------------------------------------------------------------------------------------
