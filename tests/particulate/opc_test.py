@@ -9,7 +9,7 @@ Created on 4 Jul 2016
 import sys
 import time
 
-from scs_dfe.board.pca8574 import PCA8574
+from scs_dfe.board.io import IO
 from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.bus.i2c import I2C
@@ -22,10 +22,12 @@ opc = None
 
 try:
     I2C.open(Host.I2C_SENSORS)
-    io = PCA8574(0x3f)
+
+    io = IO()
     print(io)
 
-    io.write(0xf8)
+    io.opc_power = True
+    time.sleep(OPCN2.BOOT_TIME)
 
     opc = OPCN2()
     opc.on()
@@ -48,8 +50,12 @@ except KeyboardInterrupt as ex:
     print("opc_test: " + type(ex).__name__, file=sys.stderr)
 
 finally:
-    I2C.close()
-
     if opc:
         time.sleep(1)
         opc.off()
+
+    io.opc_power = False
+
+    I2C.close()
+
+

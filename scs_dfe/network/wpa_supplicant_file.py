@@ -22,10 +22,11 @@ class WPASupplicantFile(object):
     classdocs
     """
 
-    __TMP_DIR =         "/tmp/southcoastscience/"           # hard-coded path
-    __LIVE_DIR =        "/etc/wpa_supplicant/"              # hard-coded path
+    __TMP_DIR =         "/tmp/southcoastscience/"           # hard-coded path       # TODO: should go in Host
+    __LIVE_DIR =        "/etc/wpa_supplicant/"              # hard-coded path       # TODO: should go in Host
 
     __FILE =            "wpa_supplicant.conf"
+
 
     # ----------------------------------------------------------------------------------------------------------------
 

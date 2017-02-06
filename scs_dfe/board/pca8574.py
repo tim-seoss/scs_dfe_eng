@@ -9,7 +9,6 @@ from scs_host.bus.i2c import I2C
 
 # --------------------------------------------------------------------------------------------------------------------
 
-
 class PCA8574(object):
     """
     NXP PCA8574 remote 8-bit I/O expander
@@ -26,14 +25,6 @@ class PCA8574(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def write(self, byte):
-        try:
-            I2C.start_tx(self.__addr)
-            I2C.write(byte)
-        finally:
-            I2C.end_tx()
-
-
     def read(self):
         try:
             I2C.start_tx(self.__addr)
@@ -42,6 +33,14 @@ class PCA8574(object):
             I2C.end_tx()
 
         return byte
+
+
+    def write(self, byte):
+        try:
+            I2C.start_tx(self.__addr)
+            I2C.write(byte)
+        finally:
+            I2C.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------
