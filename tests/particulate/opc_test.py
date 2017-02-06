@@ -25,7 +25,7 @@ try:
     io = PCA8574(0x3f)
     print(io)
 
-    io.write(0x0d)
+    io.write(0xf8)
 
     opc = OPCN2()
     opc.on()
