@@ -20,7 +20,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-pt1000_calib = Pt1000Calib.load(Host)
+pt1000_calib = Pt1000Calib.load_from_host(Host)
 print(pt1000_calib)
 print("-")
  
@@ -28,7 +28,7 @@ pt1000 = pt1000_calib.pt1000()
 print(pt1000)
 print("-")
 
-conf = AFEConf.load(Host)
+conf = AFEConf.load_from_host(Host)
 print(conf)
 print("-")
 

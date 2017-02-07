@@ -4,16 +4,9 @@ Created on 6 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import os
-
-from collections import OrderedDict
-
-from scs_core.data.json import PersistentJSONable
-
 from scs_dfe.board.pca8574 import PCA8574
 
 from scs_host.lock.lock import Lock
-from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -24,6 +17,8 @@ class IO(object):
     """
     HIGH = True
     LOW = False
+
+    FILENAME =        "dfe_io.json"
 
 
     __MASK_GPS =        0x01            # 0000 0001
@@ -52,7 +47,7 @@ class IO(object):
         """
         Constructor
         """
-        self.__device = PCA8574.construct(IO.__ADDR)      # device is none if it can't be read
+        self.__device = PCA8574.construct(IO.__ADDR, IO.FILENAME)      # device is none if it can't be accessed
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -112,11 +107,13 @@ class IO(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __get_state(self, mask):
+        if self.__device is None:
+            return None
+
         Lock.acquire(IO.__lock_name(IO.__LOCK), IO.__LOCK_TIMEOUT, False)
 
         try:
-            state = IOState.load(Host)
-            byte = state.byte
+            byte = self.__device.state.byte
 
             return bool(byte & mask)
 
@@ -125,22 +122,21 @@ class IO(object):
 
 
     def __set_state(self, mask, level):
+        if self.__device is None:
+            return
+
         Lock.acquire(IO.__lock_name(IO.__LOCK), IO.__LOCK_TIMEOUT, False)
 
         try:
-            state = IOState.load(Host)
-            byte = state.byte
+            byte = self.__device.state.byte
 
             if level:
                 byte |= mask
             else:
                 byte &= ~mask
 
-            if self.__device:
-                self.__device.write(byte)
-
-            state.byte = byte
-            state.save(Host)
+            self.__device.write(byte)
+            self.__device.state = byte
 
         finally:
             Lock.release(IO.__lock_name(IO.__LOCK))
@@ -150,83 +146,3 @@ class IO(object):
 
     def __str__(self, *args, **kwargs):
         return "IO:{device:%s}" % self.__device
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
-class IOState(PersistentJSONable):      # TODO: move this to PCA8574
-    """
-    classdocs
-    """
-
-    __FILENAME = "dfe_io.json"
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @classmethod
-    def init(cls):
-        """
-        Establish the /tmp/southcoastscience/ root.
-        Should be invoked level class load.
-        """
-        try:
-            os.makedirs(Host.SCS_TMP)       # TODO: get the file permissions right
-        except FileExistsError:
-            pass
-
-
-    @classmethod
-    def filename(cls, host):
-        return host.SCS_TMP + cls.__FILENAME
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @classmethod
-    def construct_from_jdict(cls, jdict):
-        byte = jdict.get('byte') if jdict else '0xff'
-        state = int(byte, 16)
-
-        return IOState(state)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __init__(self, byte):
-        """
-        Constructor
-        """
-        self.__byte = byte                  # int
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def as_json(self):
-        jdict = OrderedDict()
-
-        jdict['byte'] = "0x%02x" % self.__byte
-
-        return jdict
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def byte(self):
-        return self.__byte
-
-
-    @byte.setter
-    def byte(self, byte):
-        self.__byte = byte
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __str__(self, *args, **kwargs):
-        return "IOState:{byte:0x%02x}" % self.byte
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
-IOState.init()

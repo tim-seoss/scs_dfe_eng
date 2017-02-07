@@ -22,7 +22,7 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    sht_conf = SHTConf.load(Host)
+    sht_conf = SHTConf.load_from_host(Host)
     sht = sht_conf.ext_sht()                    # TODO: this should be int_sht() but we don't have one yet
 
     sht.reset()
@@ -34,7 +34,7 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    calib = Pt1000Calib.load(Host)
+    calib = Pt1000Calib.load_from_host(Host)
     print(calib)
     print("-")
 

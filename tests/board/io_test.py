@@ -8,8 +8,8 @@ Created on 6 Feb 2017
 
 import time
 
-from scs_dfe.board.io import IOState
 from scs_dfe.board.io import IO
+from scs_dfe.board.pca8574 import PCA8574State
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -20,7 +20,7 @@ from scs_host.sys.host import Host
 I2C.open(Host.I2C_SENSORS)
 
 try:
-    state = IOState.load(Host)
+    state = PCA8574State.load_from_file(IO.FILENAME)
     print(state)
 
     io = IO()
@@ -31,7 +31,7 @@ try:
     io.led_red = not io.led_red
     print("led RED is:%s" % io.led_red)
 
-    state = IOState.load(Host)
+    state = PCA8574State.load_from_file(IO.FILENAME)
     print(state)
 
 finally:

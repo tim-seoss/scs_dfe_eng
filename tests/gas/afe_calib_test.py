@@ -15,7 +15,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-calib = AFECalib.load(Host)
+calib = AFECalib.load_from_host(Host)
 print(calib)
 print("-")
 

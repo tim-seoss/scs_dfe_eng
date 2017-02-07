@@ -19,7 +19,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-conf = AFEConf.load(Host)
+conf = AFEConf.load_from_host(Host)
 print(conf)
 print("-")
 

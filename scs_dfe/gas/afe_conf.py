@@ -30,10 +30,17 @@ class AFEConf(PersistentJSONable):
         return host.SCS_CONF + cls.__FILENAME
 
 
+    @classmethod
+    def load_from_host(cls, host):
+        return cls.load_from_file(cls.filename(host))
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
     def construct_from_jdict(cls, jdict):
+        print("constructing:%s" % jdict)
+
         if not jdict:
             return None
 
@@ -64,7 +71,7 @@ class AFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def sensors(self):
-        afe_calib = AFECalib.load(Host)
+        afe_calib = AFECalib.load_from_host(Host)
 
         if afe_calib.afe_type != self.afe_type:
             raise ValueError("AFEConf.sensors: calibration AFE type does not match configuration AFE type: %s" % afe_calib)
@@ -82,6 +89,12 @@ class AFEConf(PersistentJSONable):
             sensors.append(sensor)
 
         return sensors
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def save(self, host):
+        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------

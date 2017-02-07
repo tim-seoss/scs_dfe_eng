@@ -31,6 +31,11 @@ class AFECalib(PersistentJSONable):
         return host.SCS_CONF + cls.__FILENAME
 
 
+    @classmethod
+    def load_from_host(cls, host):
+        return cls.load_from_file(cls.filename(host))
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
@@ -85,6 +90,12 @@ class AFECalib(PersistentJSONable):
 
     def __len__(self):
         return len(self.__sensor_calibs)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def save(self, host):
+        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------
