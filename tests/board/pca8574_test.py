@@ -20,7 +20,7 @@ from scs_host.sys.host import Host
 I2C.open(Host.I2C_SENSORS)
 
 try:
-    io = PCA8574.construct(IO.ADDR, IO.FILENAME)
+    io = PCA8574.construct(IO.ADDR, IO.filename(Host))
     print(io)
 
     byte = io.read()
