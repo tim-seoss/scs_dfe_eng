@@ -15,23 +15,21 @@ class IO(object):
     """
     NXP PCA8574 remote 8-bit I/O expander
     """
-    HIGH = True
-    LOW = False
+    HIGH =                  True
+    LOW =                   False
 
-    FILENAME =        "dfe_io.json"
+    ADDR =                  0x3f
+    FILENAME =              "dfe_io.json"
 
+    __MASK_GPS =            0x01            # 0000 0001
+    __MASK_OPC =            0x02            # 0000 0010
+    __MASK_NDIR =           0x04            # 0000 0100
 
-    __MASK_GPS =        0x01            # 0000 0001
-    __MASK_OPC =        0x02            # 0000 0010
-    __MASK_NDIR =       0x04            # 0000 0100
+    __MASK_LED_RED =        0x40            # 0100 0000
+    __MASK_LED_GREEN =      0x80            # 1000 0000
 
-    __MASK_LED_RED =    0x40            # 0100 0000
-    __MASK_LED_GREEN =  0x80            # 1000 0000
-
-    __ADDR =            0x3f
-
-    __LOCK =            "DFE_IO"
-    __LOCK_TIMEOUT =    2.0
+    __LOCK =                "DFE_IO"
+    __LOCK_TIMEOUT =        2.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -47,66 +45,66 @@ class IO(object):
         """
         Constructor
         """
-        self.__device = PCA8574.construct(IO.__ADDR, IO.FILENAME)      # device is none if it can't be accessed
+        self.__device = PCA8574.construct(IO.ADDR, IO.FILENAME)      # device is none if it can't be accessed
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def gps_power(self):
-        return self.__get_state(IO.__MASK_GPS)
+    def gps_power(self):                                      # active low
+        return self.__get_output(IO.__MASK_GPS)
 
 
     @gps_power.setter
     def gps_power(self, level):
-        self.__set_state(IO.__MASK_GPS, level)
+        self.__set_output(IO.__MASK_GPS, level)
 
 
     @property
-    def opc_power(self):
-        return self.__get_state(IO.__MASK_OPC)
+    def opc_power(self):                                      # active low
+        return self.__get_output(IO.__MASK_OPC)
 
 
     @opc_power.setter
     def opc_power(self, level):
-        self.__set_state(IO.__MASK_OPC, level)
+        self.__set_output(IO.__MASK_OPC, level)
 
 
     @property
-    def ndir_power(self):
-        return self.__get_state(IO.__MASK_NDIR)
+    def ndir_power(self):                                      # active low
+        return self.__get_output(IO.__MASK_NDIR)
 
 
     @ndir_power.setter
     def ndir_power(self, level):
-        self.__set_state(IO.__MASK_NDIR, level)
+        self.__set_output(IO.__MASK_NDIR, level)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def led_red(self):
-        return self.__get_state(IO.__MASK_LED_RED)
+    def led_red(self):                                      # active high
+        return self.__get_output(IO.__MASK_LED_RED)
 
 
     @led_red.setter
     def led_red(self, level):
-        self.__set_state(IO.__MASK_LED_RED, level)
+        self.__set_output(IO.__MASK_LED_RED, level)
 
 
     @property
-    def led_green(self):
-        return self.__get_state(IO.__MASK_LED_GREEN)
+    def led_green(self):                                      # active high
+        return self.__get_output(IO.__MASK_LED_GREEN)
 
 
     @led_green.setter
     def led_green(self, level):
-        self.__set_state(IO.__MASK_LED_GREEN, level)
+        self.__set_output(IO.__MASK_LED_GREEN, level)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __get_state(self, mask):
+    def __get_output(self, mask):
         if self.__device is None:
             return None
 
@@ -121,7 +119,7 @@ class IO(object):
             Lock.release(IO.__lock_name(IO.__LOCK))
 
 
-    def __set_state(self, mask, level):
+    def __set_output(self, mask, level):
         if self.__device is None:
             return
 

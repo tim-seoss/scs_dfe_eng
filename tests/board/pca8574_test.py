@@ -8,6 +8,7 @@ Created on 3 Feb 2017
 
 import sys
 
+from scs_dfe.board.io import IO
 from scs_dfe.board.pca8574 import PCA8574
 
 from scs_host.bus.i2c import I2C
@@ -19,7 +20,7 @@ from scs_host.sys.host import Host
 I2C.open(Host.I2C_SENSORS)
 
 try:
-    io = PCA8574(0x3f)
+    io = PCA8574.construct(IO.ADDR, IO.FILENAME)
     print(io)
 
     byte = io.read()
