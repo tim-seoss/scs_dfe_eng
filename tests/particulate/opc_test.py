@@ -24,7 +24,7 @@ opc = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    io = IO()
+    io = IO(IO.filename(Host))
     print(io)
 
     io.opc_power = IO.HIGH
