@@ -10,6 +10,7 @@ import sys
 import time
 
 from scs_dfe.climate.sht_conf import SHTConf
+
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
