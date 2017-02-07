@@ -27,7 +27,7 @@ try:
     io = IO()
     print(io)
 
-    io.opc_power = True
+    io.opc_power = IO.HIGH
     time.sleep(OPCN2.BOOT_TIME)
 
     opc = OPCN2()
@@ -55,7 +55,7 @@ finally:
         opc.off()
 
     if io:
-        io.opc_power = False
+        io.opc_power = IO.LOW
 
     I2C.close()
 

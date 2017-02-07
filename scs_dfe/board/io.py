@@ -22,6 +22,10 @@ class IO(object):
     """
     NXP PCA8574 remote 8-bit I/O expander
     """
+    HIGH = True
+    LOW = False
+
+
     __MASK_GPS =        0x01            # 0000 0001
     __MASK_OPC =        0x02            # 0000 0010
     __MASK_NDIR =       0x04            # 0000 0100
@@ -59,8 +63,8 @@ class IO(object):
 
 
     @gps_power.setter
-    def gps_power(self, on):
-        self.__set_state(IO.__MASK_GPS, on)
+    def gps_power(self, level):
+        self.__set_state(IO.__MASK_GPS, level)
 
 
     @property
@@ -69,8 +73,8 @@ class IO(object):
 
 
     @opc_power.setter
-    def opc_power(self, on):
-        self.__set_state(IO.__MASK_OPC, on)
+    def opc_power(self, level):
+        self.__set_state(IO.__MASK_OPC, level)
 
 
     @property
@@ -79,8 +83,8 @@ class IO(object):
 
 
     @ndir_power.setter
-    def ndir_power(self, on):
-        self.__set_state(IO.__MASK_NDIR, on)
+    def ndir_power(self, level):
+        self.__set_state(IO.__MASK_NDIR, level)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -91,8 +95,8 @@ class IO(object):
 
 
     @led_red.setter
-    def led_red(self, on):
-        self.__set_state(IO.__MASK_LED_RED, on)
+    def led_red(self, level):
+        self.__set_state(IO.__MASK_LED_RED, level)
 
 
     @property
@@ -101,8 +105,8 @@ class IO(object):
 
 
     @led_green.setter
-    def led_green(self, on):
-        self.__set_state(IO.__MASK_LED_GREEN, on)
+    def led_green(self, level):
+        self.__set_state(IO.__MASK_LED_GREEN, level)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -120,14 +124,14 @@ class IO(object):
             Lock.release(IO.__lock_name(IO.__LOCK))
 
 
-    def __set_state(self, mask, on):
+    def __set_state(self, mask, level):
         Lock.acquire(IO.__lock_name(IO.__LOCK), IO.__LOCK_TIMEOUT, False)
 
         try:
             state = IOState.load(Host)
             byte = state.byte
 
-            if on:
+            if level:
                 byte |= mask
             else:
                 byte &= ~mask
@@ -145,12 +149,12 @@ class IO(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "IO:{device:%s}" % (self.__device)
+        return "IO:{device:%s}" % self.__device
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class IOState(PersistentJSONable):
+class IOState(PersistentJSONable):      # TODO: move this to PCA8574
     """
     classdocs
     """
@@ -163,7 +167,7 @@ class IOState(PersistentJSONable):
     def init(cls):
         """
         Establish the /tmp/southcoastscience/ root.
-        Should be invoked on class load.
+        Should be invoked level class load.
         """
         try:
             os.makedirs(Host.SCS_TMP)       # TODO: get the file permissions right
@@ -220,7 +224,7 @@ class IOState(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "IOState:{byte:0x%02x}" % (self.byte)
+        return "IOState:{byte:0x%02x}" % self.byte
 
 
 # --------------------------------------------------------------------------------------------------------------------
