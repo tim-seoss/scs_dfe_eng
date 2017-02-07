@@ -20,7 +20,12 @@ class PCA8574(object):
     def construct(cls, addr):
         device = PCA8574(addr)
 
-        # TODO: test, return None if not present
+        try:
+            device.read()
+            return device
+
+        except OSError:
+            return None
 
 
     # ----------------------------------------------------------------------------------------------------------------

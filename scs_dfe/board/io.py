@@ -48,7 +48,7 @@ class IO(object):
         """
         Constructor
         """
-        self.__device = PCA8574(IO.__ADDR)      # device is none if it can't be read
+        self.__device = PCA8574.construct(IO.__ADDR)      # device is none if it can't be read
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -132,8 +132,8 @@ class IO(object):
             else:
                 byte &= ~mask
 
-            # TODO: if no device, skip...
-            self.__device.write(byte)
+            if self.__device:
+                self.__device.write(byte)
 
             state.byte = byte
             state.save(Host)
