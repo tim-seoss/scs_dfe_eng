@@ -39,8 +39,6 @@ class AFEConf(PersistentJSONable):
 
     @classmethod
     def construct_from_jdict(cls, jdict):
-        print("constructing:%s" % jdict)
-
         if not jdict:
             return None
 
