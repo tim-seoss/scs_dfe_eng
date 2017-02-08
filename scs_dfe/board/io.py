@@ -50,13 +50,13 @@ class IO(object):
         """
         Constructor
         """
-        self.__device = PCA8574.construct(IO.ADDR, filename)      # device is none if it can't be accessed
+        self.__device = PCA8574.construct(IO.ADDR, filename)      # device is none if it cannot be accessed
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def gps_power(self):                                      # active low
+    def gps_power(self):                                    # active low
         return self.__get_output(IO.__MASK_GPS)
 
 
@@ -66,7 +66,7 @@ class IO(object):
 
 
     @property
-    def opc_power(self):                                      # active low
+    def opc_power(self):                                    # active low
         return self.__get_output(IO.__MASK_OPC)
 
 
@@ -76,7 +76,7 @@ class IO(object):
 
 
     @property
-    def ndir_power(self):                                      # active low
+    def ndir_power(self):                                   # active low
         return self.__get_output(IO.__MASK_NDIR)
 
 
@@ -98,7 +98,7 @@ class IO(object):
 
 
     @property
-    def led_green(self):                                      # active high
+    def led_green(self):                                    # active high
         return self.__get_output(IO.__MASK_LED_GREEN)
 
 
