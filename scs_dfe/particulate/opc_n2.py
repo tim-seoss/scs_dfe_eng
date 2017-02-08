@@ -2,9 +2,6 @@
 Created on 4 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
-
-    __CMD_POWER                        0x03
-    __CMD_POWER_ON                     0x00        //    0x03, 0x00
 """
 
 import struct
@@ -67,6 +64,18 @@ class OPCN2(object):
     def __pack_float(byte_values):
         packed = struct.unpack('f', struct.pack('BBBB', byte_values[0], byte_values[1], byte_values[2], byte_values[3]))
         return packed[0]
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def obtain_lock(cls):
+        Lock.acquire(cls.__name__, OPCN2.__LOCK_TIMEOUT)
+
+
+    @classmethod
+    def release_lock(cls):
+        Lock.release(cls.__name__)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -186,16 +195,6 @@ class OPCN2(object):
 
             self.__spi.close()
             self.release_lock()
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def obtain_lock(self):
-        Lock.acquire(OPCN2.__name__, OPCN2.__LOCK_TIMEOUT)
-
-
-    def release_lock(self):
-        Lock.release(OPCN2.__name__)
 
 
     # ----------------------------------------------------------------------------------------------------------------
