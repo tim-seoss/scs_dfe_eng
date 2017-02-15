@@ -47,18 +47,19 @@ class PAM7Q(object):
     u-blox 7 GPS Antenna Module
     """
 
-    UART = 1
-
     START_MESSAGE_ID = GPRMC.MESSAGE_ID
 
-    __SERIAL_TIMEOUT = 2.0
+    __UART =                1
+    __BAUD_RATE =           9600
+
+    __SERIAL_TIMEOUT =      2.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
         self.__io = IO()
-        self.__serial = HostSerial(PAM7Q.UART, 9600, False)
+        self.__serial = HostSerial(self.__UART, self.__BAUD_RATE, False)
 
 
     # ----------------------------------------------------------------------------------------------------------------
