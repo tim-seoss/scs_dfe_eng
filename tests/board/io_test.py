@@ -26,7 +26,11 @@ try:
 
     print("led RED was:%s" % io.led_red)
 
-    io.led_red = not io.led_red
+    io.gps_power = IO.LOW
+    io.opc_power = IO.LOW
+
+    io.led_red = IO.LOW
+
     print("led RED is:%s" % io.led_red)
 
     state = PCA8574State.load_from_file(IO.filename(Host))

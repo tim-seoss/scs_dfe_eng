@@ -97,7 +97,7 @@ class PAM7Q(object):
         # start...
         start = None
         for start in range(len(sentences)):
-            if sentences[start].field(0) == PAM7Q.START_MESSAGE_ID:
+            if sentences[start].str(0) == PAM7Q.START_MESSAGE_ID:
                 break
 
         if start is None:
@@ -122,7 +122,7 @@ class PAM7Q(object):
 
         # GPGSVs...
         for sentence in sentences[start + 4:]:
-            if sentence.field(0) != GPGSV.MESSAGE_ID:
+            if sentence.str(0) != GPGSV.MESSAGE_ID:
                 break
 
             messages.append(GPGSV.construct(sentence))
