@@ -24,16 +24,9 @@ opc = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    io = IO()
-    print(io)
-
-    io.opc_power = IO.LOW
-    print("opc power:%s" % io.opc_power)
-
-    time.sleep(OPCN2.BOOT_TIME)
-
     opc = OPCN2()
-    opc.on()
+    opc.power_on()
+    opc.operations_on()
 
     version = opc.firmware()
     print(version)
@@ -54,10 +47,8 @@ except KeyboardInterrupt as ex:
 
 finally:
     if opc:
-        opc.off()
-
-    if io:
-        io.opc_power = IO.HIGH
+        opc.operations_off()
+        opc.power_off()
 
     I2C.close()
 

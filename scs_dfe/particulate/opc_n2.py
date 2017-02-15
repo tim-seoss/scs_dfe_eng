@@ -7,6 +7,7 @@ Created on 4 Jul 2016
 import struct
 import time
 
+from scs_dfe.board.io import IO
 from scs_dfe.particulate.opc_datum import OPCDatum
 
 from scs_host.lock.lock import Lock
@@ -84,12 +85,28 @@ class OPCN2(object):
         """
         Constructor
         """
+        self.__io = IO()
         self.__spi = HostSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def on(self):
+    def power_on(self):
+        initial_power = self.__io.opc_power
+
+        self.__io.opc_power = IO.LOW
+
+        if initial_power == IO.HIGH:        # initial_power is None if there is no power control
+            time.sleep(self.BOOT_TIME)
+
+
+    def power_off(self):
+        self.__io.opc_power = IO.HIGH
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def operations_on(self):
         try:
             self.obtain_lock()
             self.__spi.open()
@@ -112,7 +129,7 @@ class OPCN2(object):
             self.release_lock()
 
 
-    def off(self):
+    def operations_off(self):
         try:
             self.obtain_lock()
             self.__spi.open()
@@ -125,6 +142,8 @@ class OPCN2(object):
             self.__spi.close()
             self.release_lock()
 
+
+    # ----------------------------------------------------------------------------------------------------------------
 
     def sample(self):
         try:
@@ -229,4 +248,4 @@ class OPCN2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCN2:{spi:%s}" % self.__spi
+        return "OPCN2:{io:%s, spi:%s}" % (self.__io, self.__spi)
