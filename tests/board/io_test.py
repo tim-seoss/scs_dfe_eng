@@ -18,10 +18,10 @@ from scs_host.sys.host import Host
 I2C.open(Host.I2C_SENSORS)
 
 try:
-    io = IO(IO.filename(Host))
+    io = IO()
     print(io)
 
-    state = PCA8574State.load_from_file(IO.filename(Host))
+    state = PCA8574State.load_from_file(IO.filename())
     print(state)
 
     print("led RED was:%s" % io.led_red)
@@ -33,7 +33,7 @@ try:
 
     print("led RED is:%s" % io.led_red)
 
-    state = PCA8574State.load_from_file(IO.filename(Host))
+    state = PCA8574State.load_from_file(IO.filename())
     print(state)
 
 finally:

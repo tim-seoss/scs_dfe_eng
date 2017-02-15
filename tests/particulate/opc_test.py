@@ -24,10 +24,12 @@ opc = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    io = IO(IO.filename(Host))
+    io = IO()
     print(io)
 
-    io.opc_power = IO.HIGH
+    io.opc_power = IO.LOW
+    print("opc power:%s" % io.opc_power)
+
     time.sleep(OPCN2.BOOT_TIME)
 
     opc = OPCN2()
@@ -55,7 +57,7 @@ finally:
         opc.off()
 
     if io:
-        io.opc_power = IO.LOW
+        io.opc_power = IO.HIGH
 
     I2C.close()
 

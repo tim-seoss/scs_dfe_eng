@@ -24,7 +24,7 @@ from scs_host.sys.host import Host
 
 I2C.open(Host.I2C_SENSORS)
 
-io = IO(IO.filename(Host))
+io = IO()
 
 gps = PAM7Q()
 print(gps)
