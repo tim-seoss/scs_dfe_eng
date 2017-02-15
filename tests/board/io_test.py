@@ -25,13 +25,13 @@ try:
     print(state)
 
     print("led RED was:%s" % io.led_red)
+    print("led GREEN was:%s" % io.led_green)
 
-    io.gps_power = IO.LOW
-    io.opc_power = IO.LOW
-
-    io.led_red = IO.LOW
+    io.led_red = not io.led_red
+    io.led_green = not io.led_green
 
     print("led RED is:%s" % io.led_red)
+    print("led GREEN is:%s" % io.led_green)
 
     state = PCA8574State.load_from_file(IO.filename())
     print(state)

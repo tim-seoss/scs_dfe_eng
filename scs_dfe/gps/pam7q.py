@@ -33,6 +33,8 @@ from scs_core.location.gprmc import GPRMC
 from scs_core.location.gpvtg import GPVTG
 from scs_core.location.nmea_sentence import NMEASentence
 
+from scs_dfe.board.io import IO
+
 from scs_host.sys.host_serial import HostSerial
 
 
@@ -49,17 +51,30 @@ class PAM7Q(object):
 
     START_MESSAGE_ID = GPRMC.MESSAGE_ID
 
+    __SERIAL_TIMEOUT = 2.0
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self):
+        self.__io = IO()
         self.__serial = HostSerial(PAM7Q.UART, 9600, False)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def power_on(self):
+        self.__io.gps_power = IO.LOW
+
+
+    def power_off(self):
+        self.__io.gps_power = IO.HIGH
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def open(self):
-        self.__serial.open(2.0)
+        self.__serial.open(self.__SERIAL_TIMEOUT)
 
 
     def close(self):
@@ -136,4 +151,4 @@ class PAM7Q(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PAM7Q:{serial:%s}" % self.__serial
+        return "PAM7Q:{io:%s, serial:%s}" % (self.__io, self.__serial)

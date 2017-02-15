@@ -13,7 +13,6 @@ from scs_core.location.gpgsv import GPGSV
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gpvtg import GPVTG
 
-from scs_dfe.board.io import IO
 from scs_dfe.gps.pam7q import PAM7Q
 
 from scs_host.bus.i2c import I2C
@@ -24,8 +23,6 @@ from scs_host.sys.host import Host
 
 I2C.open(Host.I2C_SENSORS)
 
-io = IO()
-
 gps = PAM7Q()
 print(gps)
 print("-")
@@ -35,14 +32,10 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
 
     print("power up...")
-
-    io.gps_power = IO.LOW
-    print(io.gps_power)
-    print("=")
+    gps.power_on()
 
 
     print("open...")
-
     gps.open()
     print(gps)
     print("=")
@@ -104,7 +97,6 @@ try:
     print("=")
 
 
-
 except KeyboardInterrupt as ex:
     print("pamq7_test: " + type(ex).__name__)
 
@@ -113,15 +105,11 @@ except KeyboardInterrupt as ex:
 
 finally:
     print("close...")
-
     gps.close()
     print(gps)
     print("=")
 
     # print("power down...")
-
-    # io.gps_power = IO.LOW
-    # print(io.gps_power)
-    # print("=")
+    # gps.power_off()
 
     I2C.close()
