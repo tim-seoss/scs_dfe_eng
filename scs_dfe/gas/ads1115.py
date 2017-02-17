@@ -148,7 +148,7 @@ class ADS1115(object):
             config = self.__read_config()
 
             if not (config & ADS1115.__OS_START):
-                raise ValueError("ADS1115:read_conversion: conversion not ready.")  # TODO: check that lock is released
+                raise ValueError("ADS1115:read_conversion: conversion not ready.")
 
             v = self.__read_conv()
 

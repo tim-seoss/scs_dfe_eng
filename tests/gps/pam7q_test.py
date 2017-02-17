@@ -13,6 +13,8 @@ from scs_core.location.gpgsv import GPGSV
 from scs_core.location.gprmc import GPRMC
 from scs_core.location.gpvtg import GPVTG
 
+from scs_core.location.gps_location import GPSLocation
+
 from scs_dfe.gps.pam7q import PAM7Q
 
 from scs_host.bus.i2c import I2C
@@ -45,28 +47,28 @@ try:
 
     print("report...")
 
-    msg = gps.report(GPGGA)
-    print(msg)
+    gga = gps.report(GPGGA)
+    print(gga)
     print("-")
 
-    msg = gps.report(GPGLL)
-    print(msg)
+    gll = gps.report(GPGLL)
+    print(gll)
     print("-")
 
-    msg = gps.report(GPGSV)
-    print(msg)
+    gsv = gps.report(GPGSV)
+    print(gsv)
     print("-")
 
-    msg = gps.report(GPGSA)
-    print(msg)
+    gsa = gps.report(GPGSA)
+    print(gsa)
     print("-")
 
-    gpmrc = gps.report(GPRMC)
-    print(gpmrc)
+    rmc = gps.report(GPRMC)
+    print(rmc)
     print("-")
 
-    msg = gps.report(GPVTG)
-    print(msg)
+    vtg = gps.report(GPVTG)
+    print(vtg)
     print("=")
 
 
@@ -85,16 +87,13 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    if gpmrc is not None:
-        print("position: %s, %s  time: %s" % (gpmrc.loc.deg_lat(), gpmrc.loc.deg_lng(), gpmrc.datetime.as_iso8601()))
+    if rmc is not None:
+        print("position: %s, %s  time: %s" % (rmc.loc.deg_lat(), rmc.loc.deg_lng(), rmc.datetime.as_iso8601()))
+
+        location = GPSLocation.construct(gga)
+        print(location)
+
         print("=")
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    # TODO: test location class
-
-    print("=")
 
 
 except KeyboardInterrupt as ex:
