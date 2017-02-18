@@ -9,7 +9,6 @@ Created on 4 Jul 2016
 import sys
 import time
 
-from scs_dfe.board.io import IO
 from scs_dfe.particulate.opc_n2 import OPCN2
 
 from scs_host.bus.i2c import I2C
