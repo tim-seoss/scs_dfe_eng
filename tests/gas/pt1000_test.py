@@ -23,7 +23,7 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
 
     sht_conf = SHTConf.load_from_host(Host)
-    sht = sht_conf.ext_sht()                    # TODO: this should be int_sht() but we don't have one yet
+    sht = sht_conf.int_sht()
 
     sht.reset()
 
