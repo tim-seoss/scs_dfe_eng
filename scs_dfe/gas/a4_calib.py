@@ -129,5 +129,7 @@ class A4Calib(SensorCalib):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "A4Calib:{serial_number:%s, sensor_type:%s, weELC:%s, weCAL:%s, weTOT:%s, aeELC:%s, aeCAL:%s, aeTOT:%s, weSENS:%s, weXSENS:%s}" % \
-                    (self.serial_number, self.sensor_type, self.weELC, self.weCAL, self.weTOT, self.aeELC, self.aeCAL, self.aeTOT, self.weSENS, self.weXSENS)
+        return "A4Calib:{serial_number:%s, sensor_type:%s, weELC:%s, weCAL:%s, weTOT:%s, aeELC:%s, aeCAL:%s, " \
+               "aeTOT:%s, weSENS:%s, weXSENS:%s}" % \
+                    (self.serial_number, self.sensor_type, self.weELC, self.weCAL, self.weTOT, self.aeELC, self.aeCAL,
+                     self.aeTOT, self.weSENS, self.weXSENS)
