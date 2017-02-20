@@ -87,7 +87,7 @@ class PAM7Q(object):
     def report(self, message_class):
         for i in range(11):
             try:
-                line = self.__serial.read_line("\r\n", 1)
+                line = self.__serial.read_line("\r\n", 1.0)
                 s = NMEASentence.construct(line)
 
                 if s.str(0) == message_class.MESSAGE_ID:
