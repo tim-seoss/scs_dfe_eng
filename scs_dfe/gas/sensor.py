@@ -19,8 +19,8 @@ class Sensor(object):
     CO_A4 =     'CO-A4'
     H2S_A4 =    'H2S-A4'
     NO_A4 =     'NO-A4'
-    NO2_A43F =  'NO2-A43F'
-    OX_A431 =   'OX-A431'
+    NO2_A43F =  'NO2-A4'
+    OX_A431 =   'OX-A4'
     SO2_A4 =    'SO2-A4'
 
     PID_A1 =    'PID-A1'

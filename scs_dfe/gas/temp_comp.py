@@ -2,6 +2,8 @@
 Created on 22 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+Ox TempComp(3, 'kpT',  [ 0.1,   0.1,    0.2,    0.3,    0.7,    1.0,    1.7,    3.0,    4.0]), # from On 2017-02-22
 """
 
 from scs_dfe.gas.sensor import Sensor
@@ -25,14 +27,15 @@ class TempComp(object):
 
     @classmethod
     def init(cls):
-        cls.__COMP = {      # ºC                         -30    -20     -10      0       10      20     30       40      50
-                   Sensor.CO_A4:    TempComp(1, 'nT',   [ 1.0,   1.0,    1.0,    1.0,   -0.2,   -0.9,   -1.5,   -1.5,   -1.5]),
-                   Sensor.H2S_A4:   TempComp(2, 'kT',   [-1.5,  -1.5,   -1.5,   -0.5,    0.5,    1.0,    0.8,    0.5,    0.3]),
-                   Sensor.NO_A4:    TempComp(3, 'kpT',  [ 0.7,   0.7,    0.7,    0.7,    0.8,    1.0,    1.2,    1.4,    1.6]),
-                   Sensor.NO2_A43F: TempComp(1, 'nT',   [ 0.8,   0.8,    1.0,    1.2,    1.6,    1.8,    1.9,    2.5,    3.6]),
-                   Sensor.OX_A431:  None,
-                   Sensor.SO2_A4:   TempComp(4, 'kppT', [ 0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    5.0,   25.0,   45.0])
-                }
+        cls.__COMP = {
+                    # ºC                         -30    -20     -10      0       10      20     30       40      50
+           Sensor.CO_A4:    TempComp(1, 'nT',   [ 1.0,   1.0,    1.0,    1.0,   -0.2,   -0.9,   -1.5,   -1.5,   -1.5]),
+           Sensor.H2S_A4:   TempComp(2, 'kT',   [-1.5,  -1.5,   -1.5,   -0.5,    0.5,    1.0,    0.8,    0.5,    0.3]),
+           Sensor.NO_A4:    TempComp(3, 'kpT',  [ 0.7,   0.7,    0.7,    0.7,    0.8,    1.0,    1.2,    1.4,    1.6]),
+           Sensor.NO2_A43F: TempComp(1, 'nT',   [ 0.8,   0.8,    1.0,    1.2,    1.6,    1.8,    1.9,    2.5,    3.6]),
+           Sensor.OX_A431:  None,
+           Sensor.SO2_A4:   TempComp(4, 'kppT', [ 0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    5.0,   25.0,   45.0])
+        }
 
 
     @classmethod

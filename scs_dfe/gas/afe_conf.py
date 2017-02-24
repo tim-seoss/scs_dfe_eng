@@ -75,7 +75,7 @@ class AFEConf(PersistentJSONable):
             raise ValueError("AFEConf.sensors: calibration type does not match configuration type: %s" % afe_calib)
 
         if len(self) != len(afe_calib):
-            raise ValueError("AFEConf.sensors: calibration sensors do not match configuration sensors: %s" % afe_calib)
+            raise ValueError("AFEConf.sensors: calibration sensors %s\n\n do not match configuration sensors: %s" % (afe_calib, self))
 
         # TODO: further tests to validate conf and calib match
 

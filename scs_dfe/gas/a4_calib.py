@@ -25,6 +25,8 @@ class A4Calib(SensorCalib):
         if not jdict:
             return None
 
+        # print("jdict: %s\n" % jdict)
+
         serial_number = jdict.get('serial_number')
         sensor_type = jdict.get('sensor_type')
 

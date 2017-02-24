@@ -43,6 +43,8 @@ class AFECalib(PersistentJSONable):
         if not jdict:
             return None
 
+        # print("jdict: %s" % jdict)
+
         serial_number = jdict.get('serial_number')
         afe_type = jdict.get('type')
 
