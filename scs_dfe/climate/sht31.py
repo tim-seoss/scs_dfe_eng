@@ -18,7 +18,7 @@ from scs_host.bus.i2c import I2C
 
 class SHT31(object):
     """
-    classdocs
+    Sensirion SHT3x-DIS temperature and humidity
     """
     __CMD_RESET =           0x30a2
     __CMD_CLEAR =           0x3041
