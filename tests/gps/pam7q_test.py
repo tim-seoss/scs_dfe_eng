@@ -36,7 +36,6 @@ try:
     print("power up...")
     gps.power_on()
 
-
     print("open...")
     gps.open()
     print(gps)
