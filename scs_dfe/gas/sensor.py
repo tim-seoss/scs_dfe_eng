@@ -2,6 +2,8 @@
 Created on 30 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+https://www.alphasense-technology.co.uk/sensor_types
 """
 
 from abc import abstractmethod
@@ -25,7 +27,7 @@ class Sensor(object):
     CODE_VOC_PPM =  '142'           # PIDN1
     CODE_VOC_PPB =  '143'           # PIDNH
 
-    __GAS =     None
+    __SENSORS =     None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -37,7 +39,7 @@ class Sensor(object):
         from scs_dfe.gas.a4 import A4
         from scs_dfe.gas.pid import PID
 
-        cls.__GAS = {
+        cls.__SENSORS = {
             cls.CODE_CO:         A4(cls.CODE_CO,        'CO',   ADS1115.GAIN_2p048),
             cls.CODE_H2S:        A4(cls.CODE_H2S,       'H2S',  ADS1115.GAIN_2p048),
             cls.CODE_NO:         A4(cls.CODE_NO,        'NO',   ADS1115.GAIN_2p048),
@@ -55,8 +57,8 @@ class Sensor(object):
         if serial_number is None:
             return None
 
-        for key, sensor in cls.__GAS.items():
-            if str(serial_number).startswith(key):
+        for code, sensor in cls.__SENSORS.items():
+            if str(serial_number).startswith(code):
                 return sensor
 
         return None
@@ -64,11 +66,11 @@ class Sensor(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, sensor_type, gas_name, adc_gain, calib=None):
+    def __init__(self, sensor_code, gas_name, adc_gain, calib=None):
         """
         Constructor
         """
-        self.__sensor_type = sensor_type
+        self.__sensor_code = sensor_code
 
         self.__gas_name = gas_name
         self.__adc_gain = adc_gain
@@ -86,8 +88,8 @@ class Sensor(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def sensor_type(self):
-        return self.__sensor_type
+    def sensor_code(self):
+        return self.__sensor_code
 
 
     @property

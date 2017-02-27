@@ -35,5 +35,5 @@ class PID(Sensor):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PID:{sensor_type:%s, gas_name:%s, adc_gain:0x%04x, calib:%s}" % \
-                        (self.sensor_type, self.gas_name, self.adc_gain, self.calib)
+        return "PID:{sensor_code:%s, gas_name:%s, adc_gain:0x%04x, calib:%s}" % \
+                        (self.sensor_code, self.gas_name, self.adc_gain, self.calib)
