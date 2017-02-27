@@ -32,8 +32,8 @@ class TempComp(object):
            Sensor.CO_A4:    TempComp(1, 'nT',   [ 1.0,   1.0,    1.0,    1.0,   -0.2,   -0.9,   -1.5,   -1.5,   -1.5]),
            Sensor.H2S_A4:   TempComp(2, 'kT',   [-1.5,  -1.5,   -1.5,   -0.5,    0.5,    1.0,    0.8,    0.5,    0.3]),
            Sensor.NO_A4:    TempComp(3, 'kpT',  [ 0.7,   0.7,    0.7,    0.7,    0.8,    1.0,    1.2,    1.4,    1.6]),
-           Sensor.NO2_A43F: TempComp(1, 'nT',   [ 0.8,   0.8,    1.0,    1.2,    1.6,    1.8,    1.9,    2.5,    3.6]),
-           Sensor.OX_A431:  None,
+           Sensor.NO2_A4: TempComp(1, 'nT', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
+           Sensor.OX_A4:  None,
            Sensor.SO2_A4:   TempComp(4, 'kppT', [ 0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    5.0,   25.0,   45.0])
         }
 

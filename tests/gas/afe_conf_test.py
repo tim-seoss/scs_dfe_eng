@@ -22,7 +22,7 @@ afe_type = "810-0022-01"
 print(afe_type)
 print("-")
 
-sensor_types = [Sensor.OX_A431, Sensor.NO2_A43F, Sensor.NO_A4, Sensor.CO_A4]
+sensor_types = [Sensor.OX_A4, Sensor.NO2_A4, Sensor.NO_A4, Sensor.CO_A4]
 print(sensor_types)
 print("-")
 

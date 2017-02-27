@@ -36,7 +36,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.NO2_A43F
+sensor_type = Sensor.NO2_A4
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -44,7 +44,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.OX_A431
+sensor_type = Sensor.OX_A4
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)

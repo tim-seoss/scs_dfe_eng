@@ -20,7 +20,7 @@ from scs_dfe.particulate.pmx_datum import PMxDatum
 
 # --------------------------------------------------------------------------------------------------------------------
 
-sensors = (Sensor.find(Sensor.OX_A431), Sensor.find(Sensor.NO2_A43F), Sensor.find(Sensor.NO_A4), Sensor.find(Sensor.PID_A1))
+sensors = (Sensor.find(Sensor.OX_A4), Sensor.find(Sensor.NO2_A4), Sensor.find(Sensor.NO_A4), Sensor.find(Sensor.PID_A1))
 print(sensors)
 print("-")
 

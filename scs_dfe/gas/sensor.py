@@ -19,14 +19,14 @@ class Sensor(object):
     CO_A4 =     'CO-A4'
     H2S_A4 =    'H2S-A4'
     NO_A4 =     'NO-A4'
-    NO2_A43F =  'NO2-A4'
-    OX_A431 =   'OX-A4'
+    NO2_A4 =    'NO2-A4'
+    OX_A4 =     'OX-A4'
     SO2_A4 =    'SO2-A4'
 
     PID_A1 =    'PID-A1'
     PID_AH =    'PID-AH'
 
-    __GAS = None
+    __GAS =     None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -39,15 +39,15 @@ class Sensor(object):
         from scs_dfe.gas.pid import PID
 
         cls.__GAS = {
-                   cls.CO_A4:       A4(cls.CO_A4,     'CO',     ADS1115.GAIN_2p048),
-                   cls.H2S_A4:      A4(cls.H2S_A4,    'H2S',    ADS1115.GAIN_2p048),
-                   cls.NO_A4:       A4(cls.NO_A4,     'NO',     ADS1115.GAIN_2p048),
-                   cls.NO2_A43F:    A4(cls.NO2_A43F,  'NO2',    ADS1115.GAIN_2p048),
-                   cls.OX_A431:     A4(cls.OX_A431,   'Ox',     ADS1115.GAIN_2p048),
-                   cls.SO2_A4:      A4(cls.SO2_A4,    'SO2',    ADS1115.GAIN_2p048),
+                   cls.CO_A4:       A4(cls.CO_A4,       'CO',       ADS1115.GAIN_2p048),
+                   cls.H2S_A4:      A4(cls.H2S_A4,      'H2S',      ADS1115.GAIN_2p048),
+                   cls.NO_A4:       A4(cls.NO_A4,       'NO',       ADS1115.GAIN_2p048),
+                   cls.NO2_A4:      A4(cls.NO2_A4,      'NO2',      ADS1115.GAIN_2p048),
+                   cls.OX_A4:       A4(cls.OX_A4,       'Ox',       ADS1115.GAIN_2p048),
+                   cls.SO2_A4:      A4(cls.SO2_A4,      'SO2',      ADS1115.GAIN_2p048),
 
-                   cls.PID_A1:      PID(cls.PID_A1,   'VOC',    ADS1115.GAIN_4p096),
-                   cls.PID_AH:      PID(cls.PID_AH,   'VOC',    ADS1115.GAIN_4p096)
+                   cls.PID_A1:      PID(cls.PID_A1,     'VOC',      ADS1115.GAIN_4p096),
+                   cls.PID_AH:      PID(cls.PID_AH,     'VOC',      ADS1115.GAIN_4p096)
                 }
 
 
