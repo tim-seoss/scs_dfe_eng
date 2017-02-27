@@ -23,11 +23,15 @@ pt1000_calib = calib.pt100_calib
 print(pt1000_calib)
 print("-")
 
-sensor_types = calib.sensor_types()
-print("sensor_types:%s" % sensor_types)
-print("-")
+for i in range(len(calib)):
+    print(calib.sensor_calib(i))
+    print("-")
+
+for sensor in calib.sensors():
+    print(sensor)
+    print("-")
+
 
 jstr = JSONify.dumps(calib)
 print(jstr)
 print("-")
-

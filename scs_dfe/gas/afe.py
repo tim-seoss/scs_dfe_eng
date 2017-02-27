@@ -89,10 +89,10 @@ class AFE(object):
 
             time.sleep(self.__tconv)
 
-            weV = self.__wrk.read_conversion()
-            aeV = self.__aux.read_conversion()
+            we_v = self.__wrk.read_conversion()
+            ae_v = self.__aux.read_conversion()
 
-            return weV, aeV
+            return we_v, ae_v
 
         finally:
             self.__wrk.release_lock()
@@ -107,9 +107,9 @@ class AFE(object):
 
             time.sleep(self.__tconv)
 
-            weV = self.__wrk.read_conversion()
+            we_v = self.__wrk.read_conversion()
 
-            return weV
+            return we_v
 
         finally:
             self.__wrk.release_lock()

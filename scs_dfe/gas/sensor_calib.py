@@ -25,16 +25,13 @@ class SensorCalib(JSONable):
         Constructor
         """
         self.__serial_number = serial_number
-        self.__sensor_type = sensor_type                  # TODO: remove spaces?
+        self.__sensor_type = sensor_type
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sensor(self, conf_sensor_type):                   # TODO: resolve conf and calib sensor types!
-        if conf_sensor_type is None:
-            return None
-
-        sensor = Sensor.find(conf_sensor_type)
+    def sensor(self):
+        sensor = Sensor.find(self.__serial_number)
         sensor.calib = self
 
         return sensor

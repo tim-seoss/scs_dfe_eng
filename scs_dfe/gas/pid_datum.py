@@ -19,11 +19,11 @@ class PIDDatum(JSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, weT, cnc=None):
+    def __init__(self, we_t, cnc=None):
         """
         Constructor
         """
-        self.__weT = Datum.float(weT, 6)        # uncorrected working electrode output         Volts
+        self.__we_t = Datum.float(we_t, 6)        # uncorrected working electrode output         Volts
         self.__cnc = cnc                        # gas concentration                            ppb (d)
 
 
@@ -32,7 +32,7 @@ class PIDDatum(JSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['weT'] = self.weT
+        jdict['weT'] = self.we_t
 
         jdict['cnc'] = self.cnc                 # may be None
 
@@ -42,8 +42,8 @@ class PIDDatum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def weT(self):
-        return self.__weT
+    def we_t(self):
+        return self.__we_t
 
 
     @property
@@ -54,4 +54,4 @@ class PIDDatum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PIDDatum:{weT:%0.6f, cnc:%s}" % (self.weT, self.cnc)
+        return "PIDDatum:{we_t:%0.6f, cnc:%s}" % (self.we_t, self.cnc)

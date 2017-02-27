@@ -15,16 +15,15 @@ class Sensor(object):
     """
     classdocs
     """
+    CODE_CO =       '132'           # CO A4
+    CODE_H2S =      '133'           # H2SA4
+    CODE_NO =       '130'           # NO A4
+    CODE_NO2 =      '212'           # NOGA4
+    CODE_OX =       '214'           # OXGA4
+    CODE_SO2 =      '134'           # SO2A4
 
-    CO_A4 =     'CO-A4'
-    H2S_A4 =    'H2S-A4'
-    NO_A4 =     'NO-A4'
-    NO2_A4 =    'NO2-A4'
-    OX_A4 =     'OX-A4'
-    SO2_A4 =    'SO2-A4'
-
-    PID_A1 =    'PID-A1'
-    PID_AH =    'PID-AH'
+    CODE_VOC_PPM =  '142'           # PIDN1
+    CODE_VOC_PPB =  '143'           # PIDNH
 
     __GAS =     None
 
@@ -39,27 +38,28 @@ class Sensor(object):
         from scs_dfe.gas.pid import PID
 
         cls.__GAS = {
-                   cls.CO_A4:       A4(cls.CO_A4,       'CO',       ADS1115.GAIN_2p048),
-                   cls.H2S_A4:      A4(cls.H2S_A4,      'H2S',      ADS1115.GAIN_2p048),
-                   cls.NO_A4:       A4(cls.NO_A4,       'NO',       ADS1115.GAIN_2p048),
-                   cls.NO2_A4:      A4(cls.NO2_A4,      'NO2',      ADS1115.GAIN_2p048),
-                   cls.OX_A4:       A4(cls.OX_A4,       'Ox',       ADS1115.GAIN_2p048),
-                   cls.SO2_A4:      A4(cls.SO2_A4,      'SO2',      ADS1115.GAIN_2p048),
+            cls.CODE_CO:         A4(cls.CODE_CO,        'CO',   ADS1115.GAIN_2p048),
+            cls.CODE_H2S:        A4(cls.CODE_H2S,       'H2S',  ADS1115.GAIN_2p048),
+            cls.CODE_NO:         A4(cls.CODE_NO,        'NO',   ADS1115.GAIN_2p048),
+            cls.CODE_NO2:        A4(cls.CODE_NO2,       'NO2',  ADS1115.GAIN_2p048),
+            cls.CODE_OX:         A4(cls.CODE_OX,        'Ox',   ADS1115.GAIN_2p048),
+            cls.CODE_SO2:        A4(cls.CODE_SO2,       'SO2',  ADS1115.GAIN_2p048),
 
-                   cls.PID_A1:      PID(cls.PID_A1,     'VOC',      ADS1115.GAIN_4p096),
-                   cls.PID_AH:      PID(cls.PID_AH,     'VOC',      ADS1115.GAIN_4p096)
-                }
+            cls.CODE_VOC_PPM:    PID(cls.CODE_VOC_PPM,  'VOC',  ADS1115.GAIN_4p096),
+            cls.CODE_VOC_PPB:    PID(cls.CODE_VOC_PPB,  'VOC',  ADS1115.GAIN_4p096)
+        }
 
 
     @classmethod
-    def find(cls, sensor_type):
-        if sensor_type is None:
+    def find(cls, serial_number):
+        if serial_number is None:
             return None
 
-        if sensor_type not in cls.__GAS:
-            raise ValueError("Sensor.find: unrecognised sensor type: %s." % sensor_type)
+        for key, sensor in cls.__GAS.items():
+            if str(serial_number).startswith(key):
+                return sensor
 
-        return cls.__GAS[sensor_type]
+        return None
 
 
     # ----------------------------------------------------------------------------------------------------------------

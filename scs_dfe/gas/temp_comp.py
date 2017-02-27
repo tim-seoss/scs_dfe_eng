@@ -3,7 +3,7 @@ Created on 22 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Ox TempComp(3, 'kpT',  [ 0.1,   0.1,    0.2,    0.3,    0.7,    1.0,    1.7,    3.0,    4.0]), # from On 2017-02-22
+Ox TempComp(3, 'kp_t',  [ 0.1,   0.1,    0.2,    0.3,    0.7,    1.0,    1.7,    3.0,    4.0]), # from On 2017-02-22
 """
 
 from scs_dfe.gas.sensor import Sensor
@@ -25,25 +25,26 @@ class TempComp(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    #                                   ºC:  -30    -20     -10      0       10      20     30       40      50
+
     @classmethod
     def init(cls):
         cls.__COMP = {
-                    # ºC                         -30    -20     -10      0       10      20     30       40      50
-           Sensor.CO_A4:    TempComp(1, 'nT',   [ 1.0,   1.0,    1.0,    1.0,   -0.2,   -0.9,   -1.5,   -1.5,   -1.5]),
-           Sensor.H2S_A4:   TempComp(2, 'kT',   [-1.5,  -1.5,   -1.5,   -0.5,    0.5,    1.0,    0.8,    0.5,    0.3]),
-           Sensor.NO_A4:    TempComp(3, 'kpT',  [ 0.7,   0.7,    0.7,    0.7,    0.8,    1.0,    1.2,    1.4,    1.6]),
-           Sensor.NO2_A4: TempComp(1, 'nT', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
-           Sensor.OX_A4:  None,
-           Sensor.SO2_A4:   TempComp(4, 'kppT', [ 0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    5.0,   25.0,   45.0])
+            Sensor.CODE_CO:    TempComp(1, 'n_t', [1.0, 1.0, 1.0, 1.0, -0.2, -0.9, -1.5, -1.5, -1.5]),
+            Sensor.CODE_H2S:   TempComp(2, 'k_t', [-1.5, -1.5, -1.5, -0.5, 0.5, 1.0, 0.8, 0.5, 0.3]),
+            Sensor.CODE_NO:    TempComp(3, 'kp_t', [0.7, 0.7, 0.7, 0.7, 0.8, 1.0, 1.2, 1.4, 1.6]),
+            Sensor.CODE_NO2:   TempComp(1, 'n_t', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
+            Sensor.CODE_OX:    None,
+            Sensor.CODE_SO2:   TempComp(4, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])
         }
 
 
     @classmethod
-    def find(cls, sensor_type):
-        if sensor_type not in cls.__COMP:
-            raise ValueError("TempComp.find: unrecognised sensor type: %s." % sensor_type)
+    def find(cls, sensor_code):
+        if sensor_code not in cls.__COMP:
+            raise ValueError("TempComp.find: unrecognised sensor code: %s." % sensor_code)
 
-        return cls.__COMP[sensor_type]
+        return cls.__COMP[sensor_code]
 
 
     @classmethod
@@ -72,7 +73,7 @@ class TempComp(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def correct(self, calib, temp, weT, aeT):
+    def correct(self, calib, temp, we_t, ae_t):
         """
         Find corrected we.
         """
@@ -80,49 +81,49 @@ class TempComp(object):
             return None
 
         if self.__algorithm == 1:
-            return self.__eq1(temp, weT, aeT)
+            return self.__eq1(temp, we_t, ae_t)
 
         if self.__algorithm == 2:
-            return self.__eq2(temp, weT, aeT, calib.weCAL, calib.aeCAL)
+            return self.__eq2(temp, we_t, ae_t, calib.we_cal_mv, calib.ae_cal_mv)
 
         if self.__algorithm == 3:
-            return self.__eq3(temp, weT, aeT, calib.weCAL, calib.aeCAL)
+            return self.__eq3(temp, we_t, ae_t, calib.we_cal_mv, calib.ae_cal_mv)
 
         if self.__algorithm == 4:
-            return self.__eq4(temp, weT, calib.weCAL)
+            return self.__eq4(temp, we_t, calib.we_cal_mv)
 
         raise ValueError("TempComp.conv: unrecognised algorithm: %d." % self.__algorithm)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __eq1(self, temp, weT, aeT):
-        nT = self.cfT(temp)
+    def __eq1(self, temp, we_t, ae_t):
+        n_t = self.cf_t(temp)
 
-        return weT - nT * aeT
-
-
-    def __eq2(self, temp, weT, aeT, weCAL, aeCAL):
-        kT = self.cfT(temp)
-
-        return weT - kT * (weCAL / aeCAL) * aeT
+        return we_t - n_t * ae_t
 
 
-    def __eq3(self, temp, weT, aeT, weCAL, aeCAL):
-        kpT = self.cfT(temp)
+    def __eq2(self, temp, we_t, ae_t, we_cal_mv, ae_cal_mv):
+        k_t = self.cf_t(temp)
 
-        return weT - kpT * (weCAL - aeCAL) * aeT
+        return we_t - k_t * (we_cal_mv / ae_cal_mv) * ae_t
 
 
-    def __eq4(self, temp, weT, weCAL):
-        kppT = self.cfT(temp)
+    def __eq3(self, temp, we_t, ae_t, we_cal_mv, ae_cal_mv):
+        kp_t = self.cf_t(temp)
 
-        return weT - weCAL - kppT
+        return we_t - kp_t * (we_cal_mv - ae_cal_mv) * ae_t
+
+
+    def __eq4(self, temp, we_t, we_cal_mv):
+        kpp_t = self.cf_t(temp)
+
+        return we_t - we_cal_mv - kpp_t
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def cfT(self, temp):
+    def cf_t(self, temp):
         """
         Find the linear-interpolated temperature compensation factor.
         """

@@ -18,13 +18,13 @@ class A4(Sensor):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, sensor_type, gas_name, adc_gain):
+    def __init__(self, sensor_code, gas_name, adc_gain):
         """
         Constructor
         """
-        Sensor.__init__(self, sensor_type, gas_name, adc_gain)
+        Sensor.__init__(self, sensor_code, gas_name, adc_gain)
 
-        self.__tc = TempComp.find(sensor_type)
+        self.__tc = TempComp.find(sensor_code)
 
 
     # ----------------------------------------------------------------------------------------------------------------

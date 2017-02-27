@@ -14,20 +14,26 @@ from scs_dfe.gas.a4_calib import A4Calib
 serial_number = 123456789
 sensor_type = 'CO-A4'
 
-weELC = 275
-weCAL = -8
-weTOT = 278
+we_elc_mv = 275
+we_cal_mv = -8
+we_tot_mv = 278
 
-aeELC = 273
-aeCAL = -3
-aeTOT = 270
+ae_elc_mv = 273
+ae_cal_mv = -3
+ae_tot_mv = 270
 
-weSENS = 0.321
-weXSENS = None
+we_sens_na = 0.321
+we_x_sens_na = None
+
+pcb_gain = -0.73
+
+we_sens_mv = 0.321
+we_x_sens_mv = None
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-calib = A4Calib(serial_number, sensor_type, weELC, weCAL, weTOT, aeELC, aeCAL, aeTOT, weSENS, weXSENS)
+calib = A4Calib(serial_number, sensor_type, we_elc_mv, we_cal_mv, we_tot_mv, ae_elc_mv, ae_cal_mv, ae_tot_mv,
+                we_sens_na, we_x_sens_na, pcb_gain, we_sens_mv, we_x_sens_mv)
 print(calib)
 print("-")

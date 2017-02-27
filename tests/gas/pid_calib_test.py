@@ -13,8 +13,8 @@ from scs_dfe.gas.pid_calib import PIDCalib
 
 # --------------------------------------------------------------------------------------------------------------------
 
-serial_number = "123456789"
-sensor_type = "PIDAH"
+serial_number = "143456789"
+sensor_type = "PIDNH"
 
 pidELC = 275
 pidSENS = 0.321

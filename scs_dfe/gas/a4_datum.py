@@ -20,44 +20,44 @@ class A4Datum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct(cls, calib, tc, temp, weV, aeV):
+    def construct(cls, calib, tc, temp, we_v, ae_v):
         if calib is None or tc is None:
-            return A4Datum(weV, aeV)
+            return A4Datum(we_v, ae_v)
 
         # print("-")
         # print(tc)
         # print("-")
 
-        # print("weV:%0.6f, aeV:%0.6f" % (weV, aeV))
+        # print("we_v:%0.6f, ae_v:%0.6f" % (we_v, ae_v))
 
-        weT = weV - (calib.weELC / 1000.0)
-        aeT = aeV - (calib.aeELC / 1000.0)
+        we_t = we_v - (calib.we_elc_mv / 1000.0)
+        ae_t = ae_v - (calib.ae_elc_mv / 1000.0)
 
-        # print("weT:%0.6f, aeT:%0.6f" % (weT, aeT))
+        # print("we_t:%0.6f, ae_t:%0.6f" % (we_t, ae_t))
 
-        weC = tc.correct(calib, temp, weT, aeT)
+        we_c = tc.correct(calib, temp, we_t, ae_t)
 
-        if weC is None:
-            return A4Datum(weV, aeV)
+        if we_c is None:
+            return A4Datum(we_v, ae_v)
 
-        cnc = (weC * 1000.0) / calib.weSENS
+        cnc = (we_c * 1000.0) / calib.we_sens_mv
 
-        # print("weC:%0.6f, cnc:%0.6f" % (weC, cnc))
+        # print("we_c:%0.6f, cnc:%0.6f" % (we_c, cnc))
         # print("-")
 
-        return A4Datum(weV, aeV, weC, cnc)
+        return A4Datum(we_v, ae_v, we_c, cnc)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, weV, aeV, weC=None, cnc=None):
+    def __init__(self, we_v, ae_v, we_c=None, cnc=None):
         """
         Constructor
         """
-        self.__weV = Datum.float(weV, 6)        # uncorrected working electrode voltage
-        self.__aeV = Datum.float(aeV, 6)        # uncorrected auxiliary electrode voltage
+        self.__we_v = Datum.float(we_v, 6)        # uncorrected working electrode voltage
+        self.__ae_v = Datum.float(ae_v, 6)        # uncorrected auxiliary electrode voltage
 
-        self.__weC = Datum.float(weC, 6)        # corrected working electrode voltage
+        self.__we_c = Datum.float(we_c, 6)        # corrected working electrode voltage
         self.__cnc = Datum.float(cnc, 1)        # gas concentration                            ppb
 
 
@@ -66,10 +66,10 @@ class A4Datum(JSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['weV'] = self.weV
-        jdict['aeV'] = self.aeV
+        jdict['weV'] = self.we_v
+        jdict['aeV'] = self.ae_v
 
-        jdict['weC'] = self.weC                 # may be None
+        jdict['weC'] = self.we_c                 # may be None
         jdict['cnc'] = self.cnc                 # may be None
 
         return jdict
@@ -78,18 +78,18 @@ class A4Datum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def weV(self):
-        return self.__weV
+    def we_v(self):
+        return self.__we_v
 
 
     @property
-    def aeV(self):
-        return self.__aeV
+    def ae_v(self):
+        return self.__ae_v
 
 
     @property
-    def weC(self):
-        return self.__weC
+    def we_c(self):
+        return self.__we_c
 
 
     @property
@@ -100,4 +100,4 @@ class A4Datum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "A4Datum:{weV:%0.6f, aeV:%0.6f, weC:%s, cnc:%s}" % (self.weV, self.aeV, self.weC, self.cnc)
+        return "A4Datum:{we_v:%0.6f, ae_v:%0.6f, we_c:%s, cnc:%s}" % (self.we_v, self.ae_v, self.we_c, self.cnc)

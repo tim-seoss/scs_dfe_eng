@@ -21,7 +21,8 @@ from scs_host.sys.host import Host
 calib = Pt1000Calib.load_from_host(Host)
 pt1000 = calib.pt1000()
 
-sensors = (Sensor.find(Sensor.OX_A4), Sensor.find(Sensor.NO2_A4), Sensor.find(Sensor.NO_A4), Sensor.find(Sensor.PID_A1))
+sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),
+           Sensor.find(Sensor.CODE_VOC_PPM))
 
 
 # --------------------------------------------------------------------------------------------------------------------

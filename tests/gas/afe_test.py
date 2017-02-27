@@ -11,7 +11,7 @@ import time
 from scs_core.data.json import JSONify
 
 from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.afe_conf import AFEConf
+from scs_dfe.gas.afe_calib import AFECalib
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
 
 from scs_host.bus.i2c import I2C
@@ -28,11 +28,11 @@ pt1000 = pt1000_calib.pt1000()
 print(pt1000)
 print("-")
 
-conf = AFEConf.load_from_host(Host)
-print(conf)
+afe_calib = AFECalib.load_from_host(Host)
+print(afe_calib)
 print("-")
 
-sensors = conf.sensors()
+sensors = afe_calib.sensors()
 print('\n\n'.join(str(sensor) for sensor in sensors))
 print("-")
 

@@ -12,7 +12,7 @@ from scs_dfe.gas.temp_comp import TempComp
 
 # --------------------------------------------------------------------------------------------------------------------
 
-sensor_type = Sensor.CO_A4
+sensor_type = Sensor.CODE_CO
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -20,7 +20,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.H2S_A4
+sensor_type = Sensor.CODE_H2S
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -28,7 +28,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.NO_A4
+sensor_type = Sensor.CODE_NO
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -36,7 +36,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.NO2_A4
+sensor_type = Sensor.CODE_NO2
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -44,7 +44,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.OX_A4
+sensor_type = Sensor.CODE_OX
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -52,7 +52,7 @@ print(tc)
 print("-")
 
 
-sensor_type = Sensor.SO2_A4
+sensor_type = Sensor.CODE_SO2
 print(sensor_type)
 
 tc = TempComp.find(sensor_type)
@@ -65,7 +65,7 @@ temp = -30.0
 print("temp:%0.1f" % temp)
 print("in range:%s" % TempComp.in_range(temp))
 
-comp = tc.cfT(temp)
+comp = tc.cf_t(temp)
 print("comp:%0.2f" % comp)
 print("-")
 
@@ -73,7 +73,7 @@ temp = 25.0
 print("temp:%0.1f" % temp)
 print("in range:%s" % TempComp.in_range(temp))
 
-comp = tc.cfT(temp)
+comp = tc.cf_t(temp)
 print("comp:%0.2f" % comp)
 print("-")
 
@@ -81,7 +81,7 @@ temp = 50.0
 print("temp:%0.1f" % temp)
 print("in range:%s" % TempComp.in_range(temp))
 
-comp = tc.cfT(temp)
+comp = tc.cf_t(temp)
 print("comp:%0.2f" % comp)
 print("-")
 

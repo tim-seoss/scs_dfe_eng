@@ -121,10 +121,15 @@ class AFECalib(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    # TODO: dangerous: calib strings don't match sensor config strings
+    def sensors(self):
+        sensors = []
+        for i in range(len(self)):
+            calib = self.sensor_calib(i)
+            sensor = None if calib is None else calib.sensor()
 
-    def sensor_types(self):
-        return [calib.sensor_type for calib in self.__sensor_calibs]
+            sensors.append(sensor)
+
+        return sensors
 
 
     # ----------------------------------------------------------------------------------------------------------------
