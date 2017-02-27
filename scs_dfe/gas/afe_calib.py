@@ -24,7 +24,14 @@ class AFECalib(PersistentJSONable):
     classdocs
     """
 
-    __FILENAME = "afe_calib.json"
+    HOST =          "www.alphasense-technology.co.uk"
+    PATH =          "/api/v1/boards/"
+    HEADER =        {"Accept": "application/json"}
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    __FILENAME =    "afe_calib.json"
 
     @classmethod
     def filename(cls, host):
