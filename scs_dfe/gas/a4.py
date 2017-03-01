@@ -32,11 +32,11 @@ class A4(Sensor):
     def sample(self, afe, temp, index):
         we_v, ae_v = afe.sample_raw_wrk_aux(index, self.adc_gain)
 
-        return A4Datum.construct(self.calib, self.__tc, temp, we_v, ae_v)
+        return A4Datum.construct(self.calib, self.baseline, self.__tc, temp, we_v, ae_v)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "A4:{sensor_code:%s, gas_name:%s, adc_gain:0x%04x, calib:%s, tc:%s}" % \
-                        (self.sensor_code, self.gas_name, self.adc_gain, self.calib, self.__tc)
+        return "A4:{sensor_code:%s, gas_name:%s, adc_gain:0x%04x, calib:%s, baseline:%s, tc:%s}" % \
+                        (self.sensor_code, self.gas_name, self.adc_gain, self.calib, self.baseline, self.__tc)

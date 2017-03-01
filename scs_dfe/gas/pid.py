@@ -29,11 +29,13 @@ class PID(Sensor):
     def sample(self, afe, temp, index):
         wrk = afe.sample_raw_wrk(index, self.adc_gain)
 
+        # TODO handle PID calib and baseline for cnc
+
         return PIDDatum(wrk)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PID:{sensor_code:%s, gas_name:%s, adc_gain:0x%04x, calib:%s}" % \
-                        (self.sensor_code, self.gas_name, self.adc_gain, self.calib)
+        return "PID:{sensor_code:%s, gas_name:%s, adc_gain:0x%04x, calib:%s, baseline:%s}" % \
+                        (self.sensor_code, self.gas_name, self.adc_gain, self.calib, self.baseline)

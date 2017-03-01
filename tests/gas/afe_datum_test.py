@@ -9,6 +9,7 @@ Created on 19 Sep 2016
 from scs_core.data.json import JSONify
 
 from scs_dfe.gas.a4_datum import A4Datum
+from scs_dfe.gas.afe_baseline import AFEBaseline
 from scs_dfe.gas.afe_calib import AFECalib
 from scs_dfe.gas.afe_datum import AFEDatum
 from scs_dfe.gas.pid_datum import PIDDatum
@@ -23,7 +24,11 @@ calib = AFECalib.load_from_host(Host)
 print(calib)
 print("-")
 
-sensors = calib.sensors()
+afe_baseline = AFEBaseline.load_from_host(Host)
+print(afe_baseline)
+print("-")
+
+sensors = calib.sensors(afe_baseline)
 print('\n\n'.join(str(sensor) for sensor in sensors))
 print("-")
 

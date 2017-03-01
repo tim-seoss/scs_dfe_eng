@@ -118,7 +118,7 @@ class AFECalib(PersistentJSONable):
         jdict['calibrated_on'] = self.calibrated_on.isoformat() if self.calibrated_on else None
         jdict['dispatched_on'] = self.dispatched_on.isoformat() if self.dispatched_on else None
 
-        jdict['pt1000_v20'] = self.pt100_calib.v20 if self.pt100_calib else None
+        jdict['pt1000_v20'] = self.pt1000_calib.v20 if self.pt1000_calib else None
 
         for i in range(len(self.__sensor_calibs)):
             jdict['sn' + str(i + 1)] = self.__sensor_calibs[i]
@@ -128,11 +128,11 @@ class AFECalib(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sensors(self):
+    def sensors(self, afe_baseline):
         sensors = []
         for i in range(len(self)):
             calib = self.sensor_calib(i)
-            sensor = None if calib is None else calib.sensor()
+            sensor = None if calib is None else calib.sensor(afe_baseline.sensor_baseline(i))
 
             sensors.append(sensor)
 
@@ -162,7 +162,7 @@ class AFECalib(PersistentJSONable):
 
 
     @property
-    def pt100_calib(self):
+    def pt1000_calib(self):
         return self.__pt100_calib
 
 

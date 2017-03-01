@@ -23,7 +23,7 @@ class PIDDatum(JSONable):
         """
         Constructor
         """
-        self.__we_t = Datum.float(we_t, 6)        # uncorrected working electrode output         Volts
+        self.__we_t = Datum.float(we_t, 6)      # uncorrected working electrode output         Volts
         self.__cnc = cnc                        # gas concentration                            ppb (d)
 
 

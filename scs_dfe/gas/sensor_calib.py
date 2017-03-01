@@ -30,9 +30,11 @@ class SensorCalib(JSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sensor(self):
+    def sensor(self, baseline):
         sensor = Sensor.find(self.__serial_number)
+
         sensor.calib = self
+        sensor.baseline = baseline
 
         return sensor
 

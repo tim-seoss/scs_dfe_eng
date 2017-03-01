@@ -66,7 +66,7 @@ class Sensor(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, sensor_code, gas_name, adc_gain, calib=None):
+    def __init__(self, sensor_code, gas_name, adc_gain, calib=None, baseline=None):
         """
         Constructor
         """
@@ -76,6 +76,7 @@ class Sensor(object):
         self.__adc_gain = adc_gain
 
         self.__calib = calib
+        self.__baseline = baseline
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -112,6 +113,16 @@ class Sensor(object):
     @calib.setter
     def calib(self, calib):
         self.__calib = calib
+
+
+    @property
+    def baseline(self):
+        return self.__baseline
+
+
+    @baseline.setter
+    def baseline(self, baseline):
+        self.__baseline = baseline
 
 
 # --------------------------------------------------------------------------------------------------------------------

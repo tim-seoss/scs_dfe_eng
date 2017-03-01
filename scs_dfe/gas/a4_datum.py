@@ -20,7 +20,7 @@ class A4Datum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct(cls, calib, tc, temp, we_v, ae_v):
+    def construct(cls, calib, baseline, tc, temp, we_v, ae_v):
         if calib is None or tc is None:
             return A4Datum(we_v, ae_v)
 
@@ -41,6 +41,8 @@ class A4Datum(JSONable):
             return A4Datum(we_v, ae_v)
 
         cnc = (we_c * 1000.0) / calib.we_sens_mv
+
+        cnc = cnc + baseline.offset
 
         # print("we_c:%0.6f, cnc:%0.6f" % (we_c, cnc))
         # print("-")
