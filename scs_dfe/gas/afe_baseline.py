@@ -15,14 +15,15 @@ from scs_core.data.json import PersistentJSONable
 from scs_dfe.gas.sensor_baseline import SensorBaseline
 
 
-# TODO: better to find out how long the AFECalib is than to use the constant 4
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class AFEBaseline(PersistentJSONable):
     """
     classdocs
     """
+
+    __SENSORS = 4       # TODO: better to find out how long the AFECalib is than to use the constant 4?
+
     # ----------------------------------------------------------------------------------------------------------------
 
     __FILENAME =    "afe_baseline.json"
@@ -42,12 +43,11 @@ class AFEBaseline(PersistentJSONable):
     @classmethod
     def construct_from_jdict(cls, jdict):
         if not jdict:
-            sensor_baselines = [SensorBaseline(None, 0)] * 4
-            return AFEBaseline(sensor_baselines)
+            return AFEBaseline([SensorBaseline(None, 0)] * cls.__SENSORS)
 
         sensor_baselines = []
 
-        for i in range(4):
+        for i in range(cls.__SENSORS):
             key = 'sn' + str(i + 1)
 
             baseline = SensorBaseline.construct_from_jdict(jdict[key]) if key in jdict else SensorBaseline(None, 0)
@@ -80,7 +80,7 @@ class AFEBaseline(PersistentJSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        for i in range(4):
+        for i in range(self.__SENSORS):
             jdict['sn' + str(i + 1)] = self.__sensor_baselines[i]
 
         return jdict
