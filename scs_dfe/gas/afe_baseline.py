@@ -15,6 +15,8 @@ from scs_core.data.json import PersistentJSONable
 from scs_dfe.gas.sensor_baseline import SensorBaseline
 
 
+# TODO: similar to AFECalib, this class should be backed by the cloud helper system
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class AFEBaseline(PersistentJSONable):
@@ -22,7 +24,7 @@ class AFEBaseline(PersistentJSONable):
     classdocs
     """
 
-    __SENSORS = 4       # TODO: better to find out how long the AFECalib is than to use the constant 4?
+    __SENSORS = 4       # TODO: better to find out how long the AFECalib is than to use a constant?
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -47,7 +49,7 @@ class AFEBaseline(PersistentJSONable):
 
         sensor_baselines = []
 
-        for i in range(cls.__SENSORS):
+        for i in range(len(jdict)):
             key = 'sn' + str(i + 1)
 
             baseline = SensorBaseline.construct_from_jdict(jdict[key]) if key in jdict else SensorBaseline(None, 0)
@@ -80,7 +82,7 @@ class AFEBaseline(PersistentJSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        for i in range(self.__SENSORS):
+        for i in range(len(self.__sensor_baselines)):
             jdict['sn' + str(i + 1)] = self.__sensor_baselines[i]
 
         return jdict
