@@ -1,0 +1,104 @@
+"""
+Created on 1 Mar 2017
+
+@author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+example JSON:
+{"sn1": {"calibrated_on": "2017-03-01", "offset": 111}, "sn2": {"calibrated_on": "2017-03-01", "offset": 222},
+"sn3": {"calibrated_on": "2017-03-01", "offset": 333}, "sn4": {"calibrated_on": "2017-03-01", "offset": 444}}
+"""
+
+from collections import OrderedDict
+
+from scs_core.data.json import PersistentJSONable
+
+from scs_dfe.gas.sensor_baseline import SensorBaseline
+
+
+# TODO: better to find out how long the AFECalib is than to use the constant 4
+
+# --------------------------------------------------------------------------------------------------------------------
+
+class AFEBaseline(PersistentJSONable):
+    """
+    classdocs
+    """
+    # ----------------------------------------------------------------------------------------------------------------
+
+    __FILENAME =    "afe_baseline.json"
+
+    @classmethod
+    def filename(cls, host):
+        return host.SCS_CONF + cls.__FILENAME
+
+
+    @classmethod
+    def load_from_host(cls, host):
+        return cls.load_from_file(cls.filename(host))
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def construct_from_jdict(cls, jdict):
+        if not jdict:
+            sensor_baselines = [SensorBaseline(None, 0)] * 4
+            return AFEBaseline(sensor_baselines)
+
+        sensor_baselines = []
+
+        for i in range(4):
+            key = 'sn' + str(i + 1)
+
+            baseline = SensorBaseline.construct_from_jdict(jdict[key]) if key in jdict else SensorBaseline(None, 0)
+            sensor_baselines.append(baseline)
+
+        return AFEBaseline(sensor_baselines)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self, sensor_baselines):
+        """
+        Constructor
+        """
+        self.__sensor_baselines = sensor_baselines        # array of SensorBaseline
+
+
+    def __len__(self):
+        return len(self.__sensor_baselines)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def save(self, host):
+        PersistentJSONable.save(self, self.__class__.filename(host))
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def as_json(self):
+        jdict = OrderedDict()
+
+        for i in range(4):
+            jdict['sn' + str(i + 1)] = self.__sensor_baselines[i]
+
+        return jdict
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def sensor_baseline(self, i):
+        return self.__sensor_baselines[i]
+
+
+    def set_sensor_baseline(self, i, sensor_baseline):
+        self.__sensor_baselines[i] = sensor_baseline
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __str__(self, *args, **kwargs):
+        sensor_baselines = '[' + ', '.join(str(baseline) for baseline in self.__sensor_baselines) + ']'
+
+        return "AFEBaseline:{sensor_baselines:%s}" % sensor_baselines
