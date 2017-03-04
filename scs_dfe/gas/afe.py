@@ -43,8 +43,10 @@ class AFE(object):
 
     # TODO: this is where sensors can be labelled, e.g. (str(index + 1) + ':' + sensor.gas_name, sample)
 
-    def sample(self):
+    def sample(self, sht_datum=None):
         pt1000_datum = self.sample_temp()
+
+        temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
         samples = []
         for index in range(len(self.__sensors)):
@@ -52,24 +54,26 @@ class AFE(object):
             if sensor is None:
                 continue
 
-            sample = sensor.sample(self, pt1000_datum.temp, index)
+            sample = sensor.sample(self, temp, index)
 
             samples.append((sensor.gas_name, sample))
 
         return AFEDatum(pt1000_datum, *samples)
 
 
-    def sample_station(self, sn):
+    def sample_station(self, sn, sht_datum=None):
         index = sn - 1
 
         pt1000_datum = self.sample_temp()
+
+        temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
         sensor = self.__sensors[index]
 
         if sensor is None:
             return AFEDatum(pt1000_datum)
 
-        sample = sensor.sample(self, pt1000_datum.temp, index)
+        sample = sensor.sample(self, temp, index)
 
         return AFEDatum(pt1000_datum, (sensor.gas_name, sample))
 

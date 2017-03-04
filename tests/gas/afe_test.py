@@ -4,6 +4,8 @@
 Created on 15 Aug 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+Note: this script uses the Pt1000 temp sensor for temperature compensation.
 """
 
 import time

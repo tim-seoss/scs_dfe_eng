@@ -14,7 +14,7 @@ from scs_host.lock.lock import Lock
 from scs_host.sys.host_spi import HostSPI
 
 
-# TODO: unreliable start-up - command timing problem?
+# TODO: enable max 20 second interval - needs separate process?
 
 # --------------------------------------------------------------------------------------------------------------------
 
