@@ -118,6 +118,9 @@ class TempComp(object):
     def __eq4(self, temp, we_t, we_cal_mv):
         kpp_t = self.cf_t(temp)
 
+        print("we_t: %f" % we_t)
+        print("we_cal_mv: %f" % we_cal_mv)
+
         return we_t - we_cal_mv - kpp_t
 
 

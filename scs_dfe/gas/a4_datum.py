@@ -24,14 +24,16 @@ class A4Datum(JSONable):
         if calib is None or tc is None:
             return A4Datum(we_v, ae_v)
 
+        print("calib: %s" % calib)
+
         # print("-")
         # print(tc)
         # print("-")
 
         # print("we_v:%0.6f, ae_v:%0.6f" % (we_v, ae_v))
 
-        we_t = we_v - (calib.we_elc_mv / 1000.0)
-        ae_t = ae_v - (calib.ae_elc_mv / 1000.0)
+        we_t = we_v - (float(calib.we_elc_mv) / 1000.0)
+        ae_t = ae_v - (float(calib.ae_elc_mv) / 1000.0)
 
         # print("we_t:%0.6f, ae_t:%0.6f" % (we_t, ae_t))
 
