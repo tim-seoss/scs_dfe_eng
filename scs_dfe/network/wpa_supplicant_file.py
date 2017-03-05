@@ -38,6 +38,7 @@ class WPASupplicantFile(object):
         """
         try:
             os.makedirs(cls.__TMP_DIR)
+            os.chmod(cls.__TMP_DIR, 0o777)
         except FileExistsError:
             pass
 
