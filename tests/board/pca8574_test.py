@@ -10,7 +10,6 @@ import sys
 
 from scs_dfe.board.io import IO
 from scs_dfe.board.pca8574 import PCA8574
-
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
