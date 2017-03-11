@@ -3,6 +3,8 @@
 """
 Created on 22 Sep 2016
 
+Requires DeviceID document.
+
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
@@ -19,6 +21,11 @@ from scs_dfe.particulate.pmx_datum import PMxDatum
 
 
 # --------------------------------------------------------------------------------------------------------------------
+
+tag = "scs-ap1-0"
+print(tag)
+print("-")
+
 
 sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),
            Sensor.find(Sensor.CODE_VOC_PPM))
@@ -71,7 +78,7 @@ print("-")
 
 # --------------------------------------------------------------------------------------------------------------------
 
-sample = SampleDatum(now, ('afe', afe), ('pmx', pmx))
+sample = SampleDatum(tag, now, ('afe', afe), ('pmx', pmx))
 print(sample)
 print("-")
 

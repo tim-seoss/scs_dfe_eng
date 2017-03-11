@@ -177,5 +177,5 @@ class AFECalib(PersistentJSONable):
 
         return "AFECalib:{serial_number:%s, afe_type:%s, calibrated_on:%s, dispatched_on:%s, pt100_calib:%s, " \
                "sensor_calibs:%s}" % \
-               (self.serial_number, self.afe_type, self.calibrated_on, self.dispatched_on, self.pt100_calib,
+               (self.serial_number, self.afe_type, self.calibrated_on, self.dispatched_on, self.pt1000_calib,
                 sensor_calibs)
