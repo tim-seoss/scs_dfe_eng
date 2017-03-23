@@ -11,6 +11,8 @@ from scs_core.data.datum import Datum
 from scs_dfe.gas.sensor_calib import SensorCalib
 
 
+# TODO: why was pid_elc not picked up?
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class PIDCalib(SensorCalib):
@@ -73,5 +75,5 @@ class PIDCalib(SensorCalib):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PIDCalib:{serial_number:%s, sensor_type:%s, pid_elc:%d, pid_sens:%0.3f}" % \
+        return "PIDCalib:{serial_number:%s, sensor_type:%s, pid_elc:%s, pid_sens:%s}" % \
                     (self.serial_number, self.sensor_type, self.pid_elc, self.pid_sens)
