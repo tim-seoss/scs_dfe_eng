@@ -79,6 +79,11 @@ class ADS1115(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    __LOCK_TIMEOUT =    10.0
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     @classmethod
     def init(cls):
         cls.__FULL_SCALE = {
@@ -188,6 +193,7 @@ class ADS1115(object):
         try:
             I2C.start_tx(self.__addr)
             msb, lsb = I2C.read_cmd(ADS1115.__REG_CONFIG, 2)
+
         finally:
             I2C.end_tx()
 
@@ -199,6 +205,7 @@ class ADS1115(object):
         try:
             I2C.start_tx(self.__addr)
             I2C.write(ADS1115.__REG_CONFIG, config >> 8, config & 0xff)
+
         finally:
             I2C.end_tx()
 
@@ -207,6 +214,7 @@ class ADS1115(object):
         try:
             I2C.start_tx(self.__addr)
             msb, lsb = I2C.read_cmd(ADS1115.__REG_CONV, 2)
+
         finally:
             I2C.end_tx()
 
@@ -225,7 +233,7 @@ class ADS1115(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def obtain_lock(self):
-        Lock.acquire(self.__lock_name, 10.0)
+        Lock.acquire(self.__lock_name, ADS1115.__LOCK_TIMEOUT)
 
 
     def release_lock(self):
