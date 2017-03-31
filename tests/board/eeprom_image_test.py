@@ -18,7 +18,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-sp.call(['sudo', 'dtoverlay', 'i2c-gpio', 'i2c_gpio_sda=0', 'i2c_gpio_scl=1'])      # TODO: dtoverlay does not work on BBe
+sp.call(['sudo', 'dtoverlay', 'i2c-gpio', 'i2c_gpio_sda=0', 'i2c_gpio_scl=1'])      # TODO: does not work on BBe
 
 
 # --------------------------------------------------------------------------------------------------------------------
