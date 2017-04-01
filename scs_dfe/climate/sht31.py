@@ -31,14 +31,14 @@ class SHT31(object):
 
     @staticmethod
     def humid(raw_humid):
-        humid = raw_humid / 65535.0
+        humid = float(raw_humid) / 65535.0
 
         return 100.0 * humid
 
 
     @staticmethod
     def temp(raw_temp):
-        temp = raw_temp / 65535.0
+        temp = float(raw_temp) / 65535.0
 
         return -45.0 + (175.0 * temp)
 
