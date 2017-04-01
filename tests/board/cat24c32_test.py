@@ -24,7 +24,8 @@ Host.enable_eeprom_access()
 try:
     I2C.open(Host.I2C_EEPROM)
 
-    file_image = EEPROMImage.construct_from_file('/home/pi/hats/eepromutils/myhat.eep', CAT24C32.SIZE)  # hard-coded path
+    # hard-coded path...
+    file_image = EEPROMImage.construct_from_file('/home/pi/hats/eepromutils/myhat.eep', CAT24C32.SIZE)
 
     print("file:")
     file_image.formatted(32)

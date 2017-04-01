@@ -81,7 +81,7 @@ class BluetoothConnection(Process):
 
 
     def run(self):
-        pty.spawn(['sudo', 'rfcomm', 'watch', 'hci0'], self.__read)      # using spawn because we need live data feed   listen  '-S',
+        pty.spawn(['sudo', 'rfcomm', 'watch', 'hci0'], self.__read)      # using spawn because we need live data feed
 
 
     # ----------------------------------------------------------------------------------------------------------------
