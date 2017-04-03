@@ -20,11 +20,13 @@ class SHT31(object):
     """
     Sensirion SHT3x-DIS temperature and humidity
     """
-    __CMD_RESET =           0x30a2
-    __CMD_CLEAR =           0x3041
+    __CMD_RESET =                   0x30a2
+    __CMD_CLEAR =                   0x3041
 
-    __CMD_READ_SINGLE =     0x2c06
-    __CMD_READ_STATUS =     0xf32d
+    __CMD_READ_SINGLE_HIGH =        0x2c06
+    __CMD_READ_SINGLE_LOW =         0x2c10
+
+    __CMD_READ_STATUS =             0xf32d
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -73,7 +75,7 @@ class SHT31(object):
     def sample(self):
         try:
             I2C.start_tx(self.__addr)
-            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_SINGLE, 6)
+            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_SINGLE_HIGH, 6)
 
             raw_humid = (humid_msb << 8) | humid_lsb
             raw_temp = (temp_msb << 8) | temp_lsb
