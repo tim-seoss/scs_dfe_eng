@@ -1,7 +1,7 @@
 # scs-dfe-eng
 Environmental sampling abstractions for the South Coast Science _Alpha _ Eng._ digital front-end.
 
-Required libraries: 
+**Required libraries:** 
 
 * Third party: -
 * SCS root: scs_core
