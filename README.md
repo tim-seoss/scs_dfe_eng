@@ -1,4 +1,4 @@
-# scs-dfe-eng
+# scs_dfe_eng
 Environmental sampling abstractions for the South Coast Science _Alpha _ Eng._ digital front-end.
 
 **Required libraries:** 
