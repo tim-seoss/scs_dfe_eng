@@ -27,7 +27,7 @@ class SHTConf(PersistentJSONable):
 
     @classmethod
     def filename(cls, host):
-        return host.SCS_CONF + cls.__FILENAME
+        return host.conf_dir() + cls.__FILENAME
 
 
     @classmethod
