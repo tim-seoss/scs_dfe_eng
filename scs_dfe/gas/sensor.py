@@ -35,7 +35,7 @@ class Sensor(object):
     @classmethod
     def init(cls):
         # late imports to prevent circularity
-        # TODO: remove late imports
+        # TODO: remove late imports - get the subclasses to load the dict themselves
         from scs_dfe.gas.a4 import A4
         from scs_dfe.gas.pid import PID
 
