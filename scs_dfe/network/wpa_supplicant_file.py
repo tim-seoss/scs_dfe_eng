@@ -55,7 +55,7 @@ class WPASupplicantFile(object):
         # headers...
         headers = []
         for line in [line.strip() for line in text.splitlines()]:
-            matches = re.search(r'network\s*=\s*\{', line)
+            matches = re.search(r'network\s*=\s*{', line)
 
             if matches:
                 break
@@ -65,7 +65,7 @@ class WPASupplicantFile(object):
 
         # entries...
         entries = {}
-        matches = re.findall(r'network\s*=\s*\{[^\}]+\}', text, re.DOTALL)
+        matches = re.findall(r'network\s*=\s*{[^\}]+\}', text, re.DOTALL)
 
         for match in matches:
             entry = WPASupplicant.construct_from_entry(match)
