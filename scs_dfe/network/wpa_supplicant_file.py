@@ -137,7 +137,3 @@ class WPASupplicantFile(object):
         supplicants = '[' + ', '.join(str(supplicant) for supplicant in self.supplicants) + ']'
 
         return "WPASupplicantFile:{headers:%s, supplicants:%s}" % (self.headers, supplicants)
-
-# --------------------------------------------------------------------------------------------------------------------
-
-WPASupplicantFile.init()

@@ -168,8 +168,3 @@ class TempComp(object):
 
     def __str__(self, *args, **kwargs):
         return "TempComp:{algorithm:%d, factor:%s, values:%s}" % (self.algorithm, self.factor, self.values)
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
-TempComp.init()

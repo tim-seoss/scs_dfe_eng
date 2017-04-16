@@ -123,8 +123,3 @@ class Sensor(object):
     @baseline.setter
     def baseline(self, baseline):
         self.__baseline = baseline
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
-Sensor.init()
