@@ -8,8 +8,6 @@ https://www.alphasense-technology.co.uk/sensor_types
 
 from abc import abstractmethod
 
-from scs_dfe.gas.ads1115 import ADS1115
-
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -27,37 +25,17 @@ class Sensor(object):
     CODE_VOC_PPM =  '142'           # PIDN1
     CODE_VOC_PPB =  '143'           # PIDNH
 
-    __SENSORS =     None
+    SENSORS =       {}
 
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    @classmethod
-    def init(cls):
-        # late imports to prevent circularity
-        # TODO: remove late imports - get the subclasses to load the dict themselves
-        from scs_dfe.gas.a4 import A4
-        from scs_dfe.gas.pid import PID
-
-        cls.__SENSORS = {
-            cls.CODE_CO:         A4(cls.CODE_CO,        'CO',   ADS1115.GAIN_2p048),
-            cls.CODE_H2S:        A4(cls.CODE_H2S,       'H2S',  ADS1115.GAIN_2p048),
-            cls.CODE_NO:         A4(cls.CODE_NO,        'NO',   ADS1115.GAIN_2p048),
-            cls.CODE_NO2:        A4(cls.CODE_NO2,       'NO2',  ADS1115.GAIN_2p048),
-            cls.CODE_OX:         A4(cls.CODE_OX,        'Ox',   ADS1115.GAIN_2p048),
-            cls.CODE_SO2:        A4(cls.CODE_SO2,       'SO2',  ADS1115.GAIN_2p048),
-
-            cls.CODE_VOC_PPM:    PID(cls.CODE_VOC_PPM,  'VOC',  ADS1115.GAIN_4p096),
-            cls.CODE_VOC_PPB:    PID(cls.CODE_VOC_PPB,  'VOC',  ADS1115.GAIN_4p096)
-        }
-
 
     @classmethod
     def find(cls, serial_number):
         if serial_number is None:
             return None
 
-        for code, sensor in cls.__SENSORS.items():
+        for code, sensor in cls.SENSORS.items():
             if str(serial_number).startswith(code):
                 return sensor
 

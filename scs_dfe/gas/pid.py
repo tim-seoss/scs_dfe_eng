@@ -4,6 +4,7 @@ Created on 30 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+from scs_dfe.gas.ads1115 import ADS1115
 from scs_dfe.gas.pid_datum import PIDDatum
 from scs_dfe.gas.sensor import Sensor
 
@@ -14,6 +15,14 @@ class PID(Sensor):
     """
     classdocs
     """
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def init(cls):
+        cls.SENSORS[cls.CODE_VOC_PPM] = PID(cls.CODE_VOC_PPM,  'VOC',  ADS1115.GAIN_4p096)
+        cls.SENSORS[cls.CODE_VOC_PPB] = PID(cls.CODE_VOC_PPB,  'VOC',  ADS1115.GAIN_4p096)
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
