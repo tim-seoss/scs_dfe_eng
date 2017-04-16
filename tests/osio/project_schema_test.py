@@ -6,7 +6,8 @@ Created on 16 Apr 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_core.osio.config.source_schema import SourceSchema
+from scs_core.data.json import JSONify
+from scs_core.osio.config.project_schema import ProjectSchema
 
 from scs_dfe.gas.afe_calib import AFECalib
 
@@ -23,6 +24,8 @@ gas_names = calib.gas_names()
 print(gas_names)
 print("-")
 
-schema = SourceSchema.find(gas_names)
+schema = ProjectSchema.find_gas_schema(gas_names)
 print(schema)
 print("-")
+
+print(JSONify.dumps(schema))
