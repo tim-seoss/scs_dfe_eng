@@ -15,6 +15,7 @@ from scs_core.data.json import PersistentJSONable
 from scs_dfe.gas.a4_calib import A4Calib
 from scs_dfe.gas.pid_calib import PIDCalib
 from scs_dfe.gas.pt1000_calib import Pt1000Calib
+from scs_dfe.gas.sensor import Sensor
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -137,6 +138,10 @@ class AFECalib(PersistentJSONable):
             sensors.append(sensor)
 
         return sensors
+
+
+    def gas_names(self):
+        return [Sensor.find(sensor_calib.serial_number).gas_name for sensor_calib in self.__sensor_calibs]
 
 
     # ----------------------------------------------------------------------------------------------------------------

@@ -156,8 +156,3 @@ class PCA8574State(PersistentJSONable):
         binary = bin(self.__byte)
 
         return "PCA8574State:{byte:%s}" % binary
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
-PCA8574State.init()

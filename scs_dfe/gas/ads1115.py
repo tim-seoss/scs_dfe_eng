@@ -267,8 +267,3 @@ class ADS1115(object):
     def __str__(self, *args, **kwargs):
         return "ADS1115:{addr:0x%0.2x, rate:0x%0.4x, config:0x%0.4x}" % \
                     (self.addr, self.rate, self.__config)
-
-
-# --------------------------------------------------------------------------------------------------------------------
-
-ADS1115.init()

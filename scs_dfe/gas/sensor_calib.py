@@ -24,8 +24,8 @@ class SensorCalib(JSONable):
         """
         Constructor
         """
-        self.__serial_number = serial_number
-        self.__sensor_type = sensor_type
+        self.__serial_number = serial_number            # int
+        self.__sensor_type = sensor_type                # string
 
 
     # ----------------------------------------------------------------------------------------------------------------

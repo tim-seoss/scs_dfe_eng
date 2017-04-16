@@ -3,7 +3,7 @@
 """
 Created on 22 Sep 2016
 
-Requires DeviceID document.
+Requires SystemID document.
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """

@@ -39,7 +39,7 @@ class WPASupplicant(JSONable):
 
     @classmethod
     def construct_from_entry(cls, entry):
-        matches = re.search(r'network\s*=\s*\{\s*ssid="(.+)"\s*psk="(.+)"\s*key_mgmt=(.+)\s*\}', entry)
+        matches = re.search(r'network\s*=\s*{\s*ssid="(.+)"\s*psk="(.+)"\s*key_mgmt=(.+)\s*\}', entry)
 
         if matches:
             return WPASupplicant(matches.group(1), matches.group(2), matches.group(3))
