@@ -18,26 +18,37 @@ from scs_host.sys.host import Host
 
 afe_baseline = AFEBaseline.load_from_host(Host)
 print(afe_baseline)
-print("-")
+print("=")
 
 calib = AFECalib.load_from_host(Host)
 print(calib)
-print("-")
+print("=")
 
 pt1000_calib = calib.pt1000_calib
 print(pt1000_calib)
-print("-")
+print("=")
 
 
 for i in range(len(calib)):
     print(calib.sensor_calib(i))
     print("-")
 
+print("=")
+
+
 for sensor in calib.sensors(afe_baseline):
     print(sensor)
     print("-")
 
+print("=")
+
+
+for gas_name in calib.gas_names():
+    print(gas_name)
+    print("-")
+
+print("=")
 
 jstr = JSONify.dumps(calib)
 print(jstr)
-print("-")
+print("=")
