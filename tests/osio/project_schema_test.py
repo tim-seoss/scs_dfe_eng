@@ -7,7 +7,7 @@ Created on 16 Apr 2017
 """
 
 from scs_core.data.json import JSONify
-from scs_core.osio.config.project_schema import ProjectSchema
+from scs_core.osio.config.project_topic import ProjectTopic
 
 from scs_dfe.gas.afe_calib import AFECalib
 
@@ -24,7 +24,7 @@ gas_names = calib.gas_names()
 print(gas_names)
 print("-")
 
-schema = ProjectSchema.find_gas_schema(gas_names)
+schema = ProjectTopic.find_gas_schema(gas_names)
 print(schema)
 print("-")
 
