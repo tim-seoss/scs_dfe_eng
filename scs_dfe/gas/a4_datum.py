@@ -4,6 +4,8 @@ Created on 18 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)c
 """
 
+# import sys
+
 from collections import OrderedDict
 
 from scs_core.data.datum import Datum
@@ -24,18 +26,11 @@ class A4Datum(JSONable):
         if calib is None or tc is None:
             return A4Datum(we_v, ae_v)
 
-        # print("calib: %s" % calib)
-
-        # print("-")
-        # print(tc)
-        # print("-")
-
-        # print("we_v:%0.6f, ae_v:%0.6f" % (we_v, ae_v))
+        # print("A4Datum: calib:%s baseline:%s tc:%s temp:%f we_v:%f ae_v:%f" %
+        #       (calib, baseline, tc, temp, we_v, ae_v), file=sys.stderr)
 
         we_t = we_v - (float(calib.we_elc_mv) / 1000.0)
         ae_t = ae_v - (float(calib.ae_elc_mv) / 1000.0)
-
-        # print("we_t:%0.6f, ae_t:%0.6f" % (we_t, ae_t))
 
         we_c = tc.correct(calib, temp, we_t, ae_t)
 
@@ -46,8 +41,9 @@ class A4Datum(JSONable):
 
         cnc = cnc + baseline.offset
 
-        # print("we_c:%0.6f, cnc:%0.6f" % (we_c, cnc))
-        # print("-")
+        # print("A4Datum: we_t:%f ae_t:%f we_c:%s cnc:%f" %
+        #       (we_t, ae_t, we_c, cnc), file=sys.stderr)
+
 
         return A4Datum(we_v, ae_v, we_c, cnc)
 

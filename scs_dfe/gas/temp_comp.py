@@ -6,6 +6,8 @@ Created on 22 Sep 2016
 Ox TempComp(3, 'kp_t',  [ 0.1,   0.1,    0.2,    0.3,    0.7,    1.0,    1.7,    3.0,    4.0]), # from On 2017-02-22
 """
 
+# import sys
+
 from scs_dfe.gas.sensor import Sensor
 
 
@@ -102,10 +104,8 @@ class TempComp(object):
 
         we_c = we_t - n_t * ae_t
 
-        # print("alg:%d, temp:%f we_t:%f n_t:%f we_c:%f " %
+        # print("TempComp: alg:%d, temp:%f we_t:%f n_t:%f we_c:%f " %
         #       (self.__algorithm, temp, we_t, n_t, we_c), file=sys.stderr)
-
-        # print("-", file=sys.stderr)
 
         return we_c
 
@@ -115,10 +115,8 @@ class TempComp(object):
 
         we_c = we_t - k_t * (we_cal_mv / ae_cal_mv) * ae_t
 
-        # print("alg:%d, temp:%f we_t:%f ae_t:%f we_cal_mv:%f ae_cal_mv:%f k_t:%f we_c:%f " %
+        # print("TempComp: alg:%d, temp:%f we_t:%f ae_t:%f we_cal_mv:%f ae_cal_mv:%f k_t:%f we_c:%f " %
         #       (self.__algorithm, temp, we_t, ae_t, we_cal_mv, ae_cal_mv, k_t, we_c), file=sys.stderr)
-
-        # print("-", file=sys.stderr)
 
         return we_c
 
@@ -128,10 +126,8 @@ class TempComp(object):
 
         we_c = we_t - kp_t * (we_cal_mv - ae_cal_mv) * ae_t
 
-        # print("alg:%d, temp:%f we_t:%f ae_t:%f we_cal_mv:%f ae_cal_mv:%f kp_t:%f we_c:%f " %
+        # print("TempComp: alg:%d, temp:%f we_t:%f ae_t:%f we_cal_mv:%f ae_cal_mv:%f kp_t:%f we_c:%f " %
         #       (self.__algorithm, temp, we_t, ae_t, we_cal_mv, ae_cal_mv, kp_t, we_c), file=sys.stderr)
-
-        # print("-", file=sys.stderr)
 
         return we_c
 
@@ -141,10 +137,8 @@ class TempComp(object):
 
         we_c = we_t - we_cal_mv - kpp_t     # TODO: fix over-sensitivity to temperature
 
-        # print("alg:%d, temp:%f we_t:%f we_cal_mv:%f kpp_t:%f we_c:%f " %
+        # print("TempComp: alg:%d, temp:%f we_t:%f we_cal_mv:%f kpp_t:%f we_c:%f " %
         #       (self.__algorithm, temp, we_t, we_cal_mv, kpp_t, we_c), file=sys.stderr)
-
-        # print("-", file=sys.stderr)
 
         return we_c
 
@@ -171,7 +165,7 @@ class TempComp(object):
 
         cf_t = y1 + (delta_y * delta_x)
 
-        # print("alg:%d, temp:%f y1:%f y2:%f delta_y:%f delta_x:%f cf_t:%f " %
+        # print("TempComp: alg:%d, temp:%f y1:%f y2:%f delta_y:%f delta_x:%f cf_t:%f " %
         #       (self.__algorithm, temp, y1, y2, delta_y, delta_x, cf_t), file=sys.stderr)
 
         return cf_t
