@@ -1,7 +1,7 @@
 """
 Created on 18 Sep 2016
 
-@author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+@author: Bruno Beloff (bruno.beloff@southcoastscience.com)c
 """
 
 from collections import OrderedDict
@@ -62,7 +62,7 @@ class A4Datum(JSONable):
         self.__ae_v = Datum.float(ae_v, 6)        # uncorrected auxiliary electrode voltage
 
         self.__we_c = Datum.float(we_c, 6)        # corrected working electrode voltage
-        self.__cnc = Datum.float(cnc, 1)        # gas concentration                            ppb
+        self.__cnc = Datum.float(cnc, 1)          # gas concentration                            ppb
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ class A4Datum(JSONable):
         jdict['aeV'] = self.ae_v
 
         jdict['weC'] = self.we_c                 # may be None
-        jdict['cnc'] = self.cnc                 # may be None
+        jdict['cnc'] = self.cnc                  # may be None
 
         return jdict
 
