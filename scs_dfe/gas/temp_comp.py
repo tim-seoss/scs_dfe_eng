@@ -35,7 +35,7 @@ class TempComp(object):
             Sensor.CODE_NO:    TempComp(3, 'kp_t', [0.7, 0.7, 0.7, 0.7, 0.8, 1.0, 1.2, 1.4, 1.6]),
             Sensor.CODE_NO2:   TempComp(1, 'n_t', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
             Sensor.CODE_OX:    None,
-            Sensor.CODE_SO2:   TempComp(4, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])
+            Sensor.CODE_SO2:   TempComp(1, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])    # suggested is 1
         }
 
 
@@ -100,28 +100,53 @@ class TempComp(object):
     def __eq1(self, temp, we_t, ae_t):
         n_t = self.cf_t(temp)
 
-        return we_t - n_t * ae_t
+        we_c = we_t - n_t * ae_t
+
+        # print("alg:%d, temp:%f we_t:%f n_t:%f we_c:%f " %
+        #       (self.__algorithm, temp, we_t, n_t, we_c), file=sys.stderr)
+
+        # print("-", file=sys.stderr)
+
+        return we_c
 
 
     def __eq2(self, temp, we_t, ae_t, we_cal_mv, ae_cal_mv):
         k_t = self.cf_t(temp)
 
-        return we_t - k_t * (we_cal_mv / ae_cal_mv) * ae_t
+        we_c = we_t - k_t * (we_cal_mv / ae_cal_mv) * ae_t
+
+        # print("alg:%d, temp:%f we_t:%f ae_t:%f we_cal_mv:%f ae_cal_mv:%f k_t:%f we_c:%f " %
+        #       (self.__algorithm, temp, we_t, ae_t, we_cal_mv, ae_cal_mv, k_t, we_c), file=sys.stderr)
+
+        # print("-", file=sys.stderr)
+
+        return we_c
 
 
     def __eq3(self, temp, we_t, ae_t, we_cal_mv, ae_cal_mv):
         kp_t = self.cf_t(temp)
 
-        return we_t - kp_t * (we_cal_mv - ae_cal_mv) * ae_t
+        we_c = we_t - kp_t * (we_cal_mv - ae_cal_mv) * ae_t
+
+        # print("alg:%d, temp:%f we_t:%f ae_t:%f we_cal_mv:%f ae_cal_mv:%f kp_t:%f we_c:%f " %
+        #       (self.__algorithm, temp, we_t, ae_t, we_cal_mv, ae_cal_mv, kp_t, we_c), file=sys.stderr)
+
+        # print("-", file=sys.stderr)
+
+        return we_c
 
 
     def __eq4(self, temp, we_t, we_cal_mv):
         kpp_t = self.cf_t(temp)
 
-        # print("we_t: %f" % we_t)
-        # print("we_cal_mv: %f" % we_cal_mv)
+        we_c = we_t - we_cal_mv - kpp_t     # TODO: fix over-sensitivity to temperature
 
-        return we_t - we_cal_mv - kpp_t
+        # print("alg:%d, temp:%f we_t:%f we_cal_mv:%f kpp_t:%f we_c:%f " %
+        #       (self.__algorithm, temp, we_t, we_cal_mv, kpp_t, we_c), file=sys.stderr)
+
+        # print("-", file=sys.stderr)
+
+        return we_c
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -142,9 +167,14 @@ class TempComp(object):
 
         delta_y = y2 - y1
 
-        delta_x = (temp % TempComp.__INTERVAL) / TempComp.__INTERVAL            # proportion of interval
+        delta_x = float(temp % TempComp.__INTERVAL) / TempComp.__INTERVAL       # proportion of interval
 
-        return y1 + (delta_y * delta_x)
+        cf_t = y1 + (delta_y * delta_x)
+
+        # print("alg:%d, temp:%f y1:%f y2:%f delta_y:%f delta_x:%f cf_t:%f " %
+        #       (self.__algorithm, temp, y1, y2, delta_y, delta_x, cf_t), file=sys.stderr)
+
+        return cf_t
 
 
     # ----------------------------------------------------------------------------------------------------------------
