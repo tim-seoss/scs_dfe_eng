@@ -30,12 +30,13 @@ class TempComp(object):
     @classmethod
     def init(cls):          # ºC:                  -30   -20   -10    0    10    20    30    40    50
         cls.__COMP = {
-            Sensor.CODE_CO:    TempComp(1, 'n_t', [1.0, 1.0, 1.0, 1.0, -0.2, -0.9, -1.5, -1.5, -1.5]),
-            Sensor.CODE_H2S:   TempComp(2, 'k_t', [-1.5, -1.5, -1.5, -0.5, 0.5, 1.0, 0.8, 0.5, 0.3]),
-            Sensor.CODE_NO:    TempComp(3, 'kp_t', [0.7, 0.7, 0.7, 0.7, 0.8, 1.0, 1.2, 1.4, 1.6]),
-            Sensor.CODE_NO2:   TempComp(1, 'n_t', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
-            Sensor.CODE_OX:    None,
-            Sensor.CODE_SO2:   TempComp(1, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])  # suggested is 4
+            Sensor.CODE_CO:     TempComp(1, 'n_t', [1.0, 1.0, 1.0, 1.0, -0.2, -0.9, -1.5, -1.5, -1.5]),
+            Sensor.CODE_H2S:    TempComp(2, 'k_t', [-1.5, -1.5, -1.5, -0.5, 0.5, 1.0, 0.8, 0.5, 0.3]),
+            Sensor.CODE_NO:     TempComp(3, 'kp_t', [0.7, 0.7, 0.7, 0.7, 0.8, 1.0, 1.2, 1.4, 1.6]),
+            Sensor.CODE_NO2:    TempComp(1, 'n_t', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
+            Sensor.CODE_OX:     None,
+            # Sensor.CODE_SO2:   TempComp(4, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])
+            Sensor.CODE_SO2:    TempComp(1, 'kpp_t', [1.6, 1.6, 1.6, 1.6, 1.6, 1.6, 1.9, 3.0, 5.8])
         }
 
 
