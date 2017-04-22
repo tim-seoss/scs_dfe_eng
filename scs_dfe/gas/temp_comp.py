@@ -49,10 +49,7 @@ class TempComp(object):
 
     @classmethod
     def in_range(cls, temp):
-        if temp < cls.__MIN_TEMP or temp > cls.__MAX_TEMP:
-            return False
-
-        return True
+        return cls.__MIN_TEMP <= temp <= cls.__MAX_TEMP
 
 
     # ----------------------------------------------------------------------------------------------------------------
