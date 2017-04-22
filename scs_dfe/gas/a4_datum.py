@@ -44,7 +44,6 @@ class A4Datum(JSONable):
         # print("A4Datum: we_t:%f ae_t:%f we_c:%s cnc:%f" %
         #       (we_t, ae_t, we_c, cnc), file=sys.stderr)
 
-
         return A4Datum(we_v, ae_v, we_c, cnc)
 
 
@@ -54,11 +53,11 @@ class A4Datum(JSONable):
         """
         Constructor
         """
-        self.__we_v = Datum.float(we_v, 6)        # uncorrected working electrode voltage
-        self.__ae_v = Datum.float(ae_v, 6)        # uncorrected auxiliary electrode voltage
+        self.__we_v = Datum.float(we_v, 6)        # uncorrected working electrode voltage       V
+        self.__ae_v = Datum.float(ae_v, 6)        # uncorrected auxiliary electrode voltage     V
 
-        self.__we_c = Datum.float(we_c, 6)        # corrected working electrode voltage
-        self.__cnc = Datum.float(cnc, 1)          # gas concentration                            ppb
+        self.__we_c = Datum.float(we_c, 6)        # corrected working electrode voltage         V
+        self.__cnc = Datum.float(cnc, 1)          # gas concentration                           ppb
 
 
     # ----------------------------------------------------------------------------------------------------------------
