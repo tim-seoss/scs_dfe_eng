@@ -35,7 +35,7 @@ class PID(Sensor):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sample(self, afe, temp, index):
+    def sample(self, afe, temp, index, no2_sample=None):
         wrk = afe.sample_raw_wrk(index, self.adc_gain)
 
         # TODO handle PID calib and baseline for cnc

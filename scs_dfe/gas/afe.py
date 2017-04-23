@@ -2,6 +2,9 @@
 Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+Warning: If an Ox sensor is present, the NO2 sensor must have a lower SN than the Ox sensor,
+otherwise the NO2 cross-sensitivity concentration will not be found.
 """
 
 import time
@@ -24,6 +27,17 @@ class AFE(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def __no2_sample(cls, samples):
+        for sample in samples:
+            if sample[0] == 'NO2':
+                return sample[1]
+
+        return None
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self, pt1000, sensors):
         """
         Constructor
@@ -41,27 +55,30 @@ class AFE(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    # TODO: this is where sensors can be labelled, e.g. (str(index + 1) + ':' + sensor.gas_name, sample)
-
     def sample(self, sht_datum=None):
         pt1000_datum = self.sample_temp()
 
         temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
         samples = []
+        no2_sample = None
+
         for index in range(len(self.__sensors)):
             sensor = self.__sensors[index]
             if sensor is None:
                 continue
 
-            sample = sensor.sample(self, temp, index)
+            if no2_sample is None:
+                no2_sample = AFE.__no2_sample(samples)
+
+            sample = sensor.sample(self, temp, index, no2_sample)
 
             samples.append((sensor.gas_name, sample))
 
         return AFEDatum(pt1000_datum, *samples)
 
 
-    def sample_station(self, sn, sht_datum=None):
+    def sample_station(self, sn, sht_datum=None):       # TODO: must also sample NO2 if this is Ox
         index = sn - 1
 
         pt1000_datum = self.sample_temp()

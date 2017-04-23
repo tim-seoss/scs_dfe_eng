@@ -59,8 +59,15 @@ class Sensor(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def has_no2_cross_sensitivity(self):
+        if self.calib is None:
+            return False
+
+        return self.calib.reports_no2_cross_sensitivity() and self.gas_name != 'NO2'
+
+
     @abstractmethod
-    def sample(self, afe, temp, index):
+    def sample(self, afe, temp, index, no2_sample=None):
         pass
 
 

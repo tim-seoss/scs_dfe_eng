@@ -20,6 +20,13 @@ class SensorCalib(JSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def reports_no2_cross_sensitivity(cls):     # the default - override as necessary
+        return False
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self, serial_number, sensor_type):
         """
         Constructor

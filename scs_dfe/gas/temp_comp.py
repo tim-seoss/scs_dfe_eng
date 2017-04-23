@@ -3,7 +3,7 @@ Created on 22 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Ox TempComp(3, 'kp_t',  [ 0.1,   0.1,    0.2,    0.3,    0.7,    1.0,    1.7,    3.0,    4.0]), # from On 2017-02-22
+# Sensor.CODE_SO2:   TempComp(4, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])
 """
 
 # import sys
@@ -34,8 +34,7 @@ class TempComp(object):
             Sensor.CODE_H2S:    TempComp(2, 'k_t', [-1.5, -1.5, -1.5, -0.5, 0.5, 1.0, 0.8, 0.5, 0.3]),
             Sensor.CODE_NO:     TempComp(3, 'kp_t', [0.7, 0.7, 0.7, 0.7, 0.8, 1.0, 1.2, 1.4, 1.6]),
             Sensor.CODE_NO2:    TempComp(1, 'n_t', [0.8, 0.8, 1.0, 1.2, 1.6, 1.8, 1.9, 2.5, 3.6]),
-            Sensor.CODE_OX:     None,
-            # Sensor.CODE_SO2:   TempComp(4, 'kpp_t', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 25.0, 45.0])
+            Sensor.CODE_OX:     TempComp(3, 'kp_t',  [0.1, 0.1, 0.2, 0.3, 0.7, 1.0, 1.7, 3.0, 4.0]),
             Sensor.CODE_SO2:    TempComp(1, 'kpp_t', [1.6, 1.6, 1.6, 1.6, 1.6, 1.6, 1.9, 3.0, 5.8])
         }
 
@@ -73,7 +72,7 @@ class TempComp(object):
 
     def correct(self, calib, temp, we_t, ae_t):
         """
-        Find corrected we.
+        Compute weC from weT, aeT
         """
         if not TempComp.in_range(temp):
             return None
@@ -143,7 +142,7 @@ class TempComp(object):
 
     def cf_t(self, temp):
         """
-        Find the linear-interpolated temperature compensation factor.
+        Compute the linear-interpolated temperature compensation factor.
         """
         index = int((temp - TempComp.__MIN_TEMP) // TempComp.__INTERVAL)        # index of start of interval
 

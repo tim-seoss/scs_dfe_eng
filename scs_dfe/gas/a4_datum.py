@@ -22,29 +22,72 @@ class A4Datum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct(cls, calib, baseline, tc, temp, we_v, ae_v):
+    def construct(cls, calib, baseline, tc, temp, we_v, ae_v, no2_cnc=None):
         if calib is None or tc is None:
             return A4Datum(we_v, ae_v)
 
-        # print("A4Datum: calib:%s baseline:%s tc:%s temp:%f we_v:%f ae_v:%f" %
-        #       (calib, baseline, tc, temp, we_v, ae_v), file=sys.stderr)
+        # print("A4Datum: calib:%s baseline:%s tc:%s temp:%f we_v:%f ae_v:%f x_sens_sample:%s" %
+        #       (calib, baseline, tc, temp, we_v, ae_v, x_sens_sample), file=sys.stderr)
 
+        # weC...
+        we_c = cls.__we_c(calib, tc, temp, we_v, ae_v)
+
+        if we_c is None:
+            return A4Datum(we_v, ae_v)
+
+        if no2_cnc:
+            we_c -= cls.__reverse_we_c(calib.we_no2_x_sens_mv, no2_cnc)
+
+        # cnc...
+        cnc = cls.__cnc(calib.we_sens_mv, we_c)
+
+        baselined_cnc = cnc + baseline.offset
+
+        return A4Datum(we_v, ae_v, we_c, baselined_cnc)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def __we_c(cls, calib, tc, temp, we_v, ae_v):
+        """
+        Compute weC from sensor temperature compensation of weV, aeV
+        """
         we_t = we_v - (float(calib.we_elc_mv) / 1000.0)
         ae_t = ae_v - (float(calib.ae_elc_mv) / 1000.0)
 
         we_c = tc.correct(calib, temp, we_t, ae_t)
 
+        # print("A4Datum__we_c: we_t:%f ae_t:%f we_c:%s" % (we_t, ae_t, we_c), file=sys.stderr)
+
+        return we_c
+
+
+    @classmethod
+    def __cnc(cls, sens_mv, we_c):
+        """
+        Compute cnc from weC (using primary sensitivity)
+        """
         if we_c is None:
-            return A4Datum(we_v, ae_v)
+            return None
 
-        cnc = (we_c * 1000.0) / calib.we_sens_mv
+        cnc = (we_c * 1000.0) / sens_mv
 
-        cnc = cnc + baseline.offset
+        # print("A4Datum__cnc: we_c:%s cnc:%f" % (we_c, cnc), file=sys.stderr)
 
-        # print("A4Datum: we_t:%f ae_t:%f we_c:%s cnc:%f" %
-        #       (we_t, ae_t, we_c, cnc), file=sys.stderr)
+        return cnc
 
-        return A4Datum(we_v, ae_v, we_c, cnc)
+
+    @classmethod
+    def __reverse_we_c(cls, sens_mv, cnc):
+        """
+        Compute weC from cnc (using cross-sensitivity)
+        """
+        we_c = (cnc * sens_mv) / 1000.0
+
+        # print("__reverse_we_c: we_c:%s cnc:%f" % (we_c, cnc), file=sys.stderr)
+
+        return we_c
 
 
     # ----------------------------------------------------------------------------------------------------------------

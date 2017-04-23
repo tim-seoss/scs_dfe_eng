@@ -44,36 +44,42 @@ class A4Calib(SensorCalib):
         pcb_gain = jdict.get('pcb_gain')
 
         we_sens_mv = jdict.get('we_sensitivity_mv_ppb')
-        we_x_sens_mv = jdict.get('we_cross_sensitivity_no2_mv_ppb')
+        we_no2_x_sens_mv = jdict.get('we_cross_sensitivity_no2_mv_ppb')
 
         return A4Calib(serial_number, sensor_type, we_elc_mv, we_cal_mv, we_tot_mv, ae_elc_mv, ae_cal_mv, ae_tot_mv,
-                       we_sens_na, we_x_sens_na, pcb_gain, we_sens_mv, we_x_sens_mv)
+                       we_sens_na, we_x_sens_na, pcb_gain, we_sens_mv, we_no2_x_sens_mv)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, serial_number, sensor_type, we_elc_mv, we_cal_mv, we_tot_mv, ae_elc_mv, ae_cal_mv, ae_tot_mv,
-                 we_sens_na, we_x_sens_na, pcb_gain, we_sens_mv, we_x_sens_mv):
+                 we_sens_na, we_x_sens_na, pcb_gain, we_sens_mv, we_no2_x_sens_mv):
         """
         Constructor
         """
         SensorCalib.__init__(self, serial_number, sensor_type)
 
-        self.__we_elc_mv = Datum.int(we_elc_mv)                 # WE electronic zero                    mV
-        self.__we_cal_mv = Datum.int(we_cal_mv)                 # WE sensor zero at 23 ºC               mV
-        self.__we_tot_mv = Datum.int(we_tot_mv)                 # total WE zero                         mV
+        self.__we_elc_mv = Datum.int(we_elc_mv)                     # WE electronic zero                    mV
+        self.__we_cal_mv = Datum.int(we_cal_mv)                     # WE sensor zero at 23 ºC               mV
+        self.__we_tot_mv = Datum.int(we_tot_mv)                     # total WE zero                         mV
 
-        self.__ae_elc_mv = Datum.int(ae_elc_mv)                 # Aux electronic zero                   mV
-        self.__ae_cal_mv = Datum.int(ae_cal_mv)                 # Aux sensor zero at 23 ºC              mV
-        self.__ae_tot_mv = Datum.int(ae_tot_mv)                 # total Aux zero                        mV
+        self.__ae_elc_mv = Datum.int(ae_elc_mv)                     # Aux electronic zero                   mV
+        self.__ae_cal_mv = Datum.int(ae_cal_mv)                     # Aux sensor zero at 23 ºC              mV
+        self.__ae_tot_mv = Datum.int(ae_tot_mv)                     # total Aux zero                        mV
 
-        self.__we_sens_na = Datum.float(we_sens_na, 3)          # WE sensitivity                        nA
-        self.__we_x_sens_na = Datum.float(we_x_sens_na, 3)      # WE cross-sensitivity                  nA
+        self.__we_sens_na = Datum.float(we_sens_na, 3)              # WE sensitivity                        nA
+        self.__we_x_sens_na = Datum.float(we_x_sens_na, 3)          # WE cross-sensitivity                  nA
 
-        self.__pcb_gain = Datum.float(pcb_gain, 3)              # PCB gain                              mv / nA
+        self.__pcb_gain = Datum.float(pcb_gain, 3)                  # PCB gain                              mv / nA
 
-        self.__we_sens_mv = Datum.float(we_sens_mv, 3)          # WE sensitivity                        mV / ppb
-        self.__we_x_sens_mv = Datum.float(we_x_sens_mv, 3)      # WE cross-sensitivity                  mV / ppb
+        self.__we_sens_mv = Datum.float(we_sens_mv, 3)              # WE sensitivity                        mV / ppb
+        self.__we_no2_x_sens_mv = Datum.float(we_no2_x_sens_mv, 3)  # WE cross-sensitivity                  mV / ppb
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def reports_no2_cross_sensitivity(self):
+        return self.__we_no2_x_sens_mv is not None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -98,7 +104,7 @@ class A4Calib(SensorCalib):
         jdict['pcb_gain'] = self.pcb_gain
 
         jdict['we_sensitivity_mv_ppb'] = self.we_sens_mv
-        jdict['we_cross_sensitivity_no2_mv_ppb'] = self.we_x_sens_mv if self.we_x_sens_mv else "n/a"
+        jdict['we_cross_sensitivity_no2_mv_ppb'] = self.we_no2_x_sens_mv if self.we_no2_x_sens_mv else "n/a"
 
         return jdict
 
@@ -156,8 +162,8 @@ class A4Calib(SensorCalib):
 
 
     @property
-    def we_x_sens_mv(self):
-        return self.__we_x_sens_mv
+    def we_no2_x_sens_mv(self):
+        return self.__we_no2_x_sens_mv
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -165,7 +171,7 @@ class A4Calib(SensorCalib):
     def __str__(self, *args, **kwargs):
         return "A4Calib:{serial_number:%s, sensor_type:%s, we_elc_mv:%s, we_cal_mv:%s, we_tot_mv:%s, " \
                "ae_elc_mv:%s, ae_cal_mv:%s, ae_tot_mv:%s, we_sens_na:%s, we_x_sens_na:%s, pcb_gain:%s, " \
-               "we_sens_mv:%s, we_x_sens_mv:%s}" % \
+               "we_sens_mv:%s, we_no2_x_sens_mv:%s}" % \
                     (self.serial_number, self.sensor_type, self.we_elc_mv, self.we_cal_mv, self.we_tot_mv,
                      self.ae_elc_mv, self.ae_cal_mv, self.ae_tot_mv, self.we_sens_na, self.we_x_sens_na, self.pcb_gain,
-                     self.we_sens_mv, self.we_x_sens_mv)
+                     self.we_sens_mv, self.we_no2_x_sens_mv)
