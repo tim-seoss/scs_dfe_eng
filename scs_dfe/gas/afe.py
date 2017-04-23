@@ -65,10 +65,11 @@ class AFE(object):
 
         for index in range(len(self.__sensors)):
             sensor = self.__sensors[index]
+
             if sensor is None:
                 continue
 
-            if no2_sample is None:
+            if sensor.has_no2_cross_sensitivity():
                 no2_sample = AFE.__no2_sample(samples)
 
             sample = sensor.sample(self, temp, index, no2_sample)
@@ -78,7 +79,7 @@ class AFE(object):
         return AFEDatum(pt1000_datum, *samples)
 
 
-    def sample_station(self, sn, sht_datum=None):       # TODO: must also sample NO2 if this is Ox
+    def sample_station(self, sn, sht_datum=None):
         index = sn - 1
 
         pt1000_datum = self.sample_temp()
@@ -90,7 +91,14 @@ class AFE(object):
         if sensor is None:
             return AFEDatum(pt1000_datum)
 
-        sample = sensor.sample(self, temp, index)
+        if sensor.has_no2_cross_sensitivity():
+            no2_index, no2_sensor = self.__no2_sensor()
+            no2_sample = no2_sensor.sample(self, temp, no2_index)
+
+        else:
+            no2_sample = None
+
+        sample = sensor.sample(self, temp, index, no2_sample)
 
         return AFEDatum(pt1000_datum, (sensor.gas_name, sample))
 
@@ -146,6 +154,16 @@ class AFE(object):
 
         finally:
             self.__temp.release_lock()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __no2_sensor(self):
+        for index in range(len(self.__sensors)):
+            if self.__sensors[index].gas_name == 'NO2':
+                return index, self.__sensors[index]
+
+        return None
 
 
     # ----------------------------------------------------------------------------------------------------------------
