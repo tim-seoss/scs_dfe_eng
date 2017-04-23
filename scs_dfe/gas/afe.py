@@ -69,9 +69,11 @@ class AFE(object):
             if sensor is None:
                 continue
 
+            # cross-sensitivity sample...
             if sensor.has_no2_cross_sensitivity():
                 no2_sample = AFE.__no2_sample(samples)
 
+            # sample...
             sample = sensor.sample(self, temp, index, no2_sample)
 
             samples.append((sensor.gas_name, sample))
@@ -91,13 +93,14 @@ class AFE(object):
         if sensor is None:
             return AFEDatum(pt1000_datum)
 
+        # cross-sensitivity sample...
         if sensor.has_no2_cross_sensitivity():
             no2_index, no2_sensor = self.__no2_sensor()
             no2_sample = no2_sensor.sample(self, temp, no2_index)
-
         else:
             no2_sample = None
 
+        # sample...
         sample = sensor.sample(self, temp, index, no2_sample)
 
         return AFEDatum(pt1000_datum, (sensor.gas_name, sample))
