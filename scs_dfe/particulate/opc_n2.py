@@ -29,6 +29,7 @@ class OPCN2(object):
     __FLOW_RATE_VERSION =               16
 
     __START_TIME =                      5
+    __STOP_TIME =                       2
 
     __FAN_UP_TIME =                     10
     __FAN_DOWN_TIME =                   2
@@ -134,6 +135,7 @@ class OPCN2(object):
             self.__spi.open()
 
             self.__spi.xfer([OPCN2.__CMD_POWER, OPCN2.__CMD_POWER_OFF])
+            time.sleep(OPCN2.__STOP_TIME)
 
         finally:
             time.sleep(OPCN2.__CMD_DELAY)
