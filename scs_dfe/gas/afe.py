@@ -9,8 +9,8 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 
 import time
 
+from scs_core.gas.afe_datum import AFEDatum
 from scs_dfe.gas.ads1115 import ADS1115
-from scs_dfe.gas.afe_datum import AFEDatum
 from scs_dfe.gas.mcp3425 import MCP3425
 
 

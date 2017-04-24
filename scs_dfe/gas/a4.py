@@ -4,10 +4,10 @@ Created on 30 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_dfe.gas.a4_datum import A4Datum
+from scs_core.gas.a4_datum import A4Datum
+from scs_core.gas.sensor import Sensor
+from scs_core.gas.temp_comp import TempComp
 from scs_dfe.gas.ads1115 import ADS1115
-from scs_dfe.gas.sensor import Sensor
-from scs_dfe.gas.temp_comp import TempComp
 
 
 # --------------------------------------------------------------------------------------------------------------------
