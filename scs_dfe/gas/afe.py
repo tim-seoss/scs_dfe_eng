@@ -2,12 +2,15 @@
 Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+Warning: If an Ox sensor is present, the NO2 sensor must have a lower SN than the Ox sensor,
+otherwise the NO2 cross-sensitivity concentration will not be found.
 """
 
 import time
 
+from scs_core.gas.afe_datum import AFEDatum
 from scs_dfe.gas.ads1115 import ADS1115
-from scs_dfe.gas.afe_datum import AFEDatum
 from scs_dfe.gas.mcp3425 import MCP3425
 
 
@@ -20,6 +23,17 @@ class AFE(object):
     __RATE = ADS1115.RATE_8
 
     __MUX = (ADS1115.MUX_A3_GND, ADS1115.MUX_A2_GND, ADS1115.MUX_A1_GND, ADS1115.MUX_A0_GND)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def __no2_sample(cls, samples):
+        for sample in samples:
+            if sample[0] == 'NO2':
+                return sample[1]
+
+        return None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -41,20 +55,26 @@ class AFE(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    # TODO: this is where sensors can be labelled, e.g. (str(index + 1) + ':' + sensor.gas_name, sample)
-
     def sample(self, sht_datum=None):
         pt1000_datum = self.sample_temp()
 
         temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
         samples = []
+        no2_sample = None
+
         for index in range(len(self.__sensors)):
             sensor = self.__sensors[index]
+
             if sensor is None:
                 continue
 
-            sample = sensor.sample(self, temp, index)
+            # cross-sensitivity sample...
+            if sensor.has_no2_cross_sensitivity():
+                no2_sample = AFE.__no2_sample(samples)
+
+            # sample...
+            sample = sensor.sample(self, temp, index, no2_sample)
 
             samples.append((sensor.gas_name, sample))
 
@@ -73,7 +93,15 @@ class AFE(object):
         if sensor is None:
             return AFEDatum(pt1000_datum)
 
-        sample = sensor.sample(self, temp, index)
+        # cross-sensitivity sample...
+        if sensor.has_no2_cross_sensitivity():
+            no2_index, no2_sensor = self.__no2_sensor()
+            no2_sample = no2_sensor.sample(self, temp, no2_index)
+        else:
+            no2_sample = None
+
+        # sample...
+        sample = sensor.sample(self, temp, index, no2_sample)
 
         return AFEDatum(pt1000_datum, (sensor.gas_name, sample))
 
@@ -129,6 +157,16 @@ class AFE(object):
 
         finally:
             self.__temp.release_lock()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __no2_sensor(self):
+        for index in range(len(self.__sensors)):
+            if self.__sensors[index].gas_name == 'NO2':
+                return index, self.__sensors[index]
+
+        return None
 
 
     # ----------------------------------------------------------------------------------------------------------------

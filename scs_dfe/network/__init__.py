@@ -7,7 +7,7 @@ Created on 16 Apr 2017
 from scs_dfe.network.wpa_supplicant_file import WPASupplicantFile
 
 
-# TODO: move this package to host
+# TODO: move the network package to host
 
 # --------------------------------------------------------------------------------------------------------------------
 

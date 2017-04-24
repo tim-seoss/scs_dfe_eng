@@ -9,9 +9,8 @@ Created on 1 Mar 2017
 import datetime
 
 from scs_core.data.json import JSONify
-
-from scs_dfe.gas.afe_baseline import AFEBaseline
-from scs_dfe.gas.sensor_baseline import SensorBaseline
+from scs_core.gas.afe_baseline import AFEBaseline
+from scs_core.gas.sensor_baseline import SensorBaseline
 
 
 # --------------------------------------------------------------------------------------------------------------------

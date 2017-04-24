@@ -8,7 +8,7 @@ https://github.com/raspberrypi/weather-station/blob/master/SHT31.py
 
 import time
 
-from scs_dfe.climate.sht_datum import SHTDatum
+from scs_core.climate.sht_datum import SHTDatum
 
 from scs_host.bus.i2c import I2C
 

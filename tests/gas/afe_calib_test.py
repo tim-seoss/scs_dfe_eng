@@ -8,8 +8,8 @@ Created on 29 Sep 2016
 
 from scs_core.data.json import JSONify
 
-from scs_dfe.gas.afe_baseline import AFEBaseline
-from scs_dfe.gas.afe_calib import AFECalib
+from scs_core.gas.afe_baseline import AFEBaseline
+from scs_core.gas.afe_calib import AFECalib
 
 from scs_host.sys.host import Host
 

@@ -4,9 +4,9 @@ Created on 30 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+from scs_core.gas.pid_datum import PIDDatum
+from scs_core.gas.sensor import Sensor
 from scs_dfe.gas.ads1115 import ADS1115
-from scs_dfe.gas.pid_datum import PIDDatum
-from scs_dfe.gas.sensor import Sensor
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ class PID(Sensor):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sample(self, afe, temp, index):
+    def sample(self, afe, temp, index, no2_sample=None):
         wrk = afe.sample_raw_wrk(index, self.adc_gain)
 
         # TODO handle PID calib and baseline for cnc

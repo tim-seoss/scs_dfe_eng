@@ -7,10 +7,8 @@ Created on 16 Apr 2017
 """
 
 from scs_core.data.json import JSONify
+from scs_core.gas.afe_calib import AFECalib
 from scs_core.osio.config.project_topic import ProjectTopic
-
-from scs_dfe.gas.afe_calib import AFECalib
-
 from scs_host.sys.host import Host
 
 
