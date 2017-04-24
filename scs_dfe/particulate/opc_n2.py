@@ -7,9 +7,8 @@ Created on 4 Jul 2016
 import struct
 import time
 
+from scs_core.particulate.opc_datum import OPCDatum
 from scs_dfe.board.io import IO
-from scs_dfe.particulate.opc_datum import OPCDatum
-
 from scs_host.lock.lock import Lock
 from scs_host.sys.host_spi import HostSPI
 

@@ -10,7 +10,7 @@ from scs_core.data.datum import Datum
 from scs_core.data.json import JSONable
 
 
-# TODO: add precision
+# TODO: rename as ClimateDatum, move to scs_core
 
 # --------------------------------------------------------------------------------------------------------------------
 
