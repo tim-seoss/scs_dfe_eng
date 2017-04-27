@@ -113,9 +113,9 @@ class AFE(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def sample_raw_wrk_aux(self, sensor_index, gain_index):
-        gain = ADS1115.gain(gain_index)
-
         try:
+            gain = ADS1115.gain(gain_index)
+
             mux = AFE.__MUX[sensor_index]
 
             self.__wrk.start_conversion(mux, gain)
@@ -133,9 +133,11 @@ class AFE(object):
             self.__aux.release_lock()
 
 
-    def sample_raw_wrk(self, index, gain):
+    def sample_raw_wrk(self, sensor_index, gain_index):
         try:
-            mux = AFE.__MUX[index]
+            gain = ADS1115.gain(gain_index)
+
+            mux = AFE.__MUX[sensor_index]
 
             self.__wrk.start_conversion(mux, gain)
 
