@@ -63,8 +63,8 @@ class AFE(object):
         samples = []
         no2_sample = None
 
-        for index in range(len(self.__sensors)):
-            sensor = self.__sensors[index]
+        for sensor_index in range(len(self.__sensors)):
+            sensor = self.__sensors[sensor_index]
 
             if sensor is None:
                 continue
@@ -74,7 +74,7 @@ class AFE(object):
                 no2_sample = AFE.__no2_sample(samples)
 
             # sample...
-            sample = sensor.sample(self, temp, index, no2_sample)
+            sample = sensor.sample(self, temp, sensor_index, no2_sample)
 
             samples.append((sensor.gas_name, sample))
 
@@ -112,9 +112,11 @@ class AFE(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sample_raw_wrk_aux(self, index, gain):
+    def sample_raw_wrk_aux(self, sensor_index, gain_index):
+        gain = ADS1115.gain(gain_index)
+
         try:
-            mux = AFE.__MUX[index]
+            mux = AFE.__MUX[sensor_index]
 
             self.__wrk.start_conversion(mux, gain)
             self.__aux.start_conversion(mux, gain)
