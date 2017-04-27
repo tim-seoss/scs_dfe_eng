@@ -73,6 +73,8 @@ class ADS1115(object):
     __COMP_QUEUE_4 =    0x0002      # ---- ---- ---- --10
     __COMP_QUEUE_0 =    0x0003      # ---- ---- ---- --11    (default)
 
+
+    __GAIN =            None
     __FULL_SCALE =      None
     __TCONV =           None
 
@@ -86,6 +88,15 @@ class ADS1115(object):
 
     @classmethod
     def init(cls):
+        cls.__GAIN = (
+                        ADS1115.GAIN_0p256,        # 0
+                        ADS1115.GAIN_0p512,        # 1
+                        ADS1115.GAIN_1p024,        # 2
+                        ADS1115.GAIN_2p048,        # 3
+                        ADS1115.GAIN_4p096,        # 4
+                        ADS1115.GAIN_6p144         # 5
+                    )
+
         cls.__FULL_SCALE = {
                         ADS1115.GAIN_0p256:  0.256,
                         ADS1115.GAIN_0p512:  0.512,
@@ -105,6 +116,11 @@ class ADS1115(object):
                         ADS1115.RATE_475:   0.022,
                         ADS1115.RATE_860:   0.021
                     }
+
+
+    @classmethod
+    def gain(cls, index):
+        return cls.__GAIN[index]
 
 
     # ----------------------------------------------------------------------------------------------------------------
