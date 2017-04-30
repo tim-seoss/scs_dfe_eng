@@ -22,8 +22,8 @@ gas_names = calib.gas_names()
 print(gas_names)
 print("-")
 
-schema = ProjectTopic.find_gas_schema(gas_names)
-print(schema)
+topic = ProjectTopic.find_gases_topic(gas_names)
+print(topic)
 print("-")
 
-print(JSONify.dumps(schema))
+print(JSONify.dumps(topic))
