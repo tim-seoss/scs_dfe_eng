@@ -95,6 +95,18 @@ class SHTConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @property
+    def int_addr(self):
+        return self.__int_addr
+
+
+    @property
+    def ext_addr(self):
+        return self.__ext_addr
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def as_json(self):
         jdict = OrderedDict()
 
@@ -107,5 +119,5 @@ class SHTConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SHTConf:{int_addr:%s, ext_addr:%s}" % \
-                    (SHTConf.__addr_str(self.__int_addr), SHTConf.__addr_str(self.__ext_addr))
+        return "SHTConf:{int_addr:%s, ext_addr:%s}" %  \
+               (SHTConf.__addr_str(self.int_addr), SHTConf.__addr_str(self.ext_addr))
