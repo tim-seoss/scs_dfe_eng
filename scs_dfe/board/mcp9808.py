@@ -37,6 +37,34 @@ class MCP9808(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def __write_config(cls, config):
+        try:
+            I2C.start_tx(cls.__ADDR)
+            I2C.write(cls.__REG_CONFIG, config >> 8, config & 0xff)
+        finally:
+            I2C.end_tx()
+
+
+    @classmethod
+    def __read_temp(cls):
+        try:
+            I2C.start_tx(cls.__ADDR)
+            msb, lsb = I2C.read_cmd(cls.__REG_TEMP, 2)
+        finally:
+            I2C.end_tx()
+
+        # render voltage...
+        unsigned_c = float(msb & 0x1f) * 16 + float(lsb) / 16
+        sign = msb & 0x10
+
+        temp = 256 - unsigned_c if sign else unsigned_c
+
+        return temp
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self, running):
         """
         initialise with conversion status
@@ -56,33 +84,7 @@ class MCP9808(object):
         if not self.__running:
             raise ValueError("MCP9808:sense: conversion not running.")
 
-        return BoardDatum(self.__read_temp())
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __write_config(self, config):
-        try:
-            I2C.start_tx(MCP9808.__ADDR)
-            I2C.write(MCP9808.__REG_CONFIG, config >> 8, config & 0xff)
-        finally:
-            I2C.end_tx()
-
-
-    def __read_temp(self):
-        try:
-            I2C.start_tx(MCP9808.__ADDR)
-            msb, lsb = I2C.read_cmd(MCP9808.__REG_TEMP, 2)
-        finally:
-            I2C.end_tx()
-
-        # render voltage...
-        unsigned_c = float(msb & 0x1f) * 16 + float(lsb) / 16
-        sign = msb & 0x10
-
-        temp = 256 - unsigned_c if sign else unsigned_c
-
-        return temp
+        return BoardDatum(MCP9808.__read_temp())
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -98,7 +100,7 @@ class MCP9808(object):
         sleeps for 250 mS if conversion is being switched on
         """
         config = MCP9808.__CONV_CONT if running else MCP9808.__CONV_SHUT
-        self.__write_config(config)
+        MCP9808.__write_config(config)
 
         if running and not self.__running:
             time.sleep(MCP9808.__TCONV_0p0625)
