@@ -3,8 +3,12 @@ Created on 16 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Time is always stored as UTC.
+Note: time should always be stored as UTC, then localized on retrieval.
 """
+
+import sys
+
+from scs_core.data.rtc_datetime import RTCDatetime
 
 from scs_host.bus.i2c import I2C
 
@@ -15,9 +19,6 @@ class DS1338(object):
     """
     Maxim Integrated DS1338 serial real-time clock
     """
-
-    CENTURY =               2000
-
     __ADDR =                0x68
 
     __REG_SECONDS =         0x00
@@ -29,7 +30,7 @@ class DS1338(object):
     __REG_YEAR =            0x06
     __REG_CONTROL =         0x07
 
-    __REG_RAM =             0x08
+    __RAM_START_ADDR =      0x08
 
     __MASK_CLOCK_HALT =     0x80        # ---- 1000 0000
 
@@ -41,99 +42,123 @@ class DS1338(object):
     # clock...
 
     @classmethod
-    def set(cls, year, month, date, day, hours, minutes, seconds):
-        bcd = cls.__as_bcd(seconds)
-        cls.__write_reg(cls.__REG_SECONDS, bcd)
+    def init(cls):
+        # TODO: set 24 Hr, no SQWE
+        pass
 
-        bcd = cls.__as_bcd(minutes)
-        cls.__write_reg(cls.__REG_MINUTES, bcd)
 
-        bcd = cls.__as_bcd(hours)
-        cls.__write_reg(cls.__REG_HOURS, bcd)
+    @classmethod
+    def get_time(cls):
+        # read RTC...
+        second = cls.__read_reg_decimal(cls.__REG_SECONDS)
+        minute = cls.__read_reg_decimal(cls.__REG_MINUTES)
+        hour = cls.__read_reg_decimal(cls.__REG_HOURS)
 
-        bcd = cls.__as_bcd(day)
-        cls.__write_reg(cls.__REG_DAY, bcd)
+        weekday = cls.__read_reg_decimal(cls.__REG_DAY)
 
-        bcd = cls.__as_bcd(date)
-        cls.__write_reg(cls.__REG_DATE, bcd)
+        day = cls.__read_reg_decimal(cls.__REG_DATE)
+        month = cls.__read_reg_decimal(cls.__REG_MONTH)
+        year = cls.__read_reg_decimal(cls.__REG_YEAR)
 
-        bcd = cls.__as_bcd(month)
-        cls.__write_reg(cls.__REG_MONTH, bcd)
+        rtc_datetime = RTCDatetime(year, month, day, weekday, hour, minute, second)
 
-        bcd = cls.__as_bcd(year % 100)
-        cls.__write_reg(cls.__REG_YEAR, bcd)
+        return rtc_datetime
+
+
+    @classmethod
+    def set_time(cls, rtc_datetime):
+        # update RTC...
+        cls.__write_reg_decimal(cls.__REG_SECONDS, rtc_datetime.second)
+        cls.__write_reg_decimal(cls.__REG_MINUTES, rtc_datetime.minute)
+        cls.__write_reg_decimal(cls.__REG_HOURS, rtc_datetime.hour)
+
+        cls.__write_reg_decimal(cls.__REG_DAY, rtc_datetime.weekday)
+
+        cls.__write_reg_decimal(cls.__REG_DATE, rtc_datetime.day)
+        cls.__write_reg_decimal(cls.__REG_MONTH, rtc_datetime.month)
+        cls.__write_reg_decimal(cls.__REG_YEAR, rtc_datetime.year)
 
 
     @classmethod
     def square_wave(cls, enabled):
-        val = cls.__read_reg(cls.__REG_CONTROL)
-        val = val | cls.__MASK_SQW_EN if enabled else val & ~cls.__MASK_SQW_EN
+        value = cls.__read_reg(cls.__REG_CONTROL)
+        value = value | cls.__MASK_SQW_EN if enabled else value & ~cls.__MASK_SQW_EN
 
-        print("val: 0x%02x" % val)
-
-        cls.__write_reg(cls.__REG_CONTROL, val)
+        cls.__write_reg(cls.__REG_CONTROL, value)
 
 
     @classmethod
     def dump(cls):
-        val = cls.__read_reg(cls.__REG_SECONDS)
-        print("seconds: 0x%02x" % val)
-        print("seconds: %d" % cls.__as_decimal(val))
-        print("seconds: 0x%02x" % cls.__as_bcd(cls.__as_decimal(val)))
+        # read RTC...
+        second = cls.__read_reg(cls.__REG_SECONDS)
+        minute = cls.__read_reg(cls.__REG_MINUTES)
+        hour = cls.__read_reg(cls.__REG_HOURS)
 
-        val = cls.__read_reg(cls.__REG_MINUTES)
-        print("minutes: 0x%02x" % val)
+        weekday = cls.__read_reg(cls.__REG_DAY)
 
-        val = cls.__read_reg(cls.__REG_HOURS)
-        print("  hours: 0x%02x" % val)
+        day = cls.__read_reg(cls.__REG_DATE)
+        month = cls.__read_reg(cls.__REG_MONTH)
+        year = cls.__read_reg(cls.__REG_YEAR)
 
-        val = cls.__read_reg(cls.__REG_DAY)
-        print("    day: 0x%02x" % val)
+        control = cls.__read_reg(cls.__REG_CONTROL)
 
-        val = cls.__read_reg(cls.__REG_DATE)
-        print("   date: 0x%02x" % val)
+        # print...
+        print("seconds: 0x%02x" % second, file=sys.stderr)
+        print("minutes: 0x%02x" % minute, file=sys.stderr)
+        print("  hours: 0x%02x" % hour, file=sys.stderr)
 
-        val = cls.__read_reg(cls.__REG_MONTH)
-        print("  month: 0x%02x" % val)
+        print("weekday: 0x%02x" % weekday, file=sys.stderr)
 
-        val = cls.__read_reg(cls.__REG_YEAR)
-        print("   year: 0x%02x" % val)
+        print("    day: 0x%02x" % day, file=sys.stderr)
+        print("  month: 0x%02x" % month, file=sys.stderr)
+        print("   year: 0x%02x" % year, file=sys.stderr)
 
-        val = cls.__read_reg(cls.__REG_CONTROL)
-        print("control: 0x%02x" % val)
+        print("control: 0x%02x" % control, file=sys.stderr)
+
+        sys.stderr.flush()
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # RAM...
 
     @classmethod
-    def write(cls, addr, val):
-        cls.__write_reg(cls.__REG_RAM + addr, val)
+    def read(cls, addr):
+        return cls.__read_reg(cls.__RAM_START_ADDR + addr)
 
 
     @classmethod
-    def read(cls, addr):
-        return cls.__read_reg(cls.__REG_RAM + addr)
+    def write(cls, addr, val):
+        cls.__write_reg(cls.__RAM_START_ADDR + addr, val)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def __read_reg(cls, addr):
-        try:
-            I2C.start_tx(cls.__ADDR)
-            val = I2C.read_cmd(addr, 1)
-        finally:
-            I2C.end_tx()
-
-        return val
+    def __read_reg_decimal(cls, addr):
+        return cls.__as_decimal(cls.__read_reg(addr))
 
 
     @classmethod
-    def __write_reg(cls, addr, val):
+    def __read_reg(cls, addr):
         try:
             I2C.start_tx(cls.__ADDR)
-            I2C.write(addr, val)
+            value = I2C.read_cmd(addr, 1)
+        finally:
+            I2C.end_tx()
+
+        return value
+
+
+    @classmethod
+    def __write_reg_decimal(cls, addr, value):
+        return cls.__write_reg(addr, cls.__as_bcd(value))
+
+
+    @classmethod
+    def __write_reg(cls, addr, value):
+        try:
+            I2C.start_tx(cls.__ADDR)
+            I2C.write(addr, value)
         finally:
             I2C.end_tx()
 

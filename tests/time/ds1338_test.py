@@ -6,9 +6,10 @@ Created on 16 May 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import time
+import tzlocal
 
 from scs_core.data.localized_datetime import LocalizedDatetime
+from scs_core.data.rtc_datetime import RTCDatetime
 
 from scs_dfe.time.ds1338 import DS1338
 
@@ -18,38 +19,41 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
+set_time = False
+
+
+# --------------------------------------------------------------------------------------------------------------------
+
 now = LocalizedDatetime.now()
 print(now)
 print("-")
 
-datetime = now.datetime
-
-print("year: %d" % datetime.year)
-print("month: %d" % datetime.month)
-print("day: %d" % datetime.day)
-print("weekday: %s" % datetime.isoweekday())
-print("-")
-
-print("hour: %s" % datetime.hour)
-print("minute: %s" % datetime.minute)
-print("second: %s" % datetime.second)
+rtc_datetime = RTCDatetime.construct_from_localized_datetime(now)
+print(rtc_datetime)
 print("-")
 
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    # DS1338.sqwe(False)
-    # time.sleep(1)
-    #
-    # DS1338.set(2017, 5, 17, 4, 9, 3, 55)
-    # DS1338.set(2000, 1, 1, 1, 00, 00, 00)
+    # clock...
+    DS1338.square_wave(False)
 
-    # time.sleep(1)
+    if set_time:
+        DS1338.set_time(rtc_datetime)
+
     DS1338.dump()
     print("-")
 
+    rtc_datetime = DS1338.get_time()
+    print("rtc_datetime: % s" % rtc_datetime)
+
+    localized_datetime = rtc_datetime.as_localized_datetime(tzlocal.get_localzone())
+    print(localized_datetime)
+    print("-")
+
+    # RAM...
     addr = 1
-    val = 0x34
+    val = 0x45
     DS1338.write(addr, val)
     read = DS1338.read(addr)
 
