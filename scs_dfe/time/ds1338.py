@@ -86,7 +86,7 @@ class DS1338(object):
 
 
     @classmethod
-    def square_wave(cls, enabled):                  # TODO: remove
+    def square_wave(cls, enabled):                  # TODO: remove?
         value = cls.__read_reg(cls.__REG_CONTROL)
         value = value | cls.__MASK_SQW_EN if enabled else value & ~cls.__MASK_SQW_EN
 
