@@ -42,12 +42,6 @@ class DS1338(object):
     # clock...
 
     @classmethod
-    def init(cls):
-        # TODO: set 24 Hr, no SQWE
-        pass
-
-
-    @classmethod
     def get_time(cls):
         # read RTC...
         second = cls.__read_reg_decimal(cls.__REG_SECONDS)
@@ -80,7 +74,19 @@ class DS1338(object):
 
 
     @classmethod
-    def square_wave(cls, enabled):
+    def init(cls):
+        # TODO: set 24 Hr, no SQWE
+        pass
+
+
+    @classmethod
+    def get_ctrl(cls):
+        # TODO: implement
+        pass
+
+
+    @classmethod
+    def square_wave(cls, enabled):                  # TODO: remove
         value = cls.__read_reg(cls.__REG_CONTROL)
         value = value | cls.__MASK_SQW_EN if enabled else value & ~cls.__MASK_SQW_EN
 
@@ -88,7 +94,7 @@ class DS1338(object):
 
 
     @classmethod
-    def dump(cls):
+    def dump(cls):      # TODO: remove
         # read RTC...
         second = cls.__read_reg(cls.__REG_SECONDS)
         minute = cls.__read_reg(cls.__REG_MINUTES)
