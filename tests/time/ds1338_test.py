@@ -36,19 +36,20 @@ try:
     I2C.open(Host.I2C_SENSORS)
 
     # clock...
-    DS1338.square_wave(False)
+    DS1338.init()
 
     if set_time:
         DS1338.set_time(rtc_datetime)
 
-    DS1338.dump()
-    print("-")
-
     rtc_datetime = DS1338.get_time()
-    print("rtc_datetime: % s" % rtc_datetime)
+    print("rtc_datetime: %s" % rtc_datetime)
 
     localized_datetime = rtc_datetime.as_localized_datetime(tzlocal.get_localzone())
     print(localized_datetime)
+    print("-")
+
+    control = DS1338.get_ctrl()
+    print("control: 0x%02x" % control)
     print("-")
 
     # RAM...
@@ -58,6 +59,7 @@ try:
     read = DS1338.read(addr)
 
     print("ram[%d]: 0x%02x" % (addr, read))
+    print("-")
 
 finally:
     I2C.close()
