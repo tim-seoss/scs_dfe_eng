@@ -3,7 +3,7 @@ Created on 16 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Note: time should always be stored as UTC, then localized on retrieval.
+Note: time shall always be stored as UTC, then localized on retrieval.
 """
 
 from scs_core.data.rtc_datetime import RTCDatetime
