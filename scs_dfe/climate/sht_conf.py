@@ -3,7 +3,7 @@ Created on 13 Dec 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Note: where an A4 SHT is not available, the int_sht I2C address should be set to the ext_sht address.
+the I2C addresses of the internal (in A4 pot) and external (exposed to air) SHTs
 
 example JSON:
 {"int": "0x44", "ext": "0x45"}

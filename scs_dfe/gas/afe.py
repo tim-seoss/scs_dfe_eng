@@ -49,7 +49,7 @@ class AFE(object):
         self.__wrk_adc = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
         self.__aux_adc = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE)
 
-        self.__temp_adc = pt1000_conf.adc(MCP342X.GAIN_4, MCP342X.RATE_15)
+        self.__pt1000_adc = pt1000_conf.adc(MCP342X.GAIN_4, MCP342X.RATE_15)
 
         self.__tconv = self.__wrk_adc.tconv
 
@@ -154,14 +154,14 @@ class AFE(object):
 
     def sample_raw_tmp(self):
         try:
-            self.__temp_adc.start_conversion()
+            self.__pt1000_adc.start_conversion()
 
-            time.sleep(self.__temp_adc.tconv)
+            time.sleep(self.__pt1000_adc.tconv)
 
-            return self.__temp_adc.read_conversion()
+            return self.__pt1000_adc.read_conversion()
 
         finally:
-            self.__temp_adc.release_lock()
+            self.__pt1000_adc.release_lock()
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -179,5 +179,5 @@ class AFE(object):
     def __str__(self, *args, **kwargs):
         sensors = '[' + ', '.join(str(sensor) for sensor in self.__sensors) + ']'
 
-        return "AFE:{pt1000:%s, sensors:%s, tconv:%0.3f, wrk_adc:%s, aux_adc:%s, temp_adc:%s}" % \
-            (self.__pt1000, sensors, self.__tconv, self.__wrk_adc, self.__aux_adc, self.__temp_adc)
+        return "AFE:{pt1000:%s, sensors:%s, tconv:%0.3f, wrk_adc:%s, aux_adc:%s, pt1000_adc:%s}" % \
+            (self.__pt1000, sensors, self.__tconv, self.__wrk_adc, self.__aux_adc, self.__pt1000_adc)

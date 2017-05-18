@@ -3,6 +3,8 @@ Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+the I2C address of the Pt1000 ADC
+
 example JSON:
 {"addr": "0x69"}
 """
