@@ -5,11 +5,11 @@ Created on 16 Apr 2017
 """
 
 from scs_dfe.gas.ads1115 import ADS1115
-from scs_dfe.gas.mcp3425 import MCP3425
+from scs_dfe.gas.mcp342x import MCP342X
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 ADS1115.init()
 
-MCP3425.init()
+MCP342X.init()

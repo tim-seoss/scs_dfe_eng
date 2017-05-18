@@ -9,8 +9,10 @@ Created on 1 Oct 2016
 from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_dfe.climate.sht_conf import SHTConf
+
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.pt1000_conf import Pt1000Conf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -36,15 +38,19 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    calib = Pt1000Calib.load_from_host(Host)
-    print(calib)
+    pt1000_conf = Pt1000Conf.load_from_host(Host)
+    print(pt1000_conf)
     print("-")
 
-    pt1000 = Pt1000(calib)
+    pt1000_calib = Pt1000Calib.load_from_host(Host)
+    print(pt1000_calib)
+    print("-")
+
+    pt1000 = Pt1000(pt1000_calib)
     print(pt1000)
     print("-")
 
-    afe = AFE(pt1000, [])
+    afe = AFE(pt1000_conf, pt1000, [])
     print(afe)
     print("-")
 
@@ -59,17 +65,17 @@ try:
     print(v20)
     print("-")
 
-    calib = Pt1000Calib(None, v20)
-    print(calib)
+    pt1000_calib = Pt1000Calib(None, v20)
+    print(pt1000_calib)
     print("=")
 
-    calib.save(Host)
+    pt1000_calib.save(Host)
 
-    pt1000 = Pt1000(calib)
+    pt1000 = Pt1000(pt1000_calib)
     print(pt1000)
     print("-")
 
-    afe = AFE(pt1000, [])
+    afe = AFE(pt1000_conf, pt1000, [])
     print(afe)
     print("-")
 

@@ -10,15 +10,16 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 import time
 
 from scs_core.gas.afe_datum import AFEDatum
+
 from scs_dfe.gas.ads1115 import ADS1115
-from scs_dfe.gas.mcp3425 import MCP3425
+from scs_dfe.gas.mcp342x import MCP342X
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 class AFE(object):
     """
-    Alphasense Analogue Front-End (AFE) with Ti ADS1115 ADC (gases), Microchip Technology MCP3425 ADC (temp)
+    Alphasense Analogue Front-End (AFE) with Ti ADS1115 ADC (gases), Microchip Technology MCP342X ADC (Pt1000 temp)
     """
     __RATE = ADS1115.RATE_8
 
@@ -38,19 +39,19 @@ class AFE(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, pt1000, sensors):
+    def __init__(self, pt1000_conf, pt1000, sensors):
         """
         Constructor
         """
         self.__pt1000 = pt1000
         self.__sensors = sensors
 
-        self.__wrk = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
-        self.__aux = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE)
+        self.__wrk_adc = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
+        self.__aux_adc = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE)
 
-        self.__temp = MCP3425(MCP3425.GAIN_4, MCP3425.RATE_15)
+        self.__temp_adc = pt1000_conf.adc(MCP342X.GAIN_4, MCP342X.RATE_15)
 
-        self.__tconv = self.__wrk.tconv
+        self.__tconv = self.__wrk_adc.tconv
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -118,19 +119,19 @@ class AFE(object):
 
             mux = AFE.__MUX[sensor_index]
 
-            self.__wrk.start_conversion(mux, gain)
-            self.__aux.start_conversion(mux, gain)
+            self.__wrk_adc.start_conversion(mux, gain)
+            self.__aux_adc.start_conversion(mux, gain)
 
             time.sleep(self.__tconv)
 
-            we_v = self.__wrk.read_conversion()
-            ae_v = self.__aux.read_conversion()
+            we_v = self.__wrk_adc.read_conversion()
+            ae_v = self.__aux_adc.read_conversion()
 
             return we_v, ae_v
 
         finally:
-            self.__wrk.release_lock()
-            self.__aux.release_lock()
+            self.__wrk_adc.release_lock()
+            self.__aux_adc.release_lock()
 
 
     def sample_raw_wrk(self, sensor_index, gain_index):
@@ -139,28 +140,28 @@ class AFE(object):
 
             mux = AFE.__MUX[sensor_index]
 
-            self.__wrk.start_conversion(mux, gain)
+            self.__wrk_adc.start_conversion(mux, gain)
 
             time.sleep(self.__tconv)
 
-            we_v = self.__wrk.read_conversion()
+            we_v = self.__wrk_adc.read_conversion()
 
             return we_v
 
         finally:
-            self.__wrk.release_lock()
+            self.__wrk_adc.release_lock()
 
 
     def sample_raw_tmp(self):
         try:
-            self.__temp.start_conversion()
+            self.__temp_adc.start_conversion()
 
-            time.sleep(self.__temp.tconv)
+            time.sleep(self.__temp_adc.tconv)
 
-            return self.__temp.read_conversion()
+            return self.__temp_adc.read_conversion()
 
         finally:
-            self.__temp.release_lock()
+            self.__temp_adc.release_lock()
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -178,5 +179,5 @@ class AFE(object):
     def __str__(self, *args, **kwargs):
         sensors = '[' + ', '.join(str(sensor) for sensor in self.__sensors) + ']'
 
-        return "AFE:{pt1000:%s, sensors:%s, tconv:%0.3f, wrk:%s, aux:%s, temp:%s}" % \
-            (self.__pt1000, sensors, self.__tconv, self.__wrk, self.__aux, self.__temp)
+        return "AFE:{pt1000:%s, sensors:%s, tconv:%0.3f, wrk_adc:%s, aux_adc:%s, temp_adc:%s}" % \
+            (self.__pt1000, sensors, self.__tconv, self.__wrk_adc, self.__aux_adc, self.__temp_adc)
