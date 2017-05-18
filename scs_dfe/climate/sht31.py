@@ -100,7 +100,12 @@ class SHT31(object):
             I2C.end_tx()
 
 
+    @property
+    def addr(self):
+        return self.__addr
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SHT31:{addr:0x%02x}" % self.__addr
+        return "SHT31:{addr:0x%02x}" % self.addr
