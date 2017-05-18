@@ -11,6 +11,8 @@ from scs_core.data.rtc_datetime import RTCDatetime
 from scs_host.bus.i2c import I2C
 
 
+# TODO: needs locking!
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class DS1338(object):
