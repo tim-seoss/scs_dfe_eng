@@ -5,7 +5,7 @@ Created on 18 May 2017
 
 the I2C address of the Pt1000 ADC
 
-example JSON:
+example document:
 {"addr": "0x69"}
 """
 
