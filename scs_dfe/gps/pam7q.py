@@ -5,6 +5,7 @@ Created on 30 Dec 2016
 
 https://www.u-blox.com/en/product/pam-7q-module
 
+example sentences:
 $GPRMC,103228.00,A,5049.37823,N,00007.37872,W,0.104,,301216,,,D*64
 $GPVTG,,T,,M,0.104,N,0.193,K,D*28
 $GPGGA,103228.00,5049.37823,N,00007.37872,W,2,07,1.85,34.0,M,45.4,M,,0000*75

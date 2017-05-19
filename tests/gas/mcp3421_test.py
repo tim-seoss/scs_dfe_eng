@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 """
-Created on 5 Aug 2016
+Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
 import time
 
-from scs_dfe.gas.mcp3425 import MCP3425
+from scs_dfe.gas.mcp3421 import MCP3421
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -21,7 +21,7 @@ temp = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    temp = MCP3425(MCP3425.GAIN_4, MCP3425.RATE_15)     # 16 bits
+    temp = MCP3421(MCP3421.GAIN_4, MCP3421.RATE_15)     # 16 bits
     print(temp)
 
     temp.start_conversion()

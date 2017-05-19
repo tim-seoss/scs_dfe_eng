@@ -1,29 +1,34 @@
 """
-Created on 13 Dec 2016
+Created on 18 May 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-the I2C addresses of the internal (in A4 pot) and external (exposed to air) SHTs
+the I2C address of the Pt1000 ADC
 
-example JSON:
-{"int": "0x44", "ext": "0x45"}
+example document:
+{"addr": "0x69"}
 """
 
 from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
 
-from scs_dfe.climate.sht31 import SHT31
+from scs_dfe.gas.mcp342x import MCP342X
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class SHTConf(PersistentJSONable):
+class Pt1000Conf(PersistentJSONable):
     """
     classdocs
     """
 
-    __FILENAME = "sht_conf.json"
+    DEFAULT_ADDR = 0x68
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    __FILENAME = "pt1000_conf.json"
 
     @classmethod
     def filename(cls, host):
@@ -50,41 +55,31 @@ class SHTConf(PersistentJSONable):
     @classmethod
     def construct_from_jdict(cls, jdict):
         if not jdict:
-            return None
+            return Pt1000Conf(cls.DEFAULT_ADDR)
 
-        int_str = jdict.get('int')
-        ext_str = jdict.get('ext')
+        addr_str = jdict.get('addr')
 
-        int_addr = None if int_str is None else int(int_str, 0)
-        ext_addr = None if ext_str is None else int(ext_str, 0)
+        int_addr = None if addr_str is None else int(addr_str, 0)
 
-        return SHTConf(int_addr, ext_addr)
+        return Pt1000Conf(int_addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, int_addr, ext_addr):
+    def __init__(self, addr):
         """
         Constructor
         """
-        self.__int_addr = int_addr          # int       I2C address of SHT in A4 package
-        self.__ext_addr = ext_addr          # int       I2C address of SHT exposed to air
+        self.__addr = addr          # int       I2C address of Pt1000 ADC
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def int_sht(self):
-        if self.__int_addr is None:
+    def adc(self, gain, rate):
+        if self.addr is None:
             return None
 
-        return SHT31(self.__int_addr)
-
-
-    def ext_sht(self):
-        if self.__ext_addr is None:
-            return None
-
-        return SHT31(self.__ext_addr)
+        return MCP342X(self.addr, gain, rate)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -96,13 +91,8 @@ class SHTConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def int_addr(self):
-        return self.__int_addr
-
-
-    @property
-    def ext_addr(self):
-        return self.__ext_addr
+    def addr(self):
+        return self.__addr
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -110,8 +100,7 @@ class SHTConf(PersistentJSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['int'] = SHTConf.__addr_str(self.__int_addr)
-        jdict['ext'] = SHTConf.__addr_str(self.__ext_addr)
+        jdict['addr'] = Pt1000Conf.__addr_str(self.__addr)
 
         return jdict
 
@@ -119,5 +108,4 @@ class SHTConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SHTConf:{int_addr:%s, ext_addr:%s}" %  \
-               (SHTConf.__addr_str(self.int_addr), SHTConf.__addr_str(self.ext_addr))
+        return "Pt1000Conf:{addr:%s}" % Pt1000Conf.__addr_str(self.addr)

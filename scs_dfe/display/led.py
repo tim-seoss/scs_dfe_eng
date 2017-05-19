@@ -6,7 +6,6 @@ Created on 20 Feb 2017
 
 from scs_dfe.board.io import IO
 
-# TODO: move LED away from climate!
 
 # --------------------------------------------------------------------------------------------------------------------
 

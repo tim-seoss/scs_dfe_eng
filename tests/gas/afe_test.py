@@ -17,12 +17,17 @@ from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.pt1000_conf import Pt1000Conf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
+
+pt1000_conf = Pt1000Conf.load_from_host(Host)
+print(pt1000_conf)
+print("-")
 
 pt1000_calib = Pt1000Calib.load_from_host(Host)
 print(pt1000_calib)
@@ -46,7 +51,7 @@ print("-")
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    afe = AFE(pt1000, sensors)
+    afe = AFE(pt1000_conf, pt1000, sensors)
     print(afe)
     print("-")
 

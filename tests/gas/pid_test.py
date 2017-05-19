@@ -15,6 +15,7 @@ from scs_core.gas.sensor import Sensor
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.pt1000_conf import Pt1000Conf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -22,8 +23,10 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-calib = Pt1000Calib.load_from_host(Host)
-pt1000 = Pt1000(calib)
+pt1000_conf = Pt1000Conf.load_from_host(Host)
+
+pt1000_calib = Pt1000Calib.load_from_host(Host)
+pt1000 = Pt1000(pt1000_calib)
 
 sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),
            Sensor.find(Sensor.CODE_VOC_PPM))
@@ -38,7 +41,7 @@ try:
     print(pid)
     print("-")
 
-    afe = AFE(pt1000, sensors)
+    afe = AFE(pt1000_conf, pt1000, sensors)
     print(afe)
     print("-")
 
