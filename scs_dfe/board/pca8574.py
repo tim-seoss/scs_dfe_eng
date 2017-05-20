@@ -98,7 +98,7 @@ class PCA8574State(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def init(cls):          # TODO: there should be a universal one for this
+    def init(cls):
         """
         Establish the /tmp/southcoastscience/ root.
         Should be invoked level class load.

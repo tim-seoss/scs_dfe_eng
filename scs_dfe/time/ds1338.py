@@ -9,9 +9,8 @@ Note: time shall always be stored as UTC, then localized on retrieval.
 from scs_core.data.rtc_datetime import RTCDatetime
 
 from scs_host.bus.i2c import I2C
+from scs_host.lock.lock import Lock
 
-
-# TODO: needs locking!
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -31,7 +30,7 @@ class DS1338(object):
     __REG_CONTROL =                 0x07
 
     __RAM_START_ADDR =              0x08
-    __RAM_MAX_ADDR =                0xff        # 256 bytes
+    __RAM_MAX_ADDR =                0xff        # 247 bytes
 
     __SECONDS_MASK_CLOCK_HALT =     0x80        # ---- 1000 0000
 
@@ -42,20 +41,53 @@ class DS1338(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
-    # clock...
+
+    __LOCK_TIMEOUT =                2.0
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # RTC...
+
+    @classmethod
+    def init(cls, enable_square_wave=False):
+        try:
+            cls.obtain_lock()
+
+            # use 24 hour...
+            hours = cls.__read_reg(cls.__REG_HOURS)
+            hours = hours & ~cls.__HOURS_MASK_24_HOUR
+
+            cls.__write_reg(cls.__REG_HOURS, hours)
+
+            # enable square wave output...
+            control = cls.__read_reg(cls.__REG_CONTROL)
+            control = control | cls.__CONTROL_MASK_SQW_EN if enable_square_wave \
+                else control & ~cls.__CONTROL_MASK_SQW_EN
+
+            cls.__write_reg(cls.__REG_CONTROL, control)
+
+        finally:
+            cls.release_lock()
+
 
     @classmethod
     def get_time(cls):
-        # read RTC...
-        second = cls.__read_reg_decimal(cls.__REG_SECONDS)
-        minute = cls.__read_reg_decimal(cls.__REG_MINUTES)
-        hour = cls.__read_reg_decimal(cls.__REG_HOURS)
+        try:
+            cls.obtain_lock()
 
-        weekday = cls.__read_reg_decimal(cls.__REG_DAY)
+            # read RTC...
+            second = cls.__read_reg_decimal(cls.__REG_SECONDS)
+            minute = cls.__read_reg_decimal(cls.__REG_MINUTES)
+            hour = cls.__read_reg_decimal(cls.__REG_HOURS)
 
-        day = cls.__read_reg_decimal(cls.__REG_DATE)
-        month = cls.__read_reg_decimal(cls.__REG_MONTH)
-        year = cls.__read_reg_decimal(cls.__REG_YEAR)
+            weekday = cls.__read_reg_decimal(cls.__REG_DAY)
+
+            day = cls.__read_reg_decimal(cls.__REG_DATE)
+            month = cls.__read_reg_decimal(cls.__REG_MONTH)
+            year = cls.__read_reg_decimal(cls.__REG_YEAR)
+
+        finally:
+            cls.release_lock()
 
         rtc_datetime = RTCDatetime(year, month, day, weekday, hour, minute, second)
 
@@ -64,31 +96,22 @@ class DS1338(object):
 
     @classmethod
     def set_time(cls, rtc_datetime):
-        # update RTC...
-        cls.__write_reg_decimal(cls.__REG_SECONDS, rtc_datetime.second)
-        cls.__write_reg_decimal(cls.__REG_MINUTES, rtc_datetime.minute)
-        cls.__write_reg_decimal(cls.__REG_HOURS, rtc_datetime.hour)
+        try:
+            cls.obtain_lock()
 
-        cls.__write_reg_decimal(cls.__REG_DAY, rtc_datetime.weekday)
+            # update RTC...
+            cls.__write_reg_decimal(cls.__REG_SECONDS, rtc_datetime.second)
+            cls.__write_reg_decimal(cls.__REG_MINUTES, rtc_datetime.minute)
+            cls.__write_reg_decimal(cls.__REG_HOURS, rtc_datetime.hour)
 
-        cls.__write_reg_decimal(cls.__REG_DATE, rtc_datetime.day)
-        cls.__write_reg_decimal(cls.__REG_MONTH, rtc_datetime.month)
-        cls.__write_reg_decimal(cls.__REG_YEAR, rtc_datetime.year)
+            cls.__write_reg_decimal(cls.__REG_DAY, rtc_datetime.weekday)
 
+            cls.__write_reg_decimal(cls.__REG_DATE, rtc_datetime.day)
+            cls.__write_reg_decimal(cls.__REG_MONTH, rtc_datetime.month)
+            cls.__write_reg_decimal(cls.__REG_YEAR, rtc_datetime.year)
 
-    @classmethod
-    def init(cls, enable_square_wave=False):
-        # use 24 hour...
-        hours = cls.__read_reg(cls.__REG_HOURS)
-        hours = hours & ~cls.__HOURS_MASK_24_HOUR
-
-        cls.__write_reg(cls.__REG_HOURS, hours)
-
-        # enable square wave output...
-        control = cls.__read_reg(cls.__REG_CONTROL)
-        control = control | cls.__CONTROL_MASK_SQW_EN if enable_square_wave else control & ~cls.__CONTROL_MASK_SQW_EN
-
-        cls.__write_reg(cls.__REG_CONTROL, control)
+        finally:
+            cls.release_lock()
 
 
     @classmethod
@@ -146,6 +169,25 @@ class DS1338(object):
         finally:
             I2C.end_tx()
 
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def obtain_lock(cls):
+        Lock.acquire(cls.__lock_name(), DS1338.__LOCK_TIMEOUT)
+
+
+    @classmethod
+    def release_lock(cls):
+        Lock.release(cls.__lock_name())
+
+
+    @classmethod
+    def __lock_name(cls):
+        return cls.__name__ + "-" + ("0x%02x" % cls.__ADDR)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
     def __as_decimal(cls, bcd):
