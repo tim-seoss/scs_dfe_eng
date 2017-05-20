@@ -46,7 +46,29 @@ class DS1338(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
-    # clock...
+    # RTC...
+
+    @classmethod
+    def init(cls, enable_square_wave=False):
+        try:
+            cls.obtain_lock()
+
+            # use 24 hour...
+            hours = cls.__read_reg(cls.__REG_HOURS)
+            hours = hours & ~cls.__HOURS_MASK_24_HOUR
+
+            cls.__write_reg(cls.__REG_HOURS, hours)
+
+            # enable square wave output...
+            control = cls.__read_reg(cls.__REG_CONTROL)
+            control = control | cls.__CONTROL_MASK_SQW_EN if enable_square_wave \
+                else control & ~cls.__CONTROL_MASK_SQW_EN
+
+            cls.__write_reg(cls.__REG_CONTROL, control)
+
+        finally:
+            cls.release_lock()
+
 
     @classmethod
     def get_time(cls):
@@ -87,28 +109,6 @@ class DS1338(object):
             cls.__write_reg_decimal(cls.__REG_DATE, rtc_datetime.day)
             cls.__write_reg_decimal(cls.__REG_MONTH, rtc_datetime.month)
             cls.__write_reg_decimal(cls.__REG_YEAR, rtc_datetime.year)
-
-        finally:
-            cls.release_lock()
-
-
-    @classmethod
-    def init(cls, enable_square_wave=False):
-        try:
-            cls.obtain_lock()
-
-            # use 24 hour...
-            hours = cls.__read_reg(cls.__REG_HOURS)
-            hours = hours & ~cls.__HOURS_MASK_24_HOUR
-
-            cls.__write_reg(cls.__REG_HOURS, hours)
-
-            # enable square wave output...
-            control = cls.__read_reg(cls.__REG_CONTROL)
-            control = control | cls.__CONTROL_MASK_SQW_EN if enable_square_wave \
-                else control & ~cls.__CONTROL_MASK_SQW_EN
-
-            cls.__write_reg(cls.__REG_CONTROL, control)
 
         finally:
             cls.release_lock()
