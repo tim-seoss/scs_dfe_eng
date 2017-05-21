@@ -22,7 +22,7 @@ gas_names = calib.gas_names()
 print(gas_names)
 print("-")
 
-topic = ProjectTopic.find_gases_topic(gas_names)
+topic = ProjectTopic.get_gases_topic(gas_names)
 print(topic)
 print("-")
 
