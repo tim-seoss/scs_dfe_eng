@@ -41,9 +41,18 @@ class AT24MAC402(object):
     @classmethod
     def __read_array(cls, device_addr, memory_addr, count):
         try:
-            I2C.start_tx(device_addr)
+            I2C.start_tx(Host.DFE_UID_ADDR)
 
-            return I2C.read_cmd(memory_addr, count)
+            # I2C.read(1)
+        finally:
+            I2C.end_tx()
+
+        try:
+            I2C.start_tx(Host.DFE_UID_ADDR)
+
+            # I2C.write(0x80)
+
+            return I2C.read_cmd(0x80, count)        # memory_addr,
         finally:
             I2C.end_tx()
 
@@ -78,7 +87,8 @@ class AT24MAC402(object):
         initialise with current EEPROM contents
         """
         self.__serial_number = self.__read_array(Host.DFE_EEPROM_ADDR + 8, AT24MAC402.__SERIAL_NUMBER_ADDR, 16)
-        self.__eui = self.__read_array(Host.DFE_EEPROM_ADDR + 8, AT24MAC402.__EUI_ADDR, 6)
+        # self.__eui = self.__read_array(Host.DFE_EEPROM_ADDR + 8, AT24MAC402.__EUI_ADDR, 6)
+        self.__eui = []
 
         # self.__image = self.__read_image(0, AT24MAC402.SIZE)
         self.__image = None
