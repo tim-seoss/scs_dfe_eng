@@ -108,7 +108,27 @@ class AFE(object):
 
 
     def sample_temp(self):
-        return self.__pt1000.sample(self)
+        try:
+            return self.__pt1000.sample(self)
+
+        except OSError:
+            return self.__pt1000.null_datum()
+
+
+    def null_datum(self):
+        pt1000_datum = self.sample_temp()
+
+        samples = []
+
+        for sensor_index in range(len(self.__sensors)):
+            sensor = self.__sensors[sensor_index]
+
+            if sensor is None:
+                continue
+
+            samples.append((sensor.gas_name, sensor.null_datum()))
+
+        return AFEDatum(pt1000_datum, *samples)
 
 
     # ----------------------------------------------------------------------------------------------------------------

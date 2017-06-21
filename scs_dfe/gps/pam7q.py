@@ -100,6 +100,7 @@ class PAM7Q(object):
         return None
 
 
+    # noinspection PyListCreation
     def report_all(self):
         # text...
         sentences = []

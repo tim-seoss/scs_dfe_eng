@@ -57,13 +57,13 @@ class OPCN2(object):
 
     @staticmethod
     def __pack_int(byte_values):
-        packed = struct.unpack('h', struct.pack('BB', byte_values[0], byte_values[1]))
+        packed = struct.unpack('h', struct.pack('BB', *byte_values))
         return packed[0]
 
 
     @staticmethod
     def __pack_float(byte_values):
-        packed = struct.unpack('f', struct.pack('BBBB', byte_values[0], byte_values[1], byte_values[2], byte_values[3]))
+        packed = struct.unpack('f', struct.pack('BBBB', *byte_values))
         return packed[0]
 
 
