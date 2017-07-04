@@ -6,7 +6,8 @@ Created on 18 May 2017
 the I2C address of the Pt1000 ADC
 
 example document:
-{"addr": "0x69"}
+{"addr": "0x68"}        - Alpha Pi Eng, Alpha BB Eng without RTC
+{"addr": "0x69"}        - Alpha BB Eng with RTC
 """
 
 from collections import OrderedDict
@@ -23,7 +24,7 @@ class Pt1000Conf(PersistentJSONable):
     classdocs
     """
 
-    DEFAULT_ADDR = 0x68
+    DEFAULT_ADDR = 0x68             # the address used when there is no conf file
 
 
     # ----------------------------------------------------------------------------------------------------------------
