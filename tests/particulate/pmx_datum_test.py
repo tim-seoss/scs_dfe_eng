@@ -7,13 +7,16 @@ Created on 18 Sep 2016
 """
 
 from scs_core.data.json import JSONify
+from scs_core.data.localized_datetime import LocalizedDatetime
 
 from scs_core.particulate.pmx_datum import PMxDatum
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-pmx = PMxDatum(11, 22, 33)
+now = LocalizedDatetime.now()
+
+pmx = PMxDatum(now, 11, 22, 33)
 print(pmx)
 print("-")
 

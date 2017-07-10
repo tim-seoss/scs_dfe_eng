@@ -25,12 +25,12 @@ class OPCMonitor(SynchronisedProcess):
     classdocs
     """
 
-    __DEFAULT_SAMPLING_PERIOD =        10.0        # seconds
+    DEFAULT_SAMPLING_PERIOD =        10.0        # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, opc, sample_period=None):
+    def __init__(self, opc, sample_period):
         """
         Constructor
         """
@@ -39,7 +39,7 @@ class OPCMonitor(SynchronisedProcess):
         SynchronisedProcess.__init__(self, manager.list())
 
         self.__opc = opc
-        self.__sample_period = OPCMonitor.__DEFAULT_SAMPLING_PERIOD if sample_period is None else sample_period
+        self.__sample_period = sample_period
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -56,23 +56,14 @@ class OPCMonitor(SynchronisedProcess):
                 with self._lock:
                     datum.as_list(self._value)
 
+        except KeyboardInterrupt:
+            pass
+
         finally:
             self.off()
 
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    def on(self):
-        self.__opc.power_on()
-        self.__opc.operations_on()
-        time.sleep(5)
-
-
-    def off(self):
-        self.__opc.operations_off()
-        self.__opc.power_off()
-        time.sleep(1)
-
 
     def reset(self):
         pass
@@ -80,6 +71,28 @@ class OPCMonitor(SynchronisedProcess):
 
     def sample(self):
         return OPCDatum.construct_from_jdict(OrderedDict(self.value))
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def on(self):
+        try:
+            self.__opc.power_on()
+            self.__opc.operations_on()
+            time.sleep(5)
+
+        except KeyboardInterrupt:
+            pass
+
+
+    def off(self):
+        try:
+            self.__opc.operations_off()
+            self.__opc.power_off()
+            time.sleep(1)
+
+        except KeyboardInterrupt:
+            pass
 
 
     # ----------------------------------------------------------------------------------------------------------------

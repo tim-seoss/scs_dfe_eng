@@ -26,18 +26,17 @@ from scs_host.sys.host import Host
 
 if __name__ == '__main__':
 
+    monitor = None
+
     try:
         I2C.open(Host.I2C_SENSORS)
 
-        interval = 5
-
-        opc = OPCN2()
-        monitor = OPCMonitor(opc, interval)
+        monitor = OPCMonitor(OPCN2(), 5)
         print("main: %s" % monitor)
 
         proc = monitor.start()
 
-        timer = IntervalTimer(interval)
+        timer = IntervalTimer(20)
 
         while timer.true():
             datum = monitor.sample()
@@ -49,8 +48,17 @@ if __name__ == '__main__':
             print("main: -")
             sys.stdout.flush()
 
+            # if datum is not None:
+            #     proc.terminate()
+
             if not proc.is_alive():
                 break
 
+    except KeyboardInterrupt:
+        pass
+
     finally:
+        if monitor:
+            monitor.off()
+
         I2C.close()
