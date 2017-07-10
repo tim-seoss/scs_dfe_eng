@@ -10,11 +10,15 @@ http://eli.thegreenplace.net/2012/01/04/shared-counter-with-pythons-multiprocess
 """
 
 import sys
-import time
 
+from scs_core.data.json import JSONify
+from scs_core.sync.interval_timer import IntervalTimer
+
+from scs_dfe.particulate.opc_n2 import OPCN2
 from scs_dfe.particulate.opc_monitor import OPCMonitor
 
-from scs_core.sync.interval_timer import IntervalTimer
+from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -22,22 +26,31 @@ from scs_core.sync.interval_timer import IntervalTimer
 
 if __name__ == '__main__':
 
-    interval = 5
+    try:
+        I2C.open(Host.I2C_SENSORS)
 
-    monitor = OPCMonitor(interval)
-    print("main: %s" % monitor)
+        interval = 5
 
-    timer = IntervalTimer(interval)
+        opc = OPCN2()
+        monitor = OPCMonitor(opc, interval)
+        print("main: %s" % monitor)
 
-    time.sleep(1)                       # make main loop one second ahead of monitor loop
-    proc = monitor.start()
+        proc = monitor.start()
 
-    while timer.true():
-        datum = monitor.sample()
+        timer = IntervalTimer(interval)
 
-        print("main: %s" % datum)
-        print("main: -")
-        sys.stdout.flush()
+        while timer.true():
+            datum = monitor.sample()
 
-        if not proc.is_alive():
-            break
+            print("main: %s" % datum)
+
+            print(JSONify.dumps(datum))
+
+            print("main: -")
+            sys.stdout.flush()
+
+            if not proc.is_alive():
+                break
+
+    finally:
+        I2C.close()

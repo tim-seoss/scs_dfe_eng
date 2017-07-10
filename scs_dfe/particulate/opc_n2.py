@@ -7,8 +7,11 @@ Created on 4 Jul 2016
 import struct
 import time
 
+from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.particulate.opc_datum import OPCDatum
+
 from scs_dfe.board.io import IO
+
 from scs_host.lock.lock import Lock
 from scs_host.sys.host_spi import HostSPI
 
@@ -183,7 +186,9 @@ class OPCN2(object):
             pm2p5 = self.__read_float()
             pm10 = self.__read_float()
 
-            return OPCDatum(pm1, pm2p5, pm10, period, bins, bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
+            now = LocalizedDatetime.now()
+
+            return OPCDatum(now, pm1, pm2p5, pm10, period, bins, bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
 
         finally:
             time.sleep(OPCN2.__CMD_DELAY)

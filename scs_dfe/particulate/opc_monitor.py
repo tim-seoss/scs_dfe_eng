@@ -4,7 +4,7 @@ Created on 9 Jul 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import sys
+import time
 
 from collections import OrderedDict
 from multiprocessing import Manager
@@ -25,12 +25,12 @@ class OPCMonitor(SynchronisedProcess):
     classdocs
     """
 
-    __DEFAULT_INTERVAL =        10.0        # seconds
+    __DEFAULT_SAMPLING_PERIOD =        10.0        # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, sample_period=None):
+    def __init__(self, opc, sample_period=None):
         """
         Constructor
         """
@@ -38,36 +38,52 @@ class OPCMonitor(SynchronisedProcess):
 
         SynchronisedProcess.__init__(self, manager.list())
 
-        self.__sample_period = OPCMonitor.__DEFAULT_INTERVAL if sample_period is None else sample_period
+        self.__opc = opc
+        self.__sample_period = OPCMonitor.__DEFAULT_SAMPLING_PERIOD if sample_period is None else sample_period
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def run(self):
-        timer = IntervalTimer(self.sample_period)
+        self.on()
 
-        for i in timer.range(5):
-            datum = OPCDatum(i, i, i, i, [1, 2, 3], 4, 5, 6, 7)     # TODO: must carry datetime!
+        try:
+            timer = IntervalTimer(self.__sample_period)
 
-            with self._lock:
-                datum.as_list(self._value)      # update the synchronised value with the datum's list form
+            while timer.true():
+                datum = self.__opc.sample()
 
-            print(" run: %s" % datum)
-            sys.stdout.flush()
+                with self._lock:
+                    datum.as_list(self._value)
+
+        finally:
+            self.off()
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def on(self):
+        self.__opc.power_on()
+        self.__opc.operations_on()
+        time.sleep(5)
+
+
+    def off(self):
+        self.__opc.operations_off()
+        self.__opc.power_off()
+        time.sleep(1)
+
+
+    def reset(self):
+        pass
+
+
     def sample(self):
-        return OPCDatum.construct_from_jdict(OrderedDict(self.value))   # convert the datum list form to object form
-
-
-    @property
-    def sample_period(self):
-        return self.__sample_period
+        return OPCDatum.construct_from_jdict(OrderedDict(self.value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{sample:%s, sample_period:%s}" % (self.sample(), self.sample_period)
+        return "OPCMonitor:{sample:%s, opc:%s, sample_period:%s}" % \
+               (self.sample(), self.__opc, self.__sample_period)
