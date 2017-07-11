@@ -4,8 +4,6 @@ Created on 9 Jul 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import time
-
 from collections import OrderedDict
 from multiprocessing import Manager
 
@@ -15,8 +13,7 @@ from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
 
-# TODO: separate sample period from reporting interval
-# TODO: should be able to start and stop the OPC on very long intervals
+# TODO: should be able to start and stop the OPC on very long sampling intervals
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -25,12 +22,9 @@ class OPCMonitor(SynchronisedProcess):
     classdocs
     """
 
-    DEFAULT_SAMPLING_PERIOD =        10.0        # seconds
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, opc, sample_period):
+    def __init__(self, opc, conf):
         """
         Constructor
         """
@@ -39,16 +33,16 @@ class OPCMonitor(SynchronisedProcess):
         SynchronisedProcess.__init__(self, manager.list())
 
         self.__opc = opc
-        self.__sample_period = sample_period
+        self.__conf = conf
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def run(self):
-        self.on()
+        self.__opc.sample()     # reset counts
 
         try:
-            timer = IntervalTimer(self.__sample_period)
+            timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
                 datum = self.__opc.sample()
@@ -59,18 +53,14 @@ class OPCMonitor(SynchronisedProcess):
         except KeyboardInterrupt:
             pass
 
-        finally:
-            self.off()
-
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def reset(self):
-        pass
-
-
     def sample(self):
-        return OPCDatum.construct_from_jdict(OrderedDict(self.value))
+        with self._lock:
+            value = self._value
+
+        return OPCDatum.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -79,7 +69,6 @@ class OPCMonitor(SynchronisedProcess):
         try:
             self.__opc.power_on()
             self.__opc.operations_on()
-            time.sleep(5)
 
         except KeyboardInterrupt:
             pass
@@ -89,7 +78,6 @@ class OPCMonitor(SynchronisedProcess):
         try:
             self.__opc.operations_off()
             self.__opc.power_off()
-            time.sleep(1)
 
         except KeyboardInterrupt:
             pass
@@ -98,5 +86,4 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{sample:%s, opc:%s, sample_period:%s}" % \
-               (self.sample(), self.__opc, self.__sample_period)
+        return "OPCMonitor:{sample:%s, opc:%s, conf:%s}" % (self.sample(), self.__opc, self.__conf)
