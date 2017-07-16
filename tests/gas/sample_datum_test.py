@@ -18,7 +18,7 @@ from scs_core.gas.pt1000_datum import Pt1000Datum
 from scs_core.gas.sensor import Sensor
 from scs_core.particulate.pmx_datum import PMxDatum
 
-from scs_core.sample.sample_datum import SampleDatum
+from scs_core.sample.sample import Sample
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ print("-")
 
 # --------------------------------------------------------------------------------------------------------------------
 
-sample = SampleDatum(tag, now, ('afe', afe), ('pmx', pmx))
+sample = Sample(tag, now, ('afe', afe), ('pmx', pmx))
 print(sample)
 print("-")
 
