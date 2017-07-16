@@ -3,14 +3,13 @@ Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Warning: If an Ox sensor is present, the NO2 sensor must have a lower SN than the Ox sensor,
+Warning: If an Ox sensor is present, the NO2 sensor must have a lower sensor number (SN) than the Ox sensor,
 otherwise the NO2 cross-sensitivity concentration will not be found.
 """
 
 import time
 
 from scs_core.gas.afe_datum import AFEDatum
-
 from scs_dfe.gas.ads1115 import ADS1115
 from scs_dfe.gas.mcp342x import MCP342X
 
@@ -43,6 +42,7 @@ class AFE(object):
         """
         Constructor
         """
+        self.__pt1000_conf = pt1000_conf
         self.__pt1000 = pt1000
         self.__sensors = sensors
 
@@ -57,7 +57,7 @@ class AFE(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def sample(self, sht_datum=None):
-        pt1000_datum = self.sample_temp()
+        pt1000_datum = self.sample_temp() if self.__pt1000 else None
 
         temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
