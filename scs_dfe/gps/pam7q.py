@@ -50,7 +50,7 @@ class PAM7Q(object):
 
     START_MESSAGE_ID = GPRMC.MESSAGE_ID
 
-    __UART =                1
+    __UART =                1                   # TODO: should be on Host
     __BAUD_RATE =           9600
 
     __SERIAL_TIMEOUT =      2.0
