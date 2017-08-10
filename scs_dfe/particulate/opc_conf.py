@@ -17,6 +17,8 @@ from scs_dfe.particulate.opc_monitor import OPCMonitor
 from scs_dfe.particulate.opc_n2 import OPCN2
 
 
+# TODO: OPCConf must record datetime of updates
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCConf(PersistentJSONable):
