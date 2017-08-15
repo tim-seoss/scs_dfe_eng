@@ -41,8 +41,8 @@ try:
         print(datum)
         print("-")
 
-except KeyboardInterrupt as ex:
-    print("opc_test: " + type(ex).__name__, file=sys.stderr)
+except KeyboardInterrupt:
+    print("opc_test: KeyboardInterrupt", file=sys.stderr)
 
 finally:
     if opc:

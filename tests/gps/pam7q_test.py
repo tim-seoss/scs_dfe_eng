@@ -6,6 +6,8 @@ Created on 30 Dec 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
+
 from scs_core.position.gpgga import GPGGA
 from scs_core.position.gpgll import GPGLL
 from scs_core.position.gpgsa import GPGSA
@@ -95,8 +97,8 @@ try:
         print("=")
 
 
-except KeyboardInterrupt as ex:
-    print("pamq7_test: " + type(ex).__name__)
+except KeyboardInterrupt:
+    print("pamq7_test: KeyboardInterrupt", file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
