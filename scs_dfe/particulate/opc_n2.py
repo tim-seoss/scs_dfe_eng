@@ -16,6 +16,8 @@ from scs_host.lock.lock import Lock
 from scs_host.sys.host_spi import HostSPI
 
 
+# TODO: consider locking at the top level, to prevent power on / off by other processes
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN2(object):
@@ -23,13 +25,13 @@ class OPCN2(object):
     classdocs
     """
 
-    BOOT_TIME =                          4       # seconds
-    START_TIME =                         5       # seconds
-    STOP_TIME =                          2       # seconds
+    BOOT_TIME =                          4.0       # seconds
+    START_TIME =                         5.0       # seconds
+    STOP_TIME =                          2.0       # seconds
 
-    MIN_SAMPLE_PERIOD =                  5       # seconds
-    MAX_SAMPLE_PERIOD =                 10       # seconds
-    DEFAULT_SAMPLE_PERIOD =             10       # seconds
+    MIN_SAMPLE_PERIOD =                  5.0       # seconds
+    MAX_SAMPLE_PERIOD =                 10.0       # seconds
+    DEFAULT_SAMPLE_PERIOD =             10.0       # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -97,12 +99,12 @@ class OPCN2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def power_on(self):
-        initial_power = self.__io.opc_power
+        # initial_power = self.__io.opc_power
 
         self.__io.opc_power = IO.LOW
 
-        if initial_power == IO.HIGH:        # initial_power is None if there is no power control
-            time.sleep(self.BOOT_TIME)
+        # if initial_power == IO.HIGH:        # initial_power is None if there is no power control
+        time.sleep(self.BOOT_TIME)
 
 
     def power_off(self):
@@ -128,7 +130,7 @@ class OPCN2(object):
                 self.__read_byte()
 
         finally:
-            time.sleep(OPCN2.__CMD_DELAY)
+            time.sleep(self.BOOT_TIME)      # TODO: probably unnecessary
 
             self.__spi.close()
             self.release_lock()
