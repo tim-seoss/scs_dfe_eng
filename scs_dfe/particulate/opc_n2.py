@@ -99,12 +99,12 @@ class OPCN2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def power_on(self):
-        # initial_power = self.__io.opc_power
+        initial_power_state = self.__io.opc_power
 
         self.__io.opc_power = IO.LOW
 
-        # if initial_power == IO.HIGH:        # initial_power is None if there is no power control
-        time.sleep(self.BOOT_TIME)
+        if initial_power_state == IO.HIGH:      # initial_power is None if there is no power control facility
+            time.sleep(self.BOOT_TIME)
 
 
     def power_off(self):
@@ -130,8 +130,6 @@ class OPCN2(object):
                 self.__read_byte()
 
         finally:
-            time.sleep(self.BOOT_TIME)      # TODO: probably unnecessary
-
             self.__spi.close()
             self.release_lock()
 
