@@ -15,6 +15,7 @@ from scs_core.data.json import PersistentJSONable
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.pt1000_calib import Pt1000Calib
+
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
 from scs_dfe.gas.pt1000_conf import Pt1000Conf
