@@ -49,7 +49,7 @@ class AFE(object):
         self.__wrk_adc = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
         self.__aux_adc = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE)
 
-        self.__pt1000_adc = pt1000_conf.adc(MCP342X.GAIN_4, MCP342X.RATE_15)
+        self.__pt1000_adc = pt1000_conf.adc(MCP342X.GAIN_4, MCP342X.RATE_15) if pt1000_conf else None
 
         self.__tconv = self.__wrk_adc.tconv
 
@@ -173,6 +173,9 @@ class AFE(object):
 
 
     def sample_raw_tmp(self):
+        if self.__pt1000_adc is None:
+            return None
+
         try:
             self.__pt1000_adc.start_conversion()
 
