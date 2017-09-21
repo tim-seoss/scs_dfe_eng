@@ -53,8 +53,5 @@ try:
     v_wrk = wrk.convert(mux, gain)
     print("wrk v: %0.6f" % v_wrk)
 
-except:
-    raise
-
 finally:
     I2C.close()
