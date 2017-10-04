@@ -35,11 +35,6 @@ class Pt1000Conf(PersistentJSONable):
         return host.conf_dir() + cls.__FILENAME
 
 
-    @classmethod
-    def load_from_host(cls, host):
-        return cls.load_from_file(cls.filename(host))
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
@@ -70,6 +65,8 @@ class Pt1000Conf(PersistentJSONable):
         """
         Constructor
         """
+        super().__init__()
+
         self.__addr = addr          # int       I2C address of Pt1000 ADC
 
 
@@ -80,12 +77,6 @@ class Pt1000Conf(PersistentJSONable):
             return None
 
         return MCP342X(self.addr, gain, rate)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def save(self, host):
-        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------

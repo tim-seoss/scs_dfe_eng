@@ -21,11 +21,11 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-calib = AFECalib.load_from_host(Host)
+calib = AFECalib.load(Host)
 print(calib)
 print("-")
 
-afe_baseline = AFEBaseline.load_from_host(Host)
+afe_baseline = AFEBaseline.load(Host)
 print(afe_baseline)
 print("-")
 

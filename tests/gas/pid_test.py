@@ -23,9 +23,9 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-pt1000_conf = Pt1000Conf.load_from_host(Host)
+pt1000_conf = Pt1000Conf.load(Host)
 
-pt1000_calib = Pt1000Calib.load_from_host(Host)
+pt1000_calib = Pt1000Calib.load(Host)
 pt1000 = Pt1000(pt1000_calib)
 
 sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),

@@ -29,11 +29,6 @@ class GPSConf(PersistentJSONable):
         return host.conf_dir() + cls.__FILENAME
 
 
-    @classmethod
-    def load_from_host(cls, host):
-        return cls.load_from_file(cls.filename(host))
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
@@ -52,6 +47,8 @@ class GPSConf(PersistentJSONable):
         """
         Constructor
         """
+        super().__init__()
+
         self.__model = model
 
 
@@ -65,12 +62,6 @@ class GPSConf(PersistentJSONable):
             return PAM7Q()
 
         raise ValueError('unknown model: %s' % self.model)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def save(self, host):
-        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------

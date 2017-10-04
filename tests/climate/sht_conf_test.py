@@ -27,6 +27,6 @@ print("-")
 
 conf.save(Host)
 
-conf = SHTConf.load_from_host(Host)
+conf = SHTConf.load(Host)
 print(conf)
 print("-")

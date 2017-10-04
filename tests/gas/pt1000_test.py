@@ -26,7 +26,7 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    sht_conf = SHTConf.load_from_host(Host)
+    sht_conf = SHTConf.load(Host)
     sht = sht_conf.int_sht()
 
     sht.reset()
@@ -38,11 +38,11 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    pt1000_conf = Pt1000Conf.load_from_host(Host)
+    pt1000_conf = Pt1000Conf.load(Host)
     print(pt1000_conf)
     print("-")
 
-    pt1000_calib = Pt1000Calib.load_from_host(Host)
+    pt1000_calib = Pt1000Calib.load(Host)
     print(pt1000_calib)
     print("-")
 

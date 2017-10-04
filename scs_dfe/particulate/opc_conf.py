@@ -31,11 +31,6 @@ class OPCConf(PersistentJSONable):
         return host.conf_dir() + cls.__FILENAME
 
 
-    @classmethod
-    def load_from_host(cls, host):
-        return cls.load_from_file(cls.filename(host))
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
@@ -56,6 +51,8 @@ class OPCConf(PersistentJSONable):
         """
         Constructor
         """
+        super().__init__()
+
         self.__model = model
         self.__sample_period = int(sample_period)
         self.__power_saving = bool(power_saving)
@@ -70,12 +67,6 @@ class OPCConf(PersistentJSONable):
             raise ValueError('unknown model: %s' % self.model)
 
         return OPCMonitor(opc, self)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def save(self, host):
-        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------

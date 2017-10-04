@@ -79,7 +79,7 @@ class PCA8574(object):
         state = PCA8574State.load_from_file(self.__filename)
 
         state.byte = byte
-        state.save(self.__filename)
+        state.save_to_file(self.__filename)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -94,6 +94,11 @@ class PCA8574State(PersistentJSONable):
     """
     classdocs
     """
+
+    @classmethod
+    def filename(cls, host):
+        return None
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -125,6 +130,8 @@ class PCA8574State(PersistentJSONable):
         """
         Constructor
         """
+        super().__init__()
+
         self.__byte = byte                  # int
 
 

@@ -30,11 +30,6 @@ class SHTConf(PersistentJSONable):
         return host.conf_dir() + cls.__FILENAME
 
 
-    @classmethod
-    def load_from_host(cls, host):
-        return cls.load_from_file(cls.filename(host))
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
@@ -67,6 +62,8 @@ class SHTConf(PersistentJSONable):
         """
         Constructor
         """
+        super().__init__()
+
         self.__int_addr = int_addr          # int       I2C address of SHT in A4 package
         self.__ext_addr = ext_addr          # int       I2C address of SHT exposed to air
 
@@ -85,12 +82,6 @@ class SHTConf(PersistentJSONable):
             return None
 
         return SHT31(self.__ext_addr)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def save(self, host):
-        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------

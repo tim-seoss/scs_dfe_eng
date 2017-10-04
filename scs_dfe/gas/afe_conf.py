@@ -35,11 +35,6 @@ class AFEConf(PersistentJSONable):
         return host.conf_dir() + cls.__FILENAME
 
 
-    @classmethod
-    def load_from_host(cls, host):
-        return cls.load_from_file(cls.filename(host))
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
@@ -58,6 +53,8 @@ class AFEConf(PersistentJSONable):
         """
         Constructor
         """
+        super().__init__()
+
         self.__pt1000_present = bool(pt1000_present)
 
 
@@ -65,12 +62,12 @@ class AFEConf(PersistentJSONable):
 
     def afe(self, host):
         # Pt1000...
-        pt1000_conf = Pt1000Conf.load_from_host(host)
+        pt1000_conf = Pt1000Conf.load(host)
         pt1000 = self.pt1000(host)
 
         # sensors...
-        afe_calib = AFECalib.load_from_host(host)
-        afe_baseline = AFEBaseline.load_from_host(host)
+        afe_calib = AFECalib.load(host)
+        afe_baseline = AFEBaseline.load(host)
 
         sensors = afe_calib.sensors(afe_baseline)
 
@@ -81,15 +78,9 @@ class AFEConf(PersistentJSONable):
         if not self.pt1000_present:
             return None
 
-        pt1000_calib = Pt1000Calib.load_from_host(host)
+        pt1000_calib = Pt1000Calib.load(host)
 
         return Pt1000(pt1000_calib)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def save(self, host):
-        PersistentJSONable.save(self, self.__class__.filename(host))
 
 
     # ----------------------------------------------------------------------------------------------------------------
