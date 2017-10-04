@@ -84,4 +84,4 @@ class GPSConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSConf:{model:%s}" % self.model
+        return "GPSConf:{host:%s, model:%s}" % (self.host, self.model)
