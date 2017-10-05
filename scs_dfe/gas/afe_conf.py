@@ -60,7 +60,7 @@ class AFEConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def afe(self, host):
+    def afe(self, host):                # TODO: remove host
         # Pt1000...
         pt1000_conf = Pt1000Conf.load(host)
         pt1000 = self.pt1000(host)
@@ -74,7 +74,7 @@ class AFEConf(PersistentJSONable):
         return AFE(pt1000_conf, pt1000, sensors)
 
 
-    def pt1000(self, host):
+    def pt1000(self, host):            # TODO: remove host
         if not self.pt1000_present:
             return None
 

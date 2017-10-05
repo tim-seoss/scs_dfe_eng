@@ -12,6 +12,7 @@ example JSON:
 from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
+
 from scs_dfe.gps.pam7q import PAM7Q
 
 
