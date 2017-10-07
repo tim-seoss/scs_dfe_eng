@@ -103,4 +103,4 @@ class AFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "AFEConf:{host:%s, pt1000_present:%s}" %  (self.host, self.pt1000_present)
+        return "AFEConf:{pt1000_present:%s}" %  self.pt1000_present

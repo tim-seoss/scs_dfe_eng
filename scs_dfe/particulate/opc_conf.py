@@ -107,5 +107,5 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{host:%s, model:%s, sample_period:%s, power_saving:%s}" %  \
-               (self.host, self.model, self.sample_period, self.power_saving)
+        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s}" %  \
+               (self.model, self.sample_period, self.power_saving)

@@ -110,5 +110,5 @@ class SHTConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SHTConf:{host:%s, int_addr:%s, ext_addr:%s}" %  \
-               (self.host, SHTConf.__addr_str(self.int_addr), SHTConf.__addr_str(self.ext_addr))
+        return "SHTConf:{int_addr:%s, ext_addr:%s}" %  \
+               (SHTConf.__addr_str(self.int_addr), SHTConf.__addr_str(self.ext_addr))

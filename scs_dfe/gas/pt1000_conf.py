@@ -99,4 +99,4 @@ class Pt1000Conf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "Pt1000Conf:{host:%s, addr:%s}" % (self.host, Pt1000Conf.__addr_str(self.addr))
+        return "Pt1000Conf:{addr:%s}" % Pt1000Conf.__addr_str(self.addr)
