@@ -4,6 +4,7 @@ Created on 4 Jul 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import math
 import struct
 import time
 
@@ -71,7 +72,8 @@ class OPCN2(object):
     @staticmethod
     def __pack_float(byte_values):
         packed = struct.unpack('f', struct.pack('BBBB', *byte_values))
-        return packed[0]
+
+        return None if math.isnan(packed[0]) else packed[0]
 
 
     # ----------------------------------------------------------------------------------------------------------------
