@@ -76,7 +76,7 @@ class PAM7Q(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def open(self):
-        self.__serial.open(self.__SERIAL_LOCK_TIMEOUT)
+        self.__serial.open(self.__SERIAL_LOCK_TIMEOUT, self.__SERIAL_COMMS_TIMEOUT)
 
 
     def close(self):
