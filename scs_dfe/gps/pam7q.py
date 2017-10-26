@@ -50,10 +50,11 @@ class PAM7Q(object):
 
     START_MESSAGE_ID = GPRMC.MESSAGE_ID
 
-    __UART =                1                   # TODO: should be on Host
-    __BAUD_RATE =           9600
+    __UART =                    1                   # TODO: should be on Host
+    __BAUD_RATE =               9600
 
-    __SERIAL_TIMEOUT =      2.0
+    __SERIAL_LOCK_TIMEOUT =     3.0
+    __SERIAL_COMMS_TIMEOUT =    1.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -76,7 +77,7 @@ class PAM7Q(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def open(self):
-        self.__serial.open(self.__SERIAL_TIMEOUT)
+        self.__serial.open(self.__SERIAL_LOCK_TIMEOUT)
 
 
     def close(self):
@@ -88,7 +89,7 @@ class PAM7Q(object):
     def report(self, message_class):
         for i in range(11):
             try:
-                line = self.__serial.read_line("\r\n", 1.0)
+                line = self.__serial.read_line("\r\n", self.__SERIAL_COMMS_TIMEOUT)
                 s = NMEASentence.construct(line)
 
                 if s.str(0) == message_class.MESSAGE_ID:
@@ -106,7 +107,7 @@ class PAM7Q(object):
         sentences = []
         for i in range(20):
             try:
-                s = NMEASentence.construct(self.__serial.read_line("\r\n", 1))
+                s = NMEASentence.construct(self.__serial.read_line("\r\n", self.__SERIAL_COMMS_TIMEOUT))
                 sentences.append(s)
 
             except (UnicodeDecodeError, ValueError):
