@@ -50,7 +50,6 @@ class PAM7Q(object):
 
     START_MESSAGE_ID = GPRMC.MESSAGE_ID
 
-    __UART =                    1                   # TODO: should be on Host
     __BAUD_RATE =               9600
 
     __SERIAL_LOCK_TIMEOUT =     3.0
@@ -59,9 +58,9 @@ class PAM7Q(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
+    def __init__(self, uart):
         self.__io = IO()
-        self.__serial = HostSerial(self.__UART, self.__BAUD_RATE, False)
+        self.__serial = HostSerial(uart, self.__BAUD_RATE, False)
 
 
     # ----------------------------------------------------------------------------------------------------------------

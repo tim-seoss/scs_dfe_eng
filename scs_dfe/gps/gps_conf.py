@@ -55,12 +55,12 @@ class GPSConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gps(self):
+    def gps(self, host):
         if self.model is None:
             return None
 
         if self.model == 'PAM7Q':
-            return PAM7Q()
+            return PAM7Q(host.gps_device())
 
         raise ValueError('unknown model: %s' % self.model)
 
