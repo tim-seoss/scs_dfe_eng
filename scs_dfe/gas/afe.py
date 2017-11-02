@@ -58,7 +58,7 @@ class AFE(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def sample(self, sht_datum=None):
-        pt1000_datum = self.sample_temp() if self.__pt1000 else None
+        pt1000_datum = self.sample_temp()
 
         temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
@@ -108,14 +108,6 @@ class AFE(object):
         return AFEDatum(pt1000_datum, (sensor.gas_name, sample))
 
 
-    def sample_temp(self):
-        try:
-            return self.__pt1000.sample(self)
-
-        except OSError:
-            return self.__pt1000.null_datum()
-
-
     def null_datum(self):
         pt1000_datum = self.sample_temp()
 
@@ -130,6 +122,17 @@ class AFE(object):
             samples.append((sensor.gas_name, sensor.null_datum()))
 
         return AFEDatum(pt1000_datum, *samples)
+
+
+    def sample_temp(self):
+        if self.__pt1000 is None:
+            return None
+
+        try:
+            return self.__pt1000.sample(self)
+
+        except OSError:
+            return self.__pt1000.null_datum()
 
 
     # ----------------------------------------------------------------------------------------------------------------
