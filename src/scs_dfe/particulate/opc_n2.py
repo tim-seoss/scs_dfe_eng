@@ -52,6 +52,8 @@ class OPCN2(object):
     __CMD_READ_HISTOGRAM =              0x30
     __CMD_GET_FIRMWARE_VERSION =        0x3f
 
+    __SPI_BUS =                         0
+    __SPI_DEVICE =                      0
     __SPI_CLOCK =                       488000
     __SPI_MODE =                        1
 
@@ -95,7 +97,7 @@ class OPCN2(object):
         Constructor
         """
         self.__io = IO()
-        self.__spi = HostSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
+        self.__spi = HostSPI(OPCN2.__SPI_BUS, OPCN2.__SPI_DEVICE, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
