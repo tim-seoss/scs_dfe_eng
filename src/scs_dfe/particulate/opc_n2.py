@@ -17,6 +17,8 @@ from scs_host.lock.lock import Lock
 from scs_host.sys.host_spi import HostSPI
 
 
+# TODO: NEVER return negative values!
+
 # TODO: consider locking at the top level, to prevent power on / off by other processes
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -90,12 +92,12 @@ class OPCN2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
+    def __init__(self, spi_bus, spi_device):
         """
         Constructor
         """
         self.__io = IO()
-        self.__spi = HostSPI(0, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
+        self.__spi = HostSPI(spi_bus, spi_device, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------

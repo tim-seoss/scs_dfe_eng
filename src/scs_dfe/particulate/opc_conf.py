@@ -60,9 +60,9 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def opc_monitor(self):
+    def opc_monitor(self, host):
         if self.model == 'N2':
-            opc = OPCN2()
+            opc = OPCN2(host.OPC_SPI_BUS, host.OPC_SPI_DEVICE)
         else:
             raise ValueError('unknown model: %s' % self.model)
 

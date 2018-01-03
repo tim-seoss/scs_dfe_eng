@@ -31,7 +31,7 @@ if __name__ == '__main__':
     try:
         I2C.open(Host.I2C_SENSORS)
 
-        monitor = OPCMonitor(OPCN2(), 5)
+        monitor = OPCMonitor(OPCN2(Host.OPC_SPI_BUS, Host.OPC_SPI_DEVICE), 5)
         print("main: %s" % monitor)
 
         proc = monitor.start()
