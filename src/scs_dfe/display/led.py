@@ -41,7 +41,7 @@ class LED(object):
         if self.__io.led_green == IO.HIGH:
             state |= LED.__GREEN_MASK
 
-        for colour, value in [LED.STATES.items()]:
+        for colour, value in LED.STATES.items():
             if value == state:
                 return colour
 
