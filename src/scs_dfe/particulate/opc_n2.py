@@ -40,7 +40,6 @@ class OPCN2(object):
 
     __FLOW_RATE_VERSION =               16
 
-
     __FAN_UP_TIME =                     10
     __FAN_DOWN_TIME =                   2
 
