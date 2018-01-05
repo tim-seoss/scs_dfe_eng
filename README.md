@@ -5,4 +5,4 @@ Environmental sampling abstractions for the South Coast Science _Alpha _ Eng._ d
 
 * Third party: -
 * SCS root: scs_core
-* SCS host: scs_host_bbe or scs_host_rpi
+* SCS host: scs_host_bbe, scs_host_bbe_southern or scs_host_rpi
