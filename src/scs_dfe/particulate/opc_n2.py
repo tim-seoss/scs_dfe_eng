@@ -13,8 +13,8 @@ from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.board.io import IO
 
+from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
-from scs_host.sys.host_spi import HostSPI
 
 
 # TODO: NEVER return negative values!
@@ -96,7 +96,7 @@ class OPCN2(object):
         Constructor
         """
         self.__io = IO()
-        self.__spi = HostSPI(spi_bus, spi_device, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
+        self.__spi = SPI(spi_bus, spi_device, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
