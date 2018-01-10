@@ -26,6 +26,8 @@ $GPGSV,3,3,12,27,04,013,13,28,39,126,37,30,60,068,26,33,30,200,44*74
 $GPGLL,5049.36953,N,00007.38514,W,152926.00,A,D*7B
 """
 
+import time
+
 from scs_core.position.gpgga import GPGGA
 from scs_core.position.gpgll import GPGLL
 from scs_core.position.gpgsa import GPGSA
@@ -48,9 +50,11 @@ class PAM7Q(object):
     u-blox 7 GPS Antenna Module
     """
 
-    START_MESSAGE_ID = GPRMC.MESSAGE_ID
+    START_MESSAGE_ID =          GPRMC.MESSAGE_ID
 
     __BAUD_RATE =               9600
+
+    __BOOT_DELAY =              0.500           # seconds
 
     __SERIAL_LOCK_TIMEOUT =     3.0
     __SERIAL_COMMS_TIMEOUT =    1.0
@@ -67,6 +71,7 @@ class PAM7Q(object):
 
     def power_on(self):
         self.__io.gps_power = IO.LOW
+        time.sleep(self.__BOOT_DELAY)
 
 
     def power_off(self):
