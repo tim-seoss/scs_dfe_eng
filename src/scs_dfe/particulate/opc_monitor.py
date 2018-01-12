@@ -64,8 +64,6 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        print("opc sample value: %s" % value)
-
         return OPCDatum.construct_from_jdict(OrderedDict(value))
 
 
