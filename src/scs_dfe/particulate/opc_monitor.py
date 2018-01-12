@@ -13,8 +13,6 @@ from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
 
-# TODO: power cycle OPC if all zeros / nulls returned
-
 # TODO: should be able to start and stop the OPC on very long sampling intervals
 
 # TODO: add power cycle monitor - check for all 0
