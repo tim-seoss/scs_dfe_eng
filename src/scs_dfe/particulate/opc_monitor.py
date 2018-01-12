@@ -17,6 +17,8 @@ from scs_core.sync.synchronised_process import SynchronisedProcess
 
 # TODO: should be able to start and stop the OPC on very long sampling intervals
 
+# TODO: add power cycle monitor - check for all 0
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCMonitor(SynchronisedProcess):
@@ -62,22 +64,28 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
+        print("opc sample value: %s" % value)
+
         return OPCDatum.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def on(self):
+    def start(self):
         try:
             self.__opc.power_on()
             self.__opc.operations_on()
+
+            super().start()
 
         except KeyboardInterrupt:
             pass
 
 
-    def off(self):
+    def stop(self):
         try:
+            super().stop()
+
             self.__opc.operations_off()
             self.__opc.power_off()
 

@@ -59,6 +59,6 @@ if __name__ == '__main__':
 
     finally:
         if monitor:
-            monitor.off()
+            monitor.stop()
 
         I2C.close()
