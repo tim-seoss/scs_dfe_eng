@@ -1,32 +1,32 @@
 """
-Created on 9 Jul 2017
+Created on 25 Oct 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
+
 from collections import OrderedDict
 from multiprocessing import Manager
 
-from scs_core.particulate.opc_datum import OPCDatum
+from scs_core.position.gpgga import GPGGA
+from scs_core.position.gps_location import GPSLocation
 
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
 
-# TODO: should be able to start and stop the OPC on very long sampling intervals
-
-# TODO: add power cycle monitor - check for all 0
-
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCMonitor(SynchronisedProcess):
+class GPSMonitor(SynchronisedProcess):
     """
     classdocs
     """
+    __MONITOR_INTERVAL =        10.0             # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, opc, conf):
+    def __init__(self, gps):
         """
         Constructor
         """
@@ -34,23 +34,27 @@ class OPCMonitor(SynchronisedProcess):
 
         SynchronisedProcess.__init__(self, manager.list())
 
-        self.__opc = opc
-        self.__conf = conf
+        self.__gps = gps
+        self.__shutdown_initiated = False
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def run(self):
-        self.__opc.sample()     # reset counts
-
         try:
-            timer = IntervalTimer(self.__conf.sample_period)
+            timer = IntervalTimer(self.__MONITOR_INTERVAL)
 
             while timer.true():
-                sample = self.__opc.sample()
+                gga = self.__gps.report(GPGGA)
+                position = GPSLocation.construct(gga)
 
+                if position is None:
+                    print("GPSMonitor.run: got None", sys.stderr)
+                    continue
+
+                # report...
                 with self._lock:
-                    sample.as_list(self._value)
+                    position.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
@@ -60,8 +64,8 @@ class OPCMonitor(SynchronisedProcess):
 
     def start(self):
         try:
-            self.__opc.power_on()
-            self.__opc.operations_on()
+            self.__gps.power_on()
+            self.__gps.open()
 
             super().start()
 
@@ -73,8 +77,7 @@ class OPCMonitor(SynchronisedProcess):
         try:
             super().stop()
 
-            self.__opc.operations_off()
-            self.__opc.power_off()
+            self.__gps.close()
 
         except KeyboardInterrupt:
             pass
@@ -84,10 +87,10 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        return OPCDatum.construct_from_jdict(OrderedDict(value))
+        return GPSLocation.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{sample:%s, opc:%s, conf:%s}" % (self.sample(), self.__opc, self.__conf)
+        return "GPSMonitor:{sample:%s, gps:%s}" % (self.sample(), self.__gps)

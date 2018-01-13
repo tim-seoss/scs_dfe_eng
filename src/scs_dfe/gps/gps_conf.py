@@ -13,6 +13,7 @@ from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
 
+from scs_dfe.gps.gps_monitor import GPSMonitor
 from scs_dfe.gps.pam7q import PAM7Q
 
 
@@ -55,15 +56,16 @@ class GPSConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gps(self, host):
+    def gps_monitor(self, host):
         if self.model is None:
             return None
 
         if self.model == 'PAM7Q':
-            return PAM7Q(host.gps_device())
+            gps = PAM7Q(host.gps_device())
+        else:
+            raise ValueError('unknown model: %s' % self.model)
 
-        raise ValueError('unknown model: %s' % self.model)
-
+        return GPSMonitor(gps)
 
     # ----------------------------------------------------------------------------------------------------------------
 
