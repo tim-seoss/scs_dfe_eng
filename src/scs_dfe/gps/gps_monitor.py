@@ -35,7 +35,6 @@ class GPSMonitor(SynchronisedProcess):
         SynchronisedProcess.__init__(self, manager.list())
 
         self.__gps = gps
-        self.__shutdown_initiated = False
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -93,4 +92,4 @@ class GPSMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSMonitor:{sample:%s, gps:%s}" % (self.sample(), self.__gps)
+        return "GPSMonitor:{value:%s, gps:%s}" % (self._value, self.__gps)
