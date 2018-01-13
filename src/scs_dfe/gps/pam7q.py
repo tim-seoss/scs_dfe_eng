@@ -99,7 +99,7 @@ class PAM7Q(object):
                 if s.str(0) == message_class.MESSAGE_ID:
                     return message_class.construct(s)
 
-            except (UnicodeDecodeError, ValueError):
+            except (IndexError, UnicodeDecodeError, ValueError):
                 continue
 
         return None

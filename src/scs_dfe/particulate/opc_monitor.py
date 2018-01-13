@@ -47,10 +47,10 @@ class OPCMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
-                datum = self.__opc.sample()
+                sample = self.__opc.sample()
 
                 with self._lock:
-                    datum.as_list(self._value)
+                    sample.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
