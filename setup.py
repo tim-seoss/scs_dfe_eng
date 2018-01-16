@@ -6,7 +6,7 @@ with open('requirements.txt') as req_txt:
 
 setup(
     name='scs_dfe_eng',
-    version='0.1.0',
+    version='0.1.1',
     description='Environmental sampling abstractions for the South Coast Science Alpha _ Eng. digital front-end. ',
     author='South Coast Science',
     author_email='contact@southcoastscience.com',
