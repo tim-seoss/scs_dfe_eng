@@ -5,6 +5,6 @@ _Contains library classes only._
 
 **Required libraries:** 
 
-* Third party: -
+* Third party: tzlocal
 * SCS root: scs_core
 * SCS host: scs_host_bbe, scs_host_bbe_southern or scs_host_rpi
