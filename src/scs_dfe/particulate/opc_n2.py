@@ -27,16 +27,17 @@ class OPCN2(object):
     """
     classdocs
     """
-
-    BOOT_TIME =                          4.0       # seconds
-    START_TIME =                         5.0       # seconds
-    STOP_TIME =                          2.0       # seconds
-
     MIN_SAMPLE_PERIOD =                  5.0       # seconds
     MAX_SAMPLE_PERIOD =                 10.0       # seconds
     DEFAULT_SAMPLE_PERIOD =             10.0       # seconds
 
+    POWER_CYCLE_TIME =                   2.0       # seconds
+
     # ----------------------------------------------------------------------------------------------------------------
+
+    __BOOT_TIME =                        4.0       # seconds
+    __START_TIME =                       5.0       # seconds
+    __STOP_TIME =                        2.0       # seconds
 
     __FLOW_RATE_VERSION =               16
 
@@ -107,7 +108,7 @@ class OPCN2(object):
         self.__io.opc_power = IO.LOW
 
         if initial_power_state == IO.HIGH:      # initial_power is None if there is no power control facility
-            time.sleep(self.BOOT_TIME)
+            time.sleep(self.__BOOT_TIME)
 
 
     def power_off(self):
@@ -123,7 +124,7 @@ class OPCN2(object):
 
             # start...
             self.__spi.xfer([OPCN2.__CMD_POWER, OPCN2.__CMD_POWER_ON])
-            time.sleep(OPCN2.START_TIME)
+            time.sleep(OPCN2.__START_TIME)
 
             # clear histogram...
             self.__spi.xfer([OPCN2.__CMD_READ_HISTOGRAM])
@@ -143,7 +144,7 @@ class OPCN2(object):
             self.__spi.open()
 
             self.__spi.xfer([OPCN2.__CMD_POWER, OPCN2.__CMD_POWER_OFF])
-            time.sleep(OPCN2.STOP_TIME)
+            time.sleep(OPCN2.__STOP_TIME)
 
         finally:
             time.sleep(OPCN2.__CMD_DELAY)
