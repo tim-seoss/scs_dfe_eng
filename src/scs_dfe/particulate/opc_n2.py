@@ -17,8 +17,6 @@ from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
 
-# TODO: NEVER return negative values!
-
 # TODO: consider locking at the top level, to prevent power on / off by other processes
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -188,9 +186,14 @@ class OPCN2(object):
             self.__read_int()
 
             # PMx...
-            pm1 = self.__read_float()
-            pm2p5 = self.__read_float()
-            pm10 = self.__read_float()
+            pm = self.__read_float()
+            pm1 = 0.0 if pm < 0 else pm
+
+            pm = self.__read_float()
+            pm2p5 = 0.0 if pm < 0 else pm
+
+            pm = self.__read_float()
+            pm10 = 0.0 if pm < 0 else pm
 
             now = LocalizedDatetime.now()
 
