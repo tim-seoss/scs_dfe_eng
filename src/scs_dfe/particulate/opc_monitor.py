@@ -4,6 +4,9 @@ Created on 9 Jul 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
+import time
+
 from collections import OrderedDict
 from multiprocessing import Manager
 
@@ -12,10 +15,10 @@ from scs_core.particulate.opc_datum import OPCDatum
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
+from scs_dfe.particulate.opc_n2 import OPCN2
+
 
 # TODO: should be able to start and stop the OPC on very long sampling intervals
-
-# TODO: add power cycle monitor - check for all 0
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -49,8 +52,13 @@ class OPCMonitor(SynchronisedProcess):
             while timer.true():
                 sample = self.__opc.sample()
 
+                # report...
                 with self._lock:
                     sample.as_list(self._value)
+
+                # monitor...
+                if sample.is_zero():
+                    self.__power_cycle()
 
         except KeyboardInterrupt:
             pass
@@ -85,6 +93,22 @@ class OPCMonitor(SynchronisedProcess):
             value = self._value
 
         return OPCDatum.construct_from_jdict(OrderedDict(value))
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __power_cycle(self):
+        print("OPCMonitor: POWER CYCLE", file=sys.stdout)
+
+        # off...
+        self.__opc.operations_off()
+        self.__opc.power_off()
+
+        time.sleep(OPCN2.POWER_CYCLE_TIME)
+
+        # on...
+        self.__opc.power_on()
+        self.__opc.operations_on()
 
 
     # ----------------------------------------------------------------------------------------------------------------
