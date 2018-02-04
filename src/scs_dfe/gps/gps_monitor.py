@@ -4,6 +4,8 @@ Created on 25 Oct 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
+
 from collections import OrderedDict
 from multiprocessing import Manager
 
@@ -46,7 +48,7 @@ class GPSMonitor(SynchronisedProcess):
                 position = GPSLocation.construct(gga)
 
                 if position is None:
-                    # print("GPSMonitor.run: got None", sys.stderr)
+                    print("GPSMonitor.run: got None", sys.stderr)
                     continue
 
                 # report...
