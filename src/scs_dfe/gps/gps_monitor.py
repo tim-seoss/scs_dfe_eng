@@ -48,7 +48,6 @@ class GPSMonitor(SynchronisedProcess):
                 position = GPSLocation.construct(gga)
 
                 if position is None:
-                    print("GPSMonitor.run: got None", sys.stderr)
                     continue
 
                 # report...
