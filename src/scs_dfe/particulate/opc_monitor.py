@@ -89,7 +89,7 @@ class OPCMonitor(SynchronisedProcess):
         except KeyboardInterrupt:
             pass
 
-        except LockTimeout:
+        except LockTimeout:             # __power_cycle() may be running!
             pass
 
 
