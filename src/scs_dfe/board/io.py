@@ -4,6 +4,8 @@ Created on 6 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import os
+
 from scs_dfe.board.pca8574 import PCA8574
 
 from scs_host.lock.lock import Lock
@@ -38,7 +40,7 @@ class IO(object):
 
     @classmethod
     def filename(cls):
-        return Host.tmp_dir() + cls.__FILENAME
+        return os.path.join(Host.lock_dir(), cls.__FILENAME)
 
 
     # ----------------------------------------------------------------------------------------------------------------

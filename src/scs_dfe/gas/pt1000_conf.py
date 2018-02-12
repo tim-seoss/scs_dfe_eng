@@ -10,6 +10,8 @@ example documents:
 {"addr": "0x69"}        - Alpha BB Eng with RTC
 """
 
+import os
+
 from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
@@ -32,7 +34,7 @@ class Pt1000Conf(PersistentJSONable):
 
     @classmethod
     def filename(cls, host):
-        return host.conf_dir() + cls.__FILENAME
+        return os.path.join(host.conf_dir(), cls.__FILENAME)
 
 
     # ----------------------------------------------------------------------------------------------------------------

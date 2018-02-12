@@ -9,6 +9,8 @@ example JSON:
 {"int": "0x44", "ext": "0x45"}
 """
 
+import os
+
 from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
@@ -27,7 +29,7 @@ class SHTConf(PersistentJSONable):
 
     @classmethod
     def filename(cls, host):
-        return host.conf_dir() + cls.__FILENAME
+        return os.path.join(host.conf_dir(), cls.__FILENAME)
 
 
     # ----------------------------------------------------------------------------------------------------------------
