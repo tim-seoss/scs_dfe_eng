@@ -9,6 +9,8 @@ example JSON:
 {"pt1000-present": true}
 """
 
+import os
+
 from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
@@ -32,7 +34,7 @@ class AFEConf(PersistentJSONable):
 
     @classmethod
     def filename(cls, host):
-        return host.conf_dir() + cls.__FILENAME
+        return os.path.join(host.conf_dir(), cls.__FILENAME)
 
 
     # ----------------------------------------------------------------------------------------------------------------

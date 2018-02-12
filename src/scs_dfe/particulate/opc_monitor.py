@@ -17,6 +17,8 @@ from scs_core.sync.synchronised_process import SynchronisedProcess
 
 from scs_dfe.particulate.opc_n2 import OPCN2
 
+from scs_host.lock.lock_timeout import LockTimeout
+
 
 # TODO: should be able to start and stop the OPC on very long sampling intervals
 
@@ -87,6 +89,9 @@ class OPCMonitor(SynchronisedProcess):
         except KeyboardInterrupt:
             pass
 
+        except LockTimeout:             # __power_cycle() may be running!
+            pass
+
 
     def sample(self):
         with self._lock:
@@ -98,17 +103,22 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __power_cycle(self):
-        print("OPCMonitor: POWER CYCLE", file=sys.stdout)
+        print("OPCMonitor: POWER CYCLE", file=sys.stderr)
+        sys.stderr.flush()
 
-        # off...
-        self.__opc.operations_off()
-        self.__opc.power_off()
+        try:
+            # off...
+            self.__opc.operations_off()
+            self.__opc.power_off()
 
-        time.sleep(OPCN2.POWER_CYCLE_TIME)
+            time.sleep(OPCN2.POWER_CYCLE_TIME)
 
-        # on...
-        self.__opc.power_on()
-        self.__opc.operations_on()
+            # on...
+            self.__opc.power_on()
+            self.__opc.operations_on()
+
+        except KeyboardInterrupt:
+            pass
 
 
     # ----------------------------------------------------------------------------------------------------------------
