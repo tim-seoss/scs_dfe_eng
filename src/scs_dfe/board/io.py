@@ -38,7 +38,7 @@ class IO(object):
 
     @classmethod
     def filename(cls):
-        return Host.SCS_TMP + cls.__FILENAME
+        return Host.tmp_dir() + cls.__FILENAME
 
 
     # ----------------------------------------------------------------------------------------------------------------

@@ -109,8 +109,8 @@ class PCA8574State(PersistentJSONable):
         Should be invoked level class load.
         """
         try:
-            os.makedirs(Host.SCS_TMP)
-            os.chmod(Host.SCS_TMP, 0o777)
+            os.makedirs(Host.tmp_dir())
+            os.chmod(Host.tmp_dir(), 0o777)
         except FileExistsError:
             pass
 
