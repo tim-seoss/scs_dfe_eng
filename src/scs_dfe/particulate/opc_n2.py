@@ -186,14 +186,23 @@ class OPCN2(object):
             self.__read_int()
 
             # PMx...
-            pm = self.__read_float()
-            pm1 = 0.0 if pm < 0 else pm
+            try:
+                pm = self.__read_float()
+                pm1 = 0.0 if pm < 0 else pm
+            except TypeError:
+                pm1 = None
 
-            pm = self.__read_float()
-            pm2p5 = 0.0 if pm < 0 else pm
+            try:
+                pm = self.__read_float()
+                pm2p5 = 0.0 if pm < 0 else pm
+            except TypeError:
+                pm2p5 = None
 
-            pm = self.__read_float()
-            pm10 = 0.0 if pm < 0 else pm
+            try:
+                pm = self.__read_float()
+                pm10 = 0.0 if pm < 0 else pm
+            except TypeError:
+                pm10 = None
 
             now = LocalizedDatetime.now()
 
