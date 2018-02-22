@@ -58,10 +58,19 @@ class AFE(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def sample(self, sht_datum=None):
+        # temperature...
         pt1000_datum = self.sample_temp()
 
-        temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
+        if sht_datum is not None:
+            temp = sht_datum.temp
 
+        elif pt1000_datum is not None:
+            temp = pt1000_datum.temp
+
+        else:
+            temp = None
+
+        # gases...
         samples = []
         no2_sample = None
 

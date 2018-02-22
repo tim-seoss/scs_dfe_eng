@@ -79,6 +79,9 @@ class SHT31(object):
 
 
     def sample(self):
+        if self.__addr == 0:
+            return None
+
         try:
             I2C.start_tx(self.__addr)
             temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_SINGLE_HIGH, 6)
