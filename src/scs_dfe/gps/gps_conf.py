@@ -38,7 +38,7 @@ class GPSConf(PersistentJSONable):
     @classmethod
     def construct_from_jdict(cls, jdict):
         if not jdict:
-            return GPSConf(None)
+            return None
 
         model = jdict.get('model')
 
@@ -68,6 +68,7 @@ class GPSConf(PersistentJSONable):
             raise ValueError('unknown model: %s' % self.model)
 
         return GPSMonitor(gps)
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
