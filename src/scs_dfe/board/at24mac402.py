@@ -51,8 +51,6 @@ class AT24MAC402(object):
         try:
             I2C.start_tx(Host.DFE_UID_ADDR)
 
-            # I2C.write(0x80)
-
             return I2C.read_cmd(0x80, count)        # memory_addr,
         finally:
             I2C.end_tx()
