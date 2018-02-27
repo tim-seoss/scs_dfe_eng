@@ -55,6 +55,7 @@ class DFEConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @staticmethod
     def __pt1000_addr_str(addr):
         if addr is None:
             return None
