@@ -49,7 +49,7 @@ class AFE(object):
         self.__wrk_adc = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
         self.__aux_adc = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE)
 
-        self.__pt1000_adc = dfe_conf.pt1000_adc(MCP342X.GAIN_4, MCP342X.RATE_15) if pt1000 else None
+        self.__pt1000_adc = None if pt1000 is None else dfe_conf.pt1000_adc(MCP342X.GAIN_4, MCP342X.RATE_15)
 
         self.__tconv = self.__wrk_adc.tconv
 
