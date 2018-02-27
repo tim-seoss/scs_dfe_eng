@@ -1,12 +1,13 @@
 """
-Created on 16 Jul 2017
+Created on 27 Feb 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-specifies whether on not a Pt1000 temperature sensor is present on the AFE
+the I2C address of the Pt1000 ADC
 
-example JSON:
-{"pt1000-present": true}
+example documents:
+{"pt1000-addr": "0x68"}        - Alpha Pi Eng, Alpha BB Eng without RTC
+{"pt1000-addr": "0x69"}        - Alpha BB Eng with RTC
 """
 
 import os
@@ -20,17 +21,23 @@ from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gas.pt1000_conf import Pt1000Conf
+
+from scs_dfe.gas.mcp342x import MCP342X
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class AFEConf(PersistentJSONable):
+class DFEConf(PersistentJSONable):
     """
     classdocs
     """
 
-    __FILENAME = "afe_conf.json"
+    DEFAULT_PT1000_ADDR = 0x68
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    __FILENAME = "dfe_conf.json"
 
     @classmethod
     def filename(cls, host):
@@ -39,32 +46,43 @@ class AFEConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @classmethod
-    def construct_from_jdict(cls, jdict):
-        if not jdict:
-            return AFEConf(True)
+    @staticmethod
+    def __pt1000_addr_str(addr):
+        if addr is None:
+            return None
 
-        pt1000_present = jdict.get('pt1000-present')
-
-        return AFEConf(pt1000_present)
+        return "0x%02x" % addr
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, pt1000_present):
+    @classmethod
+    def construct_from_jdict(cls, jdict):
+        if not jdict:
+            return None
+
+        pt1000_addr_str = jdict.get('pt1000-addr')
+
+        pt1000_addr = None if pt1000_addr_str is None else int(pt1000_addr_str, 0)
+
+        return DFEConf(pt1000_addr)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self, pt1000_addr):
         """
         Constructor
         """
         super().__init__()
 
-        self.__pt1000_present = bool(pt1000_present)
+        self.__pt1000_addr = pt1000_addr            # int
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def afe(self, host):                # TODO: remove host
         # Pt1000...
-        pt1000_conf = Pt1000Conf.load(host)
         pt1000 = self.pt1000(host)
 
         # sensors...
@@ -73,11 +91,11 @@ class AFEConf(PersistentJSONable):
 
         sensors = afe_calib.sensors(afe_baseline)
 
-        return AFE(pt1000_conf, pt1000, sensors)
+        return AFE(self, pt1000, sensors)
 
 
     def pt1000(self, host):            # TODO: remove host
-        if not self.pt1000_present:
+        if self.pt1000_addr is None:
             return None
 
         pt1000_calib = Pt1000Calib.load(host)
@@ -85,11 +103,18 @@ class AFEConf(PersistentJSONable):
         return Pt1000(pt1000_calib)
 
 
+    def pt1000_adc(self, gain, rate):
+        if self.pt1000_addr is None:
+            return None
+
+        return MCP342X(self.pt1000_addr, gain, rate)
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def pt1000_present(self):
-        return self.__pt1000_present
+    def pt1000_addr(self):
+        return self.__pt1000_addr
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -97,7 +122,7 @@ class AFEConf(PersistentJSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['pt1000-present'] = self.pt1000_present
+        jdict['pt1000-addr'] = DFEConf.__pt1000_addr_str(self.__pt1000_addr)
 
         return jdict
 
@@ -105,4 +130,4 @@ class AFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "AFEConf:{pt1000_present:%s}" %  self.pt1000_present
+        return "DFEConf:{pt1000_addr:%s}" % DFEConf.__pt1000_addr_str(self.pt1000_addr)

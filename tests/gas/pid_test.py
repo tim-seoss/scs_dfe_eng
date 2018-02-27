@@ -15,7 +15,7 @@ from scs_core.gas.sensor import Sensor
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gas.pt1000_conf import Pt1000Conf
+from scs_dfe.board.dfe_conf import DFEConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -23,7 +23,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-pt1000_conf = Pt1000Conf.load(Host)
+pt1000_conf = DFEConf.load(Host)
 
 pt1000_calib = Pt1000Calib.load(Host)
 pt1000 = Pt1000(pt1000_calib)

@@ -13,11 +13,12 @@ import time
 from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_calib import AFECalib
+from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.pt1000_calib import Pt1000Calib
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gas.pt1000_conf import Pt1000Conf
+from scs_dfe.board.dfe_conf import DFEConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -25,8 +26,8 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-pt1000_conf = Pt1000Conf.load(Host)
-print(pt1000_conf)
+dfe_conf = DFEConf.load(Host)
+print(dfe_conf)
 print("-")
 
 pt1000_calib = Pt1000Calib.load(Host)
@@ -41,7 +42,11 @@ afe_calib = AFECalib.load(Host)
 print(afe_calib)
 print("-")
 
-sensors = afe_calib.sensors()
+afe_baseline = AFEBaseline.load(Host)
+print(afe_baseline)
+print("-")
+
+sensors = afe_calib.sensors(afe_baseline)
 print('\n\n'.join(str(sensor) for sensor in sensors))
 print("-")
 
@@ -51,12 +56,12 @@ print("-")
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    afe = AFE(pt1000_conf, pt1000, sensors)
+    afe = AFE(dfe_conf, pt1000, sensors)
     print(afe)
     print("-")
 
     start_time = time.time()
-    temp = afe.sample_temp()
+    temp = afe.sample_pt1000()
     elapsed = time.time() - start_time
 
     print(temp)

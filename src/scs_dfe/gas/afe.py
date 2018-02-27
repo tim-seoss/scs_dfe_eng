@@ -39,18 +39,17 @@ class AFE(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, pt1000_conf, pt1000, sensors):
+    def __init__(self, dfe_conf, pt1000, sensors):
         """
         Constructor
         """
-        self.__pt1000_conf = pt1000_conf
         self.__pt1000 = pt1000
         self.__sensors = sensors
 
         self.__wrk_adc = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
         self.__aux_adc = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE)
 
-        self.__pt1000_adc = pt1000_conf.adc(MCP342X.GAIN_4, MCP342X.RATE_15) if pt1000 else None
+        self.__pt1000_adc = dfe_conf.pt1000_adc(MCP342X.GAIN_4, MCP342X.RATE_15) if pt1000 else None
 
         self.__tconv = self.__wrk_adc.tconv
 
@@ -59,16 +58,8 @@ class AFE(object):
 
     def sample(self, sht_datum=None):
         # temperature...
-        pt1000_datum = self.sample_temp()
-
-        if sht_datum is not None:
-            temp = sht_datum.temp
-
-        elif pt1000_datum is not None:
-            temp = pt1000_datum.temp
-
-        else:
-            temp = None
+        pt1000_datum = self.sample_pt1000()
+        temp = self.sample_temp(sht_datum)
 
         # gases...
         samples = []
@@ -93,11 +84,12 @@ class AFE(object):
 
 
     def sample_station(self, sn, sht_datum=None):
+        # temperature...
+        pt1000_datum = self.sample_pt1000()
+        temp = self.sample_temp(sht_datum)
+
+        # gas...
         index = sn - 1
-
-        pt1000_datum = self.sample_temp()
-
-        temp = pt1000_datum.temp if sht_datum is None else sht_datum.temp       # use SHT temp if available
 
         sensor = self.__sensors[index]
 
@@ -118,7 +110,7 @@ class AFE(object):
 
 
     def null_datum(self):
-        pt1000_datum = self.sample_temp()
+        pt1000_datum = self.sample_pt1000()
 
         samples = []
 
@@ -133,7 +125,16 @@ class AFE(object):
         return AFEDatum(pt1000_datum, *samples)
 
 
-    def sample_temp(self):
+    def sample_temp(self, sht_datum):
+        if sht_datum is not None:
+            return sht_datum.temp
+
+        pt1000_datum = self.sample_pt1000()
+
+        return None if pt1000_datum is None else pt1000_datum.temp
+
+
+    def sample_pt1000(self):
         if self.__pt1000 is None:
             return None
 

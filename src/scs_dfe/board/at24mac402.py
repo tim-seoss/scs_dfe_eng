@@ -38,6 +38,7 @@ class AT24MAC402(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    # noinspection PyUnusedLocal
     @classmethod
     def __read_array(cls, device_addr, memory_addr, count):
         try:
