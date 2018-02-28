@@ -4,11 +4,11 @@ Created on 4 Jul 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import math
-import struct
 import time
 
 from scs_core.data.localized_datetime import LocalizedDatetime
+from scs_core.data.datum import Datum
+
 from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.board.io import IO
@@ -16,8 +16,6 @@ from scs_dfe.board.io import IO
 from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
-
-# TODO: replace pack methods with Datum decode methods
 
 # TODO: consider locking at the top level, to prevent power on / off by other processes
 
@@ -61,21 +59,6 @@ class OPCN2(object):
     __TRANSFER_DELAY =                  0.00002
 
     __LOCK_TIMEOUT =                    6.0
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @staticmethod
-    def __pack_int(byte_values):
-        packed = struct.unpack('h', struct.pack('BB', *byte_values))
-        return packed[0]
-
-
-    @staticmethod
-    def __pack_float(byte_values):
-        packed = struct.unpack('f', struct.pack('BBBB', *byte_values))
-
-        return None if math.isnan(packed[0]) else packed[0]
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -258,7 +241,7 @@ class OPCN2(object):
             time.sleep(OPCN2.__TRANSFER_DELAY)
             read_bytes.extend(self.__spi.read_bytes(1))
 
-        return OPCN2.__pack_int(read_bytes)
+        return Datum.decode_unsigned_int(read_bytes)
 
 
     def __read_float(self):
@@ -268,7 +251,7 @@ class OPCN2(object):
             time.sleep(OPCN2.__TRANSFER_DELAY)
             read_bytes.extend(self.__spi.read_bytes(1))
 
-        return OPCN2.__pack_float(read_bytes)
+        return Datum.decode_float(read_bytes)
 
 
     # ----------------------------------------------------------------------------------------------------------------
