@@ -17,6 +17,8 @@ from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
 
+# TODO: replace pack methods with Datum decode methods
+
 # TODO: consider locking at the top level, to prevent power on / off by other processes
 
 # --------------------------------------------------------------------------------------------------------------------

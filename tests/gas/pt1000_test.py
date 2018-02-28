@@ -12,7 +12,7 @@ from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gas.pt1000_conf import Pt1000Conf
+from scs_dfe.board.dfe_conf import DFEConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -38,7 +38,7 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    pt1000_conf = Pt1000Conf.load(Host)
+    pt1000_conf = DFEConf.load(Host)
     print(pt1000_conf)
     print("-")
 
@@ -54,7 +54,7 @@ try:
     print(afe)
     print("-")
 
-    pt1000_datum = afe.sample_temp()
+    pt1000_datum = afe.sample_pt1000()
     print(pt1000_datum)
     print("=")
 
@@ -79,7 +79,7 @@ try:
     print(afe)
     print("-")
 
-    pt1000_datum = afe.sample_temp()
+    pt1000_datum = afe.sample_pt1000()
     print(pt1000_datum)
     print("-")
 

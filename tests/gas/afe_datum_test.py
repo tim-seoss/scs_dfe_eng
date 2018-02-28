@@ -58,10 +58,10 @@ sn2 = sensors[1].gas_name
 sn3 = sensors[2].gas_name
 sn4 = sensors[3].gas_name
 
-afe = AFEDatum(pt1, (sn1, a4_1), (sn2, a4_2), (sn3, a4_3), (sn4, pid))
-print(afe)
+datum = AFEDatum(pt1, (sn1, a4_1), (sn2, a4_2), (sn3, a4_3), (sn4, pid))
+print(datum)
 print("-")
 
-jstr = JSONify.dumps(afe)
+jstr = JSONify.dumps(datum)
 print(jstr)
 print("-")

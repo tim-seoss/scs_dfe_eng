@@ -10,12 +10,10 @@ Note: this script uses the Pt1000 temp sensor for temperature compensation.
 
 import time
 
-from scs_core.gas.pt1000_calib import Pt1000Calib
 from scs_core.gas.sensor import Sensor
 
+from scs_dfe.board.dfe_conf import DFEConf
 from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.gas.pt1000_conf import Pt1000Conf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -23,13 +21,11 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-pt1000_conf = Pt1000Conf.load(Host)
-
-pt1000_calib = Pt1000Calib.load(Host)
-pt1000 = Pt1000(pt1000_calib)
+dfe_conf = DFEConf.load(Host)
+pt1000 = dfe_conf.pt1000(Host)
 
 sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),
-           Sensor.find(Sensor.CODE_VOC_PPM))
+           Sensor.find(Sensor.CODE_VOC_PPB))
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -41,7 +37,7 @@ try:
     print(pid)
     print("-")
 
-    afe = AFE(pt1000_conf, pt1000, sensors)
+    afe = AFE(dfe_conf, pt1000, sensors)
     print(afe)
     print("-")
 
