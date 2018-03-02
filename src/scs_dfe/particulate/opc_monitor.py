@@ -44,29 +44,7 @@ class OPCMonitor(SynchronisedProcess):
 
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    def run(self):
-        self.__opc.sample()     # reset counts
-
-        try:
-            timer = IntervalTimer(self.__conf.sample_period)
-
-            while timer.true():
-                sample = self.__opc.sample()
-
-                # report...
-                with self._lock:
-                    sample.as_list(self._value)
-
-                # monitor...
-                if sample.is_zero():
-                    self.__power_cycle()
-
-        except KeyboardInterrupt:
-            pass
-
-
-    # ----------------------------------------------------------------------------------------------------------------
+    # SynchronisedProcess implementation...
 
     def start(self):
         try:
@@ -93,14 +71,29 @@ class OPCMonitor(SynchronisedProcess):
             pass
 
 
-    def sample(self):
-        with self._lock:
-            value = self._value
+    def run(self):
+        self.__opc.sample()     # reset counts
 
-        return OPCDatum.construct_from_jdict(OrderedDict(value))
+        try:
+            timer = IntervalTimer(self.__conf.sample_period)
+
+            while timer.true():
+                sample = self.__opc.sample()
+
+                # report...
+                with self._lock:
+                    sample.as_list(self._value)
+
+                # monitor...
+                if sample.is_zero():
+                    self.__power_cycle()
+
+        except KeyboardInterrupt:
+            pass
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # SynchronisedProcess special operations...
 
     def __power_cycle(self):
         print("OPCMonitor: POWER CYCLE", file=sys.stderr)
@@ -119,6 +112,16 @@ class OPCMonitor(SynchronisedProcess):
 
         except KeyboardInterrupt:
             pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # data retrieval for client process...
+
+    def sample(self):
+        with self._lock:
+            value = self._value
+
+        return OPCDatum.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
