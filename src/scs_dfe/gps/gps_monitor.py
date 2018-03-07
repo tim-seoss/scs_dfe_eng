@@ -36,27 +36,7 @@ class GPSMonitor(SynchronisedProcess):
 
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    def run(self):
-        try:
-            timer = IntervalTimer(self.__MONITOR_INTERVAL)
-
-            while timer.true():
-                gga = self.__gps.report(GPGGA)
-                position = GPSLocation.construct(gga)
-
-                if position is None:
-                    continue
-
-                # report...
-                with self._lock:
-                    position.as_list(self._value)
-
-        except KeyboardInterrupt:
-            pass
-
-
-    # ----------------------------------------------------------------------------------------------------------------
+    # SynchronisedProcess implementation...
 
     def start(self):
         try:
@@ -78,6 +58,28 @@ class GPSMonitor(SynchronisedProcess):
         except KeyboardInterrupt:
             pass
 
+
+    def run(self):
+        try:
+            timer = IntervalTimer(self.__MONITOR_INTERVAL)
+
+            while timer.true():
+                gga = self.__gps.report(GPGGA)
+                position = GPSLocation.construct(gga)
+
+                if position is None:
+                    continue
+
+                # report...
+                with self._lock:
+                    position.as_list(self._value)
+
+        except KeyboardInterrupt:
+            pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    # data retrieval for client process...
 
     def sample(self):
         with self._lock:
