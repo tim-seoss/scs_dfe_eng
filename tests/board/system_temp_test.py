@@ -7,7 +7,7 @@ Created on 10 Jan 2017
 """
 
 from scs_core.data.json import JSONify
-from scs_core.sys.exception_report import ExceptionReport
+
 from scs_core.sys.system_temp import SystemTemp
 
 from scs_dfe.board.mcp9808 import MCP9808
@@ -48,9 +48,6 @@ try:
 
 # ----------------------------------------------------------------------------------------------------------------
 # end...
-
-except Exception as ex:
-    print(JSONify.dumps(ExceptionReport.construct(ex)))
 
 finally:
     I2C.close()
