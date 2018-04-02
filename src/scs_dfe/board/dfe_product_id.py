@@ -4,7 +4,7 @@ Created on 26 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import os.path
+from os import path
 
 from collections import OrderedDict
 
@@ -26,14 +26,14 @@ class DFEProductID(JSONable):
 
     @classmethod
     def __read(cls, field):
-        path = cls.__DIR + field
+        field_path = cls.__DIR + field
 
         # check...
-        if not os.path.isfile(path):
+        if not path.isfile(field_path):
             return None
 
         # read...
-        file = open(path, "r")
+        file = open(field_path, "r")
         content = file.readline()
         file.close()
 
