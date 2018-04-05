@@ -2,6 +2,9 @@
 Created on 26 Sep 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+example document:
+{"vendor": null, "product": null, "product_id": null, "product_ver": null, "uuid": null}
 """
 
 from os import path

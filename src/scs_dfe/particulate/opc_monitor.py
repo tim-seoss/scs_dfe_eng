@@ -20,8 +20,6 @@ from scs_dfe.particulate.opc_n2 import OPCN2
 from scs_host.lock.lock_timeout import LockTimeout
 
 
-# TODO: move OPCMonitor to scs_core
-
 # TODO: should be able to start and stop the OPC on very long sampling intervals
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -69,7 +67,7 @@ class OPCMonitor(SynchronisedProcess):
         except KeyboardInterrupt:
             pass
 
-        except LockTimeout:             # __power_cycle() may be running!
+        except LockTimeout:             # because __power_cycle() may be running!
             pass
 
 
