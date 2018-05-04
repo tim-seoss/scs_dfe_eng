@@ -14,10 +14,17 @@ class LED(object):
     """
     classdocs
     """
-    STATES = {'0': 0x00, 'R': 0x01, 'G': 0x02, 'O': 0x03}
+    STATES = {'0': 0x00, 'R': 0x01, 'A': 0x03, 'G': 0x02}
 
     __RED_MASK = 0x01
     __GREEN_MASK = 0x02
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def is_valid_colour(cls, colour):
+        return colour in cls.STATES
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -50,7 +57,7 @@ class LED(object):
 
     @colour.setter
     def colour(self, colour):
-        if colour not in LED.STATES:
+        if not self.is_valid_colour(colour):
             raise ValueError(colour)
 
         state = LED.STATES[colour]
