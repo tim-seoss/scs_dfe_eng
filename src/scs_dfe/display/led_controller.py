@@ -26,6 +26,8 @@ class LEDController(SynchronisedProcess):
     __STATE0_PERIOD =   0.8             # seconds
     __STATE1_PERIOD =   0.2             # seconds
 
+    __WAIT_FOR_STOP =   1.2             # seconds
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -42,6 +44,12 @@ class LEDController(SynchronisedProcess):
 
     # ----------------------------------------------------------------------------------------------------------------
     # SynchronisedProcess implementation...
+
+    def stop(self):
+        time.sleep(self.__WAIT_FOR_STOP)
+
+        super().stop()               # allow time for the sub-process to complete its last task
+
 
     def run(self):
         try:
