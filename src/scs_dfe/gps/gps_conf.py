@@ -19,6 +19,8 @@ from scs_dfe.gps.gps_monitor import GPSMonitor
 from scs_dfe.gps.pam7q import PAM7Q
 
 
+# TODO: add static / mobile setting - for averaging
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class GPSConf(PersistentJSONable):
