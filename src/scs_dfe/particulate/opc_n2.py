@@ -29,7 +29,7 @@ class OPCN2(object):
     MAX_SAMPLE_PERIOD =                 10.0       # seconds
     DEFAULT_SAMPLE_PERIOD =             10.0       # seconds
 
-    POWER_CYCLE_TIME =                   2.0       # seconds
+    POWER_CYCLE_TIME =                  10.0       # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
