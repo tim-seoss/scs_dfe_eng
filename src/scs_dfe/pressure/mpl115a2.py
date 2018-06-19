@@ -3,16 +3,18 @@ Created on 19 Jun 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Based-on code
+https://gist.github.com/asciiphil/6167905
+
+References
 https://www.nxp.com/docs/en/data-sheet/MPL115A2.pdf
 https://www.nxp.com/docs/en/application-note/AN3785.pdf
 https://community.nxp.com/thread/73878
-
-https://gist.github.com/asciiphil/6167905
 """
 
 import time
 
-from scs_dfe.pressure.mpl115a2_driver import MPL115A2Driver
+from scs_dfe.pressure.mpl115a2_reg import MPL115A2Reg
 
 from scs_host.lock.lock import Lock
 
@@ -31,18 +33,20 @@ class MPL115A2(object):
     __DEFAULT_C25 = 472                                 # T adc counts at 25 ºC
     __COUNTS_PER_DEGREE =  -5.35                        # T adc counts per degree centigrade
 
+    __CONVERSION_TIME = 0.005                           # seconds
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
     # sampling...
-    __REG_P_ADC =       MPL115A2Driver(0x00, 10, 0,  0, 0)
-    __REG_T_ADC =       MPL115A2Driver(0x02, 10, 0,  0, 0)
+    __REG_P_ADC =       MPL115A2Reg(0x00, 10, 0, 0, 0)
+    __REG_T_ADC =       MPL115A2Reg(0x02, 10, 0, 0, 0)
 
     # calibration...
-    __REG_A0 =          MPL115A2Driver(0x04, 16, 1,  3, 0)
-    __REG_B1 =          MPL115A2Driver(0x06, 16, 1, 13, 0)
-    __REG_B2 =          MPL115A2Driver(0x08, 16, 1, 14, 0)
-    __REG_C12 =         MPL115A2Driver(0x0a, 14, 1, 13, 9)
+    __REG_A0 =          MPL115A2Reg(0x04, 16, 1, 3, 0)
+    __REG_B1 =          MPL115A2Reg(0x06, 16, 1, 13, 0)
+    __REG_B2 =          MPL115A2Reg(0x08, 16, 1, 14, 0)
+    __REG_C12 =         MPL115A2Reg(0x0a, 14, 1, 13, 9)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -81,8 +85,8 @@ class MPL115A2(object):
         try:
             self.obtain_lock()
 
-            MPL115A2Driver.convert()
-            time.sleep(0.005)
+            MPL115A2Reg.convert()
+            time.sleep(self.__CONVERSION_TIME)
 
             # read...
             p_adc = self.__REG_P_ADC.read()

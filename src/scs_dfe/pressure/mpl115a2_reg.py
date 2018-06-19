@@ -3,11 +3,13 @@ Created on 19 Jun 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Based-on code
+https://gist.github.com/asciiphil/6167905
+
+References
 https://www.nxp.com/docs/en/data-sheet/MPL115A2.pdf
 https://www.nxp.com/docs/en/application-note/AN3785.pdf
 https://community.nxp.com/thread/73878
-
-https://gist.github.com/asciiphil/6167905
 """
 
 from scs_host.bus.i2c import I2C
@@ -15,9 +17,9 @@ from scs_host.bus.i2c import I2C
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class MPL115A2Driver:
+class MPL115A2Reg:
     """
-    NXP MPL115A2 digital barometer - I2C access
+    NXP MPL115A2 digital barometer - I2C control
     """
 
     __I2C_ADDR =            0x60
@@ -30,7 +32,7 @@ class MPL115A2Driver:
     @classmethod
     def convert(cls):
         try:
-            I2C.start_tx(MPL115A2Driver.__I2C_ADDR)
+            I2C.start_tx(MPL115A2Reg.__I2C_ADDR)
             I2C.write(cls.__CMD_START_CONV, 0x00)
 
         finally:
@@ -78,5 +80,5 @@ class MPL115A2Driver:
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "MPL115A2Driver:{reg_addr:0x%2x, total:%s, sign:%s, fractional:%s, zero_padding:%s}" % \
+        return "MPL115A2Reg:{reg_addr:0x%2x, total:%s, sign:%s, fractional:%s, zero_padding:%s}" % \
                (self.__reg_addr, self.__total, self.__sign, self.__fractional, self.__zero_padding)
