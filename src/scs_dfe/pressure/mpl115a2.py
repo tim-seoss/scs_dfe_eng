@@ -21,12 +21,12 @@ from scs_host.lock.lock import Lock
 
 class MPL115A2(object):
     """
-    NXP MPL115A2 digital barometer
+    NXP MPL115A2 digital barometer - data interpretation
     """
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __PRESSURE_CONV =   (115.0 - 50.0) / 1023.0
+    __PRESSURE_CONV = (115.0 - 50.0) / 1023.0
 
     __DEFAULT_C25 = 472                                 # T adc counts at 25 ºC
     __COUNTS_PER_DEGREE =  -5.35                        # T adc counts per degree centigrade
@@ -47,7 +47,7 @@ class MPL115A2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __LOCK_TIMEOUT =    2.0
+    __LOCK_TIMEOUT =    1.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -91,10 +91,10 @@ class MPL115A2(object):
             # interpret...
             p_comp = self.__a0 + (self.__b1 + self.__c12 * t_adc) * p_adc + self.__b2 * t_adc
 
-            pressure = round(p_comp * self.__PRESSURE_CONV + 50.0, 1)
-            temperature = round((t_adc - self.__DEFAULT_C25) / self.__COUNTS_PER_DEGREE + 25.0, 1)
+            pressure = p_comp * self.__PRESSURE_CONV + 50.0
+            temperature = (t_adc - self.__DEFAULT_C25) / self.__COUNTS_PER_DEGREE + 25.0
 
-            return pressure, temperature
+            return round(pressure, 1), round(temperature, 1)
 
         finally:
             self.release_lock()
@@ -114,5 +114,3 @@ class MPL115A2(object):
 
     def __str__(self, *args, **kwargs):
         return "MPL115A2:{a0:%s, b1:%s, b2:%s, c12:%s}" % (self.__a0, self.__b1, self.__b2, self.__c12)
-
-

@@ -17,7 +17,7 @@ from scs_host.bus.i2c import I2C
 
 class MPL115A2Driver:
     """
-    classdocs
+    NXP MPL115A2 digital barometer - I2C access
     """
 
     __I2C_ADDR =            0x60
