@@ -31,7 +31,7 @@ class MPL115A2(object):
     __PRESSURE_CONV = (115.0 - 50.0) / 1023.0
 
     __DEFAULT_C25 = 472                                 # T adc counts at 25 ºC
-    __COUNTS_PER_DEGREE =  -5.35                        # T adc counts per degree centigrade
+    __COUNTS_PER_DEGREE = -5.35                         # T adc counts per degree centigrade
 
     __CONVERSION_TIME = 0.005                           # seconds
 
