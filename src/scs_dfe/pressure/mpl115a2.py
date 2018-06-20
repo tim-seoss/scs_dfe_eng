@@ -5,6 +5,8 @@ Created on 19 Jun 2018
 
 Based-on code
 https://gist.github.com/asciiphil/6167905
+https://github.com/hackscribble/microbit-MPL115A1-barometer/blob/master/microbit-MPL115A1-barometer.py
+https://gist.github.com/cubapp/23dd4e91814a995b8ff06f406679abcf
 
 References
 https://www.nxp.com/docs/en/data-sheet/MPL115A2.pdf
@@ -13,6 +15,8 @@ https://community.nxp.com/thread/73878
 """
 
 import time
+
+from scs_core.pressure.mpl115a2_datum import MPL115A2Datum
 
 from scs_dfe.pressure.mpl115a2_reg import MPL115A2Reg
 
@@ -25,16 +29,6 @@ class MPL115A2(object):
     """
     NXP MPL115A2 digital barometer - data interpretation
     """
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    __PRESSURE_CONV = (115.0 - 50.0) / 1023.0
-
-    __DEFAULT_C25 = 472                                 # T adc counts at 25 ºC
-    __COUNTS_PER_DEGREE = -5.35                         # T adc counts per degree centigrade
-
-    __CONVERSION_TIME = 0.005                           # seconds
-
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -51,15 +45,19 @@ class MPL115A2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    __CONVERSION_TIME = 0.005                                   # seconds
+
     __LOCK_TIMEOUT =    1.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
+    def __init__(self, calib):
         """
         Constructor
         """
+        self.__calib = calib
+
         self.__a0 = None
         self.__b1 = None
         self.__b2 = None
@@ -95,10 +93,7 @@ class MPL115A2(object):
             # interpret...
             p_comp = self.__a0 + (self.__b1 + self.__c12 * t_adc) * p_adc + self.__b2 * t_adc
 
-            pressure = p_comp * self.__PRESSURE_CONV + 50.0
-            temperature = (t_adc - self.__DEFAULT_C25) / self.__COUNTS_PER_DEGREE + 25.0
-
-            return round(pressure, 1), round(temperature, 1)
+            return MPL115A2Datum.construct(self.__calib.c25, p_comp, t_adc)
 
         finally:
             self.release_lock()
@@ -117,4 +112,5 @@ class MPL115A2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "MPL115A2:{a0:%s, b1:%s, b2:%s, c12:%s}" % (self.__a0, self.__b1, self.__b2, self.__c12)
+        return "MPL115A2:{calib:%s, a0:%s, b1:%s, b2:%s, c12:%s}" % \
+               (self.__calib, self.__a0, self.__b1, self.__b2, self.__c12)
