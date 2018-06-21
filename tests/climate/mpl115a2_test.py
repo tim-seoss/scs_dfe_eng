@@ -21,6 +21,21 @@ from scs_host.sys.host import Host
 try:
     I2C.open(Host.I2C_SENSORS)
 
+    # with calib & altitude...
+    calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
+
+    barometer = MPL115A2(calib)
+
+    barometer.init()
+    print(barometer)
+
+    datum = barometer.sample(1000)
+
+    print(datum)
+    print(JSONify.dumps(datum))
+
+    print("-")
+
     # with calib...
     calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
 
