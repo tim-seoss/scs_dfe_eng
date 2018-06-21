@@ -56,7 +56,7 @@ class MPL115A2(object):
         """
         Constructor
         """
-        self.__calib = calib
+        self.__c25 = None if calib is None else calib.c25
 
         self.__a0 = None
         self.__b1 = None
@@ -93,7 +93,7 @@ class MPL115A2(object):
             # interpret...
             p_comp = self.__a0 + (self.__b1 + self.__c12 * t_adc) * p_adc + self.__b2 * t_adc
 
-            return MPL115A2Datum.construct(self.__calib.c25, p_comp, t_adc)
+            return MPL115A2Datum.construct(self.__c25, p_comp, t_adc)
 
         finally:
             self.release_lock()
@@ -112,5 +112,5 @@ class MPL115A2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "MPL115A2:{calib:%s, a0:%s, b1:%s, b2:%s, c12:%s}" % \
-               (self.__calib, self.__a0, self.__b1, self.__b2, self.__c12)
+        return "MPL115A2:{c25:%s, a0:%s, b1:%s, b2:%s, c12:%s}" % \
+               (self.__c25, self.__a0, self.__b1, self.__b2, self.__c12)
