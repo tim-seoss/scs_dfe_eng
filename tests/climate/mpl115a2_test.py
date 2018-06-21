@@ -24,7 +24,7 @@ try:
     # with calib & altitude...
     calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
 
-    barometer = MPL115A2(calib)
+    barometer = MPL115A2.construct(calib)
 
     barometer.init()
     print(barometer)
@@ -39,7 +39,7 @@ try:
     # with calib...
     calib = MPL115A2Calib(None, MPL115A2Calib.DEFAULT_C25)
 
-    barometer = MPL115A2(calib)
+    barometer = MPL115A2.construct(calib)
 
     barometer.init()
     print(barometer)
@@ -54,7 +54,7 @@ try:
     # no calib...
     calib = None
 
-    barometer = MPL115A2(calib)
+    barometer = MPL115A2.construct(calib)
 
     barometer.init()
     print(barometer)
