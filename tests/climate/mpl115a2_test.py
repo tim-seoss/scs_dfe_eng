@@ -6,9 +6,9 @@ Created on 19 Jun 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_core.pressure.mpl115a2_calib import MPL115A2Calib
+from scs_core.climate.mpl115a2_calib import MPL115A2Calib
 
-from scs_dfe.pressure.mpl115a2 import MPL115A2
+from scs_dfe.climate.mpl115a2 import MPL115A2
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host

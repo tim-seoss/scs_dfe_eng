@@ -16,9 +16,9 @@ https://community.nxp.com/thread/73878
 
 import time
 
-from scs_core.pressure.mpl115a2_datum import MPL115A2Datum
+from scs_core.climate.mpl115a2_datum import MPL115A2Datum
 
-from scs_dfe.pressure.mpl115a2_reg import MPL115A2Reg
+from scs_dfe.climate.mpl115a2_reg import MPL115A2Reg
 
 from scs_host.lock.lock import Lock
 
@@ -27,7 +27,7 @@ from scs_host.lock.lock import Lock
 
 class MPL115A2(object):
     """
-    NXP MPL115A2 digital barometer - data interpretation
+    NXP MPL115A2 digital barometer - orchestration
     """
 
     # ----------------------------------------------------------------------------------------------------------------
