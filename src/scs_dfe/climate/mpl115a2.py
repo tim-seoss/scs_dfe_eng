@@ -32,6 +32,10 @@ class MPL115A2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    __CONVERSION_TIME = 0.005                                   # seconds
+
+    __LOCK_TIMEOUT =    1.0
+
     # sampling...
     __REG_P_ADC =       MPL115A2Reg(0x00, 10, 0, 0, 0)
     __REG_T_ADC =       MPL115A2Reg(0x02, 10, 0, 0, 0)
@@ -45,18 +49,20 @@ class MPL115A2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __CONVERSION_TIME = 0.005                                   # seconds
+    @classmethod
+    def construct(cls, calib):
+        c25 = None if calib is None else calib.c25
 
-    __LOCK_TIMEOUT =    1.0
+        return MPL115A2(c25)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, calib):
+    def __init__(self, c25):
         """
         Constructor
         """
-        self.__c25 = None if calib is None else calib.c25
+        self.__c25 = c25
 
         self.__a0 = None
         self.__b1 = None
