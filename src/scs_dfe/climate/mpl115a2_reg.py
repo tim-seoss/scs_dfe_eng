@@ -61,7 +61,11 @@ class MPL115A2Reg:
         if self.__sign and (raw_value & 0x8000):        # TODO: do it like STMicro code
             raw_value = raw_value ^ 0xffff * -1
 
-        return (raw_value >> (16 - self.__total)) / float(2 ** (self.__fractional + self.__zero_padding))
+        float_value = (raw_value >> (16 - self.__total)) / float(2 ** (self.__fractional + self.__zero_padding))
+
+        print("float_value: %f" % float_value)
+
+        return float_value
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -71,7 +75,11 @@ class MPL115A2Reg:
             I2C.start_tx(self.__I2C_ADDR)
             values = I2C.read_cmd(self.__reg_addr, 2)
 
-            return values[0] << 8 | values[1]
+            raw_value = values[0] << 8 | values[1]
+
+            print("addr: 0x%04x raw_value: 0x%04x" % (self.__reg_addr, raw_value))
+
+            return raw_value
 
         finally:
             I2C.end_tx()
