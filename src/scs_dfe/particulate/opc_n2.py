@@ -127,13 +127,14 @@ class OPCN2(object):
             self.__spi.open()
 
             self.__spi.xfer([OPCN2.__CMD_POWER, OPCN2.__CMD_POWER_OFF])
-            time.sleep(OPCN2.__STOP_TIME)
 
         finally:
             time.sleep(OPCN2.__CMD_DELAY)
 
             self.__spi.close()
             self.release_lock()
+
+        time.sleep(OPCN2.__STOP_TIME)
 
 
     # ----------------------------------------------------------------------------------------------------------------
