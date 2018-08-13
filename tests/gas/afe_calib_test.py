@@ -43,9 +43,17 @@ for sensor in calib.sensors(afe_baseline):
 print("=")
 
 
+gas_names = calib.gas_names()
+
+print("gas_names: %s" % gas_names)
+
 for gas_name in calib.gas_names():
-    print(gas_name)
-    print("-")
+    index = calib.sensor_index(gas_name)
+    print("gas_name: %s index: %s" % (gas_name, index))
+
+gas_name = 'XX'
+index = calib.sensor_index(gas_name)
+print("gas_name: %s index: %s" % (gas_name, index))
 
 print("=")
 
