@@ -19,8 +19,8 @@ class ADS1115(object):
     """
     Texas Instruments ADS1115 ADC
     """
-    ADDR_WRK =          0x49
     ADDR_AUX =          0x48
+    ADDR_WRK =          0x49
 
     MUX_A0_A1 =         0x0000      # -000 ---- ---- ----
     MUX_A0_A3 =         0x1000      # -001 ---- ---- ----
@@ -283,5 +283,4 @@ class ADS1115(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "ADS1115:{addr:0x%0.2x, rate:0x%0.4x, config:0x%0.4x}" % \
-                    (self.addr, self.rate, self.__config)
+        return "ADS1115:{addr:0x%0.2x, rate:0x%0.4x, config:0x%0.4x}" % (self.addr, self.rate, self.__config)
