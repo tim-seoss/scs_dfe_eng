@@ -17,7 +17,7 @@ from scs_core.particulate.pmx_datum import PMxDatum
 
 now = LocalizedDatetime.now()
 
-opc = OPCDatum(now, 11, 22, 33, 9.1, [1, 2, 3, 4, 5, 6, 7, 8, 9], 11.1, 22.2, 33.3, 44.4)
+opc = OPCDatum('test', now, 11, 22, 33, 9.1, [1, 2, 3, 4, 5, 6, 7, 8, 9], 11.1, 22.2, 33.3, 44.4)
 print(opc)
 print("-")
 
