@@ -17,7 +17,6 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-io = None
 opc = None
 
 try:
@@ -29,7 +28,7 @@ try:
 
     sys.stdout.flush()
 
-    opc.power_on()
+    # opc.power_on()
 
     '''
     firmware = opc.firmware()
@@ -52,7 +51,6 @@ try:
     print(version)
 
     opc.operations_on()
-    # opc.fan_on()
 
     time.sleep(6.000)
 
@@ -73,18 +71,13 @@ try:
 
     opc.operations_off()
 
-    # opc.laser_off()
-    # opc.fan_off()
-
 except KeyboardInterrupt:
     print("opc_n3_test: KeyboardInterrupt", file=sys.stderr)
 
 finally:
     if opc:
         # opc.operations_off()
-        opc.power_off()
+        # opc.power_off()
         pass
 
     I2C.close()
-
-

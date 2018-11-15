@@ -56,7 +56,7 @@ class OPCN3(object):
     __CMD_GET_FIRMWARE_REPORT =         0x3f
     __CMD_GET_FIRMWARE_VERSION =        0x12
 
-    __SPI_CLOCK =                       300000      # 488000
+    __SPI_CLOCK =                       488000      # 488000
     __SPI_MODE =                        1
 
     __CMD_DELAY =                       0.020
