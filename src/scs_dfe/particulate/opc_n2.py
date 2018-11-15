@@ -2,6 +2,9 @@
 Created on 4 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+Firmware report:
+OPC-N2 FirmwareVer=OPC-018.1..............................BD
 """
 
 import time
@@ -16,8 +19,6 @@ from scs_dfe.board.io import IO
 from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
-
-# TODO: consider locking at the top level, to prevent power on / off by other processes
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -194,7 +195,7 @@ class OPCN2(object):
 
             now = LocalizedDatetime.now()
 
-            return OPCDatum(self.SOURCE, now, pm1, pm2p5, pm10, period, bins, 
+            return OPCDatum(self.SOURCE, now, pm1, pm2p5, pm10, period, bins,
                             bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
 
         finally:

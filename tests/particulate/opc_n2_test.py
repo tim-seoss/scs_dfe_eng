@@ -42,7 +42,7 @@ try:
         print("-")
 
 except KeyboardInterrupt:
-    print("opc_test: KeyboardInterrupt", file=sys.stderr)
+    print("opc_n2_test: KeyboardInterrupt", file=sys.stderr)
 
 finally:
     if opc:

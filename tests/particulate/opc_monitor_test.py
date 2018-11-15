@@ -14,6 +14,7 @@ import sys
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
 
+from scs_dfe.particulate.opc_conf import OPCConf
 from scs_dfe.particulate.opc_n2 import OPCN2
 from scs_dfe.particulate.opc_monitor import OPCMonitor
 
@@ -28,11 +29,15 @@ if __name__ == '__main__':
 
     monitor = None
 
+    conf = OPCConf.load(Host)
+    print(conf)
+
     try:
         I2C.open(Host.I2C_SENSORS)
 
-        monitor = OPCMonitor(OPCN2(Host.opc_spi_bus(), Host.opc_spi_device()), 5)
-        print("main: %s" % monitor)
+        monitor = OPCMonitor(OPCN2(Host.opc_spi_bus(), Host.opc_spi_device()), conf)
+        print(monitor)
+        print("-")
 
         proc = monitor.start()
 
@@ -50,9 +55,6 @@ if __name__ == '__main__':
 
             # if datum is not None:
             #     proc.terminate()
-
-            if not proc.is_alive():
-                break
 
     except KeyboardInterrupt:
         pass
