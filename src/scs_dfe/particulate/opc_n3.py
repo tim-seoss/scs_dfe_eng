@@ -109,7 +109,7 @@ class OPCN3(object):
             self.obtain_lock()
             self.__spi.open()
 
-            self.__spi.xfer2([self.__CMD_GET_FIRMWARE_REPORT])
+            self.__spi.xfer([self.__CMD_GET_FIRMWARE_REPORT])
             time.sleep(self.__CMD_DELAY)
 
             self.__spi.xfer([self.__CMD_GET_FIRMWARE_REPORT])
@@ -138,10 +138,13 @@ class OPCN3(object):
             self.obtain_lock()
             self.__spi.open()
 
-            self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION])
-            time.sleep(self.__CMD_DELAY)
+            self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION, self.__CMD_GET_FIRMWARE_VERSION])
+            time.sleep(0.020)
 
-            self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION])
+            # self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION])
+            # time.sleep(self.__CMD_DELAY)
+            #
+            # self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION])
 
             time.sleep(self.__TRANSFER_DELAY)
             response = self.__spi.read_bytes(1)
@@ -193,70 +196,23 @@ class OPCN3(object):
             self.release_lock()
 
 
-    def laser_on(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            # laser...
-            self.__spi.xfer([0x03, 0x07])
-            time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # time.sleep(0.020)
-            #
-            # print("laser_on 1:0x%02x" % response[0])
-            #
-            # self.__spi.xfer([0x07])
-            # time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # print("laser_on 2:0x%02x" % response[0])
-
-        finally:
-            self.__spi.close()
-            self.release_lock()
-
-
-    def fan_on(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            # laser...
-            self.__spi.xfer([0x03, 0x03])
-            time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # time.sleep(0.020)
-            #
-            # print("fan_on 1:0x%02x" % response[0])
-            #
-            # self.__spi.xfer([0x03])
-            # time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # print("fan_on 2:0x%02x" % response[0])
-
-        finally:
-            self.__spi.close()
-            self.release_lock()
-
-
     def operations_on(self):
         try:
             self.obtain_lock()
-            self.__spi.open()
 
+            self.__laser_on()
+            self.__fan_on()
+
+            '''
             # laser...
-            self.__spi.xfer2([0x03])
-            time.sleep(0.010)
+            self.__spi.xfer([0x03])
+            time.sleep(0.020)
 
             response = self.__spi.read_bytes(1)
             print("1:0x%02x" % response[0])
 
             self.__spi.xfer([0x07])
-            time.sleep(0.010)
+            time.sleep(0.020)
 
             self.__spi.close()
 
@@ -265,83 +221,18 @@ class OPCN3(object):
             # fan...
             self.__spi.open()
 
-            self.__spi.xfer2([0x03])
-            time.sleep(0.010)
+            self.__spi.xfer([0x03])
+            time.sleep(0.020)
 
             response = self.__spi.read_bytes(1)
             print("2:0x%02x" % response[0])
 
             self.__spi.xfer([0x03])
-            time.sleep(0.010)
-
-            # self.__spi.xfer([0x00])
-            # time.sleep(0.020)
-
-            # self.__spi.xfer([0x03])
-            # time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # print("1:0x%02x" % response[0])
-
-            # self.__spi.xfer([0x03])
-            # time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # print("1:0x%02x" % response[0])
-            #
-            # self.__spi.xfer([0x01])
-            # time.sleep(0.020)
-
-            # response = self.__spi.read_bytes(1)
-            # print("3:0x%02x" % response[0])
+            time.sleep(0.020)
+            '''
 
         finally:
-            self.__spi.close()
             self.release_lock()
-
-
-    '''
-    def test(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            self.__spi.xfer([0x03])
-            time.sleep(0.010)
-
-            response = self.__spi.read_bytes(1)
-            print("1:0x%02x" % response[0])
-
-            self.__spi.xfer([0x03])
-            time.sleep(0.010)
-
-            response = self.__spi.read_bytes(1)
-            print("2:0x%02x" % response[0])
-
-        finally:
-            self.__spi.close()
-            self.release_lock()
-
-    def operations_on(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            # start...
-            self.__spi.xfer([OPCN3.__CMD_POWER, OPCN3.__CMD_POWER_ON])
-            time.sleep(OPCN3.__START_TIME)
-
-            # clear histogram...
-            self.__spi.xfer([OPCN3.__CMD_READ_HISTOGRAM])
-            time.sleep(OPCN3.__CMD_DELAY)
-
-            for _ in range(62):
-                self.__read_byte()
-
-        finally:
-            self.__spi.close()
-            self.release_lock()
-    '''
 
 
     def operations_off(self):
@@ -358,6 +249,56 @@ class OPCN3(object):
             self.release_lock()
 
         time.sleep(OPCN3.__STOP_TIME)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __laser_on(self):
+        try:
+            self.__spi.open()
+
+            # laser...
+            self.__spi.xfer([0x03, 0x07])
+            time.sleep(0.020)
+
+        finally:
+            self.__spi.close()
+
+
+    def __laser_off(self):
+        try:
+            self.__spi.open()
+
+            # laser...
+            self.__spi.xfer([0x03, 0x06])
+            time.sleep(0.020)
+
+        finally:
+            self.__spi.close()
+
+
+    def __fan_on(self):
+        try:
+            self.__spi.open()
+
+            # fan...
+            self.__spi.xfer([0x03, 0x03])
+            time.sleep(0.020)
+
+        finally:
+            self.__spi.close()
+
+
+    def __fan_off(self):
+        try:
+            self.__spi.open()
+
+            # fan...
+            self.__spi.xfer([0x03, 0x02])
+            time.sleep(0.020)
+
+        finally:
+            self.__spi.close()
 
 
     # ----------------------------------------------------------------------------------------------------------------

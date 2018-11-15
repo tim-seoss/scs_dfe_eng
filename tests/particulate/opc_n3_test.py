@@ -51,10 +51,9 @@ try:
     version = opc.firmware()
     print(version)
 
-    opc.laser_on()
-    time.sleep(0.020)
+    opc.operations_on()
+    # opc.fan_on()
 
-    opc.fan_on()
     time.sleep(6.000)
 
     # time.sleep(5)
@@ -71,6 +70,11 @@ try:
     serial = opc.serial_no()
     print("type:[%s] number:[%s]" % serial)
     print("-")
+
+    opc.operations_off()
+
+    # opc.laser_off()
+    # opc.fan_off()
 
 except KeyboardInterrupt:
     print("opc_n3_test: KeyboardInterrupt", file=sys.stderr)
