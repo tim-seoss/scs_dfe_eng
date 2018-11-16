@@ -12,6 +12,8 @@ import time
 from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.data.datum import Datum
 
+from scs_core.climate.sht_datum import SHTDatum
+from scs_core.data.modbus_crc import ModbusCRC
 from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.board.io import IO
@@ -67,27 +69,6 @@ class OPCN3(object):
     __DELAY_TRANSFER =                  0.010
 
     __LOCK_TIMEOUT =                    6.0
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @staticmethod
-    def __compute_crc(data):
-        polynomial = 0xa001
-        crc = 0xffff
-
-        for datum in data:
-            crc ^= datum
-
-            for i in range(8):
-                if crc & 0x0001:
-                    crc >>= 1
-                    crc ^= polynomial
-
-                else:
-                    crc >>= 1
-
-        return crc
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -163,6 +144,94 @@ class OPCN3(object):
             self.release_lock()
 
 
+    def reset(self):
+        try:
+            self.obtain_lock()
+            self.__spi.open()
+
+            # command...
+            self.__cmd(self.__CMD_RESET)
+
+        finally:
+            self.__spi.close()
+
+            time.sleep(self.__DELAY_TRANSFER)
+            self.release_lock()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def sample(self):
+        try:
+            self.obtain_lock()
+            self.__spi.open()
+
+            # command...
+            self.__cmd(self.__CMD_READ_HISTOGRAM)
+            chars = self.__read_bytes(86)
+
+            # checksum...
+            chk = Datum.decode_unsigned_int(chars[84:86])
+            crc = ModbusCRC.compute(chars[:84])
+
+            if chk != crc:
+                raise ValueError("bad checksum")
+
+            # bins...
+            bins = [Datum.decode_unsigned_int(chars[i:i + 2]) for i in range(0, 48, 2)]
+
+            # bin MToFs...
+            bin_1_mtof = chars[48]
+            bin_3_mtof = chars[49]
+            bin_5_mtof = chars[50]
+            bin_7_mtof = chars[51]
+
+            # period...
+            raw_period = Datum.decode_unsigned_int(chars[52:54])
+            period = round(float(raw_period) / 100.0, 3)
+
+            # temperature & humidity
+            raw_temp = Datum.decode_unsigned_int(chars[56:58])
+            raw_humid = Datum.decode_unsigned_int(chars[58:60])
+
+            sht = SHTDatum(SHT31.humid(raw_humid), SHT31.temp(raw_temp))
+
+            # PMx...
+            try:
+                pm1 = Datum.decode_float(chars[60:64])
+            except TypeError:
+                pm1 = None
+
+            try:
+                pm2p5 = Datum.decode_float(chars[64:68])
+            except TypeError:
+                pm2p5 = None
+
+            try:
+                pm10 = Datum.decode_float(chars[68:72])
+            except TypeError:
+                pm10 = None
+
+            # flo = Datum.decode_unsigned_int(chars[54:56])
+            # rcg = Datum.decode_unsigned_int(chars[72:74])
+            # rcl = Datum.decode_unsigned_int(chars[74:76])
+            # rcr = Datum.decode_unsigned_int(chars[76:78])
+            # rco = Datum.decode_unsigned_int(chars[78:80])
+            # frc = Datum.decode_unsigned_int(chars[80:82])
+            # lst = Datum.decode_unsigned_int(chars[82:84])
+
+            now = LocalizedDatetime.now()
+
+            return OPCDatum(self.SOURCE, now, pm1, pm2p5, pm10, period, bins,
+                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sht)
+
+        finally:
+            self.__spi.close()
+
+            time.sleep(self.__DELAY_TRANSFER)
+            self.release_lock()
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def firmware(self):
@@ -221,7 +290,7 @@ class OPCN3(object):
             if len(pieces) < 2:
                 return None, None
 
-            return pieces[0], pieces[1]
+            return pieces[0], pieces[1]             # type, number
 
         finally:
             self.__spi.close()
@@ -251,104 +320,6 @@ class OPCN3(object):
             self.release_lock()
 
 
-    def reset(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            # command...
-            self.__cmd(self.__CMD_RESET)
-
-        finally:
-            self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
-            self.release_lock()
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def sample(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            # command...
-            self.__cmd(self.__CMD_READ_HISTOGRAM)
-            chars = self.__read_bytes(86)
-
-            # checksum...
-            chk = Datum.decode_unsigned_int(chars[84:86])
-            crc = self.__compute_crc(chars[:84])
-
-            if chk != crc:
-                raise ValueError("bad checksum")
-
-            # bins...
-            bins = [None] * 24
-
-            for i in range(24):
-                chi = i * 2
-                bins[i] = Datum.decode_unsigned_int(chars[chi:chi + 2])
-
-            # bin MToFs...
-            bin_1_mtof = chars[48]
-            bin_3_mtof = chars[49]
-            bin_5_mtof = chars[50]
-            bin_7_mtof = chars[51]
-
-            # period...
-            raw_period = Datum.decode_unsigned_int(chars[52:54])
-            period = round(float(raw_period) / 100.0, 3)
-
-            # temperature
-            raw_temp = Datum.decode_unsigned_int(chars[56:58])
-            temp = round(SHT31.temp(raw_temp), 1)
-
-            print("temp: %s" % temp)
-
-            # humid...
-            raw_humid = Datum.decode_unsigned_int(chars[58:60])
-            humid = round(SHT31.humid(raw_humid), 1)
-
-            print("humid: %s" % humid)
-
-            # PMx...
-            try:
-                pm1 = Datum.decode_float(chars[60:64])
-            except TypeError:
-                pm1 = None
-
-            try:
-                pm2p5 = Datum.decode_float(chars[64:68])
-            except TypeError:
-                pm2p5 = None
-
-            try:
-                pm10 = Datum.decode_float(chars[68:72])
-            except TypeError:
-                pm10 = None
-
-            # flo = Datum.decode_unsigned_int(chars[54:56])
-            # rcg = Datum.decode_unsigned_int(chars[72:74])
-            # rcl = Datum.decode_unsigned_int(chars[74:76])
-            # rcr = Datum.decode_unsigned_int(chars[76:78])
-            # rco = Datum.decode_unsigned_int(chars[78:80])
-            # frc = Datum.decode_unsigned_int(chars[80:82])
-            # lst = Datum.decode_unsigned_int(chars[82:84])
-
-            now = LocalizedDatetime.now()
-
-            return OPCDatum(self.SOURCE, now, pm1, pm2p5, pm10, period, bins,
-                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
-
-        finally:
-            self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
-            self.release_lock()
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def __cmd_power(self, cmd):
@@ -370,11 +341,7 @@ class OPCN3(object):
 
 
     def __read_bytes(self, count):
-        chars = []
-        for _ in range(count):
-            chars.append(self.__read_byte())
-
-        return chars
+        return [self.__read_byte() for _ in range(count)]
 
 
     def __read_byte(self):

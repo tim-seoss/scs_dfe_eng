@@ -9,6 +9,7 @@ Created on 4 Jul 2016
 import sys
 import time
 
+from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
 
 from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
@@ -52,7 +53,9 @@ try:
 
     while timer.true():
         datum = opc.sample()
-        print(datum)
+
+        print(JSONify.dumps(datum))
+        sys.stdout.flush()
 
         # opc.reset()
 

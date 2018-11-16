@@ -60,7 +60,6 @@ class OPCMonitor(SynchronisedProcess):
     def stop(self):
         try:
             super().stop()
-
             self.__opc.operations_off()
             self.__opc.power_off()
 
@@ -87,6 +86,10 @@ class OPCMonitor(SynchronisedProcess):
                 # monitor...
                 if sample.is_zero():
                     self.__power_cycle()
+
+        except ValueError:
+            print("OPCMonitor: CRC check failed", file=sys.stderr)
+            sys.stderr.flush()
 
         except KeyboardInterrupt:
             pass
@@ -131,4 +134,4 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{value:%s, opc_n2:%s, conf:%s}" % (self._value, self.__opc, self.__conf)
+        return "OPCMonitor:{value:%s, opc:%s, conf:%s}" % (self._value, self.__opc, self.__conf)
