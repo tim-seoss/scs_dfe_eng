@@ -24,7 +24,12 @@ try:
     I2C.open(Host.I2C_SENSORS)
 
     opc = OPCN2(Host.opc_spi_bus(), Host.opc_spi_device())
+    print(opc)
+    print("-")
+
     opc.power_on()
+    time.sleep(5)
+
     opc.operations_on()
 
     version = opc.firmware()

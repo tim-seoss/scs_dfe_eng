@@ -27,12 +27,14 @@ try:
     print(opc)
     print("-")
 
-    # opc_n2.power_on()
+    opc.power_on()
+    time.sleep(5)
 
     firmware = opc.firmware()
     print(firmware)
 
-    opc.status()
+    status = opc.status()
+    print("status:%s" % status)
 
     print("on...")
     opc.operations_on()
@@ -43,7 +45,8 @@ try:
     serial = opc.serial_no()
     print("type:[%s] number:[%s]" % serial)
 
-    opc.status()
+    status = opc.status()
+    print("status:%s" % status)
 
     timer = IntervalTimer(10.0)
 
@@ -61,8 +64,9 @@ finally:
         print("off...")
         opc.operations_off()
 
-        opc.status()
+        status = opc.status()
+        print("status:%s" % status)
 
-        # opc_n2.power_off()
+        # opc.power_off()
 
     I2C.close()
