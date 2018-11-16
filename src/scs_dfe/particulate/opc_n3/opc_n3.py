@@ -22,8 +22,6 @@ from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
 
-# TODO: needs reset function
-
 # TODO: create an abstract base class OPC
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -59,6 +57,8 @@ class OPCN3(object):
     __CMD_GET_VERSION =                 0x12
     __CMD_GET_SERIAL =                  0x10
     __CMD_GET_STATUS =                  0x13
+
+    __CMD_RESET =                       0x06
 
     __SPI_CLOCK =                       488000
     __SPI_MODE =                        1
@@ -225,6 +225,20 @@ class OPCN3(object):
             print(status)
 
             return status
+
+        finally:
+            self.__spi.close()
+
+            time.sleep(self.__DELAY_TRANSFER)
+            self.release_lock()
+
+
+    def reset(self):
+        try:
+            self.obtain_lock()
+            self.__spi.open()
+
+            self.__cmd(self.__CMD_RESET)
 
         finally:
             self.__spi.close()

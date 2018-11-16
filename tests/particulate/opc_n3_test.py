@@ -51,6 +51,8 @@ try:
         datum = opc.sample()
         print(datum)
 
+        # opc.reset()
+
 except KeyboardInterrupt:
     print("opc_n3_test: KeyboardInterrupt", file=sys.stderr)
 
