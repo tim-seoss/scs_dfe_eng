@@ -16,7 +16,7 @@ from collections import OrderedDict
 from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.particulate.opc_monitor import OPCMonitor
-from scs_dfe.particulate.opc_n2 import OPCN2
+from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 
 
 # --------------------------------------------------------------------------------------------------------------------

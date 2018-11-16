@@ -9,11 +9,12 @@ Created on 4 Jul 2016
 import sys
 import time
 
-from scs_dfe.particulate.opc_n3 import OPCN3
+from scs_core.sync.interval_timer import IntervalTimer
+
+from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
-
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -26,58 +27,40 @@ try:
     print(opc)
     print("-")
 
-    sys.stdout.flush()
+    # opc_n2.power_on()
 
-    # opc.power_on()
-
-    '''
     firmware = opc.firmware()
-    print("firmware:[%s]" % firmware)
-    print("-")
+    print(firmware)
 
-    sys.stdout.flush()
+    opc.status()
 
-    version = opc.firmware_version()
-    print("major:[%d] minor:[%d]" % version)
-    print("-")
-
-    sys.stdout.flush()
-
-
-    sys.stdout.flush()
-    '''
-
-    version = opc.firmware()
-    print(version)
-
+    print("on...")
     opc.operations_on()
 
-    time.sleep(6.000)
-
-    # time.sleep(5)
-    # opc.sample()         # first report is always zero
-    #
-    # for i in range(100):
-    #     time.sleep(5)
-    #
-    #     print("%d:" % i)
-    #     datum = opc.sample()
-    #     print(datum)
-    #     print("-")
+    version = opc.version()
+    print("major:[%d] minor:[%d]" % version)
 
     serial = opc.serial_no()
     print("type:[%s] number:[%s]" % serial)
-    print("-")
 
-    opc.operations_off()
+    opc.status()
+
+    timer = IntervalTimer(10.0)
+
+    while timer.true():
+        datum = opc.sample()
+        print(datum)
 
 except KeyboardInterrupt:
     print("opc_n3_test: KeyboardInterrupt", file=sys.stderr)
 
 finally:
     if opc:
-        # opc.operations_off()
-        # opc.power_off()
-        pass
+        print("off...")
+        opc.operations_off()
+
+        opc.status()
+
+        # opc_n2.power_off()
 
     I2C.close()

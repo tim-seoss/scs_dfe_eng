@@ -8,7 +8,7 @@ Created on 15 Nov 2018
 
 import sys
 
-from scs_dfe.particulate.opc_n3 import OPCN3
+from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host

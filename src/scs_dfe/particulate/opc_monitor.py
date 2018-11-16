@@ -15,7 +15,7 @@ from scs_core.particulate.opc_datum import OPCDatum
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
-from scs_dfe.particulate.opc_n2 import OPCN2
+from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 
 from scs_host.lock.lock_timeout import LockTimeout
 
@@ -131,4 +131,4 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{value:%s, opc:%s, conf:%s}" % (self._value, self.__opc, self.__conf)
+        return "OPCMonitor:{value:%s, opc_n2:%s, conf:%s}" % (self._value, self.__opc, self.__conf)
