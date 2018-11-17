@@ -53,7 +53,7 @@ class OPCN2(object):
 
     __CMD_CHECK_STATUS =                0xcf
     __CMD_READ_HISTOGRAM =              0x30
-    __CMD_GET_FIRMWARE_VERSION =        0x3f
+    __CMD_GET_FIRMWARE =                0x3f
 
     __SPI_CLOCK =                       488000
     __SPI_MODE =                        1
@@ -209,7 +209,7 @@ class OPCN2(object):
             self.obtain_lock()
             self.__spi.open()
 
-            self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION])
+            self.__spi.xfer([self.__CMD_GET_FIRMWARE])
             time.sleep(self.__CMD_DELAY)
 
             read_bytes = []
