@@ -151,10 +151,7 @@ class OPCN2(object):
             time.sleep(self.__CMD_DELAY)
 
             # bins...
-            bins = [None] * 16
-
-            for i in range(16):
-                bins[i] = self.__read_int()
+            bins = [self.__read_int() for _ in range(16)]
 
             # bin MToFs...
             bin_1_mtof = self.__read_byte()
