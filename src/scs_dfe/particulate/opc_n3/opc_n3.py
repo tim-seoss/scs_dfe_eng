@@ -24,8 +24,6 @@ from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
 
-# TODO: create an abstract base class OPC
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN3(object):
