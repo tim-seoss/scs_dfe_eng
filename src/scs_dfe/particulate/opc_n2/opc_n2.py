@@ -28,17 +28,17 @@ class OPCN2(object):
     """
     SOURCE =                            'N2'
 
-    MIN_SAMPLE_PERIOD =                  5.0       # seconds
-    MAX_SAMPLE_PERIOD =                 10.0       # seconds
-    DEFAULT_SAMPLE_PERIOD =             10.0       # seconds
+    MIN_SAMPLE_PERIOD =                  5.0        # seconds
+    MAX_SAMPLE_PERIOD =                 10.0        # seconds
+    DEFAULT_SAMPLE_PERIOD =             10.0        # seconds
 
-    POWER_CYCLE_TIME =                  10.0       # seconds
+    POWER_CYCLE_TIME =                  10.0        # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                        4.0       # seconds
-    __START_TIME =                       5.0       # seconds
-    __STOP_TIME =                        2.0       # seconds
+    __BOOT_TIME =                        4.0        # seconds
+    __START_TIME =                       5.0        # seconds
+    __STOP_TIME =                        2.0        # seconds
 
     __FLOW_RATE_VERSION =               16
 

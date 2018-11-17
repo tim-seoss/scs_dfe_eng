@@ -1,5 +1,5 @@
 """
-Created on 4 Jul 2016
+Created on 15 Nov 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
@@ -32,18 +32,18 @@ class OPCN3(object):
     """
     SOURCE =                            'N3'
 
-    MIN_SAMPLE_PERIOD =                  5.0       # seconds
-    MAX_SAMPLE_PERIOD =                 10.0       # seconds
-    DEFAULT_SAMPLE_PERIOD =             10.0       # seconds
+    MIN_SAMPLE_PERIOD =                  5.0        # seconds
+    MAX_SAMPLE_PERIOD =                 10.0        # seconds
+    DEFAULT_SAMPLE_PERIOD =             10.0        # seconds
 
-    POWER_CYCLE_TIME =                  10.0       # seconds
+    POWER_CYCLE_TIME =                  10.0        # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       5.0       # seconds
-    __LASER_START_TIME =                1.0       # seconds
-    __FAN_START_TIME =                  5.0       # seconds
-    __FAN_STOP_TIME =                   2.0       # seconds
+    __BOOT_TIME =                       5.0         # seconds
+    __LASER_START_TIME =                1.0         # seconds
+    __FAN_START_TIME =                  5.0         # seconds
+    __FAN_STOP_TIME =                   2.0         # seconds
 
     __CMD_POWER =                       0x03
     __CMD_LASER_ON =                    0x07
