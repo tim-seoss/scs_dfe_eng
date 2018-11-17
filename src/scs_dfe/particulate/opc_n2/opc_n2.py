@@ -142,7 +142,7 @@ class OPCN2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sample(self):
+    def sample(self):               # TODO: re-write as block read with crc check
         try:
             self.obtain_lock()
             self.__spi.open()
