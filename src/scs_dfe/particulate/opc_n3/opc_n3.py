@@ -75,7 +75,7 @@ class OPCN3(object):
 
     @classmethod
     def obtain_lock(cls):
-        Lock.acquire(cls.__name__, OPCN3.__LOCK_TIMEOUT)
+        Lock.acquire(cls.__name__, cls.__LOCK_TIMEOUT)
 
 
     @classmethod
@@ -212,6 +212,7 @@ class OPCN3(object):
             except TypeError:
                 pm10 = None
 
+            # unused fields...
             # flo = Datum.decode_unsigned_int(chars[54:56])
             # rcg = Datum.decode_unsigned_int(chars[72:74])
             # rcl = Datum.decode_unsigned_int(chars[74:76])
@@ -244,7 +245,9 @@ class OPCN3(object):
             chars = self.__read_bytes(60)
 
             # report...
-            return ''.join(chr(byte) for byte in chars)
+            report = ''.join(chr(byte) for byte in chars)
+
+            return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
 
         finally:
             self.__spi.close()

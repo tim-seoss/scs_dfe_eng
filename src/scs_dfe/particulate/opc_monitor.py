@@ -71,25 +71,32 @@ class OPCMonitor(SynchronisedProcess):
 
 
     def run(self):
-        self.__opc.sample()     # reset counts
-
         try:
+            first_reading = True
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
-                sample = self.__opc.sample()
+                datum = self.__sample()
+
+                # discard first...
+                if first_reading:
+                    datum = OPCDatum.null_datum()
 
                 # report...
                 with self._lock:
-                    sample.as_list(self._value)
+                    datum.as_list(self._value)
+
+                if first_reading:
+                    first_reading = False
+                    continue
 
                 # monitor...
-                if sample.is_zero():
-                    self.__power_cycle()
+                if datum.is_zero():
+                    print("OPCMonitor: zero reading", file=sys.stderr)
+                    sys.stderr.flush()
 
-        except ValueError:
-            print("OPCMonitor: CRC check failed", file=sys.stderr)
-            sys.stderr.flush()
+                    self.__power_cycle()
+                    first_reading = True
 
         except KeyboardInterrupt:
             pass
@@ -97,6 +104,17 @@ class OPCMonitor(SynchronisedProcess):
 
     # ----------------------------------------------------------------------------------------------------------------
     # SynchronisedProcess special operations...
+
+    def __sample(self):
+        try:
+            return self.__opc.sample()
+
+        except ValueError:
+            print("OPCMonitor: CRC check failed", file=sys.stderr)
+            sys.stderr.flush()
+
+            return OPCDatum.null_datum()
+
 
     def __power_cycle(self):
         print("OPCMonitor: POWER CYCLE", file=sys.stderr)
@@ -128,7 +146,7 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        return OPCDatum.construct_from_jdict(OrderedDict(value))
+        return None if value is None else OPCDatum.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------

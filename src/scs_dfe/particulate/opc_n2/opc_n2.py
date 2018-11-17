@@ -68,7 +68,7 @@ class OPCN2(object):
 
     @classmethod
     def obtain_lock(cls):
-        Lock.acquire(cls.__name__, OPCN2.__LOCK_TIMEOUT)
+        Lock.acquire(cls.__name__, cls.__LOCK_TIMEOUT)
 
 
     @classmethod
@@ -83,7 +83,7 @@ class OPCN2(object):
         Constructor
         """
         self.__io = IO()
-        self.__spi = SPI(spi_bus, spi_device, OPCN2.__SPI_MODE, OPCN2.__SPI_CLOCK)
+        self.__spi = SPI(spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -109,12 +109,12 @@ class OPCN2(object):
             self.__spi.open()
 
             # start...
-            self.__spi.xfer([OPCN2.__CMD_POWER, OPCN2.__CMD_POWER_ON])
-            time.sleep(OPCN2.__START_TIME)
+            self.__spi.xfer([self.__CMD_POWER, self.__CMD_POWER_ON])
+            time.sleep(self.__START_TIME)
 
             # clear histogram...
-            self.__spi.xfer([OPCN2.__CMD_READ_HISTOGRAM])
-            time.sleep(OPCN2.__CMD_DELAY)
+            self.__spi.xfer([self.__CMD_READ_HISTOGRAM])
+            time.sleep(self.__CMD_DELAY)
 
             for _ in range(62):
                 self.__read_byte()
@@ -129,15 +129,15 @@ class OPCN2(object):
             self.obtain_lock()
             self.__spi.open()
 
-            self.__spi.xfer([OPCN2.__CMD_POWER, OPCN2.__CMD_POWER_OFF])
+            self.__spi.xfer([self.__CMD_POWER, self.__CMD_POWER_OFF])
 
         finally:
-            time.sleep(OPCN2.__CMD_DELAY)
+            time.sleep(self.__CMD_DELAY)
 
             self.__spi.close()
             self.release_lock()
 
-        time.sleep(OPCN2.__STOP_TIME)
+        time.sleep(self.__STOP_TIME)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -147,8 +147,8 @@ class OPCN2(object):
             self.obtain_lock()
             self.__spi.open()
 
-            self.__spi.xfer([OPCN2.__CMD_READ_HISTOGRAM])
-            time.sleep(OPCN2.__CMD_DELAY)
+            self.__spi.xfer([self.__CMD_READ_HISTOGRAM])
+            time.sleep(self.__CMD_DELAY)
 
             # bins...
             bins = [None] * 16
@@ -199,24 +199,26 @@ class OPCN2(object):
                             bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
 
         finally:
-            time.sleep(OPCN2.__CMD_DELAY)
+            time.sleep(self.__CMD_DELAY)
 
             self.__spi.close()
             self.release_lock()
 
+
+    # ----------------------------------------------------------------------------------------------------------------
 
     def firmware(self):
         try:
             self.obtain_lock()
             self.__spi.open()
 
-            self.__spi.xfer([OPCN2.__CMD_GET_FIRMWARE_VERSION])
-            time.sleep(OPCN2.__CMD_DELAY)
+            self.__spi.xfer([self.__CMD_GET_FIRMWARE_VERSION])
+            time.sleep(self.__CMD_DELAY)
 
             read_bytes = []
 
             for _ in range(60):
-                time.sleep(OPCN2.__TRANSFER_DELAY)
+                time.sleep(self.__TRANSFER_DELAY)
                 read_bytes.extend(self.__spi.read_bytes(1))
 
             report = '' . join(chr(b) for b in read_bytes)
@@ -224,7 +226,7 @@ class OPCN2(object):
             return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
 
         finally:
-            time.sleep(OPCN2.__CMD_DELAY)
+            time.sleep(self.__CMD_DELAY)
 
             self.__spi.close()
             self.release_lock()
@@ -233,7 +235,7 @@ class OPCN2(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __read_byte(self):
-        time.sleep(OPCN2.__TRANSFER_DELAY)
+        time.sleep(self.__TRANSFER_DELAY)
         read_bytes = self.__spi.read_bytes(1)
 
         return read_bytes[0]
@@ -243,7 +245,7 @@ class OPCN2(object):
         read_bytes = []
 
         for _ in range(2):
-            time.sleep(OPCN2.__TRANSFER_DELAY)
+            time.sleep(self.__TRANSFER_DELAY)
             read_bytes.extend(self.__spi.read_bytes(1))
 
         return Datum.decode_unsigned_int(read_bytes)
@@ -253,7 +255,7 @@ class OPCN2(object):
         read_bytes = []
 
         for _ in range(4):
-            time.sleep(OPCN2.__TRANSFER_DELAY)
+            time.sleep(self.__TRANSFER_DELAY)
             read_bytes.extend(self.__spi.read_bytes(1))
 
         return Datum.decode_float(read_bytes)
