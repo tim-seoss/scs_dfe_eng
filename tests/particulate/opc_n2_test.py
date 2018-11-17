@@ -9,7 +9,7 @@ Created on 4 Jul 2016
 import sys
 import time
 
-from scs_dfe.particulate.opc_n2 import OPCN2
+from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -24,7 +24,12 @@ try:
     I2C.open(Host.I2C_SENSORS)
 
     opc = OPCN2(Host.opc_spi_bus(), Host.opc_spi_device())
+    print(opc)
+    print("-")
+
     opc.power_on()
+    time.sleep(5)
+
     opc.operations_on()
 
     version = opc.firmware()
@@ -42,7 +47,7 @@ try:
         print("-")
 
 except KeyboardInterrupt:
-    print("opc_test: KeyboardInterrupt", file=sys.stderr)
+    print("opc_n2_test: KeyboardInterrupt", file=sys.stderr)
 
 finally:
     if opc:

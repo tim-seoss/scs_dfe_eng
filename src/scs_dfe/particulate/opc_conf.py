@@ -16,7 +16,9 @@ from collections import OrderedDict
 from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.particulate.opc_monitor import OPCMonitor
-from scs_dfe.particulate.opc_n2 import OPCN2
+
+from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
+from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -71,6 +73,10 @@ class OPCConf(PersistentJSONable):
     def opc(self, host):
         if self.model == OPCN2.SOURCE:
             return OPCN2(host.opc_spi_bus(), host.opc_spi_device())
+
+
+        if self.model == OPCN3.SOURCE:
+            return OPCN3(host.opc_spi_bus(), host.opc_spi_device())
 
         else:
             raise ValueError('unknown model: %s' % self.model)
