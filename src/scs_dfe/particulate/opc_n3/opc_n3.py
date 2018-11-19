@@ -24,6 +24,8 @@ from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
 
+# TODO: create superclass that handles fields, power controls and interface
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN3(object):
