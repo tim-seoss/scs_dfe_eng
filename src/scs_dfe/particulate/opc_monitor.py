@@ -59,9 +59,10 @@ class OPCMonitor(SynchronisedProcess):
 
     def stop(self):
         try:
-            super().stop()
             self.__opc.operations_off()
             self.__opc.power_off()
+
+            super().stop()
 
         except KeyboardInterrupt:
             pass

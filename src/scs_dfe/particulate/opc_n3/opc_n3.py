@@ -43,8 +43,11 @@ class OPCN3(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     __BOOT_TIME =                       5.0         # seconds
+
     __LASER_START_TIME =                1.0         # seconds
     __FAN_START_TIME =                  5.0         # seconds
+
+    __PRE_STOP_TIME =                   5.0         # seconds
     __FAN_STOP_TIME =                   2.0         # seconds
 
     __CMD_POWER =                       0x03
@@ -128,6 +131,8 @@ class OPCN3(object):
 
 
     def operations_off(self):
+        time.sleep(self.__PRE_STOP_TIME)
+
         try:
             self.obtain_lock()
 
