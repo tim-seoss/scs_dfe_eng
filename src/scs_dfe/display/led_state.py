@@ -2,6 +2,9 @@
 Created on 5 May 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+document example:
+{"colour0": "R", "colour1": "G"}
 """
 
 from collections import OrderedDict
