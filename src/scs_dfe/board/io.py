@@ -12,8 +12,6 @@ from scs_host.lock.lock import Lock
 from scs_host.sys.host import Host
 
 
-# TODO: for faulty BeagleBone DFEs - do not power down - remove when possible
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class IO(object):
@@ -135,9 +133,6 @@ class IO(object):
 
 
     def __set_output(self, mask, level):
-        if level == IO.HIGH:                    # for faulty BeagleBone DFEs - do not power down
-            return
-
         if self.__device is None:
             return
 
