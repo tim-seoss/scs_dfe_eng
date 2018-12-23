@@ -15,6 +15,8 @@ from scs_dfe.gas.ads1115 import ADS1115
 from scs_dfe.gas.mcp342x import MCP342X
 
 
+# TODO: fix _str_ method
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class AFE(object):
