@@ -7,6 +7,8 @@ Created on 25 Oct 2017
 from collections import OrderedDict
 from multiprocessing import Manager
 
+from scs_core.data.average import Average
+
 from scs_core.position.gpgga import GPGGA
 from scs_core.position.gps_location import GPSLocation
 
@@ -14,19 +16,16 @@ from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
 
-# TODO: add interval / tally fields
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class GPSMonitor(SynchronisedProcess):
     """
     classdocs
     """
-    __MONITOR_INTERVAL =        10.0             # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, gps):
+    def __init__(self, gps, conf):
         """
         Constructor
         """
@@ -35,6 +34,8 @@ class GPSMonitor(SynchronisedProcess):
         SynchronisedProcess.__init__(self, manager.list())
 
         self.__gps = gps
+        self.__sample_interval = conf.sample_interval
+        self.__averaging = Average(conf.tally)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -44,6 +45,8 @@ class GPSMonitor(SynchronisedProcess):
         try:
             self.__gps.power_on()
             self.__gps.open()
+
+            self.__averaging.reset()
 
             super().start()
 
@@ -63,7 +66,7 @@ class GPSMonitor(SynchronisedProcess):
 
     def run(self):
         try:
-            timer = IntervalTimer(self.__MONITOR_INTERVAL)
+            timer = IntervalTimer(self.__sample_interval)
 
             while timer.true():
                 gga = self.__gps.report(GPGGA)
@@ -72,9 +75,12 @@ class GPSMonitor(SynchronisedProcess):
                 if position is None:
                     continue
 
+                self.__averaging.append(position)
+                average = self.__averaging.compute()
+
                 # report...
                 with self._lock:
-                    position.as_list(self._value)
+                    average.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
@@ -93,4 +99,5 @@ class GPSMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSMonitor:{value:%s, gps:%s}" % (self._value, self.__gps)
+        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s}" % \
+               (self._value, self.__sample_interval, self.__averaging, self.__gps)
