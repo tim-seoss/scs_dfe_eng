@@ -24,7 +24,7 @@ class BoardDatum(JSONable):
         """
         Constructor
         """
-        self.__temp = Datum.float(temp, 1)          # temperature             ºC
+        self.__temp = Datum.float(temp, 1)          # temperature             °C
 
 
     # ----------------------------------------------------------------------------------------------------------------
