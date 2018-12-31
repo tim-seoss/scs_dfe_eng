@@ -15,7 +15,7 @@ from scs_core.position.gpgsv import GPGSV
 from scs_core.position.gprmc import GPRMC
 from scs_core.position.gpvtg import GPVTG
 
-from scs_core.position.gps_location import GPSLocation
+from scs_core.position.gps_datum import GPSDatum
 
 from scs_dfe.gps.pam7q import PAM7Q
 
@@ -91,7 +91,7 @@ try:
     if rmc is not None:
         print("position: %s, %s  time: %s" % (rmc.loc.deg_lat(), rmc.loc.deg_lng(), rmc.datetime.as_iso8601()))
 
-        location = GPSLocation.construct(gga)
+        location = GPSDatum.construct(gga)
         print(location)
 
         print("=")

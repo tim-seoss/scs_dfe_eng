@@ -10,7 +10,7 @@ from multiprocessing import Manager
 from scs_core.data.average import Average
 
 from scs_core.position.gpgga import GPGGA
-from scs_core.position.gps_location import GPSLocation
+from scs_core.position.gps_datum import GPSDatum
 
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
@@ -69,21 +69,25 @@ class GPSMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__sample_interval)
 
             while timer.true():
+                # position...
                 gga = self.__gps.report(GPGGA)
-                position = GPSLocation.construct(gga)
+                position = GPSDatum.construct(gga)
 
                 if position is None:
                     continue
 
-                if position.quality < 1:
-                    continue
+                # average...
+                if position.quality > 0:
+                    self.__averaging.append(position)
 
-                self.__averaging.append(position)
-                average = self.__averaging.compute()
+                value = self.__averaging.compute()
+
+                if value is None:
+                    value = position
 
                 # report...
                 with self._lock:
-                    average.as_list(self._value)
+                    value.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
@@ -96,7 +100,7 @@ class GPSMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        return GPSLocation.construct_from_jdict(OrderedDict(value))
+        return GPSDatum.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
