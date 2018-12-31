@@ -72,10 +72,9 @@ class GPSMonitor(SynchronisedProcess):
                 gga = self.__gps.report(GPGGA)
                 position = GPSLocation.construct(gga)
 
-                if position is None or position.quality < 1:
+                if position is None:
                     continue
 
-                self.__averaging.append(position)
                 average = self.__averaging.compute()
 
                 # report...
