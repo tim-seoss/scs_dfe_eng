@@ -29,7 +29,7 @@ class GPSConf(PersistentJSONable):
     """
 
     DEFAULT_SAMPLE_INTERVAL =       10          # seconds
-    DEFAULT_TALLY =                  6
+    DEFAULT_TALLY =                360          # 1 hour
 
 
     __FILENAME = "gps_conf.json"
