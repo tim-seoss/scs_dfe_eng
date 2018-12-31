@@ -75,6 +75,9 @@ class GPSMonitor(SynchronisedProcess):
                 if position is None:
                     continue
 
+                if position.quality < 1:
+                    continue
+
                 self.__averaging.append(position)
                 average = self.__averaging.compute()
 
