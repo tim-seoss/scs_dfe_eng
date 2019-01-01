@@ -71,19 +71,19 @@ class GPSMonitor(SynchronisedProcess):
             while timer.true():
                 # position...
                 gga = self.__gps.report(GPGGA)
-                position = GPSDatum.construct(gga)
+                datum = GPSDatum.construct(gga)
 
-                if position is None:
+                if datum is None:
                     continue
 
                 # average...
-                if position.quality > 0:
-                    self.__averaging.append(position)
+                if datum.quality > 0:
+                    self.__averaging.append(datum)
 
                 value = self.__averaging.compute()
 
                 if value is None:
-                    value = position
+                    value = datum
 
                 # report...
                 with self._lock:
