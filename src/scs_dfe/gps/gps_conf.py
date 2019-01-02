@@ -3,7 +3,7 @@ Created on 16 Jul 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-specifies which GPS receiver is present, if any
+specifies which GPS receiver is present, if any, plus sample interval and tally.
 
 example JSON:
 {"model": null}
@@ -18,8 +18,6 @@ from scs_core.data.json import PersistentJSONable
 from scs_dfe.gps.gps_monitor import GPSMonitor
 from scs_dfe.gps.pam7q import PAM7Q
 
-
-# TODO: add interval / tally fields
 
 # --------------------------------------------------------------------------------------------------------------------
 
