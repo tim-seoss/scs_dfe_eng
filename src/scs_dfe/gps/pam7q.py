@@ -41,14 +41,14 @@ from scs_dfe.board.io import IO
 from scs_host.sys.host_serial import HostSerial
 
 
-# TODO: add specialised object for message collection
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class PAM7Q(object):
     """
     u-blox 7 GPS Antenna Module
     """
+
+    SOURCE =                    "PAM7Q"
 
     START_MESSAGE_ID =          GPRMC.MESSAGE_ID
 
