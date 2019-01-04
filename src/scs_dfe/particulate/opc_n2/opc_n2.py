@@ -10,7 +10,7 @@ OPC-N2 FirmwareVer=OPC-018.1..............................BD
 import time
 
 from scs_core.data.localized_datetime import LocalizedDatetime
-from scs_core.data.datum import Datum
+from scs_core.data.datum import Decode
 
 from scs_core.particulate.opc_datum import OPCDatum
 
@@ -245,7 +245,7 @@ class OPCN2(object):
             time.sleep(self.__TRANSFER_DELAY)
             read_bytes.extend(self.__spi.read_bytes(1))
 
-        return Datum.decode_unsigned_int(read_bytes)
+        return Decode.unsigned_int(read_bytes)
 
 
     def __read_float(self):
@@ -255,7 +255,7 @@ class OPCN2(object):
             time.sleep(self.__TRANSFER_DELAY)
             read_bytes.extend(self.__spi.read_bytes(1))
 
-        return Datum.decode_float(read_bytes)
+        return Decode.float(read_bytes)
 
 
     # ----------------------------------------------------------------------------------------------------------------
