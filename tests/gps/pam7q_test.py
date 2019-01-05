@@ -91,7 +91,7 @@ try:
     if rmc is not None:
         print("position: %s, %s  time: %s" % (rmc.loc.deg_lat(), rmc.loc.deg_lng(), rmc.datetime.as_iso8601()))
 
-        location = GPSDatum.construct(gga)
+        location = GPSDatum.construct_from_gga(gga)
         print(location)
 
         print("=")

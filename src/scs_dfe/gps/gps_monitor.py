@@ -71,7 +71,7 @@ class GPSMonitor(SynchronisedProcess):
             while timer.true():
                 # position...
                 gga = self.__gps.report(GPGGA)
-                datum = GPSDatum.construct(gga)
+                datum = GPSDatum.construct_from_gga(gga)
 
                 if datum is None:
                     continue
