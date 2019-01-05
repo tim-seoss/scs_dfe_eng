@@ -8,12 +8,12 @@ Created on 30 Dec 2016
 
 import sys
 
-from scs_core.position.gpgga import GPGGA
-from scs_core.position.gpgll import GPGLL
-from scs_core.position.gpgsa import GPGSA
-from scs_core.position.gpgsv import GPGSV
-from scs_core.position.gprmc import GPRMC
-from scs_core.position.gpvtg import GPVTG
+from scs_core.position.nmea.gpgga import GPGGA
+from scs_core.position.nmea.gpgll import GPGLL
+from scs_core.position.nmea.gpgsa import GPGSA
+from scs_core.position.nmea.gpgsv import GPGSV
+from scs_core.position.nmea.gprmc import GPRMC
+from scs_core.position.nmea.gpvtg import GPVTG
 
 from scs_core.position.gps_datum import GPSDatum
 
@@ -91,7 +91,7 @@ try:
     if rmc is not None:
         print("position: %s, %s  time: %s" % (rmc.loc.deg_lat(), rmc.loc.deg_lng(), rmc.datetime.as_iso8601()))
 
-        location = GPSDatum.construct(gga)
+        location = GPSDatum.construct_from_gga(gga)
         print(location)
 
         print("=")
