@@ -9,7 +9,7 @@ from multiprocessing import Manager
 
 from scs_core.data.average import Average
 
-from scs_core.position.gpgga import GPGGA
+from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.gps_datum import GPSDatum
 
 from scs_core.sync.interval_timer import IntervalTimer
