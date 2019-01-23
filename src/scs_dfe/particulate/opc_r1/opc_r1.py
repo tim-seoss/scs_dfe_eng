@@ -1,5 +1,5 @@
 """
-Created on 15 Nov 2018
+Created on 22 Jan 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
@@ -18,19 +18,21 @@ from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.board.io import IO
 from scs_dfe.climate.sht31 import SHT31
-from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
+from scs_dfe.particulate.opc_n3.opc_status import OPCStatus     # TODO: not this one!
 
 from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
 
 
+# TODO: create superclass that handles fields, power controls and interface
+
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCN3(object):
+class OPCR1(object):
     """
     classdocs
     """
-    SOURCE =                            'N3'
+    SOURCE =                            'R1'
 
     MIN_SAMPLE_PERIOD =                  5.0        # seconds
     MAX_SAMPLE_PERIOD =                 10.0        # seconds
@@ -49,10 +51,8 @@ class OPCN3(object):
     __FAN_STOP_TIME =                   2.0         # seconds
 
     __CMD_POWER =                       0x03
-    __CMD_LASER_ON =                    0x07
-    __CMD_LASER_OFF =                   0x06
-    __CMD_FAN_ON =                      0x03
-    __CMD_FAN_OFF =                     0x02
+    __CMD_POWER_ON =                    0x01        # 0x03, 0x01
+    __CMD_POWER_OFF =                   0x00        # 0x03, 0x00
 
     __CMD_READ_HISTOGRAM =              0x30
 
@@ -91,7 +91,7 @@ class OPCN3(object):
         Constructor
         """
         self.__io = IO()
-        self.__spi = SPI(spi_bus, spi_device, OPCN3.__SPI_MODE, OPCN3.__SPI_CLOCK)
+        self.__spi = SPI(spi_bus, spi_device, OPCR1.__SPI_MODE, OPCR1.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -114,16 +114,21 @@ class OPCN3(object):
     def operations_on(self):
         try:
             self.obtain_lock()
+            self.__spi.open()
 
-            # laser...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_ON)
+            # self.__spi.xfer([self.__CMD_POWER])
+            # time.sleep(0.01)
 
-            # fan...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_FAN_ON)
+            self.__spi.xfer([self.__CMD_POWER])
+            # time.sleep(0.1)
+
+            self.__spi.xfer([self.__CMD_POWER_ON])
+            time.sleep(5)
+
+            # self.__cmd_power(self.__CMD_POWER_ON)
 
         finally:
+            self.__spi.close()
             time.sleep(self.__FAN_START_TIME)
             self.release_lock()
 
@@ -133,17 +138,22 @@ class OPCN3(object):
 
         try:
             self.obtain_lock()
+            self.__spi.open()
 
-            # laser...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_OFF)
+            # self.__spi.xfer([self.__CMD_POWER])
+            # time.sleep(0.01)
 
-            # fan...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_FAN_OFF)
+            self.__spi.xfer([self.__CMD_POWER])
+            time.sleep(0.1)
+
+            self.__spi.xfer([self.__CMD_POWER_OFF])
+            time.sleep(5)
+
+            # self.__cmd_power(self.__CMD_POWER_OFF)
 
         finally:
-            time.sleep(self.__FAN_STOP_TIME)
+            self.__spi.close()
+            # time.sleep(self.__FAN_STOP_TIME)
             self.release_lock()
 
 
@@ -332,8 +342,17 @@ class OPCN3(object):
         try:
             self.__spi.open()
 
-            self.__spi.xfer([self.__CMD_POWER, cmd])
+            self.__spi.xfer([self.__CMD_POWER])
             time.sleep(self.__DELAY_CMD)
+
+            self.__spi.xfer([self.__CMD_POWER])
+            time.sleep(self.__DELAY_CMD)
+
+            self.__spi.xfer([cmd])
+            time.sleep(self.__DELAY_CMD)
+
+            # self.__spi.xfer([self.__CMD_POWER, self.__CMD_POWER, cmd])
+            # time.sleep(self.__DELAY_CMD)
 
         finally:
             self.__spi.close()
@@ -341,7 +360,7 @@ class OPCN3(object):
 
     def __cmd(self, cmd):
         self.__spi.xfer([cmd])
-        time.sleep(self.__DELAY_CMD)
+        # time.sleep(self.__DELAY_CMD)
 
         self.__spi.xfer([cmd])
 
@@ -360,4 +379,4 @@ class OPCN3(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCN3:{io:%s, spi:%s}" % (self.__io, self.__spi)
+        return "OPCR1:{io:%s, spi:%s}" % (self.__io, self.__spi)

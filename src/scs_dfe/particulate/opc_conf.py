@@ -19,6 +19,7 @@ from scs_dfe.particulate.opc_monitor import OPCMonitor
 
 from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
+from scs_dfe.particulate.opc_r1.opc_r1 import OPCR1
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -74,9 +75,11 @@ class OPCConf(PersistentJSONable):
         if self.model == OPCN2.SOURCE:
             return OPCN2(host.opc_spi_bus(), host.opc_spi_device())
 
-
         if self.model == OPCN3.SOURCE:
             return OPCN3(host.opc_spi_bus(), host.opc_spi_device())
+
+        if self.model == OPCR1.SOURCE:
+            return OPCR1(host.opc_spi_bus(), host.opc_spi_device())
 
         else:
             raise ValueError('unknown model: %s' % self.model)
