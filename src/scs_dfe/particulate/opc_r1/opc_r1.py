@@ -17,16 +17,13 @@ from scs_core.data.modbus_crc import ModbusCRC
 
 from scs_core.particulate.opc_datum import OPCDatum
 
-from scs_dfe.board.io import IO
 from scs_dfe.climate.sht31 import SHT31
-
-from scs_host.bus.spi import SPI
-from scs_host.lock.lock import Lock
+from scs_dfe.particulate.opc import OPC
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCR1(object):
+class OPCR1(OPC):
     """
     classdocs
     """
@@ -36,11 +33,11 @@ class OPCR1(object):
     MAX_SAMPLE_PERIOD =                 10.0        # seconds
     DEFAULT_SAMPLE_PERIOD =             10.0        # seconds
 
-    POWER_CYCLE_TIME =                  10.0        # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
     __BOOT_TIME =                       8.0         # seconds
+    __POWER_CYCLE_TIME =               10.0         # seconds
 
     __FAN_START_TIME =                  3.0         # seconds
     __FAN_STOP_TIME =                   3.0         # seconds
@@ -69,13 +66,18 @@ class OPCR1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def obtain_lock(cls):
-        Lock.acquire(cls.__name__, cls.__LOCK_TIMEOUT)
+    def lock_timeout(cls):
+        return cls.__LOCK_TIMEOUT
 
 
     @classmethod
-    def release_lock(cls):
-        Lock.release(cls.__name__)
+    def boot_time(cls):
+        return cls.__BOOT_TIME
+
+
+    @classmethod
+    def power_cycle_time(cls):
+        return cls.__POWER_CYCLE_TIME
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -84,23 +86,7 @@ class OPCR1(object):
         """
         Constructor
         """
-        self.__io = IO()
-        self.__spi = SPI(spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def power_on(self):
-        initial_power_state = self.__io.opc_power
-
-        self.__io.opc_power = IO.LOW
-
-        if initial_power_state == IO.HIGH:      # initial_power_state is None if there is no power control facility
-            time.sleep(self.__BOOT_TIME)
-
-
-    def power_off(self):
-        self.__io.opc_power = IO.HIGH
+        super().__init__(spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -136,7 +122,7 @@ class OPCR1(object):
     def reset(self):
         try:
             self.obtain_lock()
-            self.__spi.open()
+            self._spi.open()
 
             # command...
             self.__cmd(self.__CMD_RESET)
@@ -144,7 +130,7 @@ class OPCR1(object):
             time.sleep(self.__DELAY_TRANSFER)
 
         finally:
-            self.__spi.close()
+            self._spi.close()
             self.release_lock()
 
 
@@ -153,20 +139,18 @@ class OPCR1(object):
     def sample(self):
         try:
             self.obtain_lock()
-            self.__spi.open()
+            self._spi.open()
 
             # command...
             self.__cmd(self.__CMD_READ_HISTOGRAM)
             chars = self.__read_bytes(64)
 
-            time.sleep(self.__DELAY_TRANSFER)
-
             # checksum...
-            chk = Decode.unsigned_int(chars[62:64])
-            crc = ModbusCRC.compute(chars[:62])
+            required = Decode.unsigned_int(chars[62:64])
+            actual = ModbusCRC.compute(chars[:62])
 
-            if chk != crc:
-                raise ValueError("bad checksum")
+            if required != actual:
+                raise ValueError("bad checksum: required: %s actual: %s" % (required, actual))
 
             # time...
             rec = LocalizedDatetime.now()
@@ -209,7 +193,7 @@ class OPCR1(object):
                             bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sht)
 
         finally:
-            self.__spi.close()
+            self._spi.close()
             self.release_lock()
 
 
@@ -218,7 +202,7 @@ class OPCR1(object):
     def firmware(self):
         try:
             self.obtain_lock()
-            self.__spi.open()
+            self._spi.open()
 
             # command...
             self.__cmd(self.__CMD_GET_FIRMWARE)
@@ -232,14 +216,14 @@ class OPCR1(object):
             return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
 
         finally:
-            self.__spi.close()
+            self._spi.close()
             self.release_lock()
 
 
     def version(self):
         try:
             self.obtain_lock()
-            self.__spi.open()
+            self._spi.open()
 
             # command...
             self.__cmd(self.__CMD_GET_VERSION)
@@ -253,14 +237,14 @@ class OPCR1(object):
             return major, minor
 
         finally:
-            self.__spi.close()
+            self._spi.close()
             self.release_lock()
 
 
     def serial_no(self):
         try:
             self.obtain_lock()
-            self.__spi.open()
+            self._spi.open()
 
             # command...
             self.__cmd(self.__CMD_GET_SERIAL)
@@ -270,9 +254,6 @@ class OPCR1(object):
 
             # report...
             report = ''.join(chr(byte) for byte in chars)
-
-            # print("serial_no: report: %s" % report)
-
             pieces = report.split(' ')
 
             if len(pieces) < 2:
@@ -281,7 +262,7 @@ class OPCR1(object):
             return pieces[0], pieces[1]             # type, number
 
         finally:
-            self.__spi.close()
+            self._spi.close()
             self.release_lock()
 
 
@@ -289,20 +270,20 @@ class OPCR1(object):
 
     def __cmd_power(self, cmd):
         try:
-            self.__spi.open()
+            self._spi.open()
 
-            self.__spi.xfer([self.__CMD_POWER, cmd])
+            self._spi.xfer([self.__CMD_POWER, cmd])
             time.sleep(self.__DELAY_CMD)
 
         finally:
-            self.__spi.close()
+            self._spi.close()
 
 
     def __cmd(self, cmd):
-        self.__spi.xfer([cmd])
+        self._spi.xfer([cmd])
         time.sleep(self.__DELAY_CMD)
 
-        self.__spi.xfer([cmd])
+        self._spi.xfer([cmd])
 
 
     def __read_bytes(self, count):
@@ -310,8 +291,8 @@ class OPCR1(object):
 
 
     def __read_byte(self):
+        chars = self._spi.read_bytes(1)
         time.sleep(self.__DELAY_TRANSFER)
-        chars = self.__spi.read_bytes(1)
 
         return chars[0]
 
@@ -319,4 +300,4 @@ class OPCR1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCR1:{io:%s, spi:%s}" % (self.__io, self.__spi)
+        return "OPCR1:{io:%s, spi:%s}" % (self._io, self._spi)

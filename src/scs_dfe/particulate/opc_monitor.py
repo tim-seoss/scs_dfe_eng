@@ -15,6 +15,8 @@ from scs_core.particulate.opc_datum import OPCDatum
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
+from scs_dfe.particulate.opc import OPC
+
 from scs_host.lock.lock_timeout import LockTimeout
 
 
@@ -29,7 +31,7 @@ class OPCMonitor(SynchronisedProcess):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, opc, conf):
+    def __init__(self, opc: OPC, conf):
         """
         Constructor
         """
@@ -130,7 +132,7 @@ class OPCMonitor(SynchronisedProcess):
             self.__opc.operations_off()
             self.__opc.power_off()
 
-            time.sleep(self.__opc.POWER_CYCLE_TIME)
+            time.sleep(self.__opc.power_cycle_time())
 
             # on...
             self.__opc.power_on()
