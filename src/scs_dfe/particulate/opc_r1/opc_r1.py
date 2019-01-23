@@ -1,10 +1,10 @@
 """
-Created on 15 Nov 2018
+Created on 23 Jan 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 Firmware report:
-OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS
+OPC-R1 FirmwareVer=2.10...................................BS
 """
 
 import time
@@ -19,7 +19,6 @@ from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.board.io import IO
 from scs_dfe.climate.sht31 import SHT31
-from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
 
 from scs_host.bus.spi import SPI
 from scs_host.lock.lock import Lock
@@ -27,11 +26,11 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCN3(object):
+class OPCR1(object):
     """
     classdocs
     """
-    SOURCE =                            'N3'
+    SOURCE =                            'R1'
 
     MIN_SAMPLE_PERIOD =                  5.0        # seconds
     MAX_SAMPLE_PERIOD =                 10.0        # seconds
@@ -43,24 +42,18 @@ class OPCN3(object):
 
     __BOOT_TIME =                       8.0         # seconds
 
-    __LASER_START_TIME =                1.0         # seconds
-    __FAN_START_TIME =                  5.0         # seconds
-
-    # __PRE_STOP_TIME =                   5.0         # seconds
-    __FAN_STOP_TIME =                   2.0         # seconds
+    __FAN_START_TIME =                  3.0         # seconds
+    __FAN_STOP_TIME =                   3.0         # seconds
 
     __CMD_POWER =                       0x03
-    __CMD_LASER_ON =                    0x07
-    __CMD_LASER_OFF =                   0x06
-    __CMD_FAN_ON =                      0x03
-    __CMD_FAN_OFF =                     0x02
+    __CMD_PERIPHERALS_ON =              0x07
+    __CMD_PERIPHERALS_OFF =             0x00
 
     __CMD_READ_HISTOGRAM =              0x30
 
     __CMD_GET_FIRMWARE =                0x3f
     __CMD_GET_VERSION =                 0x12
     __CMD_GET_SERIAL =                  0x10
-    __CMD_GET_STATUS =                  0x13
 
     __CMD_RESET =                       0x06
 
@@ -92,7 +85,7 @@ class OPCN3(object):
         Constructor
         """
         self.__io = IO()
-        self.__spi = SPI(spi_bus, spi_device, OPCN3.__SPI_MODE, OPCN3.__SPI_CLOCK)
+        self.__spi = SPI(spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -116,13 +109,9 @@ class OPCN3(object):
         try:
             self.obtain_lock()
 
-            # laser...
+            # peripherals...
             for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_ON)
-
-            # fan...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_FAN_ON)
+                self.__cmd_power(self.__CMD_PERIPHERALS_ON)
 
             time.sleep(self.__FAN_START_TIME)
 
@@ -131,18 +120,12 @@ class OPCN3(object):
 
 
     def operations_off(self):
-        # time.sleep(self.__PRE_STOP_TIME)
-
         try:
             self.obtain_lock()
 
-            # laser...
+            # peripherals...
             for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_OFF)
-
-            # fan...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_FAN_OFF)
+                self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
 
             time.sleep(self.__FAN_STOP_TIME)
 
@@ -174,13 +157,13 @@ class OPCN3(object):
 
             # command...
             self.__cmd(self.__CMD_READ_HISTOGRAM)
-            chars = self.__read_bytes(86)
+            chars = self.__read_bytes(64)
 
             time.sleep(self.__DELAY_TRANSFER)
 
             # checksum...
-            chk = Decode.unsigned_int(chars[84:86])
-            crc = ModbusCRC.compute(chars[:84])
+            chk = Decode.unsigned_int(chars[62:64])
+            crc = ModbusCRC.compute(chars[:62])
 
             if chk != crc:
                 raise ValueError("bad checksum")
@@ -189,37 +172,36 @@ class OPCN3(object):
             rec = LocalizedDatetime.now()
 
             # bins...
-            bins = [Decode.unsigned_int(chars[i:i + 2]) for i in range(0, 48, 2)]
+            bins = [Decode.unsigned_int(chars[i:i + 2]) for i in range(0, 32, 2)]
 
             # bin MToFs...
-            bin_1_mtof = chars[48]
-            bin_3_mtof = chars[49]
-            bin_5_mtof = chars[50]
-            bin_7_mtof = chars[51]
-
-            # period...
-            raw_period = Decode.unsigned_int(chars[52:54])
-            period = round(float(raw_period) / 100.0, 3)
+            bin_1_mtof = chars[32]
+            bin_3_mtof = chars[33]
+            bin_5_mtof = chars[34]
+            bin_7_mtof = chars[35]
 
             # temperature & humidity
-            raw_temp = Decode.unsigned_int(chars[56:58])
-            raw_humid = Decode.unsigned_int(chars[58:60])
+            raw_temp = Decode.unsigned_int(chars[40:42])
+            raw_humid = Decode.unsigned_int(chars[42:44])
 
             sht = SHTDatum(SHT31.humid(raw_humid), SHT31.temp(raw_temp))
 
+            # period...
+            period = Decode.float(chars[44:48])
+
             # PMx...
             try:
-                pm1 = Decode.float(chars[60:64])
+                pm1 = Decode.float(chars[50:54])
             except TypeError:
                 pm1 = None
 
             try:
-                pm2p5 = Decode.float(chars[64:68])
+                pm2p5 = Decode.float(chars[54:58])
             except TypeError:
                 pm2p5 = None
 
             try:
-                pm10 = Decode.float(chars[68:72])
+                pm10 = Decode.float(chars[58:62])
             except TypeError:
                 pm10 = None
 
@@ -288,33 +270,15 @@ class OPCN3(object):
 
             # report...
             report = ''.join(chr(byte) for byte in chars)
+
+            # print("serial_no: report: %s" % report)
+
             pieces = report.split(' ')
 
             if len(pieces) < 2:
                 return None, None
 
             return pieces[0], pieces[1]             # type, number
-
-        finally:
-            self.__spi.close()
-            self.release_lock()
-
-
-    def status(self):
-        try:
-            self.obtain_lock()
-            self.__spi.open()
-
-            # command...
-            self.__cmd(self.__CMD_GET_STATUS)
-            chars = self.__read_bytes(6)
-
-            time.sleep(self.__DELAY_TRANSFER)
-
-            # report...
-            status = OPCStatus.construct(chars)
-
-            return status
 
         finally:
             self.__spi.close()
@@ -355,4 +319,4 @@ class OPCN3(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCN3:{io:%s, spi:%s}" % (self.__io, self.__spi)
+        return "OPCR1:{io:%s, spi:%s}" % (self.__io, self.__spi)
