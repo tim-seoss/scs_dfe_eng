@@ -150,4 +150,5 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{value:%s, opc:%s, conf:%s}" % (self._value, self.__opc, self.__conf)
+        return "OPCMonitor:{value:%s, opc:%s, conf:%s, first_reading:%s}" % \
+               (self._value, self.__opc, self.__conf, self.__first_reading)
