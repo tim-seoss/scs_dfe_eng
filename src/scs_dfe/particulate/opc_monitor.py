@@ -80,8 +80,8 @@ class OPCMonitor(SynchronisedProcess):
                 try:
                     datum = self.__opc.sample()
 
-                except ValueError:
-                    print("OPCMonitor: CRC check failed", file=sys.stderr)
+                except ValueError as ex:
+                    print("OPCMonitor: %s" % ex, file=sys.stderr)
                     sys.stderr.flush()
 
                     self.__power_cycle()
