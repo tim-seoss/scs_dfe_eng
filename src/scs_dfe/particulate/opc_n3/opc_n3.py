@@ -46,7 +46,6 @@ class OPCN3(object):
     __LASER_START_TIME =                1.0         # seconds
     __FAN_START_TIME =                  5.0         # seconds
 
-    # __PRE_STOP_TIME =                   5.0         # seconds
     __FAN_STOP_TIME =                   2.0         # seconds
 
     __CMD_POWER =                       0x03

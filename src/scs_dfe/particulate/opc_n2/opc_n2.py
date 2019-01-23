@@ -36,16 +36,12 @@ class OPCN2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                        4.0        # seconds
+    __BOOT_TIME =                        5.0        # seconds
     __START_TIME =                       5.0        # seconds
     __STOP_TIME =                        2.0        # seconds
 
-    __FLOW_RATE_VERSION =               16
-
     __FAN_UP_TIME =                     10
     __FAN_DOWN_TIME =                   2
-
-    __PERIOD_CONVERSION =               45360       # should be 12000 (1/12MHz * 1000), but found by experiment
 
     __CMD_POWER =                       0x03
     __CMD_POWER_ON =                    0x00        # 0x03, 0x00
@@ -58,8 +54,8 @@ class OPCN2(object):
     __SPI_CLOCK =                       488000
     __SPI_MODE =                        1
 
-    __CMD_DELAY =                       0.01
-    __TRANSFER_DELAY =                  0.00002
+    __DELAY_CMD =                       0.010
+    __DELAY_TRANSFER =                  0.010
 
     __LOCK_TIMEOUT =                    6.0
 
@@ -110,14 +106,8 @@ class OPCN2(object):
 
             # start...
             self.__spi.xfer([self.__CMD_POWER, self.__CMD_POWER_ON])
+
             time.sleep(self.__START_TIME)
-
-            # clear histogram...
-            self.__spi.xfer([self.__CMD_READ_HISTOGRAM])
-            time.sleep(self.__CMD_DELAY)
-
-            for _ in range(62):
-                self.__read_byte()
 
         finally:
             self.__spi.close()
@@ -131,73 +121,69 @@ class OPCN2(object):
 
             self.__spi.xfer([self.__CMD_POWER, self.__CMD_POWER_OFF])
 
-        finally:
-            time.sleep(self.__CMD_DELAY)
+            time.sleep(self.__STOP_TIME)
 
+        finally:
             self.__spi.close()
             self.release_lock()
 
-        time.sleep(self.__STOP_TIME)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def sample(self):               # TODO: re-write as block read with crc check
+    def sample(self):
         try:
             self.obtain_lock()
             self.__spi.open()
 
+            # command...
             self.__spi.xfer([self.__CMD_READ_HISTOGRAM])
-            time.sleep(self.__CMD_DELAY)
+            time.sleep(self.__DELAY_CMD)
+
+            chars = self.__read_bytes(62)
+            time.sleep(self.__DELAY_TRANSFER)
+
+            # time...
+            rec = LocalizedDatetime.now()
 
             # bins...
-            bins = [self.__read_int() for _ in range(16)]
+            bins = [Decode.unsigned_int(chars[i:i + 2]) for i in range(0, 32, 2)]
 
             # bin MToFs...
-            bin_1_mtof = self.__read_byte()
-            bin_3_mtof = self.__read_byte()
-            bin_5_mtof = self.__read_byte()
-            bin_7_mtof = self.__read_byte()
-
-            # flow rate...
-            self.__spi.read_bytes(4)
-
-            # temperature
-            self.__spi.read_bytes(4)
+            bin_1_mtof = chars[32]
+            bin_3_mtof = chars[33]
+            bin_5_mtof = chars[34]
+            bin_7_mtof = chars[35]
 
             # period...
-            period = self.__read_float()
+            period = Decode.float(chars[44:48])
 
             # checksum...
-            self.__read_int()
+            chk = Decode.unsigned_int(chars[48:50])
+
+            if chk != sum(bins) % 65535:
+                raise ValueError("bad checksum")
 
             # PMx...
             try:
-                pm = self.__read_float()
-                pm1 = 0.0 if pm < 0 else pm
+                pm1 = Decode.float(chars[50:54])
             except TypeError:
                 pm1 = None
 
             try:
-                pm = self.__read_float()
-                pm2p5 = 0.0 if pm < 0 else pm
+                pm2p5 = Decode.float(chars[54:58])
             except TypeError:
                 pm2p5 = None
 
             try:
-                pm = self.__read_float()
-                pm10 = 0.0 if pm < 0 else pm
+                pm10 = Decode.float(chars[58:62])
             except TypeError:
                 pm10 = None
 
-            now = LocalizedDatetime.now()
-
-            return OPCDatum(self.SOURCE, now, pm1, pm2p5, pm10, period, bins,
+            return OPCDatum(self.SOURCE, rec, pm1, pm2p5, pm10, period, bins,
                             bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
 
         finally:
-            time.sleep(self.__CMD_DELAY)
-
             self.__spi.close()
             self.release_lock()
 
@@ -209,53 +195,35 @@ class OPCN2(object):
             self.obtain_lock()
             self.__spi.open()
 
+            # command...
             self.__spi.xfer([self.__CMD_GET_FIRMWARE])
-            time.sleep(self.__CMD_DELAY)
+            time.sleep(self.__DELAY_CMD)
 
-            read_bytes = []
+            chars = self.__read_bytes(60)
 
-            for _ in range(60):
-                time.sleep(self.__TRANSFER_DELAY)
-                read_bytes.extend(self.__spi.read_bytes(1))
+            time.sleep(self.__DELAY_TRANSFER)
 
-            report = '' . join(chr(b) for b in read_bytes)
+            # report...
+            report = ''.join(chr(byte) for byte in chars)
 
             return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
 
         finally:
-            time.sleep(self.__CMD_DELAY)
-
             self.__spi.close()
             self.release_lock()
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def __read_bytes(self, count):
+        return [self.__read_byte() for _ in range(count)]
+
+
     def __read_byte(self):
-        time.sleep(self.__TRANSFER_DELAY)
+        time.sleep(self.__DELAY_TRANSFER)
         read_bytes = self.__spi.read_bytes(1)
 
         return read_bytes[0]
-
-
-    def __read_int(self):
-        read_bytes = []
-
-        for _ in range(2):
-            time.sleep(self.__TRANSFER_DELAY)
-            read_bytes.extend(self.__spi.read_bytes(1))
-
-        return Decode.unsigned_int(read_bytes)
-
-
-    def __read_float(self):
-        read_bytes = []
-
-        for _ in range(4):
-            time.sleep(self.__TRANSFER_DELAY)
-            read_bytes.extend(self.__spi.read_bytes(1))
-
-        return Decode.float(read_bytes)
 
 
     # ----------------------------------------------------------------------------------------------------------------

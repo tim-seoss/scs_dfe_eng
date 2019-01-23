@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
 """
-Created on 4 Jul 2016
+Created on 23 Jan 2018
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
 import sys
 import time
+
+from scs_core.data.json import JSONify
+from scs_core.sync.interval_timer import IntervalTimer
 
 from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 
@@ -17,7 +20,6 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-io = None
 opc = None
 
 try:
@@ -27,33 +29,52 @@ try:
     print(opc)
     print("-")
 
+    print("booting...")
     opc.power_on()
-    time.sleep(5)
+    print("-")
 
+    print("firmware...")
+    firmware = opc.firmware()
+    print(firmware)
+    print("-")
+
+    time.sleep(1)
+
+    print("on...")
     opc.operations_on()
+    print("-")
 
-    version = opc.firmware()
-    print(version)
+    print("running...")
+    time.sleep(2)
 
-    time.sleep(5)
-    opc.sample()         # first report is always zero
+    timer = IntervalTimer(10.0)
 
-    for i in range(100):
-        time.sleep(5)
+    opc.sample()                    # clear histograms and timer
 
-        print("%d:" % i)
+    checkpoint = time.time()
+
+    for _ in timer.range(10):
         datum = opc.sample()
-        print(datum)
+
+        now = time.time()
+        print("interval: %0.3f" % round(now - checkpoint, 3))
+        checkpoint = now
+
+        print(JSONify.dumps(datum))
         print("-")
+
+        sys.stdout.flush()
 
 except KeyboardInterrupt:
     print("opc_n2_test: KeyboardInterrupt", file=sys.stderr)
 
 finally:
-    if opc:
-        opc.operations_off()
-        opc.power_off()
+    print("off...")
+    opc.operations_off()
+    print("-")
+
+    print("shutdown...")
+    opc.power_off()
+    print("-")
 
     I2C.close()
-
-
