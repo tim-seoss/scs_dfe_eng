@@ -112,17 +112,6 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
     # SynchronisedProcess special operations...
 
-    def __sample(self):
-        try:
-            return self.__opc.sample()
-
-        except ValueError:
-            print("OPCMonitor: CRC check failed", file=sys.stderr)
-            sys.stderr.flush()
-
-            return OPCDatum.null_datum()
-
-
     def __power_cycle(self):
         print("OPCMonitor: POWER CYCLE", file=sys.stderr)
         sys.stderr.flush()
