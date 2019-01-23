@@ -29,33 +29,63 @@ try:
     print(opc)
     print("-")
 
+    print("booting...")
     opc.power_on()
-    time.sleep(5)
 
+    print("status...")
+    status = opc.status()
+    print(status)
+    print("-")
+
+    print("firmware...")
     firmware = opc.firmware()
     print(firmware)
+    print("-")
 
-    status = opc.status()
-    print("status:%s" % status)
+    time.sleep(1)
+
+    print("version...")
+    version = opc.version()
+    print("major:[%d] minor:[%d]" % version)
+    print("-")
+
+    time.sleep(1)
+
+    print("serial...")
+    serial = opc.serial_no()
+    print("type:[%s] number:[%s]" % serial)
+    print("-")
+
+    time.sleep(1)
 
     print("on...")
     opc.operations_on()
+    print("-")
 
-    version = opc.version()
-    print("major:[%d] minor:[%d]" % version)
+    print("running...")
+    time.sleep(2)
 
-    serial = opc.serial_no()
-    print("type:[%s] number:[%s]" % serial)
-
+    print("status...")
     status = opc.status()
-    print("status:%s" % status)
+    print(status)
+    print("-")
 
     timer = IntervalTimer(10.0)
 
-    while timer.true():
+    opc.sample()                    # clear histograms and timer
+
+    checkpoint = time.time()
+
+    for _ in timer.range(10):
         datum = opc.sample()
 
+        now = time.time()
+        print("interval: %0.3f" % round(now - checkpoint, 3))
+        checkpoint = now
+
         print(JSONify.dumps(datum))
+        print("-")
+
         sys.stdout.flush()
 
         # opc.reset()
@@ -63,14 +93,21 @@ try:
 except KeyboardInterrupt:
     print("opc_n3_test: KeyboardInterrupt", file=sys.stderr)
 
+except ValueError as ex:
+    print(ex)
+
 finally:
     if opc:
         print("off...")
         opc.operations_off()
 
+        print("status...")
         status = opc.status()
-        print("status:%s" % status)
+        print(status)
+        print("-")
 
-        # opc.power_off()
+        print("shutdown...")
+        opc.power_off()
+        print("-")
 
     I2C.close()

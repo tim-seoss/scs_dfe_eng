@@ -9,11 +9,12 @@ OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS
 
 import time
 
-from scs_core.data.localized_datetime import LocalizedDatetime
-from scs_core.data.datum import Decode
-
 from scs_core.climate.sht_datum import SHTDatum
+
+from scs_core.data.datum import Decode
+from scs_core.data.localized_datetime import LocalizedDatetime
 from scs_core.data.modbus_crc import ModbusCRC
+
 from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.board.io import IO
@@ -40,12 +41,12 @@ class OPCN3(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       5.0         # seconds
+    __BOOT_TIME =                       8.0         # seconds
 
     __LASER_START_TIME =                1.0         # seconds
     __FAN_START_TIME =                  5.0         # seconds
 
-    __PRE_STOP_TIME =                   5.0         # seconds
+    # __PRE_STOP_TIME =                   5.0         # seconds
     __FAN_STOP_TIME =                   2.0         # seconds
 
     __CMD_POWER =                       0x03
@@ -123,13 +124,14 @@ class OPCN3(object):
             for _ in range(2):
                 self.__cmd_power(self.__CMD_FAN_ON)
 
-        finally:
             time.sleep(self.__FAN_START_TIME)
+
+        finally:
             self.release_lock()
 
 
     def operations_off(self):
-        time.sleep(self.__PRE_STOP_TIME)
+        # time.sleep(self.__PRE_STOP_TIME)
 
         try:
             self.obtain_lock()
@@ -142,8 +144,9 @@ class OPCN3(object):
             for _ in range(2):
                 self.__cmd_power(self.__CMD_FAN_OFF)
 
-        finally:
             time.sleep(self.__FAN_STOP_TIME)
+
+        finally:
             self.release_lock()
 
 
@@ -155,10 +158,10 @@ class OPCN3(object):
             # command...
             self.__cmd(self.__CMD_RESET)
 
+            time.sleep(self.__DELAY_TRANSFER)
+
         finally:
             self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
             self.release_lock()
 
 
@@ -173,12 +176,17 @@ class OPCN3(object):
             self.__cmd(self.__CMD_READ_HISTOGRAM)
             chars = self.__read_bytes(86)
 
+            time.sleep(self.__DELAY_TRANSFER)
+
             # checksum...
             chk = Decode.unsigned_int(chars[84:86])
             crc = ModbusCRC.compute(chars[:84])
 
             if chk != crc:
                 raise ValueError("bad checksum")
+
+            # time...
+            rec = LocalizedDatetime.now()
 
             # bins...
             bins = [Decode.unsigned_int(chars[i:i + 2]) for i in range(0, 48, 2)]
@@ -215,24 +223,11 @@ class OPCN3(object):
             except TypeError:
                 pm10 = None
 
-            # unused fields...
-            # flo = Decode.unsigned_int(chars[54:56])
-            # rcg = Decode.unsigned_int(chars[72:74])
-            # rcl = Decode.unsigned_int(chars[74:76])
-            # rcr = Decode.unsigned_int(chars[76:78])
-            # rco = Decode.unsigned_int(chars[78:80])
-            # frc = Decode.unsigned_int(chars[80:82])
-            # lst = Decode.unsigned_int(chars[82:84])
-
-            now = LocalizedDatetime.now()
-
-            return OPCDatum(self.SOURCE, now, pm1, pm2p5, pm10, period, bins,
+            return OPCDatum(self.SOURCE, rec, pm1, pm2p5, pm10, period, bins,
                             bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sht)
 
         finally:
             self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
             self.release_lock()
 
 
@@ -247,6 +242,8 @@ class OPCN3(object):
             self.__cmd(self.__CMD_GET_FIRMWARE)
             chars = self.__read_bytes(60)
 
+            time.sleep(self.__DELAY_TRANSFER)
+
             # report...
             report = ''.join(chr(byte) for byte in chars)
 
@@ -254,8 +251,6 @@ class OPCN3(object):
 
         finally:
             self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
             self.release_lock()
 
 
@@ -267,6 +262,8 @@ class OPCN3(object):
             # command...
             self.__cmd(self.__CMD_GET_VERSION)
 
+            time.sleep(self.__DELAY_TRANSFER)
+
             # report...
             major = int(self.__read_byte())
             minor = int(self.__read_byte())
@@ -275,8 +272,6 @@ class OPCN3(object):
 
         finally:
             self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
             self.release_lock()
 
 
@@ -289,6 +284,8 @@ class OPCN3(object):
             self.__cmd(self.__CMD_GET_SERIAL)
             chars = self.__read_bytes(60)
 
+            time.sleep(self.__DELAY_TRANSFER)
+
             # report...
             report = ''.join(chr(byte) for byte in chars)
             pieces = report.split(' ')
@@ -300,8 +297,6 @@ class OPCN3(object):
 
         finally:
             self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
             self.release_lock()
 
 
@@ -314,6 +309,8 @@ class OPCN3(object):
             self.__cmd(self.__CMD_GET_STATUS)
             chars = self.__read_bytes(6)
 
+            time.sleep(self.__DELAY_TRANSFER)
+
             # report...
             status = OPCStatus.construct(chars)
 
@@ -321,8 +318,6 @@ class OPCN3(object):
 
         finally:
             self.__spi.close()
-
-            time.sleep(self.__DELAY_TRANSFER)
             self.release_lock()
 
 

@@ -15,8 +15,6 @@ from scs_core.particulate.opc_datum import OPCDatum
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
-from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
-
 from scs_host.lock.lock_timeout import LockTimeout
 
 
@@ -73,23 +71,36 @@ class OPCMonitor(SynchronisedProcess):
 
     def run(self):
         try:
-            first_reading = True
+            try:
+                self.__opc.sample()
+            except ValueError:
+                pass
+
+            # first_reading = True
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
-                datum = self.__sample()
+                try:
+                    datum = self.__opc.sample()
+
+                except ValueError:
+                    print("OPCMonitor: CRC check failed", file=sys.stderr)
+                    sys.stderr.flush()
+
+                    self.__power_cycle()
+                    continue
 
                 # discard first...
-                if first_reading:
-                    datum = OPCDatum.null_datum()
+                # if first_reading:
+                #     datum = OPCDatum.null_datum()
 
                 # report...
                 with self._lock:
                     datum.as_list(self._value)
 
-                if first_reading:
-                    first_reading = False
-                    continue
+                # if first_reading:
+                #     first_reading = False
+                #     continue
 
                 # monitor...
                 if datum.is_zero():
@@ -97,7 +108,7 @@ class OPCMonitor(SynchronisedProcess):
                     sys.stderr.flush()
 
                     self.__power_cycle()
-                    first_reading = True
+                    # first_reading = True
 
         except KeyboardInterrupt:
             pass
@@ -126,7 +137,7 @@ class OPCMonitor(SynchronisedProcess):
             self.__opc.operations_off()
             self.__opc.power_off()
 
-            time.sleep(OPCN2.POWER_CYCLE_TIME)
+            time.sleep(self.__opc.POWER_CYCLE_TIME)
 
             # on...
             self.__opc.power_on()

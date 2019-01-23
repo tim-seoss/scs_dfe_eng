@@ -50,6 +50,11 @@ class OPCConf(PersistentJSONable):
         return OPCConf(model, sample_period, power_saving)
 
 
+    @classmethod
+    def is_valid_model(cls, model):
+        return model in (OPCN2.SOURCE, OPCN3.SOURCE, OPCR1.SOURCE)
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, model, sample_period, power_saving):
