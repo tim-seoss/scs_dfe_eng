@@ -79,6 +79,7 @@ class OPCMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
+                # sample...
                 try:
                     datum = self.__opc.sample()
 
@@ -94,16 +95,17 @@ class OPCMonitor(SynchronisedProcess):
                     self.__first_reading = False
                     continue
 
-                # report...
-                with self._lock:
-                    datum.as_list(self._value)
-
                 # monitor...
                 if datum.is_zero():
                     print("OPCMonitor: zero reading", file=sys.stderr)
                     sys.stderr.flush()
 
                     self.__power_cycle()
+                    continue
+
+                # report...
+                with self._lock:
+                    datum.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
@@ -111,17 +113,6 @@ class OPCMonitor(SynchronisedProcess):
 
     # ----------------------------------------------------------------------------------------------------------------
     # SynchronisedProcess special operations...
-
-    def __sample(self):
-        try:
-            return self.__opc.sample()
-
-        except ValueError:
-            print("OPCMonitor: CRC check failed", file=sys.stderr)
-            sys.stderr.flush()
-
-            return OPCDatum.null_datum()
-
 
     def __power_cycle(self):
         print("OPCMonitor: POWER CYCLE", file=sys.stderr)
@@ -161,4 +152,5 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCMonitor:{value:%s, opc:%s, conf:%s}" % (self._value, self.__opc, self.__conf)
+        return "OPCMonitor:{value:%s, opc:%s, conf:%s, first_reading:%s}" % \
+               (self._value, self.__opc, self.__conf, self.__first_reading)
