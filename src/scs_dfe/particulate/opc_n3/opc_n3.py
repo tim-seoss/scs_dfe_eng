@@ -163,7 +163,7 @@ class OPCN3(OPC):
             actual = ModbusCRC.compute(chars[:84])
 
             if required != actual:
-                raise ValueError("bad checksum: required: %s actual: %s" % (required, actual))
+                raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
 
             # time...
             rec = LocalizedDatetime.now()

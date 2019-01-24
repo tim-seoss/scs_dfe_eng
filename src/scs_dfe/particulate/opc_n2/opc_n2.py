@@ -90,7 +90,7 @@ class OPCN2(OPC):
             self._spi.open()
 
             # start...
-            self._spi.xfer([self.__CMD_POWER, self.__CMD_POWER_ON])
+            self.__cmd_power(self.__CMD_POWER_ON)
 
             time.sleep(self.__START_TIME)
 
@@ -104,7 +104,7 @@ class OPCN2(OPC):
             self.obtain_lock()
             self._spi.open()
 
-            self._spi.xfer([self.__CMD_POWER, self.__CMD_POWER_OFF])
+            self.__cmd_power(self.__CMD_POWER_OFF)
 
             time.sleep(self.__STOP_TIME)
 
@@ -121,11 +121,8 @@ class OPCN2(OPC):
             self._spi.open()
 
             # command...
-            self._spi.xfer([self.__CMD_READ_HISTOGRAM])
-            time.sleep(self.__DELAY_CMD)
-
+            self.__cmd(self.__CMD_READ_HISTOGRAM)
             chars = self.__read_bytes(62)
-            time.sleep(self.__DELAY_TRANSFER)
 
             # time...
             rec = LocalizedDatetime.now()
@@ -147,7 +144,7 @@ class OPCN2(OPC):
             actual = sum(bins) % 65535
 
             if required != actual:
-                raise ValueError("bad checksum: required: %s actual: %s" % (required, actual))
+                raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
 
             # PMx...
             try:
@@ -181,9 +178,7 @@ class OPCN2(OPC):
             self._spi.open()
 
             # command...
-            self._spi.xfer([self.__CMD_GET_FIRMWARE])
-            time.sleep(self.__DELAY_CMD)
-
+            self.__cmd(self.__CMD_GET_FIRMWARE)
             chars = self.__read_bytes(60)
 
             # report...
@@ -197,6 +192,16 @@ class OPCN2(OPC):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def __cmd_power(self, cmd):
+        self._spi.xfer([self.__CMD_POWER, cmd])
+        time.sleep(self.__DELAY_CMD)
+
+
+    def __cmd(self, cmd):
+        self._spi.xfer([cmd])
+        time.sleep(self.__DELAY_CMD)
+
 
     def __read_bytes(self, count):
         return [self.__read_byte() for _ in range(count)]
