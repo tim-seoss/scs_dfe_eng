@@ -79,6 +79,7 @@ class OPCMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
+                # sample...
                 try:
                     datum = self.__opc.sample()
 
@@ -94,16 +95,17 @@ class OPCMonitor(SynchronisedProcess):
                     self.__first_reading = False
                     continue
 
-                # report...
-                with self._lock:
-                    datum.as_list(self._value)
-
                 # monitor...
                 if datum.is_zero():
                     print("OPCMonitor: zero reading", file=sys.stderr)
                     sys.stderr.flush()
 
                     self.__power_cycle()
+                    continue
+
+                # report...
+                with self._lock:
+                    datum.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
