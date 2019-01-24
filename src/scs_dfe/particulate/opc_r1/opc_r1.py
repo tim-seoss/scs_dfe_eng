@@ -58,7 +58,7 @@ class OPCR1(OPC):
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010
-    __DELAY_TRANSFER =                  0.010
+    __DELAY_TRANSFER =                  0.001
 
     __LOCK_TIMEOUT =                    6.0
 
@@ -126,8 +126,6 @@ class OPCR1(OPC):
 
             # command...
             self.__cmd(self.__CMD_RESET)
-
-            time.sleep(self.__DELAY_TRANSFER)
 
         finally:
             self._spi.close()
@@ -208,8 +206,6 @@ class OPCR1(OPC):
             self.__cmd(self.__CMD_GET_FIRMWARE)
             chars = self.__read_bytes(60)
 
-            time.sleep(self.__DELAY_TRANSFER)
-
             # report...
             report = ''.join(chr(byte) for byte in chars)
 
@@ -227,8 +223,6 @@ class OPCR1(OPC):
 
             # command...
             self.__cmd(self.__CMD_GET_VERSION)
-
-            time.sleep(self.__DELAY_TRANSFER)
 
             # report...
             major = int(self.__read_byte())
@@ -249,8 +243,6 @@ class OPCR1(OPC):
             # command...
             self.__cmd(self.__CMD_GET_SERIAL)
             chars = self.__read_bytes(60)
-
-            time.sleep(self.__DELAY_TRANSFER)
 
             # report...
             report = ''.join(chr(byte) for byte in chars)

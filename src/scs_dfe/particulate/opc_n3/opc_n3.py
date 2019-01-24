@@ -63,7 +63,7 @@ class OPCN3(OPC):
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010
-    __DELAY_TRANSFER =                  0.010
+    __DELAY_TRANSFER =                  0.001
 
     __LOCK_TIMEOUT =                    6.0
 
@@ -239,7 +239,6 @@ class OPCN3(OPC):
 
             # command...
             self.__cmd(self.__CMD_GET_VERSION)
-            time.sleep(self.__DELAY_CMD)
 
             # report...
             major = int(self.__read_byte())

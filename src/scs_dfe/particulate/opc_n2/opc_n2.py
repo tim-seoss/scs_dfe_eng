@@ -51,7 +51,7 @@ class OPCN2(OPC):
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010
-    __DELAY_TRANSFER =                  0.010
+    __DELAY_TRANSFER =                  0.001
 
     __LOCK_TIMEOUT =                    6.0
 
