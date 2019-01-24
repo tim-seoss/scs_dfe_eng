@@ -79,33 +79,34 @@ class OPCMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
+                power_cycle = False
+
                 # sample...
                 try:
                     datum = self.__opc.sample()
 
+                    if datum.is_zero() and not self.__first_reading:
+                        raise ValueError("zero reading")
+
                 except ValueError as ex:
+                    datum = OPCDatum.null_datum()
+                    power_cycle = True
+
                     print("OPCMonitor: %s" % ex, file=sys.stderr)
                     sys.stderr.flush()
 
-                    self.__power_cycle()
-                    continue
-
                 # discard first...
                 if self.__first_reading:
+                    datum = OPCDatum.null_datum()
                     self.__first_reading = False
-                    continue
-
-                # monitor...
-                if datum.is_zero():
-                    print("OPCMonitor: zero reading", file=sys.stderr)
-                    sys.stderr.flush()
-
-                    self.__power_cycle()
-                    continue
 
                 # report...
                 with self._lock:
                     datum.as_list(self._value)
+
+                # monitor...
+                if power_cycle:
+                    self.__power_cycle()
 
         except KeyboardInterrupt:
             pass
@@ -115,7 +116,7 @@ class OPCMonitor(SynchronisedProcess):
     # SynchronisedProcess special operations...
 
     def __power_cycle(self):
-        print("OPCMonitor: POWER CYCLE", file=sys.stderr)
+        print("OPCMonitor: power cycle", file=sys.stderr)
         sys.stderr.flush()
 
         try:
