@@ -239,7 +239,6 @@ class OPCN3(OPC):
 
             # command...
             self.__cmd(self.__CMD_GET_VERSION)
-            time.sleep(self.__DELAY_CMD)
 
             # report...
             major = int(self.__read_byte())
