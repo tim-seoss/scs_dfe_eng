@@ -141,7 +141,7 @@ class OPCN2(OPC):
 
             # checksum...
             required = Decode.unsigned_int(chars[48:50])
-            actual = sum(bins) % 65535
+            actual = sum(bins) % 65536
 
             if required != actual:
                 raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
