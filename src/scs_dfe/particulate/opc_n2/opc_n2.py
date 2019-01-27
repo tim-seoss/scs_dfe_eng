@@ -212,9 +212,3 @@ class OPCN2(OPC):
         time.sleep(self.__DELAY_TRANSFER)
 
         return read_bytes[0]
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __str__(self, *args, **kwargs):
-        return "OPCN2:{io:%s, spi:%s}" % (self._io, self._spi)

@@ -287,9 +287,3 @@ class OPCR1(OPC):
         time.sleep(self.__DELAY_TRANSFER)
 
         return chars[0]
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __str__(self, *args, **kwargs):
-        return "OPCR1:{io:%s, spi:%s}" % (self._io, self._spi)
