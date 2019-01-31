@@ -6,7 +6,7 @@ Created on 16 Jul 2017
 specifies which GPS receiver is present, if any, plus sample interval and tally.
 
 example JSON:
-{"model": null}
+{"model": "SAM7Q", "sample-interval": 10, "tally": 60}
 """
 
 import os
@@ -17,6 +17,7 @@ from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.gps.gps_monitor import GPSMonitor
 from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.gps.sam_m8q import SAMM8Q
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -52,6 +53,11 @@ class GPSConf(PersistentJSONable):
         return GPSConf(model, sample_interval, tally)
 
 
+    @classmethod
+    def is_valid_model(cls, model):
+        return model in (PAM7Q.SOURCE, SAMM8Q.SOURCE)
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, model, sample_interval, tally):
@@ -72,8 +78,12 @@ class GPSConf(PersistentJSONable):
         if self.model is None:
             return None
 
-        if self.model == 'PAM7Q':
+        if self.model == PAM7Q.SOURCE:
             gps = PAM7Q(host.gps_device())
+
+        elif self.model == SAMM8Q.SOURCE:
+            gps = SAMM8Q(host.gps_device())
+
         else:
             raise ValueError('unknown model: %s' % self.model)
 

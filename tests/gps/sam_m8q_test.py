@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 
 """
-Created on 30 Dec 2016
+Created on 31 Jan 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+$GNRMC,103953.00,A,5049.38023,N,00007.38608,W,0.195,,310119,,,D*72
+$GNVTG,,T,,M,0.195,N,0.361,K,D*31
+$GNGGA,103953.00,5049.38023,N,00007.38608,W,2,07,1.48,54.2,M,45.4,M,,0000*62
+$GNGSA,A,3,02,09,05,07,13,28,30,,,,,,2.28,1.48,1.73*1E
+$GNGSA,A,3,,,,,,,,,,,,,2.28,1.48,1.73*1C
+$GPGSV,3,1,12,02,15,220,48,05,71,253,39,07,45,060,35,09,14,091,22*7D
+$GPGSV,3,2,12,13,42,273,34,15,08,278,16,21,09,332,33,27,02,033,*77
+$GPGSV,3,3,12,28,20,140,31,30,74,110,26,36,25,141,,49,32,173,47*7D
+$GLGSV,1,1,00*65
+$GNGLL,5049.38023,N,00007.38608,W,103953.00,A,D*6D
 """
 
 import sys
@@ -17,7 +28,7 @@ from scs_core.position.nmea.gpvtg import GPVTG
 
 from scs_core.position.gps_datum import GPSDatum
 
-from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.gps.sam_m8q import SAMM8Q
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -27,7 +38,7 @@ from scs_host.sys.host import Host
 
 I2C.open(Host.I2C_SENSORS)
 
-gps = PAM7Q(Host.gps_device())
+gps = SAMM8Q(Host.gps_device())
 print(gps)
 print("-")
 
@@ -46,30 +57,39 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    # print("monitor...")
+    #
+    # while True:
+    #     line = gps.line()
+    #     print(line)
+    #
+    #     if not line:
+    #         break
+
     print("report...")
 
     gga = gps.report(GPGGA)
-    print(gga)
+    print("GGA: %s" % gga)
     print("-")
 
     gll = gps.report(GPGLL)
-    print(gll)
+    print("GLL: %s" % gll)
     print("-")
 
     gsv = gps.report(GPGSV)
-    print(gsv)
+    print("GSV: %s" % gsv)
     print("-")
 
     gsa = gps.report(GPGSA)
-    print(gsa)
+    print("GSA: %s" % gsa)
     print("-")
 
     rmc = gps.report(GPRMC)
-    print(rmc)
+    print("RMC: %s" % rmc)
     print("-")
 
     vtg = gps.report(GPVTG)
-    print(vtg)
+    print("VTG: %s" % vtg)
     print("=")
 
 
