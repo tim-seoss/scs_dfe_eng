@@ -141,7 +141,7 @@ class OPCN2(OPC):
 
             # checksum...
             required = Decode.unsigned_int(chars[48:50])
-            actual = sum(bins) % 65535
+            actual = sum(bins) % 65536
 
             if required != actual:
                 raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
@@ -212,9 +212,3 @@ class OPCN2(OPC):
         time.sleep(self.__DELAY_TRANSFER)
 
         return read_bytes[0]
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __str__(self, *args, **kwargs):
-        return "OPCN2:{io:%s, spi:%s}" % (self._io, self._spi)

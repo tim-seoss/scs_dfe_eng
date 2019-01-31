@@ -1,11 +1,12 @@
 """
-Created on 30 Dec 2016
+Created on 31 Jan 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-https://www.u-blox.com/en/product/pam-7q-module
+https://www.u-blox.com/en/product/sam-m8q-module
 
 example sentences:
+PAM7...
 $GPRMC,103228.00,A,5049.37823,N,00007.37872,W,0.104,,301216,,,D*64
 $GPVTG,,T,,M,0.104,N,0.193,K,D*28
 $GPGGA,103228.00,5049.37823,N,00007.37872,W,2,07,1.85,34.0,M,45.4,M,,0000*75
@@ -16,14 +17,17 @@ $GPGSV,4,3,13,22,31,090,29,23,74,115,35,25,03,355,,31,14,034,20*78
 $GPGSV,4,4,13,33,30,200,42*4C
 $GPGLL,5049.37823,N,00007.37872,W,103228.00,A,D*7F
 
-$GPRMC,152926.00,A,5049.36953,N,00007.38514,W,0.018,,301216,,,D*6C
-$GPVTG,,T,,M,0.018,N,0.033,K,D*2F
-$GPGGA,152926.00,5049.36953,N,00007.38514,W,2,07,1.37,23.2,M,45.4,M,,0000*7C
-$GPGSA,A,3,30,13,28,20,05,15,07,,,,,,2.71,1.37,2.34*09
-$GPGSV,3,1,12,05,61,203,40,07,26,057,31,08,05,050,,09,00,101,*7D
-$GPGSV,3,2,12,13,58,287,22,15,26,285,35,20,41,297,29,21,13,321,*71
-$GPGSV,3,3,12,27,04,013,13,28,39,126,37,30,60,068,26,33,30,200,44*74
-$GPGLL,5049.36953,N,00007.38514,W,152926.00,A,D*7B
+SAM8...
+$GNRMC,114733.00,A,5049.38206,N,00007.39011,W,0.109,,310119,,,D*73
+$GNVTG,,T,,M,0.109,N,0.202,K,D*30
+$GNGGA,114733.00,5049.38206,N,00007.39011,W,2,06,1.44,116.2,M,45.4,M,,0000*5C
+$GNGSA,A,3,05,07,13,28,30,15,,,,,,,2.84,1.44,2.45*1D
+$GNGSA,A,3,,,,,,,,,,,,,2.84,1.44,2.45*10
+$GPGSV,3,1,12,05,51,194,47,07,18,060,27,08,08,035,22,13,71,296,32*75
+$GPGSV,3,2,12,15,34,290,26,21,15,308,12,24,04,240,,27,03,007,*7D
+$GPGSV,3,3,12,28,45,116,29,30,50,064,31,36,25,141,,49,32,173,46*77
+$GLGSV,1,1,00*65
+$GNGLL,5049.38206,N,00007.39011,W,114733.00,A,D*69
 """
 
 import time
@@ -43,12 +47,12 @@ from scs_host.sys.host_serial import HostSerial
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class PAM7Q(object):
+class SAMM8Q(object):
     """
-    u-blox 7 GPS Antenna Module
+    u-blox SAM M8Q GPS Antenna Module
     """
 
-    SOURCE =                    "PAM7Q"
+    SOURCE =                    "SAM8Q"
 
     START_MESSAGE_IDS =         GPRMC.MESSAGE_IDS
 
@@ -120,7 +124,7 @@ class PAM7Q(object):
         # start...
         start = None
         for start in range(len(reports)):
-            if reports[start].str(0) in PAM7Q.START_MESSAGE_IDS:
+            if reports[start].str(0) in SAMM8Q.START_MESSAGE_IDS:
                 break
 
         if start is None:
@@ -160,7 +164,11 @@ class PAM7Q(object):
         return sentences
 
 
+    def line(self):
+        return self.__serial.read_line("\r\n", self.__SERIAL_COMMS_TIMEOUT)
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PAM7Q:{io:%s, serial:%s}" % (self.__io, self.__serial)
+        return "SAMM8Q:{io:%s, serial:%s}" % (self.__io, self.__serial)

@@ -104,3 +104,9 @@ class OPC(object):
     @abstractmethod
     def firmware(self):
         pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __str__(self, *args, **kwargs):
+        return self.__class__.__name__ + ":{io:%s, spi:%s}" % (self._io, self._spi)

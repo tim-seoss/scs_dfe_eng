@@ -6,7 +6,7 @@ Created on 11 Jul 2017
 settings for OPCMonitor
 
 example JSON:
-{"model": "N2", "sample-period": 10, "power-saving": false}
+{"model": "R1", "sample-period": 10, "power-saving": false}
 """
 
 import os
@@ -80,10 +80,10 @@ class OPCConf(PersistentJSONable):
         if self.model == OPCN2.SOURCE:
             return OPCN2(host.opc_spi_bus(), host.opc_spi_device())
 
-        if self.model == OPCN3.SOURCE:
+        elif self.model == OPCN3.SOURCE:
             return OPCN3(host.opc_spi_bus(), host.opc_spi_device())
 
-        if self.model == OPCR1.SOURCE:
+        elif self.model == OPCR1.SOURCE:
             return OPCR1(host.opc_spi_bus(), host.opc_spi_device())
 
         else:
