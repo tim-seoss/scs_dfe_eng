@@ -6,7 +6,7 @@ Created on 11 Jul 2017
 settings for OPCMonitor
 
 example JSON:
-{"model": "R1", "sample-period": 10, "power-saving": false}
+{"model": "R1", "sample-period": 10, "power-saving": false, "spi-bus": 0, "spi-device": 0}
 """
 
 import os
