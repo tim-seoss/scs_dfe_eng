@@ -19,7 +19,7 @@ from scs_host.sys.host import Host
 I2C.open(Host.I2C_SENSORS)
 
 try:
-    io = PCA8574.construct(IO.ADDR, IO.filename())
+    io = PCA8574.construct(IO.ADDR, Host.lock_dir(), "dfe_io.json")
     print(io)
 
     byte = io.read()
