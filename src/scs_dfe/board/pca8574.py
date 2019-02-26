@@ -97,7 +97,7 @@ class PCA8574State(PersistentJSONable):
 
     @classmethod
     def persistence_location(cls, _):
-        return None, None
+        raise NotImplementedError()
 
 
     # ----------------------------------------------------------------------------------------------------------------
