@@ -24,8 +24,8 @@ class PCA8574(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct(cls, addr, filename):
-        device = PCA8574(addr, filename)
+    def construct(cls, addr, directory, file):
+        device = PCA8574(addr, directory, file)
 
         try:
             device.read()
@@ -37,12 +37,13 @@ class PCA8574(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, addr, filename):
+    def __init__(self, addr, directory, file):
         """
         Constructor
         """
         self.__addr = addr
-        self.__filename = filename
+        self.__directory = directory
+        self.__file = file
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -71,21 +72,21 @@ class PCA8574(object):
 
     @property
     def state(self):
-        return PCA8574State.load_from_file(self.__filename)
+        return PCA8574State.load_from_file(os.path.join(self.__directory, self.__file))
 
 
     @state.setter
     def state(self, byte):
-        state = PCA8574State.load_from_file(self.__filename)
+        state = PCA8574State.load_from_file(os.path.join(self.__directory, self.__file))
 
         state.byte = byte
-        state.save_to_file(self.__filename)
+        state.save_to_file(self.__directory, self.__file)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PCA8574:{addr:0x%02x, filename:%s}" % (self.__addr, self.__filename)
+        return "PCA8574:{addr:0x%02x, directory:%s, file:%s}" % (self.__addr, self.__directory, self.__file)
 
 
 # --------------------------------------------------------------------------------------------------------------------
