@@ -9,8 +9,6 @@ example JSON:
 {"model": "R1", "sample-period": 10, "power-saving": false, "spi-bus": 0, "spi-device": 0}
 """
 
-import os
-
 from collections import OrderedDict
 
 from scs_core.data.json import PersistentJSONable
@@ -32,8 +30,8 @@ class OPCConf(PersistentJSONable):
     __FILENAME = "opc_conf.json"
 
     @classmethod
-    def filename(cls, host):
-        return os.path.join(host.conf_dir(), cls.__FILENAME)
+    def persistence_location(cls, host):
+        return host.conf_dir(), cls.__FILENAME
 
 
     # ----------------------------------------------------------------------------------------------------------------
