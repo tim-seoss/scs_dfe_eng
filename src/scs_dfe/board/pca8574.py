@@ -96,8 +96,8 @@ class PCA8574State(PersistentJSONable):
     """
 
     @classmethod
-    def filename(cls, host):
-        return None
+    def persistence_location(cls, _):
+        return None, None
 
 
     # ----------------------------------------------------------------------------------------------------------------
