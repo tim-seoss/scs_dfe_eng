@@ -56,6 +56,8 @@ class PAM7Q(object):
 
     __BOOT_DELAY =              0.500           # seconds
 
+    __EOL =                     "\r\n"
+
     __SERIAL_LOCK_TIMEOUT =     3.0
     __SERIAL_COMMS_TIMEOUT =    1.0
 
@@ -93,7 +95,7 @@ class PAM7Q(object):
     def report(self, message_class):
         for i in range(11):
             try:
-                line = self.__serial.read_line("\r\n", self.__SERIAL_COMMS_TIMEOUT)
+                line = self.__serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
                 r = NMEAReport.construct(line)
 
                 if r.str(0) in message_class.MESSAGE_IDS:
@@ -111,7 +113,7 @@ class PAM7Q(object):
         reports = []
         for i in range(20):
             try:
-                r = NMEAReport.construct(self.__serial.read_line("\r\n", self.__SERIAL_COMMS_TIMEOUT))
+                r = NMEAReport.construct(self.__serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT))
                 reports.append(r)
 
             except (UnicodeDecodeError, ValueError):
