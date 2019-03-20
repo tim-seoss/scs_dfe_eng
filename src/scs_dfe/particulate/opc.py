@@ -6,7 +6,7 @@ Created on 23 Jan 2019
 
 import time
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 from scs_dfe.board.io import IO
 
@@ -16,7 +16,7 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPC(object):
+class OPC(ABC):
     """
     classdocs
     """
