@@ -19,6 +19,8 @@ class SHT31(object):
     """
     Sensirion SHT3x-DIS temperature and humidity
     """
+    MEASUREMENT_DURATION =          0.016
+
     __CMD_RESET =                   0x30a2
     __CMD_CLEAR =                   0x3041
 
@@ -84,7 +86,8 @@ class SHT31(object):
 
         try:
             I2C.start_tx(self.__addr)
-            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_SINGLE_HIGH, 6)
+            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_SINGLE_HIGH, 6,
+                                                                            wait=self.MEASUREMENT_DURATION)
 
             raw_humid = (humid_msb << 8) | humid_lsb
             raw_temp = (temp_msb << 8) | temp_lsb
