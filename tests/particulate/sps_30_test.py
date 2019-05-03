@@ -47,7 +47,7 @@ try:
     # print("-")
 
     print("get cleaning_interval...")
-    interval = opc.cleaning_interval()
+    interval = opc.cleaning_interval
     print("interval: %s" % interval)
     print("-")
 
@@ -70,6 +70,9 @@ try:
 
         sample = opc.sample()
         print(JSONify.dumps(sample))
+
+        ready =  opc.data_ready()
+        print("ready: %s" % ready)
         print("-")
 
     print("operations_off...")

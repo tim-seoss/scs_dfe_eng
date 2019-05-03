@@ -84,7 +84,7 @@ class OPCMonitor(SynchronisedProcess):
 
                 try:
                     if not self.__opc.data_ready():
-                        print("OPCMonitor.run: data not ready", file=sys.stderr)
+                        print("OPCMonitor.run: data not ready.", file=sys.stderr)       # TODO: set _value to None
                         sys.stderr.flush()
                         continue
 
@@ -115,7 +115,6 @@ class OPCMonitor(SynchronisedProcess):
                 # monitor...
                 if power_cycle:
                     self.__power_cycle()
-
 
         except KeyboardInterrupt:
             pass
