@@ -18,13 +18,14 @@ from scs_core.data.modbus_crc import ModbusCRC
 from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.climate.sht31 import SHT31
+
+from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
-from scs_dfe.particulate.opc import OPC
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCN3(OPC):
+class OPCN3(AlphasenseOPC):
     """
     classdocs
     """

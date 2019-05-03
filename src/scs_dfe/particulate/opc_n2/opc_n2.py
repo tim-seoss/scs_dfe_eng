@@ -14,12 +14,12 @@ from scs_core.data.datum import Decode
 
 from scs_core.particulate.opc_datum import OPCDatum
 
-from scs_dfe.particulate.opc import OPC
+from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCN2(OPC):
+class OPCN2(AlphasenseOPC):
     """
     classdocs
     """

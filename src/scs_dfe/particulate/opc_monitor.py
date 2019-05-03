@@ -97,7 +97,6 @@ class OPCMonitor(SynchronisedProcess):
 
                 # discard first...
                 if self.__first_reading:
-                    datum = OPCDatum.null_datum()
                     self.__first_reading = False
 
                 # report...
@@ -147,7 +146,9 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        return None if value is None else OPCDatum.construct_from_jdict(OrderedDict(value))
+        datum_class = self.__opc.datum_class()
+
+        return None if value is None else datum_class.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
