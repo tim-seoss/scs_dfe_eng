@@ -10,8 +10,6 @@ import time
 from collections import OrderedDict
 from multiprocessing import Manager
 
-from scs_core.particulate.opc_datum import OPCDatum
-
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
@@ -41,7 +39,9 @@ class OPCMonitor(SynchronisedProcess):
 
         self.__opc = opc
         self.__conf = conf
+
         self.__first_reading = True
+        self.__datum_class = self.__opc.datum_class()
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -67,35 +67,44 @@ class OPCMonitor(SynchronisedProcess):
 
             super().stop()
 
-        except KeyboardInterrupt:
-            pass
-
-        except LockTimeout:             # because __power_cycle() may be running!
+        except (KeyboardInterrupt, LockTimeout, OSError):
             pass
 
 
     def run(self):
         try:
+            # clean...
+            self.__opc.clean()
+
+            # sample...
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
                 power_cycle = False
 
-                # sample...
                 try:
+                    if not self.__opc.data_ready():
+                        print("OPCMonitor.run: data not ready", file=sys.stderr)
+                        sys.stderr.flush()
+                        continue
+
                     datum = self.__opc.sample()
 
                     if datum.is_zero() and not self.__first_reading:
                         raise ValueError("zero reading")
 
                 except ValueError as ex:
-                    datum = OPCDatum.null_datum()
+                    datum = self.__datum_class.null_datum()
                     power_cycle = True
 
-                    print("OPCMonitor: %s" % ex, file=sys.stderr)
+                    print("OPCMonitor.run: %s" % ex, file=sys.stderr)
                     sys.stderr.flush()
 
-                # discard first...
+                except OSError as ex:
+                    print("OPCMonitor.run: %s" % ex, file=sys.stderr)
+                    self.__error(-1)
+                    break
+
                 if self.__first_reading:
                     self.__first_reading = False
 
@@ -107,12 +116,19 @@ class OPCMonitor(SynchronisedProcess):
                 if power_cycle:
                     self.__power_cycle()
 
+
         except KeyboardInterrupt:
             pass
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # SynchronisedProcess special operations...
+
+    def __error(self, code):
+        with self._lock:
+            del self._value[:]
+            self._value.append(code)
+
 
     def __power_cycle(self):
         print("OPCMonitor: power cycle", file=sys.stderr)
@@ -146,9 +162,10 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        datum_class = self.__opc.datum_class()
+        if len(value) == 1 and value[0] == -1:
+            raise StopIteration()
 
-        return None if value is None else datum_class.construct_from_jdict(OrderedDict(value))
+        return None if value is None else self.__datum_class.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------

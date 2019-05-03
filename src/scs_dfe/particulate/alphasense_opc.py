@@ -66,7 +66,13 @@ class AlphasenseOPC(OPC, ABC):
         pass
 
 
-    def set_cleaning_interval(self, interval):
+    @property
+    def cleaning_interval(self):
+        return None
+
+
+    @cleaning_interval.setter
+    def cleaning_interval(self, interval):
         pass
 
 

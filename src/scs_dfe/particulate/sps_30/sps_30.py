@@ -37,6 +37,7 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     __BOOT_TIME =                       8.0         # seconds
+    __POWER_CYCLE_TIME =                2.0         # seconds
 
     __FAN_START_TIME =                  2.0         # seconds
     __FAN_STOP_TIME =                   2.0         # seconds
@@ -129,7 +130,7 @@ class SPS30(OPC):
 
     @classmethod
     def power_cycle_time(cls):
-        return cls.__BOOT_TIME
+        return cls.__POWER_CYCLE_TIME
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -173,6 +174,7 @@ class SPS30(OPC):
         time.sleep(self.__CLEANING_TIME)
 
 
+    @property
     def cleaning_interval(self):
         r = self.__read(self.__CMD_AUTO_CLEANING_INTERVAL, 6)
         interval = Decode.unsigned_long(r[0:4], '>')
@@ -180,7 +182,8 @@ class SPS30(OPC):
         return interval
 
 
-    def set_cleaning_interval(self, interval):
+    @cleaning_interval.setter
+    def cleaning_interval(self, interval):
         values = Encode.unsigned_long(interval, '>')
         self.__write(self.__CMD_AUTO_CLEANING_INTERVAL, *values)
         time.sleep(self.__POST_WRITE_DELAY)

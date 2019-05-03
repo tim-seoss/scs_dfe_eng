@@ -79,8 +79,15 @@ class OPC(ABC):
         pass
 
 
+    @property
     @abstractmethod
-    def set_cleaning_interval(self, interval):
+    def cleaning_interval(self):
+        pass
+
+
+    @cleaning_interval.setter
+    @abstractmethod
+    def cleaning_interval(self, interval):
         pass
 
 
