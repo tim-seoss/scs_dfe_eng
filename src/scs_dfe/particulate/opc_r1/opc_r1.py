@@ -18,12 +18,13 @@ from scs_core.data.modbus_crc import ModbusCRC
 from scs_core.particulate.opc_datum import OPCDatum
 
 from scs_dfe.climate.sht31 import SHT31
-from scs_dfe.particulate.opc import OPC
+
+from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCR1(OPC):
+class OPCR1(AlphasenseOPC):
     """
     classdocs
     """
@@ -144,7 +145,7 @@ class OPCR1(OPC):
             chars = self.__read_bytes(64)
 
             # checksum...
-            required = Decode.unsigned_int(chars[62:64])
+            required = Decode.unsigned_int(chars[62:64], '<')
             actual = ModbusCRC.compute(chars[:62])
 
             if required != actual:
@@ -154,7 +155,7 @@ class OPCR1(OPC):
             rec = LocalizedDatetime.now()
 
             # bins...
-            bins = [Decode.unsigned_int(chars[i:i + 2]) for i in range(0, 32, 2)]
+            bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 32, 2)]
 
             # bin MToFs...
             bin_1_mtof = chars[32]
@@ -163,27 +164,27 @@ class OPCR1(OPC):
             bin_7_mtof = chars[35]
 
             # temperature & humidity
-            raw_temp = Decode.unsigned_int(chars[40:42])
-            raw_humid = Decode.unsigned_int(chars[42:44])
+            raw_temp = Decode.unsigned_int(chars[40:42], '<')
+            raw_humid = Decode.unsigned_int(chars[42:44], '<')
 
             sht = SHTDatum(SHT31.humid(raw_humid), SHT31.temp(raw_temp))
 
             # period...
-            period = Decode.float(chars[44:48])
+            period = Decode.float(chars[44:48], '<')
 
             # PMx...
             try:
-                pm1 = Decode.float(chars[50:54])
+                pm1 = Decode.float(chars[50:54], '<')
             except TypeError:
                 pm1 = None
 
             try:
-                pm2p5 = Decode.float(chars[54:58])
+                pm2p5 = Decode.float(chars[54:58], '<')
             except TypeError:
                 pm2p5 = None
 
             try:
-                pm10 = Decode.float(chars[58:62])
+                pm10 = Decode.float(chars[58:62], '<')
             except TypeError:
                 pm10 = None
 

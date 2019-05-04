@@ -14,12 +14,12 @@ from scs_core.data.datum import Decode
 
 from scs_core.particulate.opc_datum import OPCDatum
 
-from scs_dfe.particulate.opc import OPC
+from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCN2(OPC):
+class OPCN2(AlphasenseOPC):
     """
     classdocs
     """
@@ -128,7 +128,7 @@ class OPCN2(OPC):
             rec = LocalizedDatetime.now()
 
             # bins...
-            bins = [Decode.unsigned_int(chars[i:i + 2]) for i in range(0, 32, 2)]
+            bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 32, 2)]
 
             # bin MToFs...
             bin_1_mtof = chars[32]
@@ -137,10 +137,10 @@ class OPCN2(OPC):
             bin_7_mtof = chars[35]
 
             # period...
-            period = Decode.float(chars[44:48])
+            period = Decode.float(chars[44:48], '<')
 
             # checksum...
-            required = Decode.unsigned_int(chars[48:50])
+            required = Decode.unsigned_int(chars[48:50], '<')
             actual = sum(bins) % 65536
 
             if required != actual:
@@ -148,17 +148,17 @@ class OPCN2(OPC):
 
             # PMx...
             try:
-                pm1 = Decode.float(chars[50:54])
+                pm1 = Decode.float(chars[50:54], '<')
             except TypeError:
                 pm1 = None
 
             try:
-                pm2p5 = Decode.float(chars[54:58])
+                pm2p5 = Decode.float(chars[54:58], '<')
             except TypeError:
                 pm2p5 = None
 
             try:
-                pm10 = Decode.float(chars[58:62])
+                pm10 = Decode.float(chars[58:62], '<')
             except TypeError:
                 pm10 = None
 

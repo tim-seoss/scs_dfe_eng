@@ -19,6 +19,8 @@ from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 from scs_dfe.particulate.opc_r1.opc_r1 import OPCR1
 
+from scs_dfe.particulate.sps_30.sps_30 import SPS30
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -53,7 +55,7 @@ class OPCConf(PersistentJSONable):
 
     @classmethod
     def is_valid_model(cls, model):
-        return model in (OPCN2.SOURCE, OPCN3.SOURCE, OPCR1.SOURCE)
+        return model in (OPCN2.SOURCE, OPCN3.SOURCE, OPCR1.SOURCE, SPS30.SOURCE)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -89,6 +91,9 @@ class OPCConf(PersistentJSONable):
 
         elif self.model == OPCR1.SOURCE:
             return OPCR1(self.opc_spi_bus(host), self.opc_spi_device(host))
+
+        elif self.model == SPS30.SOURCE:
+            return SPS30(SPS30.DEFAULT_ADDR)
 
         else:
             raise ValueError('unknown model: %s' % self.model)
@@ -148,8 +153,11 @@ class OPCConf(PersistentJSONable):
         jdict['sample-period'] = self.__sample_period
         jdict['power-saving'] = self.__power_saving
 
-        jdict['spi-bus'] = self.__spi_bus
-        jdict['spi-device'] = self.__spi_device
+        if self.__spi_bus is not None:
+            jdict['spi-bus'] = self.__spi_bus
+
+        if self.__spi_device is not None:
+            jdict['spi-device'] = self.__spi_device
 
         return jdict
 
