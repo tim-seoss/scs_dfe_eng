@@ -184,8 +184,7 @@ class SPS30(OPC):
     @cleaning_interval.setter
     def cleaning_interval(self, interval):
         values = Encode.unsigned_long(interval, '>')
-        self.__write(self.__CMD_AUTO_CLEANING_INTERVAL, *values)
-        time.sleep(self.__POST_WRITE_DELAY)
+        self.__write(self.__CMD_AUTO_CLEANING_INTERVAL, self.__POST_WRITE_DELAY, *values)
 
 
     # ----------------------------------------------------------------------------------------------------------------
