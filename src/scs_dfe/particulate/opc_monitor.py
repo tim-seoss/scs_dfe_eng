@@ -161,6 +161,9 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
+        print("sample: %s" % value)
+        print("datum_class: %s" % self.__datum_class.__name__)
+
         if len(value) == 1 and value[0] == -1:
             raise StopIteration()
 

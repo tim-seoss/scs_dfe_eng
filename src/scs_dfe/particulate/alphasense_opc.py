@@ -32,7 +32,7 @@ class AlphasenseOPC(OPC, ABC):
 
     @classmethod
     def datum_class(cls):
-        return OPCDatum.__class__
+        return OPCDatum
 
 
     # ----------------------------------------------------------------------------------------------------------------
