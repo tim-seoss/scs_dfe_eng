@@ -27,8 +27,8 @@ try:
     print(opc)
     print("-")
 
-    # print("reset...")
-    # opc.reset()
+    print("reset...")
+    opc.reset()
 
     # print("version...")
     # version = opc.version()
@@ -57,9 +57,9 @@ try:
     opc.operations_on()
     print("-")
 
-    # print("clean...")
-    # opc.clean()
-    # print("-")
+    print("clean...")
+    opc.clean()
+    print("-")
 
 
     timer = IntervalTimer(5)
