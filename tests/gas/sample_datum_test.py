@@ -67,7 +67,7 @@ print("-")
 
 now = LocalizedDatetime.now()
 
-pmx = PMxDatum(now, 11, 22, 33)
+pmx = PMxDatum(now, 11, 22, None, 33)
 print(pmx)
 print("-")
 
