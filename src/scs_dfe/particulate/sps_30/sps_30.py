@@ -5,6 +5,9 @@ Created on 1 May 2019
 
 https://www.sensirion.com/en/environmental-sensors/particulate-matter-sensors-pm25/
 https://bytes.com/topic/python/answers/171354-struct-ieee-754-internal-representation
+
+Firmware report:
+89667EE8A8B34BC0
 """
 
 import time
@@ -264,7 +267,6 @@ class SPS30(OPC):
                 I2C.end_tx()
 
             time.sleep(wait)
-
             return values
 
         finally:

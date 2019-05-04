@@ -27,6 +27,8 @@ class OPCMonitor(SynchronisedProcess):
     classdocs
     """
 
+    __FATAL_ERROR =         -1
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, opc: OPC, conf):
@@ -105,7 +107,7 @@ class OPCMonitor(SynchronisedProcess):
 
                 except OSError as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
-                    self.__error(-1)
+                    self.__error(self.__FATAL_ERROR)
                     break
 
                 if self.__first_reading:
@@ -161,10 +163,7 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             value = self._value
 
-        print("sample: %s" % value)
-        print("datum_class: %s" % self.__datum_class.__name__)
-
-        if len(value) == 1 and value[0] == -1:
+        if len(value) == 1 and value[0] == self.__FATAL_ERROR:
             raise StopIteration()
 
         return None if value is None else self.__datum_class.construct_from_jdict(OrderedDict(value))
