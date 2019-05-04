@@ -56,7 +56,7 @@ class SPS30(OPC):
 
     __POST_WRITE_DELAY =                0.020       # seconds
 
-    __LOCK_TIMEOUT =                    2.0
+    __LOCK_TIMEOUT =                    1.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -153,30 +153,26 @@ class SPS30(OPC):
 
 
     def operations_on(self):
-        self.__write(self.__CMD_START_MEASUREMENT, 0x03, 0x00)
-        time.sleep(self.__FAN_START_TIME)
+        self.__write(self.__CMD_START_MEASUREMENT, self.__FAN_START_TIME, 0x03, 0x00)
 
 
     def operations_off(self):
-        self.__read(self.__CMD_STOP_MEASUREMENT)
-        time.sleep(self.__FAN_STOP_TIME)
+        self.__read(self.__CMD_STOP_MEASUREMENT, self.__FAN_STOP_TIME)
 
 
     def reset(self):
-        self.__read(self.__CMD_RESET)
-        time.sleep(self.__BOOT_TIME)
+        self.__read(self.__CMD_RESET, self.__BOOT_TIME)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def clean(self):
-        self.__read(self.__CMD_START_FAN_CLEANING)
-        time.sleep(self.__CLEANING_TIME)
+        self.__read(self.__CMD_START_FAN_CLEANING, self.__CLEANING_TIME)
 
 
     @property
     def cleaning_interval(self):
-        r = self.__read(self.__CMD_AUTO_CLEANING_INTERVAL, 6)
+        r = self.__read(self.__CMD_AUTO_CLEANING_INTERVAL, 0, 6)
         interval = Decode.unsigned_long(r[0:4], '>')
 
         return interval
@@ -192,13 +188,13 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def data_ready(self):
-        chars = self.__read(self.__CMD_READ_DATA_READY_FLAG, 3)
+        chars = self.__read(self.__CMD_READ_DATA_READY_FLAG, 0, 3)
 
         return chars[1] == 0x01
 
 
     def sample(self):
-        r = self.__read(self.__CMD_READ_MEASURED_VALUES, 60)
+        r = self.__read(self.__CMD_READ_MEASURED_VALUES, 0, 60)
 
         # density...
         pm1 = Decode.float(r[0:4], '>')
@@ -232,14 +228,14 @@ class SPS30(OPC):
 
 
     def version(self):
-        r = self.__read(self.__CMD_READ_ARTICLE_CODE, 48)
+        r = self.__read(self.__CMD_READ_ARTICLE_CODE, 0, 48)
         version = ''.join(chr(byte) for byte in r)
 
         return version
 
 
     def serial_no(self):
-        r = self.__read(self.__CMD_READ_SERIAL_NUMBER, 48)
+        r = self.__read(self.__CMD_READ_SERIAL_NUMBER, 0, 48)
         serial_no = ''.join(chr(byte) for byte in r)
 
         return serial_no
@@ -254,7 +250,7 @@ class SPS30(OPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __read(self, command, count=0):
+    def __read(self, command, wait, count=0):
         try:
             self.obtain_lock()
 
@@ -262,16 +258,20 @@ class SPS30(OPC):
                 I2C.start_tx(self.__addr)
 
                 encoded = I2C.read_cmd16(command, count)
-                return self.__decode(encoded)
+                values = self.__decode(encoded)
 
             finally:
                 I2C.end_tx()
+
+            time.sleep(wait)
+
+            return values
 
         finally:
             self.release_lock()
 
 
-    def __write(self, command, *values):
+    def __write(self, command, wait, *values):
         try:
             self.obtain_lock()
 
@@ -283,6 +283,8 @@ class SPS30(OPC):
 
             finally:
                 I2C.end_tx()
+
+            time.sleep(wait)
 
         finally:
             self.release_lock()

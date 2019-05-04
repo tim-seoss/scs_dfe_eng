@@ -80,12 +80,10 @@ class OPCMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__conf.sample_period)
 
             while timer.true():
-                power_cycle = False
-
                 try:
                     if not self.__opc.data_ready():
-                        print("OPCMonitor.run: data not ready.", file=sys.stderr)       # TODO: set _value to None
-                        sys.stderr.flush()
+                        print("OPCMonitor.run: data not ready.", file=sys.stderr)
+                        self.__empty()
                         continue
 
                     datum = self.__opc.sample()
@@ -93,12 +91,17 @@ class OPCMonitor(SynchronisedProcess):
                     if datum.is_zero() and not self.__first_reading:
                         raise ValueError("zero reading")
 
-                except ValueError as ex:
-                    datum = self.__datum_class.null_datum()
-                    power_cycle = True
+                    with self._lock:
+                        datum.as_list(self._value)
 
+                except LockTimeout as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
-                    sys.stderr.flush()
+                    self.__empty()
+
+                except ValueError as ex:
+                    print("OPCMonitor.run: %s" % ex, file=sys.stderr)
+                    self.__empty()
+                    self.__power_cycle()
 
                 except OSError as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
@@ -107,14 +110,6 @@ class OPCMonitor(SynchronisedProcess):
 
                 if self.__first_reading:
                     self.__first_reading = False
-
-                # report...
-                with self._lock:
-                    datum.as_list(self._value)
-
-                # monitor...
-                if power_cycle:
-                    self.__power_cycle()
 
         except KeyboardInterrupt:
             pass
@@ -127,6 +122,11 @@ class OPCMonitor(SynchronisedProcess):
         with self._lock:
             del self._value[:]
             self._value.append(code)
+
+
+    def __empty(self):
+        with self._lock:
+            del self._value[:]
 
 
     def __power_cycle(self):
