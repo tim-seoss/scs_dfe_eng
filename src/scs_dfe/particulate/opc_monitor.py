@@ -93,8 +93,9 @@ class OPCMonitor(SynchronisedProcess):
                     if datum.is_zero() and not self.__first_reading:
                         raise ValueError("zero reading")
 
-                    with self._lock:
-                        datum.as_list(self._value)
+                    if not self.__first_reading:
+                        with self._lock:
+                            datum.as_list(self._value)
 
                 except LockTimeout as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
