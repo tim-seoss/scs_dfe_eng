@@ -47,10 +47,10 @@ class OPCConf(PersistentJSONable):
         sample_period = jdict.get('sample-period')
         power_saving = jdict.get('power-saving')
 
-        spi_bus = jdict.get('spi-bus')
-        spi_device = jdict.get('spi-device')
+        bus = jdict.get('bus')
+        address = jdict.get('address')
 
-        return OPCConf(model, sample_period, power_saving, spi_bus, spi_device)
+        return OPCConf(model, sample_period, power_saving, bus, address)
 
 
     @classmethod
@@ -60,7 +60,7 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, power_saving, spi_bus, spi_device):
+    def __init__(self, model, sample_period, power_saving, bus, address):
         """
         Constructor
         """
@@ -70,8 +70,8 @@ class OPCConf(PersistentJSONable):
         self.__sample_period = int(sample_period)
         self.__power_saving = bool(power_saving)
 
-        self.__spi_bus = spi_bus
-        self.__spi_device = spi_device
+        self.__bus = bus
+        self.__address = address
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -84,16 +84,16 @@ class OPCConf(PersistentJSONable):
 
     def opc(self, host):
         if self.model == OPCN2.SOURCE:
-            return OPCN2(self.opc_spi_bus(host), self.opc_spi_device(host))
+            return OPCN2(self.opc_bus(host), self.opc_address(host))
 
         elif self.model == OPCN3.SOURCE:
-            return OPCN3(self.opc_spi_bus(host), self.opc_spi_device(host))
+            return OPCN3(self.opc_bus(host), self.opc_address(host))
 
         elif self.model == OPCR1.SOURCE:
-            return OPCR1(self.opc_spi_bus(host), self.opc_spi_device(host))
+            return OPCR1(self.opc_bus(host), self.opc_address(host))
 
         elif self.model == SPS30.SOURCE:
-            return SPS30(SPS30.DEFAULT_ADDR)
+            return SPS30(self.opc_bus(host), SPS30.DEFAULT_ADDR)
 
         else:
             raise ValueError('unknown model: %s' % self.model)
@@ -101,20 +101,20 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def opc_spi_bus(self, host):
+    def opc_bus(self, host):
         try:
-            return int(self.__spi_bus)
+            return int(self.__bus)
 
         except TypeError:
-            return host.opc_spi_bus()
+            return host.opc_bus()
 
 
-    def opc_spi_device(self, host):
+    def opc_address(self, host):
         try:
-            return int(self.__spi_device)
+            return int(self.__address)
 
         except TypeError:
-            return host.opc_spi_device()
+            return host.opc_address()
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -135,13 +135,13 @@ class OPCConf(PersistentJSONable):
 
 
     @property
-    def spi_bus(self):
-        return self.__spi_bus
+    def bus(self):
+        return self.__bus
 
 
     @property
-    def spi_device(self):
-        return self.__spi_device
+    def address(self):
+        return self.__address
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -153,11 +153,11 @@ class OPCConf(PersistentJSONable):
         jdict['sample-period'] = self.__sample_period
         jdict['power-saving'] = self.__power_saving
 
-        if self.__spi_bus is not None:
-            jdict['spi-bus'] = self.__spi_bus
+        if self.__bus is not None:
+            jdict['bus'] = self.__bus
 
-        if self.__spi_device is not None:
-            jdict['spi-device'] = self.__spi_device
+        if self.__address is not None:
+            jdict['address'] = self.__address
 
         return jdict
 
@@ -165,5 +165,5 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, spi_bus:%s, spi_device:%s}" %  \
-               (self.model, self.sample_period, self.power_saving, self.spi_bus, self.spi_device)
+        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s}" %  \
+               (self.model, self.sample_period, self.power_saving, self.bus, self.address)

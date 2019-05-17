@@ -112,6 +112,20 @@ class OPC(ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @property
+    @abstractmethod
+    def bus(self):
+        pass
+
+
+    @property
+    @abstractmethod
+    def address(self):
+        pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def obtain_lock(self):
         Lock.acquire(self.lock_name, self.lock_timeout())
 

@@ -41,13 +41,16 @@ class AlphasenseOPC(OPC, ABC):
         """
         Constructor
         """
-        self._io = IO()
+        self._io = None
         self._spi = SPI(spi_bus, spi_device, spi_mode, spi_clock)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def power_on(self):
+        if self._io is None:
+            self._io = IO()
+
         initial_power_state = self._io.opc_power
 
         self._io.opc_power = IO.LOW
@@ -57,6 +60,9 @@ class AlphasenseOPC(OPC, ABC):
 
 
     def power_off(self):
+        if self._io is None:
+            self._io = IO()
+
         self._io.opc_power = IO.HIGH
 
 
@@ -80,6 +86,18 @@ class AlphasenseOPC(OPC, ABC):
 
     def data_ready(self):
         return True
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def bus(self):
+        return self._spi.bus
+
+
+    @property
+    def address(self):
+        return self._spi.device
 
 
     # ----------------------------------------------------------------------------------------------------------------
