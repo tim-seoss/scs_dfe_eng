@@ -106,7 +106,7 @@ class OPCConf(PersistentJSONable):
             return int(self.__bus)
 
         except TypeError:
-            return host.opc_bus()
+            return host.opc_spi_bus()
 
 
     def opc_address(self, host):
@@ -114,7 +114,7 @@ class OPCConf(PersistentJSONable):
             return int(self.__address)
 
         except TypeError:
-            return host.opc_address()
+            return host.opc_spi_device()
 
 
     # ----------------------------------------------------------------------------------------------------------------
