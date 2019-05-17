@@ -53,6 +53,9 @@ class PCA8574(object):
             I2C.start_tx(self.__addr)
             byte = I2C.read(1)
 
+        except RuntimeError:
+            return None
+
         finally:
             I2C.end_tx()
 
