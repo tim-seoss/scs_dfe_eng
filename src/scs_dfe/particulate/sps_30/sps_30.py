@@ -138,11 +138,12 @@ class SPS30(OPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, addr):
+    def __init__(self, i2c_bus, i2c_addr):
         """
         Constructor
         """
-        self.__addr = addr
+        self.__i2c_bus = i2c_bus
+        self.__i2c_addr = i2c_addr
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -246,8 +247,20 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
+    def bus(self):
+        return self.__i2c_bus
+
+
+    @property
+    def address(self):
+        return self.__i2c_addr
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @property
     def lock_name(self):
-        return self.__class__.__name__ + "-" + ("0x%02x" % self.__addr)
+        return self.__class__.__name__ + "-" + ("0x%02x" % self.__i2c_addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -257,7 +270,7 @@ class SPS30(OPC):
             self.obtain_lock()
 
             try:
-                I2C.start_tx(self.__addr)
+                I2C.start_tx(self.__i2c_addr)
 
                 encoded = I2C.read_cmd16(command, count)
                 values = self.__decode(encoded)
@@ -277,7 +290,7 @@ class SPS30(OPC):
             self.obtain_lock()
 
             try:
-                I2C.start_tx(self.__addr)
+                I2C.start_tx(self.__i2c_addr)
 
                 encoded = self.__encode(values)
                 I2C.write_addr16(command, *encoded)
@@ -294,4 +307,4 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SPS30:{addr:0x%02x}" % self.__addr
+        return "SPS30:{i2c_bus:%d i2c_addr:0x%02x}" % (self.__i2c_bus, self.__i2c_addr)
