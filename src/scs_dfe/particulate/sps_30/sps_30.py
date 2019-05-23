@@ -260,7 +260,7 @@ class SPS30(OPC):
 
     @property
     def lock_name(self):
-        return self.__class__.__name__ + "-" + ("0x%02x" % self.__i2c_addr)
+        return self.__class__.__name__ + '-' + str(self.__i2c_bus) + '-' + ("0x%02x" % self.__i2c_addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
