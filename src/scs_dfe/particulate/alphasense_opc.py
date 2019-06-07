@@ -16,6 +16,9 @@ from scs_dfe.particulate.opc import OPC
 from scs_host.bus.spi import SPI
 
 
+# TODO: fix lock_name()
+# TODO: fix bus and address
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class AlphasenseOPC(OPC, ABC):

@@ -23,6 +23,8 @@ from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
 
 
+# TODO: increase power-off time on power cycle
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN3(AlphasenseOPC):
