@@ -18,15 +18,18 @@ class DSIt1f1(object):
     """
     South Coast Science DSI t1 f1 microcontroller
     """
-    ADDR_AUX =          0x48
+
+    DEFAULT_ADDR =          0x30
+
+    CONVERSION_TIME =       0.1             # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    __RESPONSE_ACK =        1
+    __RESPONSE_NACK =       2
 
-    # ----------------------------------------------------------------------------------------------------------------
-
-    __LOCK_TIMEOUT =    2.0
+    __LOCK_TIMEOUT =        2.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -41,89 +44,45 @@ class DSIt1f1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def start_conversion(self):
-        try:
-            self.obtain_lock()
-            I2C.start_tx(self.__addr)
+        response = self.__cmd(ord('s'), 1)
 
-            response = I2C.read_cmd(ord('s'), 1)
-
-            if response != 1:        # ACK
-                raise RuntimeError("response: %s" % response)
-
-        finally:
-            I2C.end_tx()
-            self.release_lock()
+        if response != self.__RESPONSE_ACK:
+            raise RuntimeError("response: %s" % response)
 
 
     def read_conversion_count(self):
-        try:
-            self.obtain_lock()
-            I2C.start_tx(self.__addr)
+        response = self.__cmd(ord('c'), 4)
 
-            chars = I2C.read_cmd(ord('c'), 4)
+        c_aux = Decode.unsigned_int(response[0:2], '<')     # CS0
+        c_wrk = Decode.unsigned_int(response[2:4], '<')     # CS1
 
-            c_aux = Decode.unsigned_int(chars[0:2], '<')     # CS0
-            c_wrk = Decode.unsigned_int(chars[2:4], '<')     # CS1
-
-            return c_wrk, c_aux
-
-        finally:
-            I2C.end_tx()
-            self.release_lock()
+        return c_wrk, c_aux
 
 
     def read_conversion_voltage(self):
-        try:
-            self.obtain_lock()
-            I2C.start_tx(self.__addr)
+        response = self.__cmd(ord('v'), 8)
 
-            chars = I2C.read_cmd(ord('v'), 8)
+        v_aux = Decode.float(response[0:4], '<')            # CS0
+        v_wrk = Decode.float(response[4:8], '<')            # CS1
 
-            v_aux = Decode.float(chars[0:4], '<')     # CS0
-            v_wrk = Decode.float(chars[4:8], '<')     # CS1
-
-            return round(v_wrk, 5), round(v_aux, 5)
-
-        finally:
-            I2C.end_tx()
-            self.release_lock()
+        return round(v_wrk, 5), round(v_aux, 5)
 
 
     def version_ident(self):
-        try:
-            self.obtain_lock()
-            I2C.start_tx(self.__addr)
+        response = self.__cmd(ord('i'), 40)
 
-            chars = I2C.read_cmd(ord('i'), 40)
-
-            ident = ''.join([chr(char) for char in chars]).strip()
-
-            return ident
-
-        finally:
-            I2C.end_tx()
-            self.release_lock()
+        return ''.join([chr(byte) for byte in response]).strip()
 
 
     def version_tag(self):
-        try:
-            self.obtain_lock()
-            I2C.start_tx(self.__addr)
+        response = self.__cmd(ord('t'), 11)
 
-            chars = I2C.read_cmd(ord('t'), 11)
-
-            tag = ''.join([chr(char) for char in chars]).strip()
-
-            return tag
-
-        finally:
-            I2C.end_tx()
-            self.release_lock()
+        return ''.join([chr(byte) for byte in response]).strip()
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def test(self, cmd, response_size):
+    def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
             I2C.start_tx(self.__addr)

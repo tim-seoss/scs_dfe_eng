@@ -17,7 +17,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-controller = DSIt1f1(0x30)
+controller = DSIt1f1(DSIt1f1.DEFAULT_ADDR)
 print(controller)
 
 
@@ -36,7 +36,6 @@ try:
 
     for _ in range(5):
         controller.start_conversion()
-
         time.sleep(0.1)
 
         c_wrk, c_aux = controller.read_conversion_count()

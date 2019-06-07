@@ -6,8 +6,8 @@ Created on 27 Feb 2018
 the I2C address of the Pt1000 ADC
 
 example documents:
-{"pt1000-addr": "0x68"}        - Alpha Pi Eng, Alpha BB Eng without RTC
-{"pt1000-addr": "0x69"}        - Alpha BB Eng with RTC
+{"src": "AFE", "pt1000-addr": "0x68"}        - Alpha Pi Eng, Alpha BB Eng without RTC
+{"src": "AFE", "pt1000-addr": "0x69"}        - Alpha BB Eng with RTC
 """
 
 from collections import OrderedDict
@@ -21,6 +21,8 @@ from scs_core.gas.pt1000_calib import Pt1000Calib
 from scs_dfe.board.mcp9808 import MCP9808
 
 from scs_dfe.gas.afe import AFE
+from scs_dfe.gas.iei import IEI
+
 from scs_dfe.gas.pt1000 import Pt1000
 from scs_dfe.gas.mcp342x import MCP342X
 
@@ -33,6 +35,13 @@ class DFEConf(PersistentJSONable):
     """
 
     DEFAULT_PT1000_ADDR = 0x68
+
+    __SOURCES = ['AFE', 'IEI']
+    DEFAULT_SOURCE = 'AFE'
+
+    @classmethod
+    def sources(cls):
+        return cls.__SOURCES
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -68,27 +77,29 @@ class DFEConf(PersistentJSONable):
         if not jdict:
             return None
 
+        source = jdict.get('src', cls.DEFAULT_SOURCE)
         pt1000_addr_str = jdict.get('pt1000-addr')
 
         pt1000_addr = None if pt1000_addr_str is None else int(pt1000_addr_str, 0)
 
-        return DFEConf(pt1000_addr)
+        return DFEConf(source, pt1000_addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, pt1000_addr):
+    def __init__(self, source, pt1000_addr):
         """
         Constructor
         """
         super().__init__()
 
+        self.__source = source                      # string
         self.__pt1000_addr = pt1000_addr            # int
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def afe(self, host):
+    def electrochems(self, host):
         # Pt1000...
         pt1000 = self.pt1000(host)
 
@@ -98,7 +109,7 @@ class DFEConf(PersistentJSONable):
 
         sensors = afe_calib.sensors(afe_baseline)
 
-        return AFE(self, pt1000, sensors)
+        return AFE(self, pt1000, sensors) if self.source == 'AFE' else IEI(sensors)
 
 
     def pt1000(self, host):
@@ -120,6 +131,11 @@ class DFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
+    def source(self):
+        return self.__source
+
+
+    @property
     def pt1000_addr(self):
         return self.__pt1000_addr
 
@@ -129,7 +145,8 @@ class DFEConf(PersistentJSONable):
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['pt1000-addr'] = DFEConf.__pt1000_addr_str(self.__pt1000_addr)
+        jdict['src'] = self.source
+        jdict['pt1000-addr'] = DFEConf.__pt1000_addr_str(self.pt1000_addr)
 
         return jdict
 
@@ -137,4 +154,4 @@ class DFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DFEConf:{pt1000_addr:%s}" % DFEConf.__pt1000_addr_str(self.pt1000_addr)
+        return "DFEConf:{source:%s, pt1000_addr:%s}" % (self.source, DFEConf.__pt1000_addr_str(self.pt1000_addr))
