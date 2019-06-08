@@ -12,12 +12,13 @@ import time
 from scs_core.gas.afe_datum import AFEDatum
 
 from scs_dfe.gas.ads1115 import ADS1115
+from scs_dfe.gas.electrochem_interface import ElectrochemInterface
 from scs_dfe.gas.mcp342x import MCP342X
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class AFE(object):
+class AFE(ElectrochemInterface):
     """
     Alphasense Analogue Front-End (AFE) with Ti ADS1115 ADC (gases), Microchip Technology MCP342X ADC (Pt1000 temp)
     """
@@ -55,6 +56,7 @@ class AFE(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # business methods...
 
     def sample(self, sht_datum=None):
         # temperature...
@@ -146,6 +148,7 @@ class AFE(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+    # electrochem callbacks...
 
     def sample_raw_wrk_aux(self, sensor_index, gain_index):
         try:
