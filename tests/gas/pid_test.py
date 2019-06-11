@@ -25,7 +25,7 @@ dfe_conf = DFEConf.load(Host)
 pt1000 = dfe_conf.pt1000(Host)
 
 sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),
-           Sensor.find(Sensor.CODE_VOC_PPB))
+           Sensor.find(Sensor.CODE_VOC_PPB_T1))
 
 
 # --------------------------------------------------------------------------------------------------------------------
