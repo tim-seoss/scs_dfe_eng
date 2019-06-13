@@ -19,7 +19,7 @@ class RPzHeaderT1F1(object):
     South Coast Science DSI t1 f1 microcontroller
     """
 
-    DEFAULT_ADDR =          0x77
+    DEFAULT_ADDR =          0x76
 
 
     # ----------------------------------------------------------------------------------------------------------------

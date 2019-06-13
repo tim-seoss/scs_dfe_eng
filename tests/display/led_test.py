@@ -37,7 +37,7 @@ try:
     time.sleep(1)
 
     colour = 'R'
-    print("valid: %s" % LED.is_valid_colour('G'))
+    print("valid: %s" % LED.is_valid_colour('R'))
 
     led.colour = colour
     print("colour: %s" % led.colour)
