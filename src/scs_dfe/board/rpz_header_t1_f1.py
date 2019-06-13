@@ -68,8 +68,6 @@ class RPzHeaderT1F1(object):
 
 
     def version_ident(self):
-        print("i: 0x%02x" % ord('i'))
-
         response = self.__cmd(ord('i'), 40)
 
         return ''.join([chr(byte) for byte in response]).strip()

@@ -6,7 +6,6 @@ Created on 12 Jun 2019
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import sys
 import time
 
 from scs_dfe.board.rpz_header_t1_f1 import RPzHeaderT1F1

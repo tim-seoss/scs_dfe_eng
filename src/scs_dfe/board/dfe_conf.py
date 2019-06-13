@@ -37,6 +37,7 @@ class DFEConf(PersistentJSONable):
     DEFAULT_PT1000_ADDR = 0x68
 
     __SOURCES = ['AFE', 'IEI']
+
     DEFAULT_SOURCE = 'AFE'
 
     @classmethod
