@@ -41,14 +41,20 @@ try:
 
     print("-")
 
+    header.button_enable()
+
+    count = 0
+
     while True:
+        time.sleep(1)
+
         button_pressed = header.button_pressed()
 
         if button_pressed:
-            print("button pressed")
+            print("button pressed: %d" % count)
             break
 
-        time.sleep(1)
+        count += 1
 
 finally:
     I2C.close()

@@ -6,6 +6,8 @@ Created on 12 Jun 2019
 https://github.com/south-coast-science/scs_rpz_header_t1_f1
 """
 
+import time
+
 from scs_core.data.datum import Decode
 
 from scs_host.bus.i2c import I2C
@@ -16,7 +18,7 @@ from scs_host.lock.lock import Lock
 
 class RPzHeaderT1F1(object):
     """
-    South Coast Science DSI t1 f1 microcontroller
+    Constructor
     """
 
     DEFAULT_ADDR =          0x76
@@ -27,7 +29,8 @@ class RPzHeaderT1F1(object):
     __RESPONSE_ACK =        1
     __RESPONSE_NACK =       2
 
-    __LOCK_TIMEOUT =        2.0
+    __SEND_WAIT_TIME =      0.001               # seconds
+    __LOCK_TIMEOUT =        2.0                 # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -40,6 +43,14 @@ class RPzHeaderT1F1(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def host_shutdown_initiated(self):
+        self.__cmd(ord('s'), 0)
+
+
+    def button_enable(self):
+        self.__cmd(ord('e'), 0)
+
 
     def button_pressed(self):
         response = self.__cmd(ord('p'), 1)
@@ -86,7 +97,11 @@ class RPzHeaderT1F1(object):
             self.obtain_lock()
             I2C.start_tx(self.__addr)
 
-            return I2C.read_cmd(cmd, response_size)
+            response = I2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
+
+            time.sleep(self.__SEND_WAIT_TIME)
+
+            return response
 
         finally:
             I2C.end_tx()
