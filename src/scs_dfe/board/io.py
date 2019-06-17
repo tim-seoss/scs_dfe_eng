@@ -16,10 +16,10 @@ class IO(object):
     """
     NXP PCA8574 remote 8-bit I/O expander
     """
-    HIGH =                  True
-    LOW =                   False
 
     ADDR =                  0x3f
+
+    # ----------------------------------------------------------------------------------------------------------------
 
     __MASK_GPS =            0x01            # 0000 0001
     __MASK_OPC =            0x02            # 0000 0010
@@ -43,10 +43,12 @@ class IO(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, ):
+    def __init__(self, active_high):
         """
         Constructor
         """
+        self.__active_high = active_high
+
         self.__device = PCA8574.construct(IO.ADDR, Host.lock_dir(), self.__FILENAME)
 
 
@@ -54,32 +56,54 @@ class IO(object):
     # power outputs...
 
     @property
-    def gps_power(self):                                    # active low
-        return self.__get_output(IO.__MASK_GPS)
+    def gps_power(self):
+        level = self.__get_output(IO.__MASK_GPS)
+
+        if level is None:
+            return None
+
+        return not (level ^ self.__active_high)             # active high or low
+
 
 
     @gps_power.setter
-    def gps_power(self, level):
+    def gps_power(self, on):
+        level = not (on ^ self.__active_high)               # active high or low
+
         self.__set_output(IO.__MASK_GPS, level)
 
 
     @property
-    def opc_power(self):                                    # active low
-        return self.__get_output(IO.__MASK_OPC)
+    def opc_power(self):
+        level = self.__get_output(IO.__MASK_OPC)
+
+        if level is None:
+            return None
+
+        return not (level ^ self.__active_high)             # active high or low
 
 
     @opc_power.setter
-    def opc_power(self, level):
+    def opc_power(self, on):
+        level = not (on ^ self.__active_high)               # active high or low
+
         self.__set_output(IO.__MASK_OPC, level)
 
 
     @property
-    def ndir_power(self):                                   # active low
-        return self.__get_output(IO.__MASK_NDIR)
+    def ndir_power(self):
+        level = self.__get_output(IO.__MASK_NDIR)
+
+        if level is None:
+            return None
+
+        return not (level ^ self.__active_high)             # active high or low
 
 
     @ndir_power.setter
-    def ndir_power(self, level):
+    def ndir_power(self, on):
+        level = not (on ^ self.__active_high)               # active high or low
+
         self.__set_output(IO.__MASK_NDIR, level)
 
 
@@ -87,23 +111,23 @@ class IO(object):
     # LED outputs...
 
     @property
-    def led_red(self):                                      # active high
+    def led_red(self):                                      # always active high
         return self.__get_output(IO.__MASK_LED_RED)
 
 
     @led_red.setter
-    def led_red(self, level):
-        self.__set_output(IO.__MASK_LED_RED, level)
+    def led_red(self, on):
+        self.__set_output(IO.__MASK_LED_RED, on)
 
 
     @property
-    def led_green(self):                                    # active high
+    def led_green(self):                                    # always active high
         return self.__get_output(IO.__MASK_LED_GREEN)
 
 
     @led_green.setter
-    def led_green(self, level):
-        self.__set_output(IO.__MASK_LED_GREEN, level)
+    def led_green(self, on):
+        self.__set_output(IO.__MASK_LED_GREEN, on)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -147,4 +171,4 @@ class IO(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "IO:{device:%s}" % self.__device
+        return "IO:{active_high:%s, device:%s}" % (self.__active_high, self.__device)

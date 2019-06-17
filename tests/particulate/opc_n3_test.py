@@ -25,7 +25,7 @@ opc = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    opc = OPCN3(Host.opc_spi_bus(), Host.opc_spi_device())
+    opc = OPCN3(False, Host.opc_spi_bus(), Host.opc_spi_device())
     print(opc)
     print("-")
 

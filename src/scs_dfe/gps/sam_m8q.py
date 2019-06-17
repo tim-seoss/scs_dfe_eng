@@ -68,20 +68,20 @@ class SAMM8Q(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, uart):
-        self.__io = IO()
+    def __init__(self, load_switch_active_high, uart):
+        self.__io = IO(load_switch_active_high)
         self.__serial = HostSerial(uart, self.__BAUD_RATE, False)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def power_on(self):
-        self.__io.gps_power = IO.LOW
+        self.__io.gps_power = True
         time.sleep(self.__BOOT_DELAY)
 
 
     def power_off(self):
-        self.__io.gps_power = IO.HIGH
+        self.__io.gps_power = False
 
 
     # ----------------------------------------------------------------------------------------------------------------

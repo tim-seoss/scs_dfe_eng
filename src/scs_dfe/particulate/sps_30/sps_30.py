@@ -138,10 +138,12 @@ class SPS30(OPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, i2c_bus, i2c_addr):
+    def __init__(self, load_switch_active_high, i2c_bus, i2c_addr):
         """
         Constructor
         """
+        super().__init__(load_switch_active_high)
+
         self.__i2c_bus = i2c_bus
         self.__i2c_addr = i2c_addr
 
@@ -307,4 +309,5 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SPS30:{i2c_bus:%d i2c_addr:0x%02x}" % (self.__i2c_bus, self.__i2c_addr)
+        return "SPS30:{load_switch_active_high:%s, io:%s, i2c_bus:%d i2c_addr:0x%02x}" % \
+               (self.load_switch_active_high, self.io, self.__i2c_bus, self.__i2c_addr)

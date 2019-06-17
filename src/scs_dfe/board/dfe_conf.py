@@ -36,7 +36,9 @@ class DFEConf(PersistentJSONable):
 
     DEFAULT_PT1000_ADDR = 0x68
 
-    __SOURCES = ['AFE', 'IEI']
+    # ----------------------------------------------------------------------------------------------------------------
+
+    __SOURCES = ['AFE', 'ZHB']
 
     DEFAULT_SOURCE = 'AFE'
 
@@ -79,23 +81,25 @@ class DFEConf(PersistentJSONable):
             return None
 
         source = jdict.get('src', cls.DEFAULT_SOURCE)
+        load_switch_active_high = jdict.get('load-switch-active-high', False)
         pt1000_addr_str = jdict.get('pt1000-addr')
 
         pt1000_addr = None if pt1000_addr_str is None else int(pt1000_addr_str, 0)
 
-        return DFEConf(source, pt1000_addr)
+        return DFEConf(source, load_switch_active_high, pt1000_addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, source, pt1000_addr):
+    def __init__(self, source, load_switch_active_high, pt1000_addr):
         """
         Constructor
         """
         super().__init__()
 
-        self.__source = source                      # string
-        self.__pt1000_addr = pt1000_addr            # int
+        self.__source = source                                          # string
+        self.__load_switch_active_high = load_switch_active_high        # bool
+        self.__pt1000_addr = pt1000_addr                                # int
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -137,6 +141,11 @@ class DFEConf(PersistentJSONable):
 
 
     @property
+    def load_switch_active_high(self):
+        return self.__load_switch_active_high
+
+
+    @property
     def pt1000_addr(self):
         return self.__pt1000_addr
 
@@ -147,6 +156,7 @@ class DFEConf(PersistentJSONable):
         jdict = OrderedDict()
 
         jdict['src'] = self.source
+        jdict['load-switch-active-high'] = self.load_switch_active_high
         jdict['pt1000-addr'] = DFEConf.__pt1000_addr_str(self.pt1000_addr)
 
         return jdict
@@ -155,4 +165,5 @@ class DFEConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DFEConf:{source:%s, pt1000_addr:%s}" % (self.source, DFEConf.__pt1000_addr_str(self.pt1000_addr))
+        return "DFEConf:{source:%s, load_switch_active_high:%s, pt1000_addr:%s}" % \
+               (self.source, self.load_switch_active_high, DFEConf.__pt1000_addr_str(self.pt1000_addr))

@@ -22,7 +22,7 @@ filename = os.path.join(Host.lock_dir(), "dfe_io.json")
 I2C.open(Host.I2C_SENSORS)
 
 try:
-    io = IO()
+    io = IO(None)
     print(io)
 
     state = PCA8574State.load_from_file(filename)
