@@ -23,13 +23,12 @@ class RPzHeaderT1F1(object):
 
     DEFAULT_ADDR =          0x76
 
-
     # ----------------------------------------------------------------------------------------------------------------
 
     __RESPONSE_ACK =        1
     __RESPONSE_NACK =       2
 
-    __SEND_WAIT_TIME =      0.001               # seconds
+    __SEND_WAIT_TIME =      0.000               # seconds
     __LOCK_TIMEOUT =        2.0                 # seconds
 
 
