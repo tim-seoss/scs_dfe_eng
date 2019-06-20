@@ -16,7 +16,7 @@ from scs_core.data.json import JSONable
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DFEProductID(JSONable):
+class InterfaceID(JSONable):
     """
     classdocs
     """
@@ -49,13 +49,13 @@ class DFEProductID(JSONable):
         """
         Constructor
         """
-        self.__name = DFEProductID.__read('name')
+        self.__name = self.__read('name')
 
-        self.__vendor = DFEProductID.__read('vendor')
-        self.__product = DFEProductID.__read('product')
-        self.__product_id = DFEProductID.__read('product_id')
-        self.__product_ver = DFEProductID.__read('product_ver')
-        self.__uuid = DFEProductID.__read('uuid')
+        self.__vendor = self.__read('vendor')
+        self.__product = self.__read('product')
+        self.__product_id = self.__read('product_id')
+        self.__product_ver = self.__read('product_ver')
+        self.__uuid = self.__read('uuid')
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -107,5 +107,5 @@ class DFEProductID(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DFEProductID:{name:%s, product:%s, product_id:%s, product_ver:%s, uuid:%s, vendor:%s}" % \
+        return "InterfaceID:{name:%s, product:%s, product_id:%s, product_ver:%s, uuid:%s, vendor:%s}" % \
                     (self.name, self.product, self.product_id, self.product_ver, self.uuid, self.vendor)

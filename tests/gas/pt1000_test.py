@@ -12,7 +12,8 @@ from scs_dfe.climate.sht_conf import SHTConf
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
-from scs_dfe.board.dfe_conf import DFEConf
+
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -38,8 +39,12 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    pt1000_conf = DFEConf.load(Host)
-    print(pt1000_conf)
+    interface_conf = InterfaceConf.load(Host)
+    print(interface_conf)
+    print("-")
+
+    interface = interface_conf.interface()
+    print(interface)
     print("-")
 
     pt1000_calib = Pt1000Calib.load(Host)
@@ -50,7 +55,7 @@ try:
     print(pt1000)
     print("-")
 
-    afe = AFE(pt1000_conf, pt1000, [])
+    afe = AFE(interface, pt1000, [])
     print(afe)
     print("-")
 
@@ -75,7 +80,7 @@ try:
     print(pt1000)
     print("-")
 
-    afe = AFE(pt1000_conf, pt1000, [])
+    afe = AFE(interface, pt1000, [])
     print(afe)
     print("-")
 
@@ -86,4 +91,3 @@ try:
 
 finally:
     I2C.close()
-

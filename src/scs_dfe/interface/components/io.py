@@ -4,7 +4,7 @@ Created on 6 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_dfe.board.pca8574 import PCA8574
+from scs_dfe.interface.components.pca8574 import PCA8574
 
 from scs_host.lock.lock import Lock
 from scs_host.sys.host import Host

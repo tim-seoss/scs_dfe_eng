@@ -36,7 +36,7 @@ from scs_core.position.nmea.gprmc import GPRMC
 from scs_core.position.nmea.gpvtg import GPVTG
 from scs_core.position.nmea.nmea_report import NMEAReport
 
-from scs_dfe.board.io import IO
+from scs_dfe.interface.components.io import IO
 
 from scs_host.sys.host_serial import HostSerial
 

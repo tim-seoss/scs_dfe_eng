@@ -12,7 +12,7 @@ import time
 
 from scs_core.gas.sensor import Sensor
 
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 from scs_dfe.gas.afe import AFE
 
 from scs_host.bus.i2c import I2C
@@ -21,8 +21,10 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-dfe_conf = DFEConf.load(Host)
-pt1000 = dfe_conf.pt1000(Host)
+interface_conf = InterfaceConf.load(Host)
+interface = interface_conf.interface()
+
+pt1000 = interface.pt1000(Host)
 
 sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.find(Sensor.CODE_NO),
            Sensor.find(Sensor.CODE_VOC_PPB_T1))
@@ -37,7 +39,7 @@ try:
     print(pid)
     print("-")
 
-    afe = AFE(dfe_conf, pt1000, sensors)
+    afe = AFE(interface, pt1000, sensors)
     print(afe)
     print("-")
 

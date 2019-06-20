@@ -3,6 +3,8 @@ Created on 12 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB)
+
 https://github.com/south-coast-science/scs_rpz_header_t1_f1
 """
 

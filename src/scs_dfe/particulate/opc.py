@@ -8,7 +8,7 @@ import time
 
 from abc import ABC, abstractmethod
 
-from scs_dfe.board.io import IO
+from scs_dfe.interface.components.io import IO
 
 from scs_host.lock.lock import Lock
 
