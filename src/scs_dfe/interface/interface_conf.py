@@ -24,9 +24,14 @@ class InterfaceConf(PersistentJSONable):
     classdocs
     """
 
-    DEFAULT_MODEL = 'DFE'               # TODO: deprecated - provides backwards compatibility
+    DEFAULT_MODEL = 'DFE'           # TODO: deprecated - provides backwards compatibility
 
-    __MODELS = ['DFE', 'DFE/0x68', 'DFE/0x69', 'PZHB']
+    __MODELS = [
+        'DFE',                      # Alpha Pi Eng, ignoring Pt1000
+        'DFE/0x68',                 # Alpha Pi Eng, Alpha BB Eng without RTC
+        'DFE/0x69',                 # Alpha BB Eng with RTC
+        'PZHB'                      # Pi Zero Header Breakout
+    ]
 
     @classmethod
     def models(cls):
