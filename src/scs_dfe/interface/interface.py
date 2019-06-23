@@ -43,7 +43,7 @@ class Interface(ABC):
 
     @property
     @abstractmethod
-    def load_switch_active_high(self):          # TODO: return the IO device
+    def load_switch_active_high(self):          # TODO: return the IO device?
         return None
 
 
