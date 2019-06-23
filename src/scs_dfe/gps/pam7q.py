@@ -36,7 +36,7 @@ from scs_core.position.nmea.gprmc import GPRMC
 from scs_core.position.nmea.gpvtg import GPVTG
 from scs_core.position.nmea.nmea_report import NMEAReport
 
-from scs_dfe.board.io import IO
+from scs_dfe.interface.components.io import IO
 
 from scs_host.sys.host_serial import HostSerial
 
@@ -64,20 +64,20 @@ class PAM7Q(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, uart):
-        self.__io = IO()
+    def __init__(self, load_switch_active_high, uart):
+        self.__io = IO(load_switch_active_high)
         self.__serial = HostSerial(uart, self.__BAUD_RATE, False)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def power_on(self):
-        self.__io.gps_power = IO.LOW
+        self.__io.gps_power = True
         time.sleep(self.__BOOT_DELAY)
 
 
     def power_off(self):
-        self.__io.gps_power = IO.HIGH
+        self.__io.gps_power = False
 
 
     # ----------------------------------------------------------------------------------------------------------------

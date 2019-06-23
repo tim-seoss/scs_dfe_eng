@@ -6,7 +6,7 @@ Created on 6 Aug 2016
 
 import time
 
-from scs_dfe.board.board_datum import BoardDatum
+from scs_dfe.interface.interface_status import InterfaceStatus
 
 from scs_host.bus.i2c import I2C
 
@@ -39,7 +39,7 @@ class MCP9808(object):
 
     @classmethod
     def null_datum(cls):
-        return BoardDatum(None)
+        return InterfaceStatus(None)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ class MCP9808(object):
         if not self.__running:
             raise ValueError("MCP9808:sense: conversion not running.")
 
-        return BoardDatum(MCP9808.__read_temp())
+        return InterfaceStatus(MCP9808.__read_temp())
 
 
     # ----------------------------------------------------------------------------------------------------------------

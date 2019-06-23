@@ -76,27 +76,26 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def opc_monitor(self, host):
-        opc = self.opc(host)
+    def opc_monitor(self, host, load_switch_active_high):
+        opc = self.opc(host, load_switch_active_high)
 
         return OPCMonitor(opc, self)
 
 
-    def opc(self, host):
+    def opc(self, host, load_switch_active_high):
         if self.model == OPCN2.SOURCE:
-            return OPCN2(self.opc_bus(host), self.opc_address(host))
+            return OPCN2(load_switch_active_high, self.opc_bus(host), self.opc_address(host))
 
         elif self.model == OPCN3.SOURCE:
-            return OPCN3(self.opc_bus(host), self.opc_address(host))
+            return OPCN3(load_switch_active_high, self.opc_bus(host), self.opc_address(host))
 
         elif self.model == OPCR1.SOURCE:
-            return OPCR1(self.opc_bus(host), self.opc_address(host))
+            return OPCR1(load_switch_active_high, self.opc_bus(host), self.opc_address(host))
 
         elif self.model == SPS30.SOURCE:
-            return SPS30(self.opc_bus(host), SPS30.DEFAULT_ADDR)
+            return SPS30(load_switch_active_high, self.opc_bus(host), SPS30.DEFAULT_ADDR)
 
-        else:
-            raise ValueError('unknown model: %s' % self.model)
+        raise ValueError('unknown model: %s' % self.model)
 
 
     # ----------------------------------------------------------------------------------------------------------------

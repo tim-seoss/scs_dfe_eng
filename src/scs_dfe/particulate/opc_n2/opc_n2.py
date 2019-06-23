@@ -75,11 +75,11 @@ class OPCN2(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, spi_bus, spi_device):
+    def __init__(self, load_switch_active_high, spi_bus, spi_device):
         """
         Constructor
         """
-        super().__init__(spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
+        super().__init__(load_switch_active_high, spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------

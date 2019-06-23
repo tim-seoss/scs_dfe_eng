@@ -27,7 +27,7 @@ from scs_host.sys.host import Host
 
 I2C.open(Host.I2C_SENSORS)
 
-gps = PAM7Q(Host.gps_device())
+gps = PAM7Q(False, Host.gps_device())
 print(gps)
 print("-")
 

@@ -23,7 +23,7 @@ from scs_host.sys.host import Host
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    opc = SPS30(Host.I2C_SENSORS, SPS30.DEFAULT_ADDR)
+    opc = SPS30(False, Host.I2C_SENSORS, SPS30.DEFAULT_ADDR)
     print(opc)
     print("-")
 

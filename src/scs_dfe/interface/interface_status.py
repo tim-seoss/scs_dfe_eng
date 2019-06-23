@@ -12,7 +12,7 @@ from scs_core.data.json import JSONable
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class BoardDatum(JSONable):
+class InterfaceStatus(JSONable):
     """
     classdocs
     """
@@ -47,4 +47,4 @@ class BoardDatum(JSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "BoardDatum:{temp:%0.1f}" % self.temp
+        return "InterfaceStatus:{temp:%0.1f}" % self.temp

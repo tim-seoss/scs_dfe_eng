@@ -4,7 +4,7 @@ Created on 20 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_dfe.board.io import IO
+from scs_dfe.interface.components.io import IO
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ class LED(object):
         """
         Constructor
         """
-        self.__io = IO()
+        self.__io = IO(None)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -42,10 +42,10 @@ class LED(object):
     def colour(self):
         state = 0x00
 
-        if self.__io.led_red == IO.HIGH:
+        if self.__io.led_red:
             state |= LED.__RED_MASK
 
-        if self.__io.led_green == IO.HIGH:
+        if self.__io.led_green:
             state |= LED.__GREEN_MASK
 
         for colour, value in LED.STATES.items():
@@ -62,8 +62,8 @@ class LED(object):
 
         state = LED.STATES[colour]
 
-        self.__io.led_red = IO.HIGH if state & LED.__RED_MASK else IO.LOW
-        self.__io.led_green = IO.HIGH if state & LED.__GREEN_MASK else IO.LOW
+        self.__io.led_red = state & LED.__RED_MASK
+        self.__io.led_green = state & LED.__GREEN_MASK
 
 
     # ----------------------------------------------------------------------------------------------------------------
