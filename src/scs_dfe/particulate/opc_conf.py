@@ -95,8 +95,7 @@ class OPCConf(PersistentJSONable):
         elif self.model == SPS30.SOURCE:
             return SPS30(load_switch_active_high, self.opc_bus(host), SPS30.DEFAULT_ADDR)
 
-        else:
-            raise ValueError('unknown model: %s' % self.model)
+        raise ValueError('unknown model: %s' % self.model)
 
 
     # ----------------------------------------------------------------------------------------------------------------
