@@ -16,7 +16,7 @@ from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.pt1000_calib import Pt1000Calib
 
-from scs_dfe.board.dfe_conf import DFEConf
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.pt1000 import Pt1000
@@ -27,37 +27,42 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-dfe_conf = DFEConf.load(Host)
-print(dfe_conf)
-print("-")
-
-pt1000_calib = Pt1000Calib.load(Host)
-print(pt1000_calib)
-print("-")
-
-pt1000 = Pt1000(pt1000_calib)
-print(pt1000)
-print("-")
-
-afe_calib = AFECalib.load(Host)
-print(afe_calib)
-print("-")
-
-afe_baseline = AFEBaseline.load(Host)
-print(afe_baseline)
-print("-")
-
-sensors = afe_calib.sensors(afe_baseline)
-print('\n\n'.join(str(sensor) for sensor in sensors))
-print("-")
-
-
-# --------------------------------------------------------------------------------------------------------------------
 
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    afe = AFE(dfe_conf, pt1000, sensors)
+
+    interface_conf = InterfaceConf.load(Host)
+    print(interface_conf)
+    print("-")
+
+    interface = interface_conf.interface()
+    print(interface)
+    print("-")
+
+    pt1000_calib = Pt1000Calib.load(Host)
+    print(pt1000_calib)
+    print("-")
+
+    pt1000 = Pt1000(pt1000_calib)
+    print(pt1000)
+    print("-")
+
+    afe_calib = AFECalib.load(Host)
+    print(afe_calib)
+    print("-")
+
+    afe_baseline = AFEBaseline.load(Host)
+    print(afe_baseline)
+    print("-")
+
+    sensors = afe_calib.sensors(afe_baseline)
+    print('\n\n'.join(str(sensor) for sensor in sensors))
+    print("-")
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+    afe = AFE(interface, pt1000, sensors)
     print(afe)
     print("-")
 

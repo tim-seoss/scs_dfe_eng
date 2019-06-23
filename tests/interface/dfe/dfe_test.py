@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Created on 25 Sep 2016
+Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_dfe.board.at24mac402 import AT24MAC402
+from scs_dfe.interface.dfe.dfe import DFE
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -14,16 +14,20 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-Host.enable_eeprom_access()
-
-
-# --------------------------------------------------------------------------------------------------------------------
+interface = DFE(None)
+print(interface)
+print("-")
 
 try:
-    I2C.open(Host.I2C_EEPROM)
+    I2C.open(Host.I2C_SENSORS)
 
-    eeprom = AT24MAC402()
-    print(eeprom)
+    gas_sensors = interface.gas_sensors(Host)
+    print(gas_sensors)
+    print("-")
+
+    datum = interface.temp()
+    print(datum)
+    print("-")
 
 finally:
     I2C.close()
