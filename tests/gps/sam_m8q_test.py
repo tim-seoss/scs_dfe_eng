@@ -57,15 +57,6 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    # print("monitor...")
-    #
-    # while True:
-    #     line = gps.line()
-    #     print(line)
-    #
-    #     if not line:
-    #         break
-
     print("report...")
 
     gga = gps.report(GPGGA)
