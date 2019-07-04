@@ -47,7 +47,7 @@ try:
 
     print("-")
 
-    for _ in range(5):
+    while True:
         controller.start_conversion()
 
         time.sleep(0.1)
@@ -59,6 +59,7 @@ try:
 
         time.sleep(2.0)
 
+except KeyboardInterrupt:
     print("-")
 
 finally:

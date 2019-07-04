@@ -38,7 +38,7 @@ from scs_host.sys.host import Host
 
 I2C.open(Host.I2C_SENSORS)
 
-gps = SAMM8Q(False, Host.gps_device())
+gps = SAMM8Q(True, Host.gps_device())
 print(gps)
 print("-")
 
@@ -56,15 +56,6 @@ try:
 
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    # print("monitor...")
-    #
-    # while True:
-    #     line = gps.line()
-    #     print(line)
-    #
-    #     if not line:
-    #         break
 
     print("report...")
 

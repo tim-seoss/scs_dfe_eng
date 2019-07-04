@@ -6,6 +6,7 @@ Created on 22 Dec 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
 import time
 
 from scs_dfe.display.led import LED
@@ -23,6 +24,8 @@ try:
     print(led)
     print("-")
 
+    sys.stdout.flush()
+
     colour = led.colour
     print("colour: %s" % colour)
     print("-")
@@ -34,7 +37,9 @@ try:
     print("colour: %s" % led.colour)
     print("-")
 
-    time.sleep(1)
+    sys.stdout.flush()
+
+    time.sleep(4)
 
     colour = 'R'
     print("valid: %s" % LED.is_valid_colour('R'))
