@@ -30,7 +30,7 @@ class RPzHeaderT1F1(object):
     __RESPONSE_ACK =        1
     __RESPONSE_NACK =       2
 
-    __SEND_WAIT_TIME =      0.000               # seconds
+    __SEND_WAIT_TIME =      0.010               # seconds
     __LOCK_TIMEOUT =        2.0                 # seconds
 
 
