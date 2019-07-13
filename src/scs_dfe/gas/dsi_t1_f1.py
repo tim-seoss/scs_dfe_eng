@@ -3,6 +3,8 @@ Created on 27 May 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Digital Single Interface (DSI)
+
 https://github.com/south-coast-science/scs_dsi_t1_f1
 """
 
