@@ -81,6 +81,8 @@ class OPCMonitor(SynchronisedProcess):
             # sample...
             timer = IntervalTimer(self.__conf.sample_period)
 
+            zero_count = 0
+
             while timer.true():
                 try:
                     if not self.__opc.data_ready():
@@ -90,8 +92,14 @@ class OPCMonitor(SynchronisedProcess):
 
                     datum = self.__opc.sample()
 
-                    if datum.is_zero() and not self.__first_reading:
-                        raise ValueError("zero reading")
+                    if datum.is_zero():
+                        zero_count += 1
+
+                        if zero_count > 2:
+                            raise ValueError("zero reading")
+
+                    else:
+                        zero_count = 0
 
                     if not self.__first_reading:
                         with self._lock:
