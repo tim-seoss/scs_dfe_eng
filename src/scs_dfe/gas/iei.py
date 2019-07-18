@@ -3,6 +3,8 @@ Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Integrated Electrochem Interface (IEI)
+
 Warning: If an Ox sensor is present, the NO2 sensor must have a lower sensor number (SN) than the Ox sensor,
 otherwise the NO2 cross-sensitivity concentration will not be found.
 """

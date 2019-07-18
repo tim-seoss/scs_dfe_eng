@@ -3,8 +3,12 @@ Created on 27 May 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Digital Single Interface (DSI)
+
 https://github.com/south-coast-science/scs_dsi_t1_f1
 """
+
+import time
 
 from scs_core.data.datum import Decode
 
@@ -29,6 +33,7 @@ class DSIt1f1(object):
     __RESPONSE_ACK =        1
     __RESPONSE_NACK =       2
 
+    __SEND_WAIT_TIME =      0.010               # seconds
     __LOCK_TIMEOUT =        2.0
 
 
@@ -87,7 +92,11 @@ class DSIt1f1(object):
             self.obtain_lock()
             I2C.start_tx(self.__addr)
 
-            return I2C.read_cmd(cmd, response_size)
+            response = I2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
+
+            time.sleep(self.__SEND_WAIT_TIME)
+
+            return response
 
         finally:
             I2C.end_tx()
