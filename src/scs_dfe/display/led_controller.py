@@ -23,8 +23,8 @@ class LEDController(SynchronisedProcess):
     classdocs
     """
 
-    __STATE0_PERIOD =   0.8             # seconds
-    __STATE1_PERIOD =   0.2             # seconds
+    __STATE0_PERIOD =   0.2             # seconds - short period
+    __STATE1_PERIOD =   0.8             # seconds - long period
 
     __WAIT_FOR_STOP =   1.2             # seconds
 
@@ -65,13 +65,13 @@ class LEDController(SynchronisedProcess):
                 if state is None or not state.is_valid():
                     continue
 
-                # state 0...
+                # state 0 (short)...
                 if state.colour0 != self.__led.colour:
                     self.__led.colour = state.colour0
 
                 time.sleep(self.__STATE0_PERIOD)
 
-                # state 1...
+                # state 1 (long)...
                 if state.colour1 != self.__led.colour:
                     self.__led.colour = state.colour1
 
