@@ -40,8 +40,8 @@ class LEDState(JSONable):
         """
         Constructor
         """
-        self.__colour0 = colour0
-        self.__colour1 = colour1
+        self.__colour0 = colour0                    # colour - short period
+        self.__colour1 = colour1                    # colour - long period
 
 
     # ----------------------------------------------------------------------------------------------------------------
