@@ -26,8 +26,10 @@ class OPCMonitor(SynchronisedProcess):
     """
     classdocs
     """
+    __MAX_PERMITTED_ZERO_READINGS =      3
 
-    __FATAL_ERROR =         -1
+    __FATAL_ERROR =                     -1
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -95,7 +97,7 @@ class OPCMonitor(SynchronisedProcess):
                     if datum.is_zero():
                         zero_count += 1
 
-                        if zero_count > 2:
+                        if zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
                             raise ValueError("zero reading")
 
                     else:
