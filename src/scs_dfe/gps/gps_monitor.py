@@ -65,6 +65,13 @@ class GPSMonitor(SynchronisedProcess):
 
 
     def run(self):
+        # preload null datum...
+        datum = GPSDatum(None, None, 0)
+
+        with self._lock:
+            datum.as_list(self._value)
+
+        # sample...
         try:
             timer = IntervalTimer(self.__sample_interval)
 
@@ -74,20 +81,20 @@ class GPSMonitor(SynchronisedProcess):
                 datum = GPSDatum.construct_from_gga(gga)
 
                 if datum is None:
-                    datum = GPSDatum(None, None, 0)         # was continue
+                    continue
 
                 # average...
                 if datum.quality > 0:
                     self.__averaging.append(datum)          # only append valid positional fixes
 
-                value = self.__averaging.compute()
+                average = self.__averaging.compute()
 
-                if value is None:
-                    value = datum                           # provide current datum when there is no average
+                if average is None:
+                    average = datum                         # provide current datum when there is no average
 
                 # report...
                 with self._lock:
-                    value.as_list(self._value)
+                    average.as_list(self._value)
 
         except KeyboardInterrupt:
             pass
