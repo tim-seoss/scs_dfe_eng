@@ -74,7 +74,7 @@ class GPSMonitor(SynchronisedProcess):
                 datum = GPSDatum.construct_from_gga(gga)
 
                 if datum is None:
-                    continue
+                    datum = GPSDatum(None, None, 0)         # was continue
 
                 # average...
                 if datum.quality > 0:
