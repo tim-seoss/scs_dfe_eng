@@ -65,8 +65,8 @@ class GPSMonitor(SynchronisedProcess):
 
 
     def run(self):
-        # preload null datum...
-        datum = GPSDatum(None, None, 0)
+        # default report...
+        datum = GPSDatum.construct_null()
 
         with self._lock:
             datum.as_list(self._value)
