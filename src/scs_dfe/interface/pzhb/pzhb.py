@@ -27,6 +27,10 @@ class PZHB(Interface):
         return None
 
 
+    def null_datum(self):
+        return None
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def gas_sensors(self, host):

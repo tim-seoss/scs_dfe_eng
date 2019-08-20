@@ -56,6 +56,10 @@ class DFE(Interface):
         return self.__temp_sensor.sample()
 
 
+    def null_datum(self):
+        return MCP9808.null_datum()
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def gas_sensors(self, host):
