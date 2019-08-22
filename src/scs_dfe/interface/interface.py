@@ -27,6 +27,11 @@ class Interface(ABC):
     def temp(self):
         pass
 
+
+    @abstractmethod
+    def null_datum(self):
+        pass
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
