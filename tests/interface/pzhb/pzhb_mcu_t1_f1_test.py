@@ -8,7 +8,7 @@ Created on 12 Jun 2019
 
 import time
 
-from scs_dfe.interface.components.rpz_header_t1_f1 import RPzHeaderT1F1
+from scs_dfe.interface.pzhb.pzhb_mcu_t1_f1 import PZHBMCUt1f1
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -16,7 +16,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-header = RPzHeaderT1F1(RPzHeaderT1F1.DEFAULT_ADDR)
+header = PZHBMCUt1f1(PZHBMCUt1f1.DEFAULT_ADDR)
 print(header)
 
 

@@ -4,7 +4,7 @@ Created on 20 Feb 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_dfe.interface.components.io import IO
+from scs_dfe.interface.component.io import IO
 
 
 # --------------------------------------------------------------------------------------------------------------------

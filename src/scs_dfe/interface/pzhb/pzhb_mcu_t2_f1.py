@@ -1,16 +1,18 @@
 """
-Created on 12 Jun 2019
+Created on 21 Aug 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB)
+STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 2
 
-https://github.com/south-coast-science/scs_rpz_header_t1_f1
+https://github.com/south-coast-science/scs_rpz_header_t2_f1
 """
 
 import time
 
 from scs_core.data.datum import Decode
+
+from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
 
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
@@ -18,7 +20,7 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class RPzHeaderT1F1(object):
+class PZHBMCUt2f1(PZHBMCU):
     """
     Constructor
     """
@@ -27,11 +29,8 @@ class RPzHeaderT1F1(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __RESPONSE_ACK =        1
-    __RESPONSE_NACK =       2
-
-    __SEND_WAIT_TIME =      0.010               # seconds
-    __LOCK_TIMEOUT =        2.0                 # seconds
+    __SEND_WAIT_TIME =      0.010                   # seconds
+    __LOCK_TIMEOUT =        2.0                     # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -46,15 +45,35 @@ class RPzHeaderT1F1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def host_shutdown_initiated(self):
-        self.__cmd(ord('s'), 0)
+        cmd = [ord('h'), ord('s'), 0]
+        self.__cmd(cmd, 0)
+
+
+    def peripheral_power(self, enable):
+        cmd = [ord('p'), ord('m'), enable]          # modem
+        self.__cmd(cmd, 0)
+
+        cmd = [ord('p'), ord('a'), True]            # AFE (always on)
+        self.__cmd(cmd, 0)
+
+        cmd = [ord('p'), ord('n'), enable]          # NDIR
+        self.__cmd(cmd, 0)
+
+        cmd = [ord('p'), ord('g'), enable]          # GPS
+        self.__cmd(cmd, 0)
+
+        cmd = [ord('p'), ord('o'), enable]          # OPC
+        self.__cmd(cmd, 0)
 
 
     def button_enable(self):
-        self.__cmd(ord('e'), 0)
+        cmd = [ord('b'), ord('e'), 0]
+        self.__cmd(cmd, 0)
 
 
     def button_pressed(self):
-        response = self.__cmd(ord('p'), 1)
+        cmd = [ord('b'), ord('p'), 0]
+        response = self.__cmd(cmd, 1)
 
         button_pressed = response == 1
 
@@ -62,7 +81,8 @@ class RPzHeaderT1F1(object):
 
 
     def read_batt_v(self):
-        response = self.__cmd(ord('b'), 2)
+        cmd = [ord('m'), ord('b'), 0]
+        response = self.__cmd(cmd, 2)
 
         c_batt = Decode.unsigned_int(response[0:2], '<')
 
@@ -72,7 +92,8 @@ class RPzHeaderT1F1(object):
 
 
     def read_current_count(self):
-        response = self.__cmd(ord('c'), 2)
+        cmd = [ord('m'), ord('c'), 0]
+        response = self.__cmd(cmd, 2)
 
         c_current = Decode.unsigned_int(response[0:2], '<')
 
@@ -80,13 +101,15 @@ class RPzHeaderT1F1(object):
 
 
     def version_ident(self):
-        response = self.__cmd(ord('i'), 40)
+        cmd = [ord('v'), ord('i'), 0]
+        response = self.__cmd(cmd, 40)
 
         return ''.join([chr(byte) for byte in response]).strip()
 
 
     def version_tag(self):
-        response = self.__cmd(ord('t'), 11)
+        cmd = [ord('v'), ord('t'), 0]
+        response = self.__cmd(cmd, 11)
 
         return ''.join([chr(byte) for byte in response]).strip()
 
@@ -134,4 +157,4 @@ class RPzHeaderT1F1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "RPzHeaderT1F1:{addr:0x%0.2x}" % self.addr
+        return "PZHBMCUt2f1:{addr:0x%0.2x}" % self.addr

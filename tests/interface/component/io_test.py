@@ -8,8 +8,8 @@ Created on 6 Feb 2017
 
 import os
 
-from scs_dfe.interface.components.io import IO
-from scs_dfe.interface.components.pca8574 import PCA8574State
+from scs_dfe.interface.component.io import IO
+from scs_dfe.interface.component.pca8574 import PCA8574State
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
