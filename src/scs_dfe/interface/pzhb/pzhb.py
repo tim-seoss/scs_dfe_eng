@@ -32,6 +32,10 @@ class PZHB(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def led(self):
+        return self.__mcu.led()
+
+
     def peripheral_power(self, enable):
         self.__mcu.peripheral_power(enable)
 

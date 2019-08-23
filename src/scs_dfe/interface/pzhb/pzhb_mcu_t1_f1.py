@@ -13,6 +13,7 @@ import time
 from scs_core.data.datum import Decode
 
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
+from scs_dfe.led.io_led import IOLED
 
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
@@ -43,6 +44,10 @@ class PZHBMCUt1f1(PZHBMCU):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def led(self):
+        return IOLED()
+
 
     def host_shutdown_initiated(self):
         self.__cmd(ord('s'), 0)

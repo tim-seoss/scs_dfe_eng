@@ -19,22 +19,17 @@ class PZHBMCU(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
+    def led(self):
+        pass
+
+
+    @abstractmethod
     def host_shutdown_initiated(self):
         pass
 
 
     @abstractmethod
     def peripheral_power(self, enable):
-        pass
-
-
-    @abstractmethod
-    def led1(self, on):
-        pass
-
-
-    @abstractmethod
-    def led2(self, on):
         pass
 
 

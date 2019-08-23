@@ -5,17 +5,15 @@ Created on 20 Feb 2017
 """
 
 from scs_dfe.interface.component.io import IO
+from scs_dfe.led.led import LED
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-
-class LED(object):
+class IOLED(LED):
     """
     classdocs
     """
-    STATES = {'0': 0x00, 'R': 0x01, 'A': 0x03, 'G': 0x02}
-
     __RED_MASK = 0x01
     __GREEN_MASK = 0x02
 
@@ -43,10 +41,10 @@ class LED(object):
         state = 0x00
 
         if self.__io.led_red:
-            state |= LED.__RED_MASK
+            state |= self.__RED_MASK
 
         if self.__io.led_green:
-            state |= LED.__GREEN_MASK
+            state |= self.__GREEN_MASK
 
         for colour, value in LED.STATES.items():
             if value == state:
@@ -62,11 +60,11 @@ class LED(object):
 
         state = LED.STATES[colour]
 
-        self.__io.led_red = state & LED.__RED_MASK
-        self.__io.led_green = state & LED.__GREEN_MASK
+        self.__io.led_red = state & self.__RED_MASK
+        self.__io.led_green = state & self.__GREEN_MASK
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "LED:{io:%s}" % self.__io
+        return "IOLED:{io:%s}" % self.__io

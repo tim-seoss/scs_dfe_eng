@@ -19,6 +19,11 @@ class Interface(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
+    def led(self):
+        pass
+
+
+    @abstractmethod
     def peripheral_power(self, enable):
         pass
 

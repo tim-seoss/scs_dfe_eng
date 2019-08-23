@@ -13,6 +13,7 @@ import time
 from scs_core.data.datum import Decode
 
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
+from scs_dfe.led.led import LED
 
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
@@ -44,6 +45,10 @@ class PZHBMCUt2f1(PZHBMCU):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def led(self):
+        return MCULED(self)
+
+
     def host_shutdown_initiated(self):
         self.__cmd(0, 'h', 'i')
 
@@ -54,14 +59,6 @@ class PZHBMCUt2f1(PZHBMCU):
         self.__cmd(0, 'p', 'n', enable)             # NDIR
         self.__cmd(0, 'p', 'g', enable)             # GPS
         self.__cmd(0, 'p', 'o', enable)             # OPC
-
-
-    def led1(self, on):
-        self.__cmd(0, 'l', '1', on)                 # LED 1
-
-
-    def led2(self, on):
-        self.__cmd(0, 'l', '2', on)                 # LED 2
 
 
     def button_enable(self):
@@ -103,6 +100,16 @@ class PZHBMCUt2f1(PZHBMCU):
         response = self.__cmd(11, 'v', 't')
 
         return ''.join([chr(byte) for byte in response]).strip()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def led1(self, on):
+        self.__cmd(0, 'l', '1', on)                 # LED 1
+
+
+    def led2(self, on):
+        self.__cmd(0, 'l', '2', on)                 # LED 2
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -151,3 +158,54 @@ class PZHBMCUt2f1(PZHBMCU):
 
     def __str__(self, *args, **kwargs):
         return "PZHBMCUt2f1:{addr:0x%0.2x}" % self.addr
+
+
+# --------------------------------------------------------------------------------------------------------------------
+
+class MCULED(LED):
+    """
+    classdocs
+    """
+    __MAPPING = {'0': [False, False], 'R': [True, True], 'A': [True, True], 'G': [True, True]}
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def is_valid_colour(cls, colour):
+        return colour in cls.STATES
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self, mcu):
+        """
+        Constructor
+        """
+        self.__mcu = mcu
+        self.__colour = None
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def colour(self):
+        return self.__colour
+
+
+    @colour.setter
+    def colour(self, colour):
+        if not self.is_valid_colour(colour):
+            raise ValueError(colour)
+
+        self.__colour = colour
+
+        states = self.__MAPPING[colour]
+
+        self.__mcu.led1(states[0])
+        self.__mcu.led2(states[1])
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __str__(self, *args, **kwargs):
+        return "MCULED:{colour:%s, mcu:%s}" % (self.__colour, self.__mcu)

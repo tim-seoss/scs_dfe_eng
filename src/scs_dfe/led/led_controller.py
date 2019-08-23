@@ -12,8 +12,7 @@ from multiprocessing import Manager
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
 
-from scs_dfe.display.led import LED
-from scs_dfe.display.led_state import LEDState
+from scs_dfe.led.led_state import LEDState
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -23,15 +22,15 @@ class LEDController(SynchronisedProcess):
     classdocs
     """
 
-    __STATE0_PERIOD =   0.2             # seconds - short period
-    __STATE1_PERIOD =   0.8             # seconds - long period
+    __STATE0_PERIOD =   0.1             # seconds - short period
+    __STATE1_PERIOD =   0.9             # seconds - long period
 
     __WAIT_FOR_STOP =   1.2             # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
+    def __init__(self, led):
         """
         Constructor
         """
@@ -39,7 +38,7 @@ class LEDController(SynchronisedProcess):
 
         SynchronisedProcess.__init__(self, manager.list())
 
-        self.__led = LED()
+        self.__led = led
 
 
     # ----------------------------------------------------------------------------------------------------------------
