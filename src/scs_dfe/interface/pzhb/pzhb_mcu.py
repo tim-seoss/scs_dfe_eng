@@ -29,6 +29,16 @@ class PZHBMCU(ABC):
 
 
     @abstractmethod
+    def led1(self, on):
+        pass
+
+
+    @abstractmethod
+    def led2(self, on):
+        pass
+
+
+    @abstractmethod
     def button_enable(self):
         pass
 

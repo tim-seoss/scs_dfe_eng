@@ -41,6 +41,18 @@ try:
 
     print("-")
 
+    print("LED...")
+    on = True
+
+    for _ in range(10):
+        header.led1(on)
+        on = not on
+        time.sleep(2)
+
+    exit(0)
+
+    print("button...")
+
     header.button_enable()
 
     count = 0

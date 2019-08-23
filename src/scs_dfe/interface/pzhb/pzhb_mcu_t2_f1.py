@@ -45,35 +45,31 @@ class PZHBMCUt2f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def host_shutdown_initiated(self):
-        cmd = [ord('h'), ord('s'), 0]
-        self.__cmd(cmd, 0)
+        self.__cmd(0, 'h', 'i')
 
 
     def peripheral_power(self, enable):
-        cmd = [ord('p'), ord('m'), enable]          # modem
-        self.__cmd(cmd, 0)
+        self.__cmd(0, 'p', 'm', enable)             # modem
+        self.__cmd(0, 'p', 'a', True)               # AFE (always on)
+        self.__cmd(0, 'p', 'n', enable)             # NDIR
+        self.__cmd(0, 'p', 'g', enable)             # GPS
+        self.__cmd(0, 'p', 'o', enable)             # OPC
 
-        cmd = [ord('p'), ord('a'), True]            # AFE (always on)
-        self.__cmd(cmd, 0)
 
-        cmd = [ord('p'), ord('n'), enable]          # NDIR
-        self.__cmd(cmd, 0)
+    def led1(self, on):
+        self.__cmd(0, 'l', '1', on)                 # LED 1
 
-        cmd = [ord('p'), ord('g'), enable]          # GPS
-        self.__cmd(cmd, 0)
 
-        cmd = [ord('p'), ord('o'), enable]          # OPC
-        self.__cmd(cmd, 0)
+    def led2(self, on):
+        self.__cmd(0, 'l', '2', on)                 # LED 2
 
 
     def button_enable(self):
-        cmd = [ord('b'), ord('e'), 0]
-        self.__cmd(cmd, 0)
+        self.__cmd(0, 'b', 'e')
 
 
     def button_pressed(self):
-        cmd = [ord('b'), ord('p'), 0]
-        response = self.__cmd(cmd, 1)
+        response = self.__cmd(1, 'b', 'p')
 
         button_pressed = response == 1
 
@@ -81,19 +77,16 @@ class PZHBMCUt2f1(PZHBMCU):
 
 
     def read_batt_v(self):
-        cmd = [ord('m'), ord('b'), 0]
-        response = self.__cmd(cmd, 2)
+        response = self.__cmd(2, 'm', 'b')
 
         c_batt = Decode.unsigned_int(response[0:2], '<')
-
         v_batt = 2.0 * 3.3 * c_batt / 4095
 
         return v_batt
 
 
     def read_current_count(self):
-        cmd = [ord('m'), ord('c'), 0]
-        response = self.__cmd(cmd, 2)
+        response = self.__cmd(2, 'm', 'c')
 
         c_current = Decode.unsigned_int(response[0:2], '<')
 
@@ -101,27 +94,27 @@ class PZHBMCUt2f1(PZHBMCU):
 
 
     def version_ident(self):
-        cmd = [ord('v'), ord('i'), 0]
-        response = self.__cmd(cmd, 40)
+        response = self.__cmd(40, 'v', 'i')
 
         return ''.join([chr(byte) for byte in response]).strip()
 
 
     def version_tag(self):
-        cmd = [ord('v'), ord('t'), 0]
-        response = self.__cmd(cmd, 11)
+        response = self.__cmd(11, 'v', 't')
 
         return ''.join([chr(byte) for byte in response]).strip()
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __cmd(self, cmd, response_size):
+    def __cmd(self, response_size, device, command, arg=0):
+        message = [ord(device), ord(command), arg]
+
         try:
             self.obtain_lock()
             I2C.start_tx(self.__addr)
 
-            response = I2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
+            response = I2C.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
 
             time.sleep(self.__SEND_WAIT_TIME)
 
