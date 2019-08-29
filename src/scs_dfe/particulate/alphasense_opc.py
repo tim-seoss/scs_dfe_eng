@@ -16,6 +16,8 @@ from scs_host.bus.spi import SPI
 # TODO: fix lock_name()
 # TODO: fix bus and address
 
+# TODO: move power from OPC to Interface
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class AlphasenseOPC(OPC, ABC):

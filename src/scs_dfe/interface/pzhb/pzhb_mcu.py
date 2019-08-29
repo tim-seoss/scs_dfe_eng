@@ -1,9 +1,9 @@
 """
-Created on 20 Jun 2019
+Created on 21 Aug 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-An abstract sensor interface
+An abstract Pi Zero Header Breakout MCU
 """
 
 from abc import ABC, abstractmethod
@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class Interface(ABC):
+class PZHBMCU(ABC):
     """
     classdocs
     """
@@ -24,38 +24,40 @@ class Interface(ABC):
 
 
     @abstractmethod
+    def host_shutdown_initiated(self):
+        pass
+
+
+    @abstractmethod
     def peripheral_power(self, enable):
         pass
 
 
     @abstractmethod
-    def temp(self):
+    def button_enable(self):
         pass
 
 
     @abstractmethod
-    def null_datum(self):
-        pass
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @abstractmethod
-    def gas_sensors(self, host):
+    def button_pressed(self):
         pass
 
 
     @abstractmethod
-    def pt1000(self, host):
+    def read_batt_v(self):
         pass
 
 
     @abstractmethod
-    def pt1000_adc(self, gain, rate):
+    def read_current_count(self):
         pass
 
-    # ----------------------------------------------------------------------------------------------------------------
 
-    @property
     @abstractmethod
-    def load_switch_active_high(self):          # TODO: deprecated
-        return None
+    def version_ident(self):
+        pass
+
+
+    @abstractmethod
+    def version_tag(self):
+        pass

@@ -3,7 +3,7 @@ Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-An abstract sensor interface
+A Pi Zero Header Breakout sensor interface
 """
 
 from scs_core.gas.afe_baseline import AFEBaseline
@@ -22,6 +22,23 @@ class PZHB(Interface):
     """
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self, mcu):
+        """
+        Constructor
+        """
+        self.__mcu = mcu                            # PZHBMCU
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def led(self):
+        return self.__mcu.led()
+
+
+    def peripheral_power(self, enable):
+        self.__mcu.peripheral_power(enable)
+
 
     def temp(self):
         return None
@@ -54,11 +71,11 @@ class PZHB(Interface):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def load_switch_active_high(self):          # TODO: return the IO device?
+    def load_switch_active_high(self):          # TODO: deprecated
         return True
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PZHB:{}"
+        return "PZHB:{mcu:%s}" % self.__mcu
