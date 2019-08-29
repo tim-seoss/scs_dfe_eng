@@ -9,7 +9,8 @@ Created on 22 Dec 2018
 import sys
 import time
 
-from scs_dfe.display.led import LED
+from scs_dfe.led.io_led import IOLED
+from scs_dfe.led.led import LED
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -20,7 +21,7 @@ from scs_host.sys.host import Host
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    led = LED()
+    led = IOLED()
     print(led)
     print("-")
 

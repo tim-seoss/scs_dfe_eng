@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 """
-Created on 12 Jun 2019
+Created on 21 Aug 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
 import time
 
-from scs_dfe.interface.components.rpz_header_t1_f1 import RPzHeaderT1F1
+from scs_dfe.interface.pzhb.pzhb_mcu_t2_f1 import PZHBMCUt2f1
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -16,7 +16,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-header = RPzHeaderT1F1(RPzHeaderT1F1.DEFAULT_ADDR)
+header = PZHBMCUt2f1(PZHBMCUt2f1.DEFAULT_ADDR)
 print(header)
 
 
@@ -40,6 +40,18 @@ try:
     print("c_current: %d" % c_current)
 
     print("-")
+
+    print("LED...")
+    on = True
+
+    for _ in range(10):
+        header.led1(on)
+        on = not on
+        time.sleep(2)
+
+    exit(0)
+
+    print("button...")
 
     header.button_enable()
 

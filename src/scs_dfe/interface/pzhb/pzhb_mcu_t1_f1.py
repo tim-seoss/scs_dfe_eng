@@ -3,7 +3,7 @@ Created on 12 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB)
+STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 1
 
 https://github.com/south-coast-science/scs_rpz_header_t1_f1
 """
@@ -12,13 +12,16 @@ import time
 
 from scs_core.data.datum import Decode
 
+from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
+from scs_dfe.led.io_led import IOLED
+
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class RPzHeaderT1F1(object):
+class PZHBMCUt1f1(PZHBMCU):
     """
     Constructor
     """
@@ -26,9 +29,6 @@ class RPzHeaderT1F1(object):
     DEFAULT_ADDR =          0x76
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    __RESPONSE_ACK =        1
-    __RESPONSE_NACK =       2
 
     __SEND_WAIT_TIME =      0.010               # seconds
     __LOCK_TIMEOUT =        2.0                 # seconds
@@ -45,8 +45,16 @@ class RPzHeaderT1F1(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def led(self):
+        return IOLED()
+
+
     def host_shutdown_initiated(self):
         self.__cmd(ord('s'), 0)
+
+
+    def peripheral_power(self, enable):
+        pass
 
 
     def button_enable(self):
@@ -134,4 +142,4 @@ class RPzHeaderT1F1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "RPzHeaderT1F1:{addr:0x%0.2x}" % self.addr
+        return "PZHBMCUt1f1:{addr:0x%0.2x}" % self.addr

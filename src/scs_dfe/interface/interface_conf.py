@@ -14,7 +14,10 @@ from collections import OrderedDict
 from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.interface.dfe.dfe import DFE
+
 from scs_dfe.interface.pzhb.pzhb import PZHB
+from scs_dfe.interface.pzhb.pzhb_mcu_t1_f1 import PZHBMCUt1f1
+from scs_dfe.interface.pzhb.pzhb_mcu_t2_f1 import PZHBMCUt2f1
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -30,7 +33,8 @@ class InterfaceConf(PersistentJSONable):
         'DFE',                      # Alpha Pi Eng, ignoring Pt1000
         'DFE/0x68',                 # Alpha Pi Eng, Alpha BB Eng without RTC
         'DFE/0x69',                 # Alpha BB Eng with RTC
-        'PZHB'                      # Pi Zero Header Breakout
+        'PZHBt1',                   # Pi Zero Header Breakout (type 1)
+        'PZHBt2'                    # Pi Zero Header Breakout (type 2)
     ]
 
     @classmethod
@@ -83,8 +87,11 @@ class InterfaceConf(PersistentJSONable):
         if self.model == 'DFE/0x69':
             return DFE(0x69)
 
-        if self.model == 'PZHB':
-            return PZHB()
+        if self.model == 'PZHB' or self.model == 'PZHBt1':
+            return PZHB(PZHBMCUt1f1(PZHBMCUt1f1.DEFAULT_ADDR))
+
+        if self.model == 'PZHBt2':
+            return PZHB(PZHBMCUt2f1(PZHBMCUt2f1.DEFAULT_ADDR))
 
         raise ValueError('unknown model: %s' % self.model)
 

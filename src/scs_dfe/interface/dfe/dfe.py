@@ -3,7 +3,7 @@ Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-An abstract sensor interface
+A digital front-end (DFE) sensor interface
 """
 
 from scs_core.gas.afe_baseline import AFEBaseline
@@ -14,8 +14,10 @@ from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.mcp342x import MCP342X
 from scs_dfe.gas.pt1000 import Pt1000
 
-from scs_dfe.interface.components.mcp9808 import MCP9808
+from scs_dfe.interface.component.mcp9808 import MCP9808
 from scs_dfe.interface.interface import Interface
+
+from scs_dfe.led.io_led import IOLED
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -48,6 +50,14 @@ class DFE(Interface):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def led(self):
+        return IOLED()
+
+
+    def peripheral_power(self, enable):
+        pass                                    # TODO: implement peripheral_power(..)
+
 
     def temp(self):
         if self.__temp_sensor is None:
