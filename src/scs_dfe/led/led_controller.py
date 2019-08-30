@@ -22,10 +22,10 @@ class LEDController(SynchronisedProcess):
     classdocs
     """
 
-    __STATE0_PERIOD =   0.1             # seconds - short period
-    __STATE1_PERIOD =   0.9             # seconds - long period
+    __STATE0_PERIOD =   0.4             # seconds - short period
+    __STATE1_PERIOD =   0.6             # seconds - long period
 
-    __WAIT_FOR_STOP =   1.2             # seconds
+    __WAIT_FOR_STOP =   2.0             # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
