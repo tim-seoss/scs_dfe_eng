@@ -45,20 +45,8 @@ class PZHBMCUt2f1(PZHBMCU):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def led(self):
-        return MCULED(self)
-
-
     def host_shutdown_initiated(self):
         self.__cmd(0, 'h', 'i')
-
-
-    def peripheral_power(self, enable):
-        self.__cmd(0, 'p', 'm', enable)             # modem
-        self.__cmd(0, 'p', 'a', True)               # AFE (always on)
-        self.__cmd(0, 'p', 'n', enable)             # NDIR
-        self.__cmd(0, 'p', 'g', enable)             # GPS
-        self.__cmd(0, 'p', 'o', enable)             # OPC
 
 
     def button_enable(self):
@@ -100,6 +88,32 @@ class PZHBMCUt2f1(PZHBMCU):
         response = self.__cmd(11, 'v', 't')
 
         return ''.join([chr(byte) for byte in response]).strip()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def led(self):
+        return MCULED(self)
+
+
+    def power_gases(self, enable):
+        self.__cmd(0, 'p', 'a', True)
+
+
+    def power_gps(self, enable):
+        self.__cmd(0, 'p', 'g', enable)
+
+
+    def power_ndir(self, enable):
+        self.__cmd(0, 'p', 'n', enable)
+
+
+    def power_opc(self, enable):
+        self.__cmd(0, 'p', 'o', enable)
+
+
+    def power_modem(self, enable):
+        self.__cmd(0, 'p', 'm', enable)
 
 
     # ----------------------------------------------------------------------------------------------------------------

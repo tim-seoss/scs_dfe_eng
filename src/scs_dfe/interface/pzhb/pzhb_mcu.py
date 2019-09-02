@@ -19,17 +19,7 @@ class PZHBMCU(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
-    def led(self):
-        pass
-
-
-    @abstractmethod
     def host_shutdown_initiated(self):
-        pass
-
-
-    @abstractmethod
-    def peripheral_power(self, enable):
         pass
 
 
@@ -60,4 +50,36 @@ class PZHBMCU(ABC):
 
     @abstractmethod
     def version_tag(self):
+        pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @abstractmethod
+    def led(self):
+        pass
+
+
+    @abstractmethod
+    def power_gases(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_gps(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_ndir(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_opc(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_modem(self, enable):
         pass

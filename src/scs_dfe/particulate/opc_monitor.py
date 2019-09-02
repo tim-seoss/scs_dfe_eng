@@ -46,6 +46,7 @@ class OPCMonitor(SynchronisedProcess):
         self.__conf = conf
 
         self.__first_reading = True
+        self.__zero_count = 0
         self.__datum_class = self.__opc.datum_class()
 
 
@@ -58,6 +59,7 @@ class OPCMonitor(SynchronisedProcess):
             self.__opc.operations_on()
 
             self.__first_reading = True
+            self.__zero_count = 0
 
             super().start()
 
@@ -84,7 +86,7 @@ class OPCMonitor(SynchronisedProcess):
             # sample...
             timer = IntervalTimer(self.__conf.sample_period)
 
-            zero_count = 0
+            self.__zero_count = 0
 
             while timer.true():
                 try:
@@ -96,13 +98,13 @@ class OPCMonitor(SynchronisedProcess):
                     datum = self.__opc.sample()
 
                     if datum.is_zero():
-                        zero_count += 1
+                        self.__zero_count += 1
 
-                        if zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
+                        if self.__zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
                             raise ValueError("zero reading")
 
                     else:
-                        zero_count = 0
+                        self.__zero_count = 0
 
                     if not self.__first_reading:
                         with self._lock:
@@ -159,6 +161,7 @@ class OPCMonitor(SynchronisedProcess):
             self.__opc.operations_on()
 
             self.__first_reading = True
+            self.__zero_count = 0
 
         except KeyboardInterrupt:
             pass

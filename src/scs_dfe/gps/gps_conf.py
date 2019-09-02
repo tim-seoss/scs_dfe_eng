@@ -72,15 +72,15 @@ class GPSConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gps_monitor(self, host, load_switch_active_high):
+    def gps_monitor(self, interface, host):
         if self.model is None:
             return None
 
         if self.model == PAM7Q.SOURCE:
-            gps = PAM7Q(load_switch_active_high, host.gps_device())
+            gps = PAM7Q(interface, host.gps_device())
 
         elif self.model == SAMM8Q.SOURCE:
-            gps = SAMM8Q(load_switch_active_high, host.gps_device())
+            gps = SAMM8Q(interface, host.gps_device())
 
         else:
             raise ValueError('unknown model: %s' % self.model)

@@ -12,6 +12,7 @@ import time
 
 from scs_core.data.datum import Decode
 
+from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
 from scs_dfe.led.io_led import IOLED
 
@@ -41,20 +42,13 @@ class PZHBMCUt1f1(PZHBMCU):
         Constructor
         """
         self.__addr = addr
+        self.__io = IO(True)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def led(self):
-        return IOLED()
-
-
     def host_shutdown_initiated(self):
         self.__cmd(ord('s'), 0)
-
-
-    def peripheral_power(self, enable):
-        pass
 
 
     def button_enable(self):
@@ -101,6 +95,32 @@ class PZHBMCUt1f1(PZHBMCU):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def led(self):
+        return IOLED()
+
+
+    def power_gases(self, enable):
+        pass
+
+
+    def power_gps(self, enable):
+        self.__io.gps_power = enable
+
+
+    def power_ndir(self, enable):
+        self.__io.ndir_power = enable
+
+
+    def power_opc(self, enable):
+        self.__io.opc_power = enable
+
+
+    def power_modem(self, enable):
+        pass                                # TODO: implement power_modem
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
@@ -142,4 +162,4 @@ class PZHBMCUt1f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PZHBMCUt1f1:{addr:0x%0.2x}" % self.addr
+        return "PZHBMCUt1f1:{addr:0x%0.2x, io:%s}" % (self.addr, self.__io)
