@@ -38,12 +38,12 @@ from scs_core.position.nmea.gprmc import GPRMC
 from scs_core.position.nmea.gpvtg import GPVTG
 from scs_core.position.nmea.nmea_report import NMEAReport
 
-from scs_host.sys.host_serial import HostSerial
+from scs_dfe.gps.gps import GPS
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class SAMM8Q(object):
+class SAMM8Q(GPS):
     """
     u-blox SAM M8Q GPS Antenna Module
     """
@@ -64,18 +64,30 @@ class SAMM8Q(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, uart):
-        self.__serial = HostSerial(uart, self.__BAUD_RATE, False)
+    @classmethod
+    def baud_rate(cls):
+        return cls.__BAUD_RATE
+
+
+    @classmethod
+    def boot_time(cls):
+        return cls.__BOOT_DELAY
+
+
+    @classmethod
+    def serial_lock_timeout(cls):
+        return cls.__SERIAL_LOCK_TIMEOUT
+
+
+    @classmethod
+    def serial_comms_timeout(cls):
+        return cls.__SERIAL_COMMS_TIMEOUT
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def open(self):
-        self.__serial.open(self.__SERIAL_LOCK_TIMEOUT, self.__SERIAL_COMMS_TIMEOUT)
-
-
-    def close(self):
-        self.__serial.close()
+    def __init__(self, interface, uart):
+        super().__init__(interface, uart)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -83,7 +95,7 @@ class SAMM8Q(object):
     def report(self, message_class):
         for i in range(11):
             try:
-                line = self.__serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
+                line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
                 r = NMEAReport.construct(line)
 
                 if r.str(0) in message_class.MESSAGE_IDS:
@@ -101,7 +113,7 @@ class SAMM8Q(object):
         reports = []
         for i in range(20):
             try:
-                r = NMEAReport.construct(self.__serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT))
+                r = NMEAReport.construct(self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT))
                 reports.append(r)
 
             except (UnicodeDecodeError, ValueError):
@@ -151,10 +163,4 @@ class SAMM8Q(object):
 
 
     def line(self):
-        return self.__serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def __str__(self, *args, **kwargs):
-        return "SAMM8Q:{serial:%s}" % self.__serial
+        return self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)

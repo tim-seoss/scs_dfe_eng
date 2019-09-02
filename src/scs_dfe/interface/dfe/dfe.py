@@ -54,14 +54,6 @@ class DFE(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def led(self):
-        return IOLED()
-
-
-    def peripheral_power(self, enable):
-        pass                                    # TODO: implement peripheral_power(..)
-
-
     def temp(self):
         if self.__temp_sensor is None:
             self.__temp_sensor = MCP9808(True)
@@ -105,6 +97,10 @@ class DFE(Interface):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def led(self):
+        return IOLED()
+
 
     def power_gases(self, enable):
         pass

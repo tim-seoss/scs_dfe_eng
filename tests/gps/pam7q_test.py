@@ -36,16 +36,15 @@ print("-")
 
 I2C.open(Host.I2C_SENSORS)
 
-gps = PAM7Q(Host.gps_device())
+gps = PAM7Q(interface, Host.gps_device())
 print(gps)
 print("-")
-
 
 try:
     # ----------------------------------------------------------------------------------------------------------------
 
     print("power up...")
-    interface.gps_power(True)
+    gps.power_on()
 
     print("open...")
     gps.open()
@@ -120,6 +119,6 @@ finally:
     print("=")
 
     print("power down...")
-    interface.gps_power(False)
+    gps.power_off()
 
     I2C.close()

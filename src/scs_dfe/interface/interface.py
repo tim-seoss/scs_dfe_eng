@@ -50,9 +50,8 @@ class Interface(ABC):
         pass
 
 
-    def power_peripherals(self, enable):
+    def power_sensors(self, enable):
         self.power_gps(enable)
-        self.power_modem(enable)
         self.power_ndir(enable)
         self.power_opc(enable)
 
