@@ -86,7 +86,6 @@ class PZHB(Interface):
         return self.__mcu.power_opc(enable)
 
 
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
