@@ -8,8 +8,6 @@ import time
 
 from abc import ABC, abstractmethod
 
-from scs_dfe.interface.component.io import IO
-
 from scs_host.lock.lock import Lock
 
 
@@ -56,45 +54,22 @@ class OPC(ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, load_switch_active_high):
+    def __init__(self, interface):
         """
         Constructor
         """
-        self.__load_switch_active_high = load_switch_active_high
-        self.__io = None
+        self.__interface = interface
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def power_on(self):
-        if self.__io is None:
-            self.__io = IO(self.__load_switch_active_high)
-
-        initial_power_state = self.__io.opc_power
-
-        self.__io.opc_power = True
-
-        if not initial_power_state:             # initial_power_state is None if there is no power control facility
-            time.sleep(self.boot_time())
+        self.__interface.power_opc(True)
+        time.sleep(self.boot_time())
 
 
     def power_off(self):
-        if self.__io is None:
-            self.__io = IO(self.__load_switch_active_high)
-
-        self.__io.opc_power = False
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def load_switch_active_high(self):
-        return self.__load_switch_active_high
-
-
-    @property
-    def io(self):
-        return self.__io
+        self.__interface.power_opc(False)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -148,6 +123,11 @@ class OPC(ABC):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @property
+    def interface(self):
+        return self.__interface
+
 
     @property
     @abstractmethod

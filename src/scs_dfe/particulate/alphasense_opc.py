@@ -16,8 +16,6 @@ from scs_host.bus.spi import SPI
 # TODO: fix lock_name()
 # TODO: fix bus and address
 
-# TODO: move power from OPC to Interface
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class AlphasenseOPC(OPC, ABC):
@@ -39,11 +37,11 @@ class AlphasenseOPC(OPC, ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, load_switch_active_high, spi_bus, spi_device, spi_mode, spi_clock):
+    def __init__(self, interface, spi_bus, spi_device, spi_mode, spi_clock):
         """
         Constructor
         """
-        super().__init__(load_switch_active_high)
+        super().__init__(interface)
 
         self._spi = SPI(spi_bus, spi_device, spi_mode, spi_clock)
 
@@ -92,5 +90,4 @@ class AlphasenseOPC(OPC, ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return self.__class__.__name__ + ":{load_switch_active_high:%s, io:%s, spi:%s}" % \
-               (self.load_switch_active_high, self.io, self._spi)
+        return self.__class__.__name__ + ":{interface:%s, spi:%s}" %  (self.interface, self._spi)

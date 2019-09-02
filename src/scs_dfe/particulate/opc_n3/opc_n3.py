@@ -23,8 +23,6 @@ from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
 
 
-# TODO: increase power-off time on power cycle
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN3(AlphasenseOPC):
@@ -90,11 +88,11 @@ class OPCN3(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, load_switch_active_high, spi_bus, spi_device):
+    def __init__(self, interface, spi_bus, spi_device):
         """
         Constructor
         """
-        super().__init__(load_switch_active_high, spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
+        super().__init__(interface, spi_bus, spi_device, self.__SPI_MODE, self.__SPI_CLOCK)
 
 
     # ----------------------------------------------------------------------------------------------------------------
