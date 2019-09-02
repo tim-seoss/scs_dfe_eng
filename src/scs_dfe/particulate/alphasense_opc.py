@@ -90,4 +90,4 @@ class AlphasenseOPC(OPC, ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return self.__class__.__name__ + ":{interface:%s, io:%s, spi:%s}" %  (self.interface, self.io, self._spi)
+        return self.__class__.__name__ + ":{interface:%s, spi:%s}" %  (self.interface, self._spi)

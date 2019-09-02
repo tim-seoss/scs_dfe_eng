@@ -309,5 +309,5 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SPS30:{interface:%s, io:%s, i2c_bus:%d i2c_addr:0x%02x}" % \
-               (self.interface, self.io, self.__i2c_bus, self.__i2c_addr)
+        return "SPS30:{interface:%s, i2c_bus:%d i2c_addr:0x%02x}" % \
+               (self.interface, self.__i2c_bus, self.__i2c_addr)
