@@ -26,8 +26,6 @@ $GPGSV,3,3,12,27,04,013,13,28,39,126,37,30,60,068,26,33,30,200,44*74
 $GPGLL,5049.36953,N,00007.38514,W,152926.00,A,D*7B
 """
 
-import time
-
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
 from scs_core.position.nmea.gpgsa import GPGSA
@@ -35,8 +33,6 @@ from scs_core.position.nmea.gpgsv import GPGSV
 from scs_core.position.nmea.gprmc import GPRMC
 from scs_core.position.nmea.gpvtg import GPVTG
 from scs_core.position.nmea.nmea_report import NMEAReport
-
-from scs_dfe.interface.component.io import IO
 
 from scs_host.sys.host_serial import HostSerial
 
@@ -64,20 +60,8 @@ class PAM7Q(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, load_switch_active_high, uart):
-        self.__io = IO(load_switch_active_high)
+    def __init__(self, uart):
         self.__serial = HostSerial(uart, self.__BAUD_RATE, False)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def power_on(self):
-        self.__io.gps_power = True
-        time.sleep(self.__BOOT_DELAY)
-
-
-    def power_off(self):
-        self.__io.gps_power = False
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -165,4 +149,4 @@ class PAM7Q(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PAM7Q:{io:%s, serial:%s}" % (self.__io, self.__serial)
+        return "PAM7Q:{serial:%s}" % self.__serial

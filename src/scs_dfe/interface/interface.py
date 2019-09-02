@@ -19,16 +19,6 @@ class Interface(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
-    def led(self):
-        pass
-
-
-    @abstractmethod
-    def peripheral_power(self, enable):
-        pass
-
-
-    @abstractmethod
     def temp(self):
         pass
 
@@ -55,7 +45,38 @@ class Interface(ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @property
     @abstractmethod
-    def load_switch_active_high(self):          # TODO: deprecated
-        return None
+    def led(self):
+        pass
+
+
+    def power_peripherals(self, enable):
+        self.power_gps(enable)
+        self.power_modem(enable)
+        self.power_ndir(enable)
+        self.power_opc(enable)
+
+
+    @abstractmethod
+    def power_gases(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_gps(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_modem(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_ndir(self, enable):
+        pass
+
+
+    @abstractmethod
+    def power_opc(self, enable):
+        pass

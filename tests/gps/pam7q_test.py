@@ -18,6 +18,7 @@ from scs_core.position.nmea.gpvtg import GPVTG
 from scs_core.position.gps_datum import GPSDatum
 
 from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -25,9 +26,17 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
+conf = InterfaceConf.load(Host)
+interface = conf.interface()
+print(interface)
+print("-")
+
+
+# --------------------------------------------------------------------------------------------------------------------
+
 I2C.open(Host.I2C_SENSORS)
 
-gps = PAM7Q(False, Host.gps_device())
+gps = PAM7Q(Host.gps_device())
 print(gps)
 print("-")
 
@@ -36,7 +45,7 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
 
     print("power up...")
-    gps.power_on()
+    interface.gps_power(True)
 
     print("open...")
     gps.open()
@@ -110,7 +119,7 @@ finally:
     print(gps)
     print("=")
 
-    # print("power down...")
-    # gps.power_off()
+    print("power down...")
+    interface.gps_power(False)
 
     I2C.close()

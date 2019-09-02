@@ -32,14 +32,6 @@ class PZHB(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def led(self):
-        return self.__mcu.led()
-
-
-    def peripheral_power(self, enable):
-        self.__mcu.peripheral_power(enable)
-
-
     def temp(self):
         return None
 
@@ -70,9 +62,29 @@ class PZHB(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @property
-    def load_switch_active_high(self):          # TODO: deprecated
-        return True
+    def led(self):
+        return self.__mcu.led()
+
+
+    def power_gases(self, enable):
+        return self.__mcu.power_gases(enable)
+
+
+    def power_gps(self, enable):
+        return self.__mcu.power_gps(enable)
+
+
+    def power_modem(self, enable):
+        return self.__mcu.power_modem(enable)
+
+
+    def power_ndir(self, enable):
+        return self.__mcu.power_ndir(enable)
+
+
+    def power_opc(self, enable):
+        return self.__mcu.power_opc(enable)
+
 
 
     # ----------------------------------------------------------------------------------------------------------------

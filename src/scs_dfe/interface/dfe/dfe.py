@@ -14,6 +14,7 @@ from scs_dfe.gas.afe import AFE
 from scs_dfe.gas.mcp342x import MCP342X
 from scs_dfe.gas.pt1000 import Pt1000
 
+from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.component.mcp9808 import MCP9808
 from scs_dfe.interface.interface import Interface
 
@@ -46,7 +47,9 @@ class DFE(Interface):
         Constructor
         """
         self.__pt1000_addr = pt1000_addr                                # int
+
         self.__temp_sensor = None
+        self.__io = IO(False)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -103,9 +106,24 @@ class DFE(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @property
-    def load_switch_active_high(self):          # TODO: return the IO device?
-        return False
+    def power_gases(self, enable):
+        pass
+
+
+    def power_gps(self, enable):
+        self.__io.gps_power = enable
+
+
+    def power_modem(self, enable):
+        pass                                # TODO: implement power_modem
+
+
+    def power_ndir(self, enable):
+        self.__io.ndir_power = enable
+
+
+    def power_opc(self, enable):
+        self.__io.opc_power = enable
 
 
     # ----------------------------------------------------------------------------------------------------------------
