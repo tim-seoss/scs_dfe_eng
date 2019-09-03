@@ -30,6 +30,8 @@ class DFE(Interface):
 
     DEFAULT_PT1000_ADDR = 0x68
 
+    __IO_ACTIVE_HIGH = False
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @staticmethod
@@ -49,7 +51,7 @@ class DFE(Interface):
         self.__pt1000_addr = pt1000_addr                                # int
 
         self.__temp_sensor = None
-        self.__io = IO(False)
+        self.__io = IO(self.__IO_ACTIVE_HIGH)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -102,7 +104,7 @@ class DFE(Interface):
         return IOLED()
 
 
-    def power_gases(self, enable):
+    def power_gases(self, enable):                  # switches digital component only
         pass
 
 
@@ -111,7 +113,7 @@ class DFE(Interface):
 
 
     def power_modem(self, enable):
-        pass                                # TODO: implement power_modem
+        pass
 
 
     def power_ndir(self, enable):
@@ -125,5 +127,6 @@ class DFE(Interface):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DFE:{pt1000_addr:%s, temp_sensor:%s}" % \
-               (self.__pt1000_addr_str(self.__pt1000_addr), self.__temp_sensor)
+        addr_str = self.__pt1000_addr_str(self.__pt1000_addr)
+
+        return "DFE:{pt1000_addr:%s, temp_sensor:%s}" %  (addr_str, self.__temp_sensor)

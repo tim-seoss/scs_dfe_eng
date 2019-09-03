@@ -51,13 +51,14 @@ class Interface(ABC):
 
 
     def power_sensors(self, enable):
+        self.power_gases(enable)
         self.power_gps(enable)
         self.power_ndir(enable)
         self.power_opc(enable)
 
 
     @abstractmethod
-    def power_gases(self, enable):
+    def power_gases(self, enable):                  # switches digital component only
         pass
 
 

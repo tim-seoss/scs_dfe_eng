@@ -96,7 +96,7 @@ class PZHBMCUt2f1(PZHBMCU):
         return MCULED(self)
 
 
-    def power_gases(self, enable):
+    def power_gases(self, enable):                  # switches digital component only
         self.__cmd(0, 'p', 'a', True)
 
 
