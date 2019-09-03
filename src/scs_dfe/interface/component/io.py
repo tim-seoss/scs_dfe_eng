@@ -87,7 +87,7 @@ class IO(object):
     def opc_power(self, on):
         level = not (on ^ self.__active_high)               # active high or low
 
-        print("opc_power - on: %s level:%s" % (on, level))
+        # print("opc_power - on: %s level:%s" % (on, level))
 
         self.__set_output(IO.__MASK_OPC, level)
 
@@ -162,6 +162,8 @@ class IO(object):
                 byte |= mask
             else:
                 byte &= ~mask
+
+            print("mask:0x%02x byte:0x%02x" % (mask, byte))
 
             self.__device.write(byte)
             self.__device.state = byte
