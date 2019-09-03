@@ -129,4 +129,4 @@ class DFE(Interface):
     def __str__(self, *args, **kwargs):
         addr_str = self.__pt1000_addr_str(self.__pt1000_addr)
 
-        return "DFE:{pt1000_addr:%s, temp_sensor:%s}" %  (addr_str, self.__temp_sensor)
+        return "DFE:{pt1000_addr:%s, temp_sensor:%s, io:%s}" %  (addr_str, self.__temp_sensor, self.__io)
