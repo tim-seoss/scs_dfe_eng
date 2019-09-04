@@ -87,8 +87,6 @@ class IO(object):
     def opc_power(self, on):
         level = not (on ^ self.__active_high)               # active high or low
 
-        # print("opc_power - on: %s level:%s" % (on, level))
-
         self.__set_output(IO.__MASK_OPC, level)
 
 
