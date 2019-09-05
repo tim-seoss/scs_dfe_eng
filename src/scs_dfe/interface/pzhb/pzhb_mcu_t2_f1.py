@@ -96,12 +96,16 @@ class PZHBMCUt2f1(PZHBMCU):
         return MCULED(self)
 
 
-    def power_gases(self, enable):
-        self.__cmd(0, 'p', 'a', True)
+    def power_gases(self, enable):                  # switches digital component only
+        self.__cmd(0, 'p', 'g', enable)
 
 
     def power_gps(self, enable):
-        self.__cmd(0, 'p', 'g', enable)
+        self.__cmd(0, 'p', 'p', enable)
+
+
+    def power_modem(self, enable):
+        self.__cmd(0, 'p', 'm', enable)
 
 
     def power_ndir(self, enable):
@@ -110,10 +114,6 @@ class PZHBMCUt2f1(PZHBMCU):
 
     def power_opc(self, enable):
         self.__cmd(0, 'p', 'o', enable)
-
-
-    def power_modem(self, enable):
-        self.__cmd(0, 'p', 'm', enable)
 
 
     # ----------------------------------------------------------------------------------------------------------------

@@ -27,7 +27,7 @@ class OPCMonitor(SynchronisedProcess):
     """
     classdocs
     """
-    __MAX_PERMITTED_ZERO_READINGS =      3
+    __MAX_PERMITTED_ZERO_READINGS =      4
 
     __FATAL_ERROR =                     -1
 
@@ -149,6 +149,8 @@ class OPCMonitor(SynchronisedProcess):
         print("OPCMonitor: power cycle", file=sys.stderr)
         sys.stderr.flush()
 
+        # noinspection PyBroadException
+
         try:
             # off...
             self.__opc.operations_off()
@@ -163,7 +165,7 @@ class OPCMonitor(SynchronisedProcess):
             self.__first_reading = True
             self.__zero_count = 0
 
-        except KeyboardInterrupt:
+        except Exception:
             pass
 
 

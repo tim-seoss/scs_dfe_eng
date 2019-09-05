@@ -27,12 +27,16 @@ class PCA8574(object):
     def construct(cls, addr, directory, file):
         device = PCA8574(addr, directory, file)
 
-        try:
-            device.read()
-            return device
+        device.read()
 
-        except OSError:
-            return None
+        return device
+
+        # try:
+        #     device.read()
+        #     return device
+        #
+        # except OSError:
+        #     return None
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -66,6 +70,8 @@ class PCA8574(object):
         try:
             I2C.start_tx(self.__addr)
             I2C.write(byte)
+
+            print("write:0x%02x" % byte)
 
         finally:
             I2C.end_tx()
