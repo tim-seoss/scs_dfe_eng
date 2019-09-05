@@ -161,8 +161,6 @@ class IO(object):
             else:
                 byte &= ~mask
 
-            print("mask:0x%02x byte:0x%02x" % (mask, byte))
-
             self.__device.write(byte)
             self.__device.state = byte
 
