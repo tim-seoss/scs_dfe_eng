@@ -27,16 +27,12 @@ class PCA8574(object):
     def construct(cls, addr, directory, file):
         device = PCA8574(addr, directory, file)
 
-        device.read()
+        try:
+            device.read()
+            return device
 
-        return device
-
-        # try:
-        #     device.read()
-        #     return device
-        #
-        # except OSError:
-        #     return None
+        except OSError:
+            return None
 
 
     # ----------------------------------------------------------------------------------------------------------------
