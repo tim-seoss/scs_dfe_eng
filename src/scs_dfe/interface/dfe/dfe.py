@@ -104,6 +104,8 @@ class DFE(Interface):
         return IOLED()
 
 
+    # ----------------------------------------------------------------------------------------------------------------
+
     def power_gases(self, enable):                  # switches digital component only
         pass
 

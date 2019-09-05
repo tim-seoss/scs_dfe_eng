@@ -66,6 +66,8 @@ class PZHB(Interface):
         return self.__mcu.led()
 
 
+    # ----------------------------------------------------------------------------------------------------------------
+
     def power_gases(self, enable):
         return self.__mcu.power_gases(enable)
 

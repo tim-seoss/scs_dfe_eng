@@ -49,13 +49,7 @@ class Interface(ABC):
     def led(self):
         pass
 
-
-    def power_sensors(self, enable):
-        self.power_gases(enable)
-        self.power_gps(enable)
-        self.power_ndir(enable)
-        self.power_opc(enable)
-
+    # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
     def power_gases(self, enable):                  # switches digital component only
