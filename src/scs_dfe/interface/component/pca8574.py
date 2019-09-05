@@ -28,7 +28,7 @@ class PCA8574(object):
         device = PCA8574(addr, directory, file)
 
         try:
-            state = device.read()
+            state = device.read()                           # test whether PCA8574 is present
             return None if state is None else device
 
         except OSError:
