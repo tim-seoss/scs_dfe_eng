@@ -34,6 +34,7 @@ class PZHBMCUt1f1(PZHBMCU):
     __SEND_WAIT_TIME =      0.010               # seconds
     __LOCK_TIMEOUT =        2.0                 # seconds
 
+    __IO_ACTIVE_HIGH =      True
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -42,7 +43,7 @@ class PZHBMCUt1f1(PZHBMCU):
         Constructor
         """
         self.__addr = addr
-        self.__io = IO(True)
+        self.__io = IO(self.__IO_ACTIVE_HIGH)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -99,7 +100,7 @@ class PZHBMCUt1f1(PZHBMCU):
         return IOLED()
 
 
-    def power_gases(self, enable):
+    def power_gases(self, enable):                  # switches digital component only
         pass
 
 
