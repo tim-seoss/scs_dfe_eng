@@ -47,8 +47,9 @@ class GPSConf(PersistentJSONable):
 
         sample_interval = jdict.get('sample-interval', cls.DEFAULT_SAMPLE_INTERVAL)
         tally = jdict.get('tally', cls.DEFAULT_TALLY)
+        report_file = jdict.get('report-file')
 
-        return GPSConf(model, sample_interval, tally)
+        return GPSConf(model, sample_interval, tally, report_file)
 
 
     @classmethod
@@ -58,16 +59,17 @@ class GPSConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_interval, tally):
+    def __init__(self, model, sample_interval, tally, report_file):
         """
         Constructor
         """
         super().__init__()
 
-        self.__model = model
+        self.__model = model                                        # string
 
-        self.__sample_interval = sample_interval
-        self.__tally = tally
+        self.__sample_interval = sample_interval                    # int seconds
+        self.__tally = tally                                        # int count
+        self.__report_file = report_file                            # string tmp file to store current GPS report
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -109,6 +111,11 @@ class GPSConf(PersistentJSONable):
         return self.__tally
 
 
+    @property
+    def report_file(self):
+        return self.__report_file
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def as_json(self):
@@ -118,6 +125,7 @@ class GPSConf(PersistentJSONable):
 
         jdict['sample-interval'] = self.__sample_interval
         jdict['tally'] = self.__tally
+        jdict['report-file'] = self.__report_file
 
         return jdict
 
@@ -125,4 +133,5 @@ class GPSConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSConf:{model:%s, sample_interval:%s, tally:%s}" % (self.model, self.sample_interval, self.tally)
+        return "GPSConf:{model:%s, sample_interval:%s, tally:%s, report_file:%s}" % \
+               (self.model, self.sample_interval, self.tally, self.report_file)

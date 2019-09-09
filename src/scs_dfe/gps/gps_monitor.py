@@ -36,6 +36,7 @@ class GPSMonitor(SynchronisedProcess):
         self.__gps = gps
         self.__sample_interval = conf.sample_interval
         self.__averaging = Average(conf.tally)
+        self.__report_file = conf.report_file
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -83,6 +84,8 @@ class GPSMonitor(SynchronisedProcess):
                 if datum is None:
                     continue
 
+                datum.save(self.__report_file)
+
                 # average...
                 if datum.quality > 0:
                     self.__averaging.append(datum)          # only append valid positional fixes
@@ -113,5 +116,5 @@ class GPSMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s}" % \
-               (self._value, self.__sample_interval, self.__averaging, self.__gps)
+        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s, report_file:%s}" % \
+               (self._value, self.__sample_interval, self.__averaging, self.__gps, self.__report_file)
