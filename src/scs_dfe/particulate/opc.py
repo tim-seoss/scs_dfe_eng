@@ -155,4 +155,3 @@ class OPC(ABC):
     @abstractmethod
     def lock_name(self):
         pass
-
