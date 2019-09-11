@@ -98,6 +98,22 @@ class OPCConf(PersistentJSONable):
         raise ValueError('unknown model: %s' % self.model)
 
 
+    def uses_spi(self):
+        if self.model == OPCN2.SOURCE:
+            return OPCN2.uses_spi()
+
+        elif self.model == OPCN3.SOURCE:
+            return OPCN3.uses_spi()
+
+        elif self.model == OPCR1.SOURCE:
+            return OPCR1.uses_spi()
+
+        elif self.model == SPS30.SOURCE:
+            return SPS30.uses_spi()
+
+        raise ValueError('unknown model: %s' % self.model)
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def opc_bus(self, host):
