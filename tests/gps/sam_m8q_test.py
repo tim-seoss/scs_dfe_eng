@@ -130,7 +130,7 @@ finally:
     print(gps)
     print("=")
 
-    print("power down...")
-    gps.power_off()
+    # print("power down...")
+    # gps.power_off()
 
     I2C.close()
