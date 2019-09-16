@@ -99,7 +99,7 @@ class GPSMonitor(SynchronisedProcess):
                 with self._lock:
                     average.as_list(self._value)
 
-        except KeyboardInterrupt:
+        except (BrokenPipeError, KeyboardInterrupt, TypeError):
             pass
 
 

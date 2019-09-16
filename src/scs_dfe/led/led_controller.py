@@ -74,7 +74,7 @@ class LEDController(SynchronisedProcess):
                 if state.colour1 != self.__led.colour:
                     self.__led.colour = state.colour1
 
-        except KeyboardInterrupt:
+        except (BrokenPipeError, KeyboardInterrupt, TypeError):
             pass
 
 
