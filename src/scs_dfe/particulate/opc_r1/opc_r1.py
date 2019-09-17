@@ -163,6 +163,9 @@ class OPCR1(AlphasenseOPC):
             bin_5_mtof = chars[34]
             bin_7_mtof = chars[35]
 
+            # sample flow rate...
+            sfr = Decode.float(chars[36:40], '<')
+
             # temperature & humidity
             raw_temp = Decode.unsigned_int(chars[40:42], '<')
             raw_humid = Decode.unsigned_int(chars[42:44], '<')
@@ -189,7 +192,7 @@ class OPCR1(AlphasenseOPC):
                 pm10 = None
 
             return OPCDatum(self.SOURCE, rec, pm1, pm2p5, pm10, period, bins,
-                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sht)
+                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sfr=sfr, sht=sht)
 
         finally:
             self._spi.close()
