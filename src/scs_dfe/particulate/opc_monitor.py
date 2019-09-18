@@ -92,12 +92,17 @@ class OPCMonitor(SynchronisedProcess):
                 try:
                     if not self.__opc.data_ready():
                         print("OPCMonitor.run: data not ready.", file=sys.stderr)
+                        sys.stderr.flush()
+
                         self.__empty()
                         continue
 
                     datum = self.__opc.sample()
 
                     if datum.is_zero():
+                        print("OPCMonitor.run: zero reading", file=sys.stderr)
+                        sys.stderr.flush()
+
                         self.__zero_count += 1
 
                         if self.__zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
@@ -112,15 +117,21 @@ class OPCMonitor(SynchronisedProcess):
 
                 except LockTimeout as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
+                    sys.stderr.flush()
+
                     self.__empty()
 
                 except ValueError as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
+                    sys.stderr.flush()
+
                     self.__empty()
                     self.__power_cycle()
 
                 except OSError as ex:
                     print("OPCMonitor.run: %s" % ex, file=sys.stderr)
+                    sys.stderr.flush()
+
                     self.__error(self.__FATAL_ERROR)
                     break
 
