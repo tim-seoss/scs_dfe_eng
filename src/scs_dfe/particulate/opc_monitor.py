@@ -74,7 +74,7 @@ class OPCMonitor(SynchronisedProcess):
             self.__opc.operations_off()
             self.__opc.power_off()
 
-        except (KeyboardInterrupt, LockTimeout, OSError, TypeError):
+        except (KeyboardInterrupt, LockTimeout, OSError):
             pass
 
 
@@ -127,7 +127,7 @@ class OPCMonitor(SynchronisedProcess):
                 if self.__first_reading:
                     self.__first_reading = False
 
-        except KeyboardInterrupt:
+        except (BrokenPipeError, KeyboardInterrupt):
             pass
 
 

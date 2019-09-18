@@ -45,9 +45,14 @@ class LEDController(SynchronisedProcess):
     # SynchronisedProcess implementation...
 
     def stop(self):
-        time.sleep(self.__WAIT_FOR_STOP)
+        try:
+            time.sleep(self.__WAIT_FOR_STOP)
 
-        super().stop()               # allow time for the sub-process to complete its last task
+            super().stop()  # allow time for the sub-process to complete its last task
+
+        except (BrokenPipeError, KeyboardInterrupt):
+            pass
+
 
 
     def run(self):
@@ -74,7 +79,7 @@ class LEDController(SynchronisedProcess):
                 if state.colour1 != self.__led.colour:
                     self.__led.colour = state.colour1
 
-        except (BrokenPipeError, KeyboardInterrupt, TypeError):
+        except (BrokenPipeError, KeyboardInterrupt):
             pass
 
 
