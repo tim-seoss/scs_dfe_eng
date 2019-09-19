@@ -68,7 +68,6 @@ class PZHBMCUt1f1(PZHBMCU):
         response = self.__cmd(ord('b'), 2)
 
         c_batt = Decode.unsigned_int(response[0:2], '<')
-
         v_batt = 2.0 * 3.3 * c_batt / 4095
 
         return v_batt

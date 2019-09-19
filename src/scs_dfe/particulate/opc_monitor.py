@@ -4,6 +4,7 @@ Created on 9 Jul 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import copy
 import sys
 import time
 
@@ -188,7 +189,7 @@ class OPCMonitor(SynchronisedProcess):
 
     def sample(self):
         with self._lock:
-            value = self._value
+            value = copy.deepcopy(self._value)
 
         if len(value) == 1 and value[0] == self.__FATAL_ERROR:
             raise StopIteration()
