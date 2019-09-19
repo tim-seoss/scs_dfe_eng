@@ -8,6 +8,7 @@ STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 2
 https://github.com/south-coast-science/scs_rpz_header_t2_f1
 """
 
+import sys
 import time
 
 from scs_core.data.datum import Decode
@@ -64,8 +65,14 @@ class PZHBMCUt2f1(PZHBMCU):
     def read_batt_v(self):
         response = self.__cmd(2, 'm', 'b')
 
+        print("read_batt_v - response:%s" % response, file=sys.stderr)
+        sys.stderr.flush()
+
         c_batt = Decode.unsigned_int(response[0:2], '<')
         v_batt = 2.0 * 3.3 * c_batt / 4095
+
+        print("read_batt_v - c_batt:%s v_batt:%s" % (c_batt, round(v_batt, 1)), file=sys.stderr)
+        sys.stderr.flush()
 
         return v_batt
 
