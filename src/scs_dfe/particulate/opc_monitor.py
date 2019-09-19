@@ -194,7 +194,7 @@ class OPCMonitor(SynchronisedProcess):
         if len(value) == 1 and value[0] == self.__FATAL_ERROR:
             raise StopIteration()
 
-        return None if value is None else self.__datum_class.construct_from_jdict(OrderedDict(value))
+        return self.__datum_class.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------

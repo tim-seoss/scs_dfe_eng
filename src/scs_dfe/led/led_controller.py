@@ -63,9 +63,7 @@ class LEDController(SynchronisedProcess):
             while timer.true():
                 # values...
                 with self._lock:
-                    value = copy.deepcopy(self._value)
-
-                state = LEDState.construct_from_jdict(OrderedDict(value))
+                    state = LEDState.construct_from_jdict(OrderedDict(self._value))
 
                 if state is None or not state.is_valid():
                     continue
