@@ -12,6 +12,7 @@ import time
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
 
+from scs_dfe.interface.interface_conf import InterfaceConf
 from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 
 from scs_host.bus.i2c import I2C
@@ -25,7 +26,12 @@ opc = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    opc = OPCN3(False, Host.opc_spi_bus(), Host.opc_spi_device())
+    # Interface...
+    interface_conf = InterfaceConf.load(Host)
+    interface = interface_conf.interface()
+
+    # OPC...
+    opc = OPCN3(interface, Host.opc_spi_bus(), Host.opc_spi_device())
     print(opc)
     print("-")
 
@@ -76,15 +82,15 @@ try:
 
     checkpoint = time.time()
 
-    for _ in timer.range(10):
+    for _ in timer.range(60):
         datum = opc.sample()
 
         now = time.time()
-        print("interval: %0.3f" % round(now - checkpoint, 3))
+        # print("interval: %0.3f" % round(now - checkpoint, 3))
         checkpoint = now
 
         print(JSONify.dumps(datum))
-        print("-")
+        # print("-")
 
         sys.stdout.flush()
 
