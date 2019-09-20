@@ -4,8 +4,6 @@ Created on 25 Oct 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import copy
-
 from collections import OrderedDict
 from multiprocessing import Manager
 
@@ -110,9 +108,9 @@ class GPSMonitor(SynchronisedProcess):
 
     def sample(self):
         with self._lock:
-            value = copy.deepcopy(self._value)
+            datum = GPSDatum.construct_from_jdict(OrderedDict(self._value))
 
-        return GPSDatum.construct_from_jdict(OrderedDict(value))
+        return datum
 
 
     # ----------------------------------------------------------------------------------------------------------------

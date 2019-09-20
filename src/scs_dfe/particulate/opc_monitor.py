@@ -100,10 +100,10 @@ class OPCMonitor(SynchronisedProcess):
                     datum = self.__opc.sample()
 
                     if datum.is_zero():
-                        print("OPCMonitor.run: zero reading", file=sys.stderr)
-                        sys.stderr.flush()
-
                         self.__zero_count += 1
+
+                        print("OPCMonitor.run: zero reading %d" % self.__zero_count, file=sys.stderr)
+                        sys.stderr.flush()
 
                         if self.__zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
                             raise ValueError("zero reading")
@@ -194,7 +194,7 @@ class OPCMonitor(SynchronisedProcess):
         if len(value) == 1 and value[0] == self.__FATAL_ERROR:
             raise StopIteration()
 
-        return None if value is None else self.__datum_class.construct_from_jdict(OrderedDict(value))
+        return self.__datum_class.construct_from_jdict(OrderedDict(value))
 
 
     # ----------------------------------------------------------------------------------------------------------------
