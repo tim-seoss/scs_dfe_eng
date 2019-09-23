@@ -4,7 +4,6 @@ Created on 30 Apr 2018
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import copy
 import time
 
 from collections import OrderedDict
