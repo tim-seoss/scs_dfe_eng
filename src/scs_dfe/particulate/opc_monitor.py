@@ -102,8 +102,9 @@ class OPCMonitor(SynchronisedProcess):
                     if datum.is_zero():
                         self.__zero_count += 1
 
-                        print("OPCMonitor.run: zero reading %d" % self.__zero_count, file=sys.stderr)
-                        sys.stderr.flush()
+                        if not self.__first_reading:
+                            print("OPCMonitor.run: zero reading %d" % self.__zero_count, file=sys.stderr)
+                            sys.stderr.flush()
 
                         if self.__zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
                             raise ValueError("zero reading")
