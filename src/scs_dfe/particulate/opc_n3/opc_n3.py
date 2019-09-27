@@ -23,6 +23,8 @@ from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
 
 
+# TODO: check SPI speed
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN3(AlphasenseOPC):
@@ -60,7 +62,7 @@ class OPCN3(AlphasenseOPC):
 
     __CMD_RESET =                       0x06
 
-    __SPI_CLOCK =                       488000
+    __SPI_CLOCK =                       300000      # was 488000
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010

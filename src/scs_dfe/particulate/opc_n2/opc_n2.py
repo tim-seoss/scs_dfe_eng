@@ -47,7 +47,7 @@ class OPCN2(AlphasenseOPC):
     __CMD_READ_HISTOGRAM =              0x30
     __CMD_GET_FIRMWARE =                0x3f
 
-    __SPI_CLOCK =                       488000
+    __SPI_CLOCK =                       300000      # was 488000
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010
