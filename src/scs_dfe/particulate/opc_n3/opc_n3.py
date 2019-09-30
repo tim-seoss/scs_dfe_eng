@@ -62,7 +62,7 @@ class OPCN3(AlphasenseOPC):
 
     __CMD_RESET =                       0x06
 
-    __SPI_CLOCK =                       300000      # was 488000
+    __SPI_CLOCK =                       300000      # Hz    was 488000
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010
