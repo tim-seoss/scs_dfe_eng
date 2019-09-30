@@ -3,6 +3,8 @@ Created on 5 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
+Sensirion SHT3x-DIS temperature and humidity
+
 https://github.com/raspberrypi/weather-station/blob/master/SHT31.py
 """
 
@@ -17,7 +19,7 @@ from scs_host.bus.i2c import I2C
 
 class SHT31(object):
     """
-    Sensirion SHT3x-DIS temperature and humidity
+    classdocs
     """
     MEASUREMENT_DURATION =          0.016
 
