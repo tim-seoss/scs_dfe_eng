@@ -49,7 +49,7 @@ try:
         on = not on
         time.sleep(2)
 
-    exit(0)
+    # exit(0)
 
     print("button...")
 
