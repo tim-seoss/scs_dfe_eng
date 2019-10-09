@@ -11,8 +11,6 @@ from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
-# TODO: create an abstract gain constant list
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class ADS1115(object):
