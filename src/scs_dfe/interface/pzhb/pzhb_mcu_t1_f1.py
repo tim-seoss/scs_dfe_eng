@@ -116,7 +116,7 @@ class PZHBMCUt1f1(PZHBMCU):
 
 
     def power_modem(self, enable):
-        pass                                # TODO: implement power_modem
+        pass
 
 
     # ----------------------------------------------------------------------------------------------------------------

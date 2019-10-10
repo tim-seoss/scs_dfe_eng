@@ -27,7 +27,7 @@ class InterfaceConf(PersistentJSONable):
     classdocs
     """
 
-    DEFAULT_MODEL = 'DFE'           # TODO: deprecated - provides backwards compatibility
+    DEFAULT_MODEL = 'DFE'           # provides backwards compatibility
 
     __MODELS = [
         'DFE',                      # Alpha Pi Eng, ignoring Pt1000
