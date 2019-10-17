@@ -38,8 +38,8 @@ try:
         controller.start_conversion()
         time.sleep(0.1)
 
-        c_wrk, c_aux = controller.read_conversion_count()
-        print('{"wrk": %d, "aux": %d}' % (c_wrk, c_aux))
+        c_wrk, c_aux = controller.read_conversion_voltage()
+        print('{"wrk": %f, "aux": %f}' % (c_wrk, c_aux))
 
         sys.stdout.flush()
 
