@@ -46,8 +46,9 @@ try:
 
     for _ in range(10):
         header.led1(on)
+        header.led2(on)
         on = not on
-        time.sleep(2)
+        time.sleep(0.5)
 
     # exit(0)
 
