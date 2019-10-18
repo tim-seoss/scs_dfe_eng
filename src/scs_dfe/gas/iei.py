@@ -13,7 +13,7 @@ import time
 
 from scs_core.gas.iei_datum import IEIDatum
 
-from scs_dfe.gas.dsi_t1_f1 import DSIt1f1
+from scs_dfe.gas.dsi_t2_f1 import DSIt2f1
 from scs_dfe.gas.electrochem_interface import ElectrochemInterface
 
 
@@ -44,7 +44,7 @@ class IEI(ElectrochemInterface):
         Constructor
         """
         self.__sensors = sensors
-        self.__adc = DSIt1f1(DSIt1f1.DEFAULT_ADDR)
+        self.__adc = DSIt2f1(DSIt2f1.DEFAULT_ADDR)
 
 
     # ----------------------------------------------------------------------------------------------------------------

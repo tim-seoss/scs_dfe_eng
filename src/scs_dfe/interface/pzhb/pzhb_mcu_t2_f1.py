@@ -79,7 +79,7 @@ class PZHBMCUt2f1(PZHBMCU):
 
 
     def version_ident(self):
-        response = self.__cmd(40, 'v', 'i')
+        response = self.__cmd(40, 'v', 'i')          # 40
 
         return ''.join([chr(byte) for byte in response]).strip()
 
@@ -130,6 +130,7 @@ class PZHBMCUt2f1(PZHBMCU):
 
     def __cmd(self, response_size, device, command, arg=0):
         message = [ord(device), ord(command), arg]
+        # message = [ord('x')]
 
         try:
             self.obtain_lock()

@@ -9,7 +9,7 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.dsi_t1_f1 import DSIt1f1
+from scs_dfe.gas.dsi_t2_f1 import DSIt2f1
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -17,7 +17,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-controller = DSIt1f1(DSIt1f1.DEFAULT_ADDR)
+controller = DSIt2f1(DSIt2f1.DEFAULT_ADDR)
 print(controller)
 
 
@@ -38,8 +38,8 @@ try:
         controller.start_conversion()
         time.sleep(0.1)
 
-        c_wrk, c_aux = controller.read_conversion_voltage()
-        print('{"wrk": %f, "aux": %f}' % (c_wrk, c_aux))
+        c_wrk, c_aux = controller.read_conversion_count()
+        print('{"wrk": %d, "aux": %d}' % (c_wrk, c_aux))
 
         sys.stdout.flush()
 
