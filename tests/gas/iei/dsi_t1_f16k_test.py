@@ -9,7 +9,7 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.dsi_t2_f1 import DSIt2f1
+from scs_dfe.gas.iei.dsi_t1_f16k import DSIt1f16K
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -17,7 +17,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-controller = DSIt2f1(DSIt2f1.DEFAULT_ADDR)
+controller = DSIt1f16K(DSIt1f16K.DEFAULT_ADDR)
 print(controller)
 
 

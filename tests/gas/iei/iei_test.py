@@ -16,8 +16,8 @@ from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.afe_baseline import AFEBaseline
 
 from scs_dfe.climate.sht_conf import SHTConf
+from scs_dfe.gas.iei.iei import IEI
 from scs_dfe.interface.interface_conf import InterfaceConf
-from scs_dfe.gas.iei import IEI
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host

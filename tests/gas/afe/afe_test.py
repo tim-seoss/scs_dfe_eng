@@ -14,12 +14,12 @@ from scs_core.data.json import JSONify
 
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
-from scs_core.gas.pt1000_calib import Pt1000Calib
+from scs_core.gas.afe.pt1000_calib import Pt1000Calib
+
+from scs_dfe.gas.afe.afe import AFE
+from scs_dfe.gas.afe.pt1000 import Pt1000
 
 from scs_dfe.interface.interface_conf import InterfaceConf
-
-from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.pt1000 import Pt1000
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host

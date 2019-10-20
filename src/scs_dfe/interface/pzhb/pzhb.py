@@ -9,7 +9,7 @@ A Pi Zero Header Breakout sensor interface
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 
-from scs_dfe.gas.iei import IEI
+from scs_dfe.gas.iei.iei import IEI
 
 from scs_dfe.interface.interface import Interface
 

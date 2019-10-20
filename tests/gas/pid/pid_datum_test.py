@@ -8,7 +8,7 @@ Created on 19 Sep 2016
 
 from scs_core.data.json import JSONify
 
-from scs_core.gas.pid_datum import PIDDatum
+from scs_core.gas.pid.pid_datum import PIDDatum
 
 
 # --------------------------------------------------------------------------------------------------------------------

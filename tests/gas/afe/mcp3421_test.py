@@ -8,7 +8,7 @@ Created on 18 May 2017
 
 import time
 
-from scs_dfe.gas.mcp3421 import MCP3421
+from scs_dfe.gas.afe.mcp3421 import MCP3421
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
