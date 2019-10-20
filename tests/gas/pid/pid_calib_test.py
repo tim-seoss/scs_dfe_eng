@@ -8,7 +8,7 @@ Created on 27 Sep 2016
 
 from scs_core.data.json import JSONify
 
-from scs_core.gas.pid_calib import PIDCalib
+from scs_core.gas.pid.pid_calib import PIDCalib
 
 
 # --------------------------------------------------------------------------------------------------------------------

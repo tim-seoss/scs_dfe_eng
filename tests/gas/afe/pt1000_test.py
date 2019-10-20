@@ -6,12 +6,12 @@ Created on 1 Oct 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_core.gas.pt1000_calib import Pt1000Calib
+from scs_core.gas.afe.pt1000_calib import Pt1000Calib
 
 from scs_dfe.climate.sht_conf import SHTConf
 
-from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.afe.afe import AFE
+from scs_dfe.gas.afe.pt1000 import Pt1000
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 

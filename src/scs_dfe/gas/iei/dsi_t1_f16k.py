@@ -3,9 +3,10 @@ Created on 27 May 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Digital Single Interface (DSI)
+Digital Single Interface (DSI) Type 1 on 16K ROM MCU
 
-https://github.com/south-coast-science/scs_dsi_t1_f1
+Compatible with:
+https://github.com/south-coast-science/scs_dsi_t2_f1
 """
 
 import time
@@ -18,15 +19,14 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DSIt1f1(object):
+class DSIt1f16K(object):
     """
-    South Coast Science DSI t1 f1 microcontroller
+    South Coast Science DSI t1 (16K) microcontroller
     """
 
     DEFAULT_ADDR =          0x30
 
     CONVERSION_TIME =       0.1             # seconds
-
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +35,9 @@ class DSIt1f1(object):
 
     __SEND_WAIT_TIME =      0.010               # seconds
     __LOCK_TIMEOUT =        2.0
+
+    __SAMPLE_MAX_VOLTAGE =  3.3
+    __SAMPLE_MAX_COUNT =    65535
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -65,10 +68,10 @@ class DSIt1f1(object):
 
 
     def read_conversion_voltage(self):
-        response = self.__cmd(ord('v'), 8)
+        c_wrk, c_aux = self.read_conversion_count()
 
-        v_aux = Decode.float(response[0:4], '<')            # CS0
-        v_wrk = Decode.float(response[4:8], '<')            # CS1
+        v_wrk = self.__voltage_conversion(c_wrk)
+        v_aux = self.__voltage_conversion(c_aux)
 
         return round(v_wrk, 5), round(v_aux, 5)
 
@@ -86,6 +89,10 @@ class DSIt1f1(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def __voltage_conversion(self, count):
+        return self.__SAMPLE_MAX_VOLTAGE * count / self.__SAMPLE_MAX_COUNT
+
 
     def __cmd(self, cmd, response_size):
         try:
@@ -106,7 +113,7 @@ class DSIt1f1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def obtain_lock(self):
-        Lock.acquire(self.__lock_name, DSIt1f1.__LOCK_TIMEOUT)
+        Lock.acquire(self.__lock_name, DSIt1f16K.__LOCK_TIMEOUT)
 
 
     def release_lock(self):
@@ -128,4 +135,4 @@ class DSIt1f1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DSIt1f1:{addr:0x%0.2x}" % self.addr
+        return "DSIt1f16K:{addr:0x%0.2x}" % self.addr

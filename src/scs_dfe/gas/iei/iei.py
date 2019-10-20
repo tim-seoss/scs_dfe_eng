@@ -11,19 +11,19 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 
 import time
 
-from scs_core.gas.iei_datum import IEIDatum
+from scs_core.gas.iei.iei_datum import IEIDatum
 
-from scs_dfe.gas.dsi_t2_f1 import DSIt2f1
+from scs_dfe.gas.iei.dsi_t1_f16k import DSIt1f16K
 from scs_dfe.gas.electrochem_interface import ElectrochemInterface
 
 
-# TODO: IEI requires multiple DSIt1f1 instances to support multiple sensors
+# TODO: IEI requires multiple DSIt1 instances to support multiple sensors
 
 # --------------------------------------------------------------------------------------------------------------------
 
 class IEI(ElectrochemInterface):
     """
-    South Coast Science integrated electrochem interface using DSIt1f1
+    South Coast Science integrated electrochem interface using DSIt1
     """
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ class IEI(ElectrochemInterface):
         Constructor
         """
         self.__sensors = sensors
-        self.__adc = DSIt2f1(DSIt2f1.DEFAULT_ADDR)
+        self.__adc = DSIt1f16K(DSIt1f16K.DEFAULT_ADDR)
 
 
     # ----------------------------------------------------------------------------------------------------------------

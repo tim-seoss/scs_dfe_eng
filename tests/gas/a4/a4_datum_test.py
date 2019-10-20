@@ -8,7 +8,7 @@ Created on 18 Sep 2016
 
 from scs_core.data.json import JSONify
 
-from scs_core.gas.a4_datum import A4Datum
+from scs_core.gas.a4.a4_datum import A4Datum
 
 
 # --------------------------------------------------------------------------------------------------------------------
