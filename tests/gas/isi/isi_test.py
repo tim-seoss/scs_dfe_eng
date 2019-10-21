@@ -5,7 +5,7 @@ Created on 7 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Set DFEConf to IEI before running
+Set DFEConf to ISI before running
 """
 
 import time
@@ -16,7 +16,7 @@ from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.afe_baseline import AFEBaseline
 
 from scs_dfe.climate.sht_conf import SHTConf
-from scs_dfe.gas.iei.iei import IEI
+from scs_dfe.gas.isi.isi import ISI
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
@@ -56,8 +56,8 @@ try:
 
 
 # --------------------------------------------------------------------------------------------------------------------
-    iei = IEI(sensors)
-    print(iei)
+    interface = ISI(sensors)
+    print(interface)
     print("-")
 
     start_time = time.time()
@@ -69,7 +69,7 @@ try:
     print("-")
 
     start_time = time.time()
-    sample = iei.sample_station(1, sht_datum)
+    sample = interface.sample_station(1, sht_datum)
     elapsed = time.time() - start_time
 
     print("SN1: %s" % sample)
@@ -77,7 +77,7 @@ try:
     print("=")
 
     start_time = time.time()
-    samples = iei.sample(sht_datum)
+    samples = interface.sample(sht_datum)
     elapsed = time.time() - start_time
 
     print(samples)

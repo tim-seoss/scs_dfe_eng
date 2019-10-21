@@ -3,7 +3,7 @@ Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Integrated Electrochem Interface (IEI)
+Integrated Electrochem Interface (ISI)
 
 Warning: If an Ox sensor is present, the NO2 sensor must have a lower sensor number (SN) than the Ox sensor,
 otherwise the NO2 cross-sensitivity concentration will not be found.
@@ -11,19 +11,20 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 
 import time
 
-from scs_core.gas.iei.iei_datum import IEIDatum
+from scs_core.gas.isi.isi_datum import ISIDatum
 
-from scs_dfe.gas.iei.dsi_t1_f16k import DSIt1f16K
-from scs_dfe.gas.electrochem_interface import ElectrochemInterface
+from scs_dfe.gas.isi.dsi_t1_f16k import DSIt1f16K
+from scs_dfe.gas.sensor_interface import SensorInterface
 
 
-# TODO: IEI requires multiple DSIt1 instances to support multiple sensors
+# TODO: use config to specify which type of DSI is being used
+# TODO: ISI requires multiple DSIt1 instances to support multiple sensors
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class IEI(ElectrochemInterface):
+class ISI(SensorInterface):
     """
-    South Coast Science integrated electrochem interface using DSIt1
+    South Coast Science integrated sensor interface, using DSI gas sensors
     """
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -63,14 +64,14 @@ class IEI(ElectrochemInterface):
 
             # cross-sensitivity sample...
             if sensor.has_no2_cross_sensitivity():
-                no2_sample = IEI.__no2_sample(samples)
+                no2_sample = ISI.__no2_sample(samples)
 
             # sample...
             sample = sensor.sample(self, sht_datum.temp, sensor_index, no2_sample)
 
             samples.append((sensor.gas_name, sample))
 
-        return IEIDatum(*samples)
+        return ISIDatum(*samples)
 
 
     def sample_station(self, sn, sht_datum):
@@ -80,7 +81,7 @@ class IEI(ElectrochemInterface):
         sensor = self.__sensors[index]
 
         if sensor is None:
-            return IEIDatum()
+            return ISIDatum()
 
         # cross-sensitivity sample...
         if sensor.has_no2_cross_sensitivity():
@@ -92,7 +93,7 @@ class IEI(ElectrochemInterface):
         # sample...
         sample = sensor.sample(self, sht_datum.temp, index, no2_sample)
 
-        return IEIDatum((sensor.gas_name, sample))
+        return ISIDatum((sensor.gas_name, sample))
 
 
     def null_datum(self):
@@ -106,7 +107,7 @@ class IEI(ElectrochemInterface):
 
             samples.append((sensor.gas_name, sensor.null_datum()))
 
-        return IEIDatum(*samples)
+        return ISIDatum(*samples)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -139,4 +140,4 @@ class IEI(ElectrochemInterface):
     def __str__(self, *args, **kwargs):
         sensors = '[' + ', '.join(str(sensor) for sensor in self.__sensors) + ']'
 
-        return "IEI:{sensors:%s, adc:%s}" %  (sensors, self.__adc)
+        return "ISI:{sensors:%s, adc:%s}" %  (sensors, self.__adc)
