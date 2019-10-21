@@ -3,7 +3,7 @@ Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-A Pi Zero Header Breakout sensor interface
+A Pi Zero Header Breakout system interface
 """
 
 from scs_core.gas.afe_baseline import AFEBaseline
