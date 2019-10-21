@@ -2,6 +2,8 @@
 Created on 7 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
+
+An abstract gas sensor interface
 """
 
 from abc import ABC, abstractmethod
@@ -9,7 +11,7 @@ from abc import ABC, abstractmethod
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class ElectrochemInterface(ABC):
+class SensorInterface(ABC):
     """
     classdocs
     """

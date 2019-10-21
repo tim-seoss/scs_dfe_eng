@@ -3,7 +3,7 @@ Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-An abstract sensor interface
+An abstract system interface
 """
 
 from abc import ABC, abstractmethod

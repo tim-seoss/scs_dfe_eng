@@ -9,7 +9,7 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.iei.dsi_t1 import DSIt1
+from scs_dfe.gas.isi.dsi_t1 import DSIt1
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host

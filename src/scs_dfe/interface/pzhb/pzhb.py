@@ -3,13 +3,13 @@ Created on 20 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-A Pi Zero Header Breakout sensor interface
+A Pi Zero Header Breakout system interface
 """
 
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
 
-from scs_dfe.gas.iei.iei import IEI
+from scs_dfe.gas.isi.isi import ISI
 
 from scs_dfe.interface.interface import Interface
 
@@ -49,7 +49,7 @@ class PZHB(Interface):
 
         sensors = afe_calib.sensors(afe_baseline)
 
-        return IEI(sensors)
+        return ISI(sensors)
 
 
     def pt1000(self, host):
