@@ -130,7 +130,6 @@ class PZHBMCUt2f1(PZHBMCU):
 
     def __cmd(self, response_size, device, command, arg=0):
         message = [ord(device), ord(command), arg]
-        # message = [ord('x')]
 
         try:
             self.obtain_lock()

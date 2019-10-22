@@ -6,7 +6,7 @@ Created on 26 Sep 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-from scs_core.gas.a4_calib import A4Calib
+from scs_core.gas.a4.a4_calib import A4Calib
 
 
 # --------------------------------------------------------------------------------------------------------------------

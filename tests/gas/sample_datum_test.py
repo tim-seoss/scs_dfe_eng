@@ -11,11 +11,15 @@ Requires SystemID document.
 from scs_core.data.json import JSONify
 from scs_core.data.localized_datetime import LocalizedDatetime
 
-from scs_core.gas.a4_datum import A4Datum
-from scs_core.gas.afe_datum import AFEDatum
-from scs_core.gas.pid_datum import PIDDatum
-from scs_core.gas.pt1000_datum import Pt1000Datum
+from scs_core.gas.a4.a4_datum import A4Datum
+
+from scs_core.gas.afe.afe_datum import AFEDatum
+from scs_core.gas.afe.pt1000_datum import Pt1000Datum
+
+from scs_core.gas.pid.pid_datum import PIDDatum
+
 from scs_core.gas.sensor import Sensor
+
 from scs_core.particulate.pmx_datum import PMxDatum
 
 from scs_core.sample.sample import Sample

@@ -8,11 +8,11 @@ A digital front-end (DFE) sensor interface
 
 from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
-from scs_core.gas.pt1000_calib import Pt1000Calib
+from scs_core.gas.afe.pt1000_calib import Pt1000Calib
 
-from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.mcp342x import MCP342X
-from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.afe.afe import AFE
+from scs_dfe.gas.afe.mcp342x import MCP342X
+from scs_dfe.gas.afe.pt1000 import Pt1000
 
 from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.component.mcp9808 import MCP9808

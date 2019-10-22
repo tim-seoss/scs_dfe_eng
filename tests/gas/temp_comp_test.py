@@ -8,7 +8,7 @@ Created on 22 Sep 2016
 
 from scs_core.gas.sensor import Sensor
 
-from scs_core.gas.a4_temp_comp import A4TempComp
+from scs_core.gas.a4.a4_temp_comp import A4TempComp
 
 
 # --------------------------------------------------------------------------------------------------------------------

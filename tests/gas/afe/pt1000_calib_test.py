@@ -9,9 +9,9 @@ Created on 30 Sep 2016
 import json
 
 from scs_core.data.json import JSONify
-from scs_core.gas.pt1000_calib import Pt1000Calib
+from scs_core.gas.afe.pt1000_calib import Pt1000Calib
 
-from scs_dfe.gas.pt1000 import Pt1000
+from scs_dfe.gas.afe.pt1000 import Pt1000
 
 from scs_host.sys.host import Host
 

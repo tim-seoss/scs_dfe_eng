@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
 
 """
-Created on 15 Aug 2016
+Created on 7 Jun 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Note: this script uses the Pt1000 temp sensor for temperature compensation.
+Set DFEConf to ISI before running
 """
 
 import time
 
 from scs_core.data.json import JSONify
 
-from scs_core.gas.afe_baseline import AFEBaseline
 from scs_core.gas.afe_calib import AFECalib
-from scs_core.gas.pt1000_calib import Pt1000Calib
+from scs_core.gas.afe_baseline import AFEBaseline
 
+from scs_dfe.climate.sht_conf import SHTConf
+from scs_dfe.gas.isi.isi import ISI
 from scs_dfe.interface.interface_conf import InterfaceConf
-
-from scs_dfe.gas.afe import AFE
-from scs_dfe.gas.pt1000 import Pt1000
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -31,6 +29,10 @@ from scs_host.sys.host import Host
 try:
     I2C.open(Host.I2C_SENSORS)
 
+    sht_conf = SHTConf.load(Host)
+    sht = sht_conf.ext_sht()
+    print(sht)
+    print("-")
 
     interface_conf = InterfaceConf.load(Host)
     print(interface_conf)
@@ -38,14 +40,6 @@ try:
 
     interface = interface_conf.interface()
     print(interface)
-    print("-")
-
-    pt1000_calib = Pt1000Calib.load(Host)
-    print(pt1000_calib)
-    print("-")
-
-    pt1000 = Pt1000(pt1000_calib)
-    print(pt1000)
     print("-")
 
     afe_calib = AFECalib.load(Host)
@@ -61,37 +55,29 @@ try:
     print("-")
 
 
-    # ----------------------------------------------------------------------------------------------------------------
-    afe = AFE(interface, pt1000, sensors)
-    print(afe)
+# --------------------------------------------------------------------------------------------------------------------
+    interface = ISI(sensors)
+    print(interface)
     print("-")
 
     start_time = time.time()
-    temp = afe.sample_pt1000()
+    sht_datum = sht.sample()
     elapsed = time.time() - start_time
 
-    print(temp)
+    print(sht_datum)
     print("elapsed:%0.3f" % elapsed)
     print("-")
 
     start_time = time.time()
-    sample = afe.sample_station(1)
+    sample = interface.sample_station(1, sht_datum)
     elapsed = time.time() - start_time
 
     print("SN1: %s" % sample)
     print("elapsed:%0.3f" % elapsed)
-    print("-")
-
-    start_time = time.time()
-    sample = afe.sample_station(4)
-    elapsed = time.time() - start_time
-
-    print("SN4: %s" % sample)
-    print("elapsed:%0.3f" % elapsed)
     print("=")
 
     start_time = time.time()
-    samples = afe.sample()
+    samples = interface.sample(sht_datum)
     elapsed = time.time() - start_time
 
     print(samples)
