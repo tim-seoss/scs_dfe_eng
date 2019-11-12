@@ -47,6 +47,8 @@ class SPS30(OPC):
 
     __CLEANING_TIME =                  10.0         # seconds
 
+    __MAX_PERMITTED_ZERO_READINGS =     4
+
     __CMD_START_MEASUREMENT =           0x0010
     __CMD_STOP_MEASUREMENT =            0x0104
     __CMD_READ_DATA_READY_FLAG =        0x0202
@@ -134,6 +136,11 @@ class SPS30(OPC):
     @classmethod
     def power_cycle_time(cls):
         return cls.__POWER_CYCLE_TIME
+
+
+    @classmethod
+    def max_permitted_zero_readings(cls):
+        return cls.__MAX_PERMITTED_ZERO_READINGS
 
 
     # ----------------------------------------------------------------------------------------------------------------
