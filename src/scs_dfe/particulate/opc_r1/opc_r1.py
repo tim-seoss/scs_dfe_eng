@@ -43,6 +43,8 @@ class OPCR1(AlphasenseOPC):
     __FAN_START_TIME =                  3.0         # seconds
     __FAN_STOP_TIME =                   3.0         # seconds
 
+    __MAX_PERMITTED_ZERO_READINGS =     30
+
     __CMD_POWER =                       0x03
     __CMD_PERIPHERALS_ON =              0x07
     __CMD_PERIPHERALS_OFF =             0x00
@@ -79,6 +81,11 @@ class OPCR1(AlphasenseOPC):
     @classmethod
     def power_cycle_time(cls):
         return cls.__POWER_CYCLE_TIME
+
+
+    @classmethod
+    def max_permitted_zero_readings(cls):
+        return cls.__MAX_PERMITTED_ZERO_READINGS
 
 
     # ----------------------------------------------------------------------------------------------------------------
