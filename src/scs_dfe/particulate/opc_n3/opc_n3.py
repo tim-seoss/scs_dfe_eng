@@ -47,6 +47,8 @@ class OPCN3(AlphasenseOPC):
 
     __FAN_STOP_TIME =                   2.0         # seconds
 
+    __MAX_PERMITTED_ZERO_READINGS =     4
+
     __CMD_POWER =                       0x03
     __CMD_LASER_ON =                    0x07
     __CMD_LASER_OFF =                   0x06
@@ -86,6 +88,11 @@ class OPCN3(AlphasenseOPC):
     @classmethod
     def power_cycle_time(cls):
         return cls.__POWER_CYCLE_TIME
+
+
+    @classmethod
+    def max_permitted_zero_readings(cls):
+        return cls.__MAX_PERMITTED_ZERO_READINGS
 
 
     # ----------------------------------------------------------------------------------------------------------------

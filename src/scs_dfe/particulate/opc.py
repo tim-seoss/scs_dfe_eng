@@ -52,6 +52,12 @@ class OPC(ABC):
         pass
 
 
+    @classmethod
+    @abstractmethod
+    def max_permitted_zero_readings(cls):
+        pass
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __init__(self, interface):

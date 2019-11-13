@@ -27,8 +27,6 @@ class OPCMonitor(SynchronisedProcess):
     """
     classdocs
     """
-    __MAX_PERMITTED_ZERO_READINGS =      4
-
     __FATAL_ERROR =                     -1
 
 
@@ -87,6 +85,7 @@ class OPCMonitor(SynchronisedProcess):
             timer = IntervalTimer(self.__conf.sample_period)
 
             self.__zero_count = 0
+            max_permitted_zero_readings = self.__opc.max_permitted_zero_readings()
 
             while timer.true():
                 try:
@@ -103,10 +102,11 @@ class OPCMonitor(SynchronisedProcess):
                         self.__zero_count += 1
 
                         if not self.__first_reading:
-                            print("OPCMonitor.run: zero reading %d" % self.__zero_count, file=sys.stderr)
+                            print("OPCMonitor.run: zero reading %d of %d" %
+                                  (self.__zero_count, max_permitted_zero_readings), file=sys.stderr)
                             sys.stderr.flush()
 
-                        if self.__zero_count > self.__MAX_PERMITTED_ZERO_READINGS:
+                        if self.__zero_count > max_permitted_zero_readings:
                             raise ValueError("zero reading")
 
                     else:
