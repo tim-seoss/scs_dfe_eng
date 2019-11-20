@@ -6,29 +6,37 @@ Created on 31 Jan 2019
 https://www.u-blox.com/en/product/sam-m8q-module
 
 example sentences:
-PAM7...
-$GPRMC,103228.00,A,5049.37823,N,00007.37872,W,0.104,,301216,,,D*64
-$GPVTG,,T,,M,0.104,N,0.193,K,D*28
-$GPGGA,103228.00,5049.37823,N,00007.37872,W,2,07,1.85,34.0,M,45.4,M,,0000*75
-$GPGSA,A,3,23,17,03,09,01,22,19,,,,,,2.96,1.85,2.30*06
-$GPGSV,4,1,13,01,15,142,36,02,12,312,21,03,46,084,33,06,46,301,*70
-$GPGSV,4,2,13,09,49,206,46,12,01,319,,17,32,235,43,19,38,254,35*74
-$GPGSV,4,3,13,22,31,090,29,23,74,115,35,25,03,355,,31,14,034,20*78
-$GPGSV,4,4,13,33,30,200,42*4C
-$GPGLL,5049.37823,N,00007.37872,W,103228.00,A,D*7F
+$GNGGA,104821.00,5049.40135,N,00007.38444,W,2,09,1.01,24.2,M,45.4,M,,0000*66
+$GNGSA,A,3,31,22,09,17,19,23,06,07,,,,,1.48,1.01,1.08*1D
+$GNGSA,A,3,69,,,,,,,,,,,,1.48,1.01,1.08*17
+$GPGSV,4,1,15,01,04,145,10,02,21,312,,03,42,089,09,04,67,197,23*7B
+$GPGSV,4,2,15,06,59,290,19,07,06,169,20,09,66,203,15,17,22,224,30*72
+$GPGSV,4,3,15,19,31,241,27,22,22,097,12,23,74,092,11,25,00,344,*72
+$GPGSV,4,4,15,31,08,027,10,36,25,141,,49,32,173,27*49
+$GLGSV,3,1,09,68,36,057,,69,75,334,23,70,25,259,,77,16,019,*6E
+$GLGSV,3,2,09,78,24,073,,79,07,121,,83,06,176,,84,53,215,*6A
+$GLGSV,3,3,09,85,43,314,*50
+$GNGLL,5049.40135,N,00007.38444,W,104821.00,A,D*6D
+$GNTXT,01,01,01,More than 100 frame errors, UART RX was disabled*70
+$GNRMC,104822.00,A,5049.40155,N,00007.38453,W,0.105,,201119,,,D*79
+$GNVTG,,T,,M,0.105,N,0.194,K,D*30
 
-SAM8...
-$GNRMC,114733.00,A,5049.38206,N,00007.39011,W,0.109,,310119,,,D*73
-$GNVTG,,T,,M,0.109,N,0.202,K,D*30
-$GNGGA,114733.00,5049.38206,N,00007.39011,W,2,06,1.44,116.2,M,45.4,M,,0000*5C
-$GNGSA,A,3,05,07,13,28,30,15,,,,,,,2.84,1.44,2.45*1D
-$GNGSA,A,3,,,,,,,,,,,,,2.84,1.44,2.45*10
-$GPGSV,3,1,12,05,51,194,47,07,18,060,27,08,08,035,22,13,71,296,32*75
-$GPGSV,3,2,12,15,34,290,26,21,15,308,12,24,04,240,,27,03,007,*7D
-$GPGSV,3,3,12,28,45,116,29,30,50,064,31,36,25,141,,49,32,173,46*77
-$GLGSV,1,1,00*65
-$GNGLL,5049.38206,N,00007.39011,W,114733.00,A,D*69
+$GNGGA,104822.00,5049.40155,N,00007.38453,W,2,09,1.97,23.8,M,45.4,M,,0000*67
+$GNGSA,A,3,03,22,09,17,19,23,06,07,,,,,3.13,1.97,2.44*14
+$GNGSA,A,3,69,,,,,,,,,,,,3.13,1.97,2.44*1F
+$GPGSV,4,1,15,01,04,145,12,02,21,312,,03,42,089,10,04,67,197,23*71
+$GPGSV,4,2,15,06,59,290,20,07,06,169,20,09,66,203,15,17,22,224,30*78
+$GPGSV,4,3,15,19,31,241,27,22,22,097,13,23,74,092,13,25,00,344,*71
+$GPGSV,4,4,15,31,08,027,07,36,25,141,,49,32,173,28*40
+$GLGSV,3,1,09,68,36,057,,69,75,334,23,70,25,259,,77,16,019,*6E
+$GLGSV,3,2,09,78,24,073,,79,07,121,,83,06,176,,84,53,215,*6A
+$GLGSV,3,3,09,85,43,314,*50
+$GNGLL,5049.40155,N,00007.38453,W,104822.00,A,D*6E
+$GNRMC,104823.00,A,5049.40180,N,00007.38497,W,0.237,,201119,,,D*7A
+$GNVTG,,T,,M,0.237,N,0.439,K,D*30
 """
+
+# import sys
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
@@ -60,6 +68,8 @@ class SAMM8Q(GPS):
 
     __SERIAL_LOCK_TIMEOUT =     3.0
     __SERIAL_COMMS_TIMEOUT =    1.0
+
+    __MESSAGE_SET_SIZE =        14              # message set size (add extra for broken message on start of scan)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -93,9 +103,12 @@ class SAMM8Q(GPS):
     # ----------------------------------------------------------------------------------------------------------------
 
     def report(self, message_class):
-        for i in range(11):
+        for i in range(self.__MESSAGE_SET_SIZE + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
+                # print(line, file=sys.stderr)
+                # sys.stderr.flush()
+
                 r = NMEAReport.construct(line)
 
                 if r.str(0) in message_class.MESSAGE_IDS:
@@ -111,9 +124,13 @@ class SAMM8Q(GPS):
     def report_all(self):
         # reports...
         reports = []
-        for i in range(20):
+        for i in range((self.__MESSAGE_SET_SIZE * 2) + 2):
             try:
-                r = NMEAReport.construct(self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT))
+                line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
+                # print(line, file=sys.stderr)
+                # sys.stderr.flush()
+
+                r = NMEAReport.construct(line)
                 reports.append(r)
 
             except (UnicodeDecodeError, ValueError):
@@ -150,14 +167,16 @@ class SAMM8Q(GPS):
             if report.str(0) in GPGSV.MESSAGE_IDS:
                 break
 
-        sentences.append(GPGSV.construct(report))
+        if report.str(0) in GPGSV.MESSAGE_IDS:
+            sentences.append(GPGSV.construct(report))
 
         # GPGLL...
         for report in reports[start + 5:]:
             if report.str(0) in GPGLL.MESSAGE_IDS:
                 break
 
-        sentences.append(GPGLL.construct(report))
+        if report.str(0) in GPGLL.MESSAGE_IDS:
+            sentences.append(GPGLL.construct(report))
 
         return sentences
 
