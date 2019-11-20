@@ -5,19 +5,25 @@ Created on 30 Dec 2016
 
 https://www.u-blox.com/en/product/pam-7q-module
 
-example sentences:
-$GPRMC,103228.00,A,5049.37823,N,00007.37872,W,0.104,,301216,,,D*64
-$GPVTG,,T,,M,0.104,N,0.193,K,D*28
-$GPGGA,103228.00,5049.37823,N,00007.37872,W,2,07,1.85,34.0,M,45.4,M,,0000*75
-$GPGSA,A,3,23,17,03,09,01,22,19,,,,,,2.96,1.85,2.30*06
-$GPGSV,4,1,13,01,15,142,36,02,12,312,21,03,46,084,33,06,46,301,*70
-$GPGSV,4,2,13,09,49,206,46,12,01,319,,17,32,235,43,19,38,254,35*74
-$GPGSV,4,3,13,22,31,090,29,23,74,115,35,25,03,355,,31,14,034,20*78
-$GPGSV,4,4,13,33,30,200,42*4C
-$GPGLL,5049.37823,N,00007.37872,W,103228.00,A,D*7F
+example sentence sets:
+$GPGGA,113111.00,5049.38388,N,00007.37172,W,1,04,2.48,35.9,M,45.4,M,,*7B
+$GPGSA,A,3,07,19,06,23,,,,,,,,,4.22,2.48,3.42*05
+$GPGSV,2,1,07,06,66,247,39,07,24,164,47,09,,,34,17,04,214,39*40
+$GPGSV,2,2,07,19,15,227,50,23,57,066,32,24,,,31*76
+$GPGLL,5049.38388,N,00007.37172,W,113111.00,A,A*7E
+$GPRMC,113112.00,A,5049.38381,N,00007.37173,W,0.017,,201119,,,A*60
+$GPVTG,,T,,M,0.017,N,0.032,K,A*24
+
+$GPGGA,113112.00,5049.38381,N,00007.37173,W,1,04,2.48,36.5,M,45.4,M,,*7F
+$GPGSA,A,3,07,19,06,23,,,,,,,,,4.22,2.48,3.41*06
+$GPGSV,2,1,08,06,66,247,39,07,24,164,47,09,,,33,17,04,214,39*48
+$GPGSV,2,2,08,19,15,227,50,23,57,066,33,24,,,30,26,,,29*76
+$GPGLL,5049.38381,N,00007.37173,W,113112.00,A,A*75
+$GPRMC,113113.00,A,5049.38380,N,00007.37174,W,0.060,,201119,,,A*67
+$GPVTG,,T,,M,0.060,N,0.111,K,A*24
 """
 
-import sys
+# import sys
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
@@ -50,7 +56,7 @@ class PAM7Q(GPS):
     __SERIAL_LOCK_TIMEOUT =     3.0
     __SERIAL_COMMS_TIMEOUT =    1.0
 
-    __MESSAGE_SET_SIZE =        9               # message set size (add extra for broken message on start of scan)
+    __MAX_MESSAGE_SET_SIZE =    12              # max message set size (add extra for broken message on start of scan)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -84,11 +90,11 @@ class PAM7Q(GPS):
     # ----------------------------------------------------------------------------------------------------------------
 
     def report(self, message_class):
-        for i in range(self.__MESSAGE_SET_SIZE + 2):
+        for i in range(self.__MAX_MESSAGE_SET_SIZE + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
-                print(line, file=sys.stderr)
-                sys.stderr.flush()
+                # print(line, file=sys.stderr)
+                # sys.stderr.flush()
 
                 r = NMEAReport.construct(line)
 
@@ -105,11 +111,11 @@ class PAM7Q(GPS):
     def report_all(self):
         # reports...
         reports = []
-        for i in range((self.__MESSAGE_SET_SIZE * 2) + 2):
+        for i in range((self.__MAX_MESSAGE_SET_SIZE * 2) + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
-                print(line, file=sys.stderr)
-                sys.stderr.flush()
+                # print(line, file=sys.stderr)
+                # sys.stderr.flush()
 
                 r = NMEAReport.construct(line)
                 reports.append(r)

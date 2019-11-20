@@ -5,7 +5,7 @@ Created on 31 Jan 2019
 
 https://www.u-blox.com/en/product/sam-m8q-module
 
-example sentences:
+example sentence sets:
 $GNGGA,104821.00,5049.40135,N,00007.38444,W,2,09,1.01,24.2,M,45.4,M,,0000*66
 $GNGSA,A,3,31,22,09,17,19,23,06,07,,,,,1.48,1.01,1.08*1D
 $GNGSA,A,3,69,,,,,,,,,,,,1.48,1.01,1.08*17
@@ -69,7 +69,7 @@ class SAMM8Q(GPS):
     __SERIAL_LOCK_TIMEOUT =     3.0
     __SERIAL_COMMS_TIMEOUT =    1.0
 
-    __MESSAGE_SET_SIZE =        14              # message set size (add extra for broken message on start of scan)
+    __MAX_MESSAGE_SET_SIZE =    14              # message set size (add extra for broken message on start of scan)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ class SAMM8Q(GPS):
     # ----------------------------------------------------------------------------------------------------------------
 
     def report(self, message_class):
-        for i in range(self.__MESSAGE_SET_SIZE + 2):
+        for i in range(self.__MAX_MESSAGE_SET_SIZE + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
                 # print(line, file=sys.stderr)
@@ -124,7 +124,7 @@ class SAMM8Q(GPS):
     def report_all(self):
         # reports...
         reports = []
-        for i in range((self.__MESSAGE_SET_SIZE * 2) + 2):
+        for i in range((self.__MAX_MESSAGE_SET_SIZE * 2) + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
                 # print(line, file=sys.stderr)
