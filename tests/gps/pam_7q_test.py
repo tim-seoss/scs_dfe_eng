@@ -17,7 +17,7 @@ from scs_core.position.nmea.gpvtg import GPVTG
 
 from scs_core.position.gps_datum import GPSDatum
 
-from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.gps.pam_7q import PAM7Q
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C

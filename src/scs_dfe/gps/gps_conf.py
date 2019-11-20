@@ -14,7 +14,7 @@ from collections import OrderedDict
 from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.gps.gps_monitor import GPSMonitor
-from scs_dfe.gps.pam7q import PAM7Q
+from scs_dfe.gps.pam_7q import PAM7Q
 from scs_dfe.gps.sam_m8q import SAMM8Q
 
 
