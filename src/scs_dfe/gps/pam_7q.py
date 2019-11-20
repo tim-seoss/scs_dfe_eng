@@ -15,16 +15,9 @@ $GPGSV,4,2,13,09,49,206,46,12,01,319,,17,32,235,43,19,38,254,35*74
 $GPGSV,4,3,13,22,31,090,29,23,74,115,35,25,03,355,,31,14,034,20*78
 $GPGSV,4,4,13,33,30,200,42*4C
 $GPGLL,5049.37823,N,00007.37872,W,103228.00,A,D*7F
-
-$GPRMC,152926.00,A,5049.36953,N,00007.38514,W,0.018,,301216,,,D*6C
-$GPVTG,,T,,M,0.018,N,0.033,K,D*2F
-$GPGGA,152926.00,5049.36953,N,00007.38514,W,2,07,1.37,23.2,M,45.4,M,,0000*7C
-$GPGSA,A,3,30,13,28,20,05,15,07,,,,,,2.71,1.37,2.34*09
-$GPGSV,3,1,12,05,61,203,40,07,26,057,31,08,05,050,,09,00,101,*7D
-$GPGSV,3,2,12,13,58,287,22,15,26,285,35,20,41,297,29,21,13,321,*71
-$GPGSV,3,3,12,27,04,013,13,28,39,126,37,30,60,068,26,33,30,200,44*74
-$GPGLL,5049.36953,N,00007.38514,W,152926.00,A,D*7B
 """
+
+import sys
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
@@ -56,6 +49,8 @@ class PAM7Q(GPS):
 
     __SERIAL_LOCK_TIMEOUT =     3.0
     __SERIAL_COMMS_TIMEOUT =    1.0
+
+    __MESSAGE_SET_SIZE =        9               # message set size (add extra for broken message on start of scan)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -89,9 +84,12 @@ class PAM7Q(GPS):
     # ----------------------------------------------------------------------------------------------------------------
 
     def report(self, message_class):
-        for i in range(11):
+        for i in range(self.__MESSAGE_SET_SIZE + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
+                print(line, file=sys.stderr)
+                sys.stderr.flush()
+
                 r = NMEAReport.construct(line)
 
                 if r.str(0) in message_class.MESSAGE_IDS:
@@ -107,9 +105,13 @@ class PAM7Q(GPS):
     def report_all(self):
         # reports...
         reports = []
-        for i in range(20):
+        for i in range((self.__MESSAGE_SET_SIZE * 2) + 2):
             try:
-                r = NMEAReport.construct(self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT))
+                line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
+                print(line, file=sys.stderr)
+                sys.stderr.flush()
+
+                r = NMEAReport.construct(line)
                 reports.append(r)
 
             except (UnicodeDecodeError, ValueError):
