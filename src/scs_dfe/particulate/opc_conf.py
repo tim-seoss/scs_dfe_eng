@@ -6,7 +6,7 @@ Created on 11 Jul 2017
 settings for OPCMonitor
 
 example JSON:
-{"model": "R1", "sample-period": 10, "power-saving": false, "spi-bus": 0, "spi-device": 0}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iselutn2v1"], "sht": "ext"}
 """
 
 from collections import OrderedDict
@@ -50,7 +50,10 @@ class OPCConf(PersistentJSONable):
         bus = jdict.get('bus')
         address = jdict.get('address')
 
-        return OPCConf(model, sample_period, power_saving, bus, address)
+        exegetes = jdict.get('exg', [])
+        sht = jdict.get('sht')
+
+        return OPCConf(model, sample_period, power_saving, bus, address, exegetes, sht)
 
 
     @classmethod
@@ -60,18 +63,21 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, power_saving, bus, address):
+    def __init__(self, model, sample_period, power_saving, bus, address, exegetes, sht):
         """
         Constructor
         """
         super().__init__()
 
-        self.__model = model
-        self.__sample_period = int(sample_period)
-        self.__power_saving = bool(power_saving)
+        self.__model = model                                    # string
+        self.__sample_period = int(sample_period)               # int
+        self.__power_saving = bool(power_saving)                # bool
 
-        self.__bus = bus
-        self.__address = address
+        self.__bus = bus                                        # int
+        self.__address = address                                # int
+
+        self.__exegetes = set(exegetes)                         # set of string
+        self.__sht = sht                                        # string
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -134,6 +140,16 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def add_exegete(self, exegete):
+        self.__exegetes.add(exegete)
+
+
+    def discard_exegete(self, exegete):
+        self.__exegetes.discard(exegete)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     @property
     def model(self):
         return self.__model
@@ -159,20 +175,33 @@ class OPCConf(PersistentJSONable):
         return self.__address
 
 
+    @property
+    def exegetes(self):
+        return sorted(self.__exegetes)
+
+
+    @property
+    def sht(self):
+        return self.__sht
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['model'] = self.__model
-        jdict['sample-period'] = self.__sample_period
-        jdict['power-saving'] = self.__power_saving
+        jdict['model'] = self.model
+        jdict['sample-period'] = self.sample_period
+        jdict['power-saving'] = self.power_saving
 
         if self.__bus is not None:
-            jdict['bus'] = self.__bus
+            jdict['bus'] = self.bus
 
         if self.__address is not None:
-            jdict['address'] = self.__address
+            jdict['address'] = self.address
+
+        jdict['exg'] = self.exegetes
+        jdict['sht'] = self.sht
 
         return jdict
 
@@ -180,5 +209,5 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s}" %  \
-               (self.model, self.sample_period, self.power_saving, self.bus, self.address)
+        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s, exegetes:%s, sht:%s}" %  \
+               (self.model, self.sample_period, self.power_saving, self.bus, self.address, self.__exegetes, self.sht)
