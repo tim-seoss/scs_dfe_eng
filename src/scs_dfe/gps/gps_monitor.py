@@ -90,14 +90,16 @@ class GPSMonitor(SynchronisedProcess):
                 if datum.quality > 0:
                     self.__averaging.append(datum)          # only append valid positional fixes
 
-                average = self.__averaging.compute()
+                report = self.__averaging.compute()
 
-                if average is None:
-                    average = datum                         # provide current datum when there is no average
+                if report is None:
+                    report = datum                          # provide current datum when there is no average
+
+                report.quality = datum.quality              # quality is current quality, not average quality
 
                 # report...
                 with self._lock:
-                    average.as_list(self._value)
+                    report.as_list(self._value)
 
         except (BrokenPipeError, KeyboardInterrupt, SystemExit):
             pass
