@@ -66,8 +66,8 @@ class SAMM8Q(GPS):
 
     __EOL =                     "\r\n"
 
-    __SERIAL_LOCK_TIMEOUT =     3.0
-    __SERIAL_COMMS_TIMEOUT =    1.0
+    __SERIAL_LOCK_TIMEOUT =     20.0
+    __SERIAL_COMMS_TIMEOUT =     1.0
 
     __MAX_MESSAGE_SET_SIZE =    14              # message set size (add extra for broken message on start of scan)
 
