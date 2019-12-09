@@ -62,10 +62,10 @@ class MCP9808(object):
             I2C.end_tx()
 
         # render voltage...
-        unsigned_c = float(msb & 0x1f) * 16 + float(lsb) / 16
+        unsigned_c = float(msb & 0x0f) * 16 + float(lsb) / 16
         sign = msb & 0x10
 
-        temp = 256 - unsigned_c if sign else unsigned_c
+        temp = 255 - unsigned_c if sign else unsigned_c             # two's complement
 
         return temp
 
