@@ -67,7 +67,7 @@ class MCP9808(object):
         print("msb, lsb: %s" % Format.bin16(msb << 8 | lsb), file=sys.stderr)
 
         # render voltage...
-        unsigned_c = float(msb & 0x1f) * 16 + float(lsb) / 16
+        unsigned_c = float(msb & 0x0f) * 16 + float(lsb) / 16
         sign = msb & 0x10
 
         print("unsigned_c: %f, sign: %x" % (unsigned_c, sign), file=sys.stderr)
