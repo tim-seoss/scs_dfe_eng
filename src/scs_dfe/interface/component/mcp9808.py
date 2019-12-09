@@ -4,10 +4,7 @@ Created on 6 Aug 2016
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
-import sys
 import time
-
-from scs_core.data.datum import Format
 
 from scs_dfe.interface.interface_status import InterfaceStatus
 
@@ -64,17 +61,11 @@ class MCP9808(object):
         finally:
             I2C.end_tx()
 
-        print("msb, lsb: %s" % Format.bin16(msb << 8 | lsb), file=sys.stderr)
-
         # render voltage...
         unsigned_c = float(msb & 0x0f) * 16 + float(lsb) / 16
         sign = msb & 0x10
 
-        print("unsigned_c: %f, sign: %x" % (unsigned_c, sign), file=sys.stderr)
-
-        temp = 255 - unsigned_c if sign else unsigned_c
-
-        print("temp: %f" % temp, file=sys.stderr)
+        temp = 255 - unsigned_c if sign else unsigned_c             # two's complement
 
         return temp
 
