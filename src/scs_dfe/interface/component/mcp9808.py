@@ -72,7 +72,7 @@ class MCP9808(object):
 
         print("unsigned_c: %f, sign: %x" % (unsigned_c, sign), file=sys.stderr)
 
-        temp = 256 - unsigned_c if sign else unsigned_c
+        temp = 255 - unsigned_c if sign else unsigned_c
 
         print("temp: %f" % temp, file=sys.stderr)
 
