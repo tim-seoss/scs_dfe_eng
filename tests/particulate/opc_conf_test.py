@@ -18,7 +18,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-conf = OPCConf("N2", 10, False, 0, 1, [ISELUTN2v1.name(), ISECEEN2v1.name()], "ext")
+conf = OPCConf("N2", 10, False, 0, 1, [ISELUTN2v1.name(), ISECEEN2v1.name()])
 print(conf)
 print("-")
 
