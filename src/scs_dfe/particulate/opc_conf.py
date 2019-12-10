@@ -6,7 +6,7 @@ Created on 11 Jul 2017
 settings for OPCMonitor
 
 example JSON:
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iselutn2v1"], "sht": "ext"}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iselutn2v1"]}
 """
 
 from collections import OrderedDict
@@ -50,10 +50,9 @@ class OPCConf(PersistentJSONable):
         bus = jdict.get('bus')
         address = jdict.get('address')
 
-        exegetes = jdict.get('exg', [])
-        sht = jdict.get('sht')
+        exegete_names = jdict.get('exg', [])
 
-        return OPCConf(model, sample_period, power_saving, bus, address, exegetes, sht)
+        return OPCConf(model, sample_period, power_saving, bus, address, exegete_names)
 
 
     @classmethod
@@ -63,7 +62,7 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, power_saving, bus, address, exegetes, sht):
+    def __init__(self, model, sample_period, power_saving, bus, address, exegete_names):
         """
         Constructor
         """
@@ -76,8 +75,7 @@ class OPCConf(PersistentJSONable):
         self.__bus = bus                                        # int
         self.__address = address                                # int
 
-        self.__exegetes = set(exegetes)                         # set of string
-        self.__sht = sht                                        # string
+        self.__exegete_names = set(exegete_names)               # set of string
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -141,11 +139,11 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def add_exegete(self, exegete):
-        self.__exegetes.add(exegete)
+        self.__exegete_names.add(exegete)
 
 
     def discard_exegete(self, exegete):
-        self.__exegetes.discard(exegete)
+        self.__exegete_names.discard(exegete)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -176,13 +174,8 @@ class OPCConf(PersistentJSONable):
 
 
     @property
-    def exegetes(self):
-        return sorted(self.__exegetes)
-
-
-    @property
-    def sht(self):
-        return self.__sht
+    def exegete_names(self):
+        return sorted(self.__exegete_names)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -200,8 +193,7 @@ class OPCConf(PersistentJSONable):
         if self.__address is not None:
             jdict['address'] = self.address
 
-        jdict['exg'] = self.exegetes
-        jdict['sht'] = self.sht
+        jdict['exg'] = self.exegete_names
 
         return jdict
 
@@ -209,5 +201,5 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s, exegetes:%s, sht:%s}" %  \
-               (self.model, self.sample_period, self.power_saving, self.bus, self.address, self.__exegetes, self.sht)
+        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s, exegete_names:%s}" %  \
+               (self.model, self.sample_period, self.power_saving, self.bus, self.address, self.exegete_names)
