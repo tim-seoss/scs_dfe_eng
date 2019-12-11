@@ -72,7 +72,7 @@ class PAM7Q(GPS):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, interface, uart, verbose=True):
+    def __init__(self, interface, uart, verbose=False):
         super().__init__(interface, uart, verbose)
 
 
