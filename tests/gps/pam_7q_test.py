@@ -36,7 +36,7 @@ print("-")
 
 I2C.open(Host.I2C_SENSORS)
 
-gps = PAM7Q(interface, Host.gps_device())
+gps = PAM7Q(interface, Host.gps_device(), True)
 print(gps)
 print("-")
 
