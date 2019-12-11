@@ -13,6 +13,7 @@ from scs_core.data.average import Average
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.gps_datum import GPSDatum
+from scs_core.position.nmea.gprmc import GPRMC
 
 from scs_core.sync.interval_timer import IntervalTimer
 from scs_core.sync.synchronised_process import SynchronisedProcess
@@ -84,14 +85,21 @@ class GPSMonitor(SynchronisedProcess):
             while timer.true():
                 # position...
                 gga = self.__gps.report(GPGGA)
-                datum = GPSDatum.construct_from_gga(gga)
 
                 if self.__verbose:
-                    print("GPSMonitor: %s" % gga, file=sys.stderr)
+                    print("GPSMonitor - gga: %s" % gga, file=sys.stderr)
                     sys.stderr.flush()
 
+                rmc = self.__gps.report(GPRMC)
+
+                if self.__verbose:
+                    print("GPSMonitor - rmc: %s" % rmc, file=sys.stderr)
+                    sys.stderr.flush()
+
+                datum = GPSDatum.construct_from_gga(gga)
+
                 if datum is None:
-                    continue
+                    datum = GPSDatum.null_datum()           # loss of contact with receiver = quality 0
 
                 datum.save(self.__report_file)
 
