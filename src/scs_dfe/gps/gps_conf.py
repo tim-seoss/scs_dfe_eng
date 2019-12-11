@@ -74,10 +74,10 @@ class GPSConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gps_monitor(self, interface, host):
+    def gps_monitor(self, interface, host, verbose=False):
         gps = self.gps(interface, host)
 
-        return GPSMonitor(gps, self)
+        return GPSMonitor(gps, self, verbose)
 
 
     def gps(self, interface, host):
