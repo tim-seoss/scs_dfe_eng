@@ -23,7 +23,7 @@ $GPRMC,113113.00,A,5049.38380,N,00007.37174,W,0.060,,201119,,,A*67
 $GPVTG,,T,,M,0.060,N,0.111,K,A*24
 """
 
-# import sys
+import sys
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
@@ -53,7 +53,7 @@ class PAM7Q(GPS):
 
     __EOL =                     "\r\n"
 
-    __SERIAL_LOCK_TIMEOUT =     20.0
+    __SERIAL_LOCK_TIMEOUT =     10.0
     __SERIAL_COMMS_TIMEOUT =     1.0
 
     __MAX_MESSAGE_SET_SIZE =    12              # max message set size (add extra for broken message on start of scan)
@@ -90,7 +90,7 @@ class PAM7Q(GPS):
     # ----------------------------------------------------------------------------------------------------------------
 
     def report(self, message_class):
-        for i in range(self.__MAX_MESSAGE_SET_SIZE + 2):
+        while True:
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
                 # print(line, file=sys.stderr)
@@ -104,8 +104,6 @@ class PAM7Q(GPS):
             except (IndexError, UnicodeDecodeError, ValueError):
                 continue
 
-        return None
-
 
     # noinspection PyListCreation
     def report_all(self):
@@ -114,8 +112,8 @@ class PAM7Q(GPS):
         for i in range((self.__MAX_MESSAGE_SET_SIZE * 2) + 2):
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
-                # print(line, file=sys.stderr)
-                # sys.stderr.flush()
+                print(line, file=sys.stderr)
+                sys.stderr.flush()
 
                 r = NMEAReport.construct(line)
                 reports.append(r)

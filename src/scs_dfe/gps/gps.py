@@ -46,12 +46,14 @@ class GPS(ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, interface, uart):
+    def __init__(self, interface, uart, verbose=False):
         """
         Constructor
         """
         self.__interface = interface
+
         self._serial = HostSerial(uart, self.baud_rate(), False)
+        self._verbose = verbose
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -90,5 +92,6 @@ class GPS(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return self.__class__.__name__ + ":{interface:%s, serial:%s}" % (self.__interface, self._serial)
+        return self.__class__.__name__ + ":{interface:%s, serial:%s, verbose:%s}" % \
+               (self.__interface, self._serial, self._verbose)
 

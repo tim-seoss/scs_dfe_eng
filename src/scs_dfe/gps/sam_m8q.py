@@ -36,7 +36,7 @@ $GNRMC,104823.00,A,5049.40180,N,00007.38497,W,0.237,,201119,,,D*7A
 $GNVTG,,T,,M,0.237,N,0.439,K,D*30
 """
 
-# import sys
+import sys
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
@@ -58,18 +58,13 @@ class SAMM8Q(GPS):
 
     SOURCE =                    "SAM8Q"
 
-    START_MESSAGE_IDS =         GPRMC.MESSAGE_IDS
-
     __BAUD_RATE =               9600
-
     __BOOT_DELAY =              0.500           # seconds
 
     __EOL =                     "\r\n"
 
-    __SERIAL_LOCK_TIMEOUT =     20.0
+    __SERIAL_LOCK_TIMEOUT =     10.0
     __SERIAL_COMMS_TIMEOUT =     1.0
-
-    __MAX_MESSAGE_SET_SIZE =    14              # message set size (add extra for broken message on start of scan)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -96,90 +91,61 @@ class SAMM8Q(GPS):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, interface, uart):
-        super().__init__(interface, uart)
+    def __init__(self, interface, uart, verbose=False):
+        super().__init__(interface, uart, verbose)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def report(self, message_class):
-        for i in range(self.__MAX_MESSAGE_SET_SIZE + 2):
+        while True:
+            sentence = self.__sentence()
+
+            if sentence.message_id in message_class.MESSAGE_IDS:
+                return message_class.construct(sentence)
+
+
+    def report_all(self):
+        reports = []
+
+        # find start...
+        while True:
+            sentence = self.__sentence()
+
+            if sentence.message_id in GPGLL.MESSAGE_IDS:
+                break
+
+        reports.append(GPGLL.construct(sentence))
+
+        reports.append(GPRMC.construct(self.__sentence()))
+        reports.append(GPVTG.construct(self.__sentence()))
+        reports.append(GPGGA.construct(self.__sentence()))
+        reports.append(GPGSA.construct(self.__sentence()))
+
+        # find end...
+        while True:
+            sentence = self.__sentence()
+
+            if sentence.message_id not in GPGSV.MESSAGE_IDS:
+                break
+
+            reports.append(GPGSV.construct(sentence))
+
+        return reports
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __sentence(self):
+        while True:
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
-                # print(line, file=sys.stderr)
-                # sys.stderr.flush()
 
-                r = NMEAReport.construct(line)
+                if self._verbose:
+                    print("sentence:[%s]" % line, file=sys.stderr)
+                    sys.stderr.flush()
 
-                if r.str(0) in message_class.MESSAGE_IDS:
-                    return message_class.construct(r)
+                return NMEAReport.construct(line)
 
             except (IndexError, UnicodeDecodeError, ValueError):
                 continue
-
-        return None
-
-
-    # noinspection PyListCreation
-    def report_all(self):
-        # reports...
-        reports = []
-        for i in range((self.__MAX_MESSAGE_SET_SIZE * 2) + 2):
-            try:
-                line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
-                # print(line, file=sys.stderr)
-                # sys.stderr.flush()
-
-                r = NMEAReport.construct(line)
-                reports.append(r)
-
-            except (UnicodeDecodeError, ValueError):
-                continue
-
-        # start...
-        start = None
-        for start in range(len(reports)):
-            if reports[start].str(0) in SAMM8Q.START_MESSAGE_IDS:
-                break
-
-        if start is None:
-            return []
-
-        # sentences...
-        sentences = []
-
-        # GPRMC...
-        sentences.append(GPRMC.construct(reports[start]))
-
-        # GPVTG...
-        sentences.append(GPVTG.construct(reports[start + 1]))
-
-        # GPGGA...
-        sentences.append(GPGGA.construct(reports[start + 2]))
-
-        # GPGSA...
-        sentences.append(GPGSA.construct(reports[start + 3]))
-
-        report = None         # prevents post-loop warning
-
-        # GPGSVs...
-        for report in reports[start + 4:]:
-            if report.str(0) in GPGSV.MESSAGE_IDS:
-                break
-
-        if report.str(0) in GPGSV.MESSAGE_IDS:
-            sentences.append(GPGSV.construct(report))
-
-        # GPGLL...
-        for report in reports[start + 5:]:
-            if report.str(0) in GPGLL.MESSAGE_IDS:
-                break
-
-        if report.str(0) in GPGLL.MESSAGE_IDS:
-            sentences.append(GPGLL.construct(report))
-
-        return sentences
-
-
-    def line(self):
-        return self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
