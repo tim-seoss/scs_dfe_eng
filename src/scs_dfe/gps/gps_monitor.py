@@ -4,6 +4,8 @@ Created on 25 Oct 2017
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
+import sys
+
 from collections import OrderedDict
 from multiprocessing import Manager
 
@@ -25,7 +27,7 @@ class GPSMonitor(SynchronisedProcess):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, gps, conf):
+    def __init__(self, gps, conf, verbose=False):
         """
         Constructor
         """
@@ -34,9 +36,12 @@ class GPSMonitor(SynchronisedProcess):
         SynchronisedProcess.__init__(self, manager.list())
 
         self.__gps = gps
+
         self.__sample_interval = conf.sample_interval
         self.__averaging = Average(conf.tally)
         self.__report_file = conf.report_file
+
+        self.__verbose = verbose
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -81,6 +86,10 @@ class GPSMonitor(SynchronisedProcess):
                 gga = self.__gps.report(GPGGA)
                 datum = GPSDatum.construct_from_gga(gga)
 
+                if self.__verbose:
+                    print("GPSMonitor: %s" % gga, file=sys.stderr)
+                    sys.stderr.flush()
+
                 if datum is None:
                     continue
 
@@ -118,5 +127,5 @@ class GPSMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s, report_file:%s}" % \
-               (self._value, self.__sample_interval, self.__averaging, self.__gps, self.__report_file)
+        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s, report_file:%s, verbose:%s}" % \
+               (self._value, self.__sample_interval, self.__averaging, self.__gps, self.__report_file, self.__verbose)
