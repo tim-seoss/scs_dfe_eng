@@ -47,7 +47,7 @@ print("-")
 
 I2C.open(Host.I2C_SENSORS)
 
-gps = SAMM8Q(interface, Host.gps_device())
+gps = SAMM8Q(interface, Host.gps_device(), True)
 print(gps)
 print("-")
 
@@ -95,7 +95,7 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    print("report all...")
+    print("report set...")
 
     msgs = gps.report_all()
 
@@ -119,7 +119,7 @@ try:
 
 
 except KeyboardInterrupt:
-    print("pamq7_test: KeyboardInterrupt", file=sys.stderr)
+    print("sam_m8q_test: KeyboardInterrupt", file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
