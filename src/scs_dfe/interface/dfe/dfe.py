@@ -21,6 +21,8 @@ from scs_dfe.interface.interface import Interface
 from scs_dfe.led.io_led import IOLED
 
 
+# TODO: distinguish between DFEs that have IO controllers, and those that don't?
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class DFE(Interface):
