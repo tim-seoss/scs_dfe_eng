@@ -26,15 +26,15 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-conf = InterfaceConf.load(Host)
-interface = conf.interface()
-print(interface)
-print("-")
+I2C.open(Host.I2C_SENSORS)
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-I2C.open(Host.I2C_SENSORS)
+conf = InterfaceConf.load(Host)
+interface = conf.interface()
+print(interface)
+print("-")
 
 gps = PAM7Q(interface, Host.gps_device(), True)
 print(gps)
