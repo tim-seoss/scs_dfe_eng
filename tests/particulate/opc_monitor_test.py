@@ -53,9 +53,6 @@ if __name__ == '__main__':
             print("main: -")
             sys.stdout.flush()
 
-            # if datum is not None:
-            #     proc.terminate()
-
     except KeyboardInterrupt:
         pass
 
