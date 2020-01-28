@@ -48,7 +48,9 @@ class LEDController(SynchronisedProcess):
         try:
             time.sleep(self.__WAIT_FOR_STOP)
 
-            super().stop()  # allow time for the sub-process to complete its last task
+            super().stop()                          # allow time for the sub-process to complete its last task
+
+            self.__led.colour = 'A'                 # set default mode on stop
 
         except (BrokenPipeError, KeyboardInterrupt, SystemExit):
             pass
