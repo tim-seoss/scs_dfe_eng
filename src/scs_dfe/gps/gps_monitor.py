@@ -28,7 +28,14 @@ class GPSMonitor(SynchronisedProcess):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, gps, conf, verbose=False):
+    @classmethod
+    def construct(cls, gps, conf):
+        return cls(gps, conf.sample_interval, Average(conf.tally), conf.report_file, conf.debug)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self, gps, sample_interval, averaging, report_file, debug):
         """
         Constructor
         """
@@ -36,13 +43,13 @@ class GPSMonitor(SynchronisedProcess):
 
         SynchronisedProcess.__init__(self, manager.list())
 
-        self.__gps = gps
+        self.__gps = gps                                            # GPS
 
-        self.__sample_interval = conf.sample_interval
-        self.__averaging = Average(conf.tally)
-        self.__report_file = conf.report_file
+        self.__sample_interval = int(sample_interval)               # int seconds
+        self.__averaging = averaging                                # Average
+        self.__report_file = report_file                            # string
 
-        self.__verbose = verbose
+        self.__debug = bool(debug)                                  # bool
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -86,13 +93,13 @@ class GPSMonitor(SynchronisedProcess):
                 # position...
                 gga = self.__gps.report(GPGGA)
 
-                if self.__verbose:
+                if self.__debug:
                     print("GPSMonitor - gga: %s" % gga, file=sys.stderr)
                     sys.stderr.flush()
 
                 rmc = self.__gps.report(GPRMC)
 
-                if self.__verbose:
+                if self.__debug:
                     print("GPSMonitor - rmc: %s" % rmc, file=sys.stderr)
                     sys.stderr.flush()
 
@@ -135,5 +142,5 @@ class GPSMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s, report_file:%s, verbose:%s}" % \
-               (self._value, self.__sample_interval, self.__averaging, self.__gps, self.__report_file, self.__verbose)
+        return "GPSMonitor:{value:%s, sample_interval:%s, averaging:%s, gps:%s, report_file:%s, debug:%s}" % \
+               (self._value, self.__sample_interval, self.__averaging, self.__gps, self.__report_file, self.__debug)
