@@ -3,10 +3,11 @@ Created on 16 Jul 2017
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-specifies which GPS receiver is present, if any, plus sample interval and tally.
+specifies which GPS receiver is present, if any, plus sample interval, tally and verbosity
 
 example JSON:
-{"model": "SAM7Q", "sample-interval": 10, "tally": 60}
+{"model": "PAM7Q", "sample-interval": 10, "tally": 1, "report-file": "/tmp/southcoastscience/gps_report.json",
+"debug": false}
 """
 
 from collections import OrderedDict
@@ -48,8 +49,9 @@ class GPSConf(PersistentJSONable):
         sample_interval = jdict.get('sample-interval', cls.DEFAULT_SAMPLE_INTERVAL)
         tally = jdict.get('tally', cls.DEFAULT_TALLY)
         report_file = jdict.get('report-file')
+        debug = jdict.get('debug', False)
 
-        return GPSConf(model, sample_interval, tally, report_file)
+        return GPSConf(model, sample_interval, tally, report_file, debug)
 
 
     @classmethod
@@ -59,7 +61,7 @@ class GPSConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_interval, tally, report_file):
+    def __init__(self, model, sample_interval, tally, report_file, debug):
         """
         Constructor
         """
@@ -67,17 +69,18 @@ class GPSConf(PersistentJSONable):
 
         self.__model = model                                        # string
 
-        self.__sample_interval = sample_interval                    # int seconds
-        self.__tally = tally                                        # int count
+        self.__sample_interval = int(sample_interval)               # int seconds
+        self.__tally = int(tally)                                   # int count
         self.__report_file = report_file                            # string tmp file to store current GPS report
+        self.__debug = bool(debug)                                  # bool
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gps_monitor(self, interface, host, verbose=False):
+    def gps_monitor(self, interface, host):
         gps = self.gps(interface, host)
 
-        return GPSMonitor(gps, self, verbose)
+        return GPSMonitor.construct(gps, self)
 
 
     def gps(self, interface, host):
@@ -116,16 +119,22 @@ class GPSConf(PersistentJSONable):
         return self.__report_file
 
 
+    @property
+    def debug(self):
+        return self.__debug
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['model'] = self.__model
+        jdict['model'] = self.model
 
-        jdict['sample-interval'] = self.__sample_interval
-        jdict['tally'] = self.__tally
-        jdict['report-file'] = self.__report_file
+        jdict['sample-interval'] = self.sample_interval
+        jdict['tally'] = self.tally
+        jdict['report-file'] = self.report_file
+        jdict['debug'] = self.debug
 
         return jdict
 
@@ -133,5 +142,5 @@ class GPSConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "GPSConf:{model:%s, sample_interval:%s, tally:%s, report_file:%s}" % \
-               (self.model, self.sample_interval, self.tally, self.report_file)
+        return "GPSConf:{model:%s, sample_interval:%s, tally:%s, report_file:%s, debug:%s}" % \
+               (self.model, self.sample_interval, self.tally, self.report_file, self.debug)
