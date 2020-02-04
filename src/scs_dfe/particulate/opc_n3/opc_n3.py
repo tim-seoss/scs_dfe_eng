@@ -23,8 +23,6 @@ from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
 from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
 
 
-# TODO: check SPI speed
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCN3(AlphasenseOPC):
