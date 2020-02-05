@@ -89,7 +89,7 @@ class SAMM8Q(GPS):
         self._serial.flush_input()
 
         while True:
-            sentence = self.__sentence()
+            sentence = self.__read_sentence()
 
             if sentence.message_id in message_class.MESSAGE_IDS:
                 return message_class.construct(sentence)
@@ -98,37 +98,21 @@ class SAMM8Q(GPS):
     def report_all(self):
         self._serial.flush_input()
 
-        reports = []
-
-        # find start...
-        while True:
-            sentence = self.__sentence()
-
-            if sentence.message_id in GPGLL.MESSAGE_IDS:
-                break
-
-        reports.append(GPGLL.construct(sentence))
-
-        reports.append(GPRMC.construct(self.__sentence()))
-        reports.append(GPVTG.construct(self.__sentence()))
-        reports.append(GPGGA.construct(self.__sentence()))
-        reports.append(GPGSA.construct(self.__sentence()))
-
-        # find end...
-        while True:
-            sentence = self.__sentence()
-
-            if sentence.message_id not in GPGSV.MESSAGE_IDS:
-                break
-
-            reports.append(GPGSV.construct(sentence))
+        reports = [
+            self.report(GPGLL),
+            self.report(GPRMC),
+            self.report(GPVTG),
+            self.report(GPGGA),
+            self.report(GPGSA),
+            self.report(GPGSV)
+            ]
 
         return reports
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __sentence(self):
+    def __read_sentence(self):
         while True:
             try:
                 line = self._serial.read_line(eol=self.__EOL, timeout=self.__SERIAL_COMMS_TIMEOUT)
