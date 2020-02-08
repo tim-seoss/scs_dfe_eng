@@ -52,9 +52,8 @@ class LEDController(SynchronisedProcess):
 
             self.__led.colour = 'A'                 # set default mode on stop
 
-        except (BrokenPipeError, KeyboardInterrupt, SystemExit):
+        except (ConnectionError, KeyboardInterrupt, SystemExit):
             pass
-
 
 
     def run(self):
@@ -79,7 +78,7 @@ class LEDController(SynchronisedProcess):
                 if state.colour1 != self.__led.colour:
                     self.__led.colour = state.colour1
 
-        except (BrokenPipeError, KeyboardInterrupt, SystemExit):
+        except (ConnectionError, KeyboardInterrupt, SystemExit):
             pass
 
 

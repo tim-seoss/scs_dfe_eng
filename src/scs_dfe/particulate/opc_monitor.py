@@ -139,7 +139,7 @@ class OPCMonitor(SynchronisedProcess):
                 if self.__first_reading:
                     self.__first_reading = False
 
-        except (BrokenPipeError, KeyboardInterrupt, SystemExit):
+        except (ConnectionError, KeyboardInterrupt, SystemExit):
             pass
 
 
