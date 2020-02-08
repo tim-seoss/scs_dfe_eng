@@ -74,7 +74,7 @@ class GPSMonitor(SynchronisedProcess):
 
             self.__gps.close()
 
-        except (BrokenPipeError, KeyboardInterrupt, SystemExit):
+        except (ConnectionError, KeyboardInterrupt, SystemExit):
             pass
 
 
@@ -125,7 +125,7 @@ class GPSMonitor(SynchronisedProcess):
                 with self._lock:
                     report.as_list(self._value)
 
-        except (BrokenPipeError, KeyboardInterrupt, SystemExit):
+        except (ConnectionError, KeyboardInterrupt, SystemExit):
             pass
 
 
