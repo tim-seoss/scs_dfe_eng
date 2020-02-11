@@ -12,8 +12,8 @@ Firmware report:
 
 import time
 
+from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.datum import Decode, Encode
-from scs_core.data.localized_datetime import LocalizedDatetime
 
 from scs_core.particulate.sps_datum import SPSDatum, SPSDatumCounts
 

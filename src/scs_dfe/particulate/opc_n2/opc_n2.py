@@ -9,7 +9,7 @@ OPC-N2 FirmwareVer=OPC-018.1..............................BD
 
 import time
 
-from scs_core.data.localized_datetime import LocalizedDatetime
+from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.datum import Decode
 
 from scs_core.particulate.opc_datum import OPCDatum
