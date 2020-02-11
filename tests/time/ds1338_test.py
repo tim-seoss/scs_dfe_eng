@@ -8,7 +8,7 @@ Created on 16 May 2017
 
 import tzlocal
 
-from scs_core.data.localized_datetime import LocalizedDatetime
+from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.rtc_datetime import RTCDatetime
 
 from scs_dfe.time.ds1338 import DS1338
