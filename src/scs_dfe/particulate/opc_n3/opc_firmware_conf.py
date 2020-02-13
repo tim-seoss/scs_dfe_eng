@@ -9,10 +9,11 @@ Example:
 "bin-boundaries-diameter": [35, 46, 66, 100, 130, 170, 230, 300, 400, 520, 650, 800, 1000, 1200, 1400, 1600, 1800,
 2000, 2200, 2500, 2800, 3100, 3400, 3700, 4000],
 "bin-weightings": [165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
-165, 165, 165, 165, 165], "pm-diameter-a": 100, "pm-diameter-b": 250, "pm-diameter-c": 1000, "max-tof": 4095,
+165, 165, 165, 165, 165],
+"pm-diameter-a": 100, "pm-diameter-b": 250, "pm-diameter-c": 1000, "max-tof": 4095,
 "am-sampling-interval-count": 1, "am-middle-interval-count": 0, "am-max-data_arrays-in-file": 61798,
-"am-only-save-pm-data": false, "am-fan-on-in-idle": false, "am-laser-on-in-idle": false, "tof-to-sfr-factor": 56,
-"pvp": 48, "bin-weighting-index": 2}
+"am-only-save-pm-data": false, "am-fan-on-in-idle": false, "am-laser-on-in-idle": false,
+"tof-to-sfr-factor": 56, "pvp": 48, "bin-weighting-index": 2}
 """
 
 from collections import OrderedDict
