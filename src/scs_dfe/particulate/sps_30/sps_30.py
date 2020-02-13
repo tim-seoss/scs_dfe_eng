@@ -67,6 +67,11 @@ class SPS30(OPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
+    def source(cls):
+        return cls.SOURCE
+
+
+    @classmethod
     def uses_spi(cls):
         return False
 

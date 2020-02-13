@@ -16,11 +16,13 @@ class OPCStatus(JSONable):
     classdocs
     """
 
+    CHARS = 6
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
     def construct(cls, chars):
-        if len(chars) != 6:
+        if len(chars) != cls.CHARS:
             raise ValueError(chars)
 
         fan_on = chars[0]
