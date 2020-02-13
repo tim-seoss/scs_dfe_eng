@@ -9,17 +9,10 @@ OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS
 
 import time
 
-from scs_core.climate.sht_datum import SHTDatum
-
-from scs_core.data.datetime import LocalizedDatetime
-from scs_core.data.datum import Decode
-from scs_core.data.modbus_crc import ModbusCRC
-
-from scs_core.particulate.opc_datum import OPCDatum
-
-from scs_dfe.climate.sht31 import SHT31
-
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
+
+from scs_dfe.particulate.opc_n3.opc_firmware_conf import OPCFirmwareConf
+from scs_dfe.particulate.opc_n3.opc_n3_datum import OPCN3Datum
 from scs_dfe.particulate.opc_n3.opc_status import OPCStatus
 
 
@@ -29,11 +22,11 @@ class OPCN3(AlphasenseOPC):
     """
     classdocs
     """
-    SOURCE =                            'N3'
-
     MIN_SAMPLE_PERIOD =                  5.0        # seconds
     MAX_SAMPLE_PERIOD =                 10.0        # seconds
     DEFAULT_SAMPLE_PERIOD =             10.0        # seconds
+
+    DEFAULT_BUSY_TIMEOUT =               5.0        # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -60,18 +53,36 @@ class OPCN3(AlphasenseOPC):
     __CMD_GET_SERIAL =                  0x10
     __CMD_GET_STATUS =                  0x13
 
+    __CMD_GET_CONF =                    0x3c
+    __CMD_SET_CONF =                    0x3a
+    __CMD_SET_BIN_WEIGHTING_INDEX =     0x05
+
+    __CMD_SAVE_CONF =                   0x43
+    __CMD_SAVE_CONF_SEQUENCE =          [0x3F, 0x3c, 0x3f, 0x3c, 0x43]
+
+    __CMD_CHECK =                       0xcf
+
     __CMD_RESET =                       0x06
+
+    __RESPONSE_BUSY =                   0x31
+    __RESPONSE_READY =                  0xf3
 
     __SPI_CLOCK =                       300000      # Hz    was 488000
     __SPI_MODE =                        1
 
     __DELAY_CMD =                       0.010
     __DELAY_TRANSFER =                  0.001
+    __DELAY_BUSY =                      0.1
 
     __LOCK_TIMEOUT =                    20.0
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def source(cls):
+        return OPCN3Datum.SOURCE
+
 
     @classmethod
     def lock_timeout(cls):
@@ -146,6 +157,7 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__cmd_wait_while_busy()
             self.__cmd(self.__CMD_RESET)
 
             time.sleep(self.__DELAY_TRANSFER)
@@ -163,60 +175,12 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__cmd_wait_while_busy()
             self.__cmd(self.__CMD_READ_HISTOGRAM)
-            chars = self.__read_bytes(86)
+            chars = self.__read_bytes(OPCN3Datum.CHARS)
 
-            # checksum...
-            required = Decode.unsigned_int(chars[84:86], '<')
-            actual = ModbusCRC.compute(chars[:84])
-
-            if required != actual:
-                raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
-
-            # time...
-            rec = LocalizedDatetime.now()
-
-            # bins...
-            bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 48, 2)]
-
-            # bin MToFs...
-            bin_1_mtof = chars[48]
-            bin_3_mtof = chars[49]
-            bin_5_mtof = chars[50]
-            bin_7_mtof = chars[51]
-
-            # period...
-            raw_period = Decode.unsigned_int(chars[52:54], '<')
-            period = round(float(raw_period) / 100.0, 3)
-
-            # sample flow rate...
-            int_sfr = Decode.unsigned_int(chars[54:56], '<')
-            sfr = round(float(int_sfr) / 100.0, 2)
-
-            # temperature & humidity
-            raw_temp = Decode.unsigned_int(chars[56:58], '<')
-            raw_humid = Decode.unsigned_int(chars[58:60], '<')
-
-            sht = SHTDatum(SHT31.humid(raw_humid), SHT31.temp(raw_temp))
-
-            # PMx...
-            try:
-                pm1 = Decode.float(chars[60:64], '<')
-            except TypeError:
-                pm1 = None
-
-            try:
-                pm2p5 = Decode.float(chars[64:68], '<')
-            except TypeError:
-                pm2p5 = None
-
-            try:
-                pm10 = Decode.float(chars[68:72], '<')
-            except TypeError:
-                pm10 = None
-
-            return OPCDatum(self.SOURCE, rec, pm1, pm2p5, pm10, period, bins,
-                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sfr=sfr, sht=sht)
+            # report...
+            return OPCN3Datum.construct(chars)
 
         finally:
             self._spi.close()
@@ -231,6 +195,7 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__cmd_wait_while_busy()
             self.__cmd(self.__CMD_GET_FIRMWARE)
             chars = self.__read_bytes(60)
 
@@ -250,6 +215,7 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__cmd_wait_while_busy()
             self.__cmd(self.__CMD_GET_VERSION)
 
             # report...
@@ -269,6 +235,7 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__cmd_wait_while_busy()
             self.__cmd(self.__CMD_GET_SERIAL)
             chars = self.__read_bytes(60)
 
@@ -292,8 +259,9 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__cmd_wait_while_busy()
             self.__cmd(self.__CMD_GET_STATUS)
-            chars = self.__read_bytes(6)
+            chars = self.__read_bytes(OPCStatus.CHARS)
 
             # report...
             status = OPCStatus.construct(chars)
@@ -306,6 +274,78 @@ class OPCN3(AlphasenseOPC):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def get_firmware_conf(self):
+        try:
+            self.obtain_lock()
+            self._spi.open()
+
+            # command...
+            self.__cmd_wait_while_busy()
+            self.__cmd(self.__CMD_GET_CONF)
+            chars = self.__read_bytes(OPCFirmwareConf.CHARS)
+
+            # report...
+            conf = OPCFirmwareConf.construct(chars)
+
+            return conf
+
+        finally:
+            self._spi.close()
+            self.release_lock()
+
+
+    def set_firmware_conf(self, conf: OPCFirmwareConf):
+        chars = conf.as_chars()
+
+        try:
+            self.obtain_lock()
+            self._spi.open()
+
+            # set conf...
+            self.__cmd_wait_while_busy()
+            self.__cmd(self.__CMD_SET_CONF)
+            self.__write_bytes(chars)
+
+            # set bin_weighting_index...
+            self.__cmd_wait_while_busy()
+            self.__cmd(self.__CMD_SET_BIN_WEIGHTING_INDEX)
+            self.__write_byte(conf.bin_weighting_index)
+
+        finally:
+            self._spi.close()
+            self.release_lock()
+
+
+    def save_firmware_conf(self):
+        try:
+            self.obtain_lock()
+            self._spi.open()
+
+            # command...
+            self.__cmd_wait_while_busy()
+            self.__cmd(self.__CMD_SAVE_CONF)
+            self.__write_bytes(self.__CMD_SAVE_CONF_SEQUENCE)
+
+        finally:
+            self._spi.close()
+            self.release_lock()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __cmd_wait_while_busy(self, specified_timeout=None):
+        timeout = self.DEFAULT_BUSY_TIMEOUT if specified_timeout is None else specified_timeout
+        timeout_time = time.time() + timeout
+
+        self.__cmd(self.__CMD_CHECK)
+
+        while self.__read_byte() == self.__RESPONSE_BUSY:
+            if time.time() > timeout_time:
+                raise TimeoutError()
+
+            time.sleep(self.__DELAY_BUSY)
+
 
     def __cmd_power(self, cmd):
         try:
@@ -323,6 +363,7 @@ class OPCN3(AlphasenseOPC):
         time.sleep(self.__DELAY_CMD)
 
         self._spi.xfer([cmd])
+        time.sleep(self.__DELAY_TRANSFER)
 
 
     def __read_bytes(self, count):
@@ -334,3 +375,13 @@ class OPCN3(AlphasenseOPC):
         time.sleep(self.__DELAY_TRANSFER)
 
         return chars[0]
+
+
+    def __write_bytes(self, chars):
+        for char in chars:
+            self.__write_byte(char)
+
+
+    def __write_byte(self, char):
+        self._spi.xfer([char])
+        time.sleep(self.__DELAY_CMD)

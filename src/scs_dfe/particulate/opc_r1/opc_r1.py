@@ -69,6 +69,11 @@ class OPCR1(AlphasenseOPC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
+    def source(cls):
+        return cls.SOURCE
+
+
+    @classmethod
     def lock_timeout(cls):
         return cls.__LOCK_TIMEOUT
 

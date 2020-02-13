@@ -7,7 +7,6 @@ Created on 4 Jul 2016
 """
 
 import sys
-import time
 
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
@@ -48,28 +47,26 @@ try:
     print(firmware)
     print("-")
 
-    time.sleep(1)
-
     print("version...")
     version = opc.version()
     print("major:[%d] minor:[%d]" % version)
     print("-")
-
-    time.sleep(1)
 
     print("serial...")
     serial = opc.serial_no()
     print("type:[%s] number:[%s]" % serial)
     print("-")
 
-    time.sleep(1)
+    print("firmware_conf...")
+    conf = opc.get_firmware_conf()
+    print(JSONify.dumps(conf))
+    print("-")
 
     print("on...")
     opc.operations_on()
     print("-")
 
     print("running...")
-    time.sleep(2)
 
     print("status...")
     status = opc.status()
@@ -80,21 +77,11 @@ try:
 
     opc.sample()                    # clear histograms and timer
 
-    checkpoint = time.time()
-
-    for _ in timer.range(60):
+    for _ in timer.range(3):
         datum = opc.sample()
 
-        now = time.time()
-        # print("interval: %0.3f" % round(now - checkpoint, 3))
-        checkpoint = now
-
         print(JSONify.dumps(datum))
-        # print("-")
-
         sys.stdout.flush()
-
-        # opc.reset()
 
 except KeyboardInterrupt:
     print("opc_n3_test: KeyboardInterrupt", file=sys.stderr)
