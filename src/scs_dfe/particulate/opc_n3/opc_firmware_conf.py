@@ -156,7 +156,7 @@ class OPCFirmwareConf(JSONable):
                self.am_laser_on_in_idle == other.am_laser_on_in_idle and \
                self.tof_to_sfr_factor == other.tof_to_sfr_factor and \
                self.pvp == other.pvp and \
-               self.__bin_weighting_index == other.__bin_weighting_index
+               self.bin_weighting_index == other.bin_weighting_index
 
 
     # ----------------------------------------------------------------------------------------------------------------
