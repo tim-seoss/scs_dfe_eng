@@ -57,7 +57,7 @@ class OPCConf(PersistentJSONable):
 
     @classmethod
     def is_valid_model(cls, model):
-        return model in (OPCN2.SOURCE, OPCN3.SOURCE, OPCR1.SOURCE, SPS30.SOURCE)
+        return model in (OPCN2.source(), OPCN3.source(), OPCR1.source(), SPS30.source())
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -87,32 +87,32 @@ class OPCConf(PersistentJSONable):
 
 
     def opc(self, interface, host):
-        if self.model == OPCN2.SOURCE:
+        if self.model == OPCN2.source():
             return OPCN2(interface, self.opc_bus(host), self.opc_address(host))
 
-        elif self.model == OPCN3.SOURCE:
+        elif self.model == OPCN3.source():
             return OPCN3(interface, self.opc_bus(host), self.opc_address(host))
 
-        elif self.model == OPCR1.SOURCE:
+        elif self.model == OPCR1.source():
             return OPCR1(interface, self.opc_bus(host), self.opc_address(host))
 
-        elif self.model == SPS30.SOURCE:
+        elif self.model == SPS30.source():
             return SPS30(interface, self.opc_bus(host), SPS30.DEFAULT_ADDR)
 
         raise ValueError('unknown model: %s' % self.model)
 
 
     def uses_spi(self):
-        if self.model == OPCN2.SOURCE:
+        if self.model == OPCN2.source():
             return OPCN2.uses_spi()
 
-        elif self.model == OPCN3.SOURCE:
+        elif self.model == OPCN3.source():
             return OPCN3.uses_spi()
 
-        elif self.model == OPCR1.SOURCE:
+        elif self.model == OPCR1.source():
             return OPCR1.uses_spi()
 
-        elif self.model == SPS30.SOURCE:
+        elif self.model == SPS30.source():
             return SPS30.uses_spi()
 
         raise ValueError('unknown model: %s' % self.model)

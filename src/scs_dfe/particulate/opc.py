@@ -22,6 +22,12 @@ class OPC(ABC):
 
     @classmethod
     @abstractmethod
+    def source(cls):
+        pass
+
+
+    @classmethod
+    @abstractmethod
     def uses_spi(cls):
         pass
 
