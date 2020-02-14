@@ -54,7 +54,7 @@ try:
 
     print("serial...")
     serial = opc.serial_no()
-    print("type:[%s] number:[%s]" % serial)
+    print("serial_no:%s" % serial)
     print("-")
 
     print("firmware_conf...")
