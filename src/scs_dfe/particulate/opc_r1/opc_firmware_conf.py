@@ -4,16 +4,12 @@ Created on 14 Feb 2020
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
 Example:
-{"bin-boundaries": [14, 40, 80, 120, 145, 215, 340, 590, 846, 1363, 2029, 2848, 4119, 5527, 7076, 8624, 10204, 11815,
-13457, 15897, 18305, 20698, 22966, 25140, 27158],
-"bin-boundaries-diameter": [35, 46, 66, 100, 130, 170, 230, 300, 400, 520, 650, 800, 1000, 1200, 1400, 1600, 1800,
-2000, 2200, 2500, 2800, 3100, 3400, 3700, 4000],
-"bin-weightings": [165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
-165, 165, 165, 165, 165],
-"pm-diameter-a": 100, "pm-diameter-b": 250, "pm-diameter-c": 1000, "max-tof": 4095,
-"am-sampling-interval-count": 1, "am-middle-interval-count": 0, "am-max-data_arrays-in-file": 61798,
-"am-only-save-pm-data": false, "am-fan-on-in-idle": false, "am-laser-on-in-idle": false,
-"tof-to-sfr-factor": 56, "pvp": 48, "bin-weighting-index": 2}
+{"bin-boundaries": [0, 27, 57, 95, 140, 205, 296, 473, 682, 920, 1184, 1473, 1786, 2123, 2481, 2861, 4095],
+"bin-boundaries-diameter": [0.35, 0.7, 1.1, 1.5, 1.9, 2.4, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 12.4],
+"bin-weightings": [1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65],
+"gain-scaling-coefficient": 1.0, "sample-flow-rate": 3.7, "tof-to-sfr-factor": 87,
+"pm-concentration-a": 1.0, "pm-concentration-b": 2.5, "pm-concentration-c": 10.0,
+"pvp": 48, "power-status": 0, "max-tof": 4095, "laser-dac": 150, "bin-weighting-index": 2}
 """
 
 from collections import OrderedDict
