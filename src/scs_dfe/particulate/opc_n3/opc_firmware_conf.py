@@ -19,12 +19,12 @@ Example:
 from collections import OrderedDict
 
 from scs_core.data.datum import Decode, Encode
-from scs_core.data.json import JSONable
+from scs_core.data.json import JSONReport
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCFirmwareConf(JSONable):
+class OPCFirmwareConf(JSONReport):
     """
     classdocs
     """

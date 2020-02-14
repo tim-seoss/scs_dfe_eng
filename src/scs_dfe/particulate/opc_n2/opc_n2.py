@@ -184,6 +184,10 @@ class OPCN2(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def serial_no(self):
+        return None
+
+
     def firmware(self):
         try:
             self.obtain_lock()
@@ -203,9 +207,18 @@ class OPCN2(AlphasenseOPC):
             self.release_lock()
 
 
-    def serial_no(self):
-        return None
+    # ----------------------------------------------------------------------------------------------------------------
 
+    def get_firmware_conf(self):
+        raise NotImplementedError
+
+
+    def set_firmware_conf(self, jdict):
+        raise NotImplementedError
+
+
+    def commit_firmware_conf(self):
+        raise NotImplementedError
 
     # ----------------------------------------------------------------------------------------------------------------
 
