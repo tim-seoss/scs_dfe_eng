@@ -265,9 +265,9 @@ class OPCR1(AlphasenseOPC):
             pieces = report.split(' ')
 
             if len(pieces) < 2:
-                return None, None
+                return None
 
-            return pieces[0], pieces[1]             # type, number
+            return pieces[1]
 
         finally:
             self._spi.close()
