@@ -9,12 +9,8 @@ OPC-N2 FirmwareVer=OPC-018.1..............................BD
 
 import time
 
-from scs_core.data.datetime import LocalizedDatetime
-from scs_core.data.datum import Decode
-
-from scs_core.particulate.opc_datum import OPCDatum
-
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
+from scs_dfe.particulate.opc_n2.opc_n2_datum import OPCN2Datum
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -28,6 +24,8 @@ class OPCN2(AlphasenseOPC):
     MIN_SAMPLE_PERIOD =                  5.0        # seconds
     MAX_SAMPLE_PERIOD =                 10.0        # seconds
     DEFAULT_SAMPLE_PERIOD =             10.0        # seconds
+
+    DEFAULT_BUSY_TIMEOUT =               5.0        # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -49,11 +47,17 @@ class OPCN2(AlphasenseOPC):
     __CMD_READ_HISTOGRAM =              0x30
     __CMD_GET_FIRMWARE =                0x3f
 
+    __CMD_CHECK =                       0xcf
+
+    __RESPONSE_BUSY =                   0x31
+    __RESPONSE_READY =                  0xf3
+
     __SPI_CLOCK =                       300000      # Hz    was 488000
     __SPI_MODE =                        1
 
-    __DELAY_CMD =                       0.010
     __DELAY_TRANSFER =                  0.001
+    __DELAY_CMD =                       0.010
+    __DELAY_BUSY =                      0.100
 
     __LOCK_TIMEOUT =                    20.0
 
@@ -134,48 +138,10 @@ class OPCN2(AlphasenseOPC):
 
             # command...
             self.__cmd(self.__CMD_READ_HISTOGRAM)
-            chars = self.__read_bytes(62)
+            chars = self.__read_bytes(OPCN2Datum.CHARS)
 
-            # time...
-            rec = LocalizedDatetime.now()
-
-            # bins...
-            bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 32, 2)]
-
-            # bin MToFs...
-            bin_1_mtof = chars[32]
-            bin_3_mtof = chars[33]
-            bin_5_mtof = chars[34]
-            bin_7_mtof = chars[35]
-
-            # period...
-            period = Decode.float(chars[44:48], '<')
-
-            # checksum...
-            required = Decode.unsigned_int(chars[48:50], '<')
-            actual = sum(bins) % 65536
-
-            if required != actual:
-                raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
-
-            # PMx...
-            try:
-                pm1 = Decode.float(chars[50:54], '<')
-            except TypeError:
-                pm1 = None
-
-            try:
-                pm2p5 = Decode.float(chars[54:58], '<')
-            except TypeError:
-                pm2p5 = None
-
-            try:
-                pm10 = Decode.float(chars[58:62], '<')
-            except TypeError:
-                pm10 = None
-
-            return OPCDatum(self.SOURCE, rec, pm1, pm2p5, pm10, period, bins,
-                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof)
+            # report...
+            return OPCN2Datum.construct(chars)
 
         finally:
             self._spi.close()
@@ -221,6 +187,19 @@ class OPCN2(AlphasenseOPC):
         raise NotImplementedError
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def __wait_while_busy(self, specified_timeout=None):
+        timeout = self.DEFAULT_BUSY_TIMEOUT if specified_timeout is None else specified_timeout
+        timeout_time = time.time() + timeout
+
+        self.__cmd(self.__CMD_CHECK)
+
+        while self.__read_byte() == self.__RESPONSE_BUSY:
+            if time.time() > timeout_time:
+                raise TimeoutError()
+
+            time.sleep(self.__DELAY_BUSY)
+
 
     def __cmd_power(self, cmd):
         self._spi.xfer([self.__CMD_POWER, cmd])

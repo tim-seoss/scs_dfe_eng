@@ -70,9 +70,9 @@ class OPCN3(AlphasenseOPC):
     __SPI_CLOCK =                       300000      # Hz    was 488000
     __SPI_MODE =                        1
 
-    __DELAY_CMD =                       0.010
     __DELAY_TRANSFER =                  0.001
-    __DELAY_BUSY =                      0.1
+    __DELAY_CMD =                       0.010
+    __DELAY_BUSY =                      0.100
 
     __LOCK_TIMEOUT =                    20.0
 
