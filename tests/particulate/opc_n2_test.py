@@ -59,7 +59,7 @@ try:
 
     checkpoint = time.time()
 
-    for _ in timer.range(10):
+    for _ in timer.range(3):
         datum = opc.sample()
 
         now = time.time()
