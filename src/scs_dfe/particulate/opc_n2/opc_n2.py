@@ -203,6 +203,10 @@ class OPCN2(AlphasenseOPC):
             self.release_lock()
 
 
+    def serial_no(self):
+        return None
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __cmd_power(self, cmd):
