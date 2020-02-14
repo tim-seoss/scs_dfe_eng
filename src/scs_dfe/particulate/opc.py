@@ -130,12 +130,29 @@ class OPC(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
-    def firmware(self):
+    def serial_no(self):
         pass
 
 
     @abstractmethod
-    def serial_no(self):
+    def firmware(self):
+        pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @abstractmethod
+    def get_firmware_conf(self):
+        pass
+
+
+    @abstractmethod
+    def set_firmware_conf(self, jdict):
+        pass
+
+
+    @abstractmethod
+    def commit_firmware_conf(self):
         pass
 
 

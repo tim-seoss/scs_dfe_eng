@@ -9,17 +9,10 @@ OPC-R1 FirmwareVer=2.10...................................BS
 
 import time
 
-from scs_core.climate.sht_datum import SHTDatum
-
-from scs_core.data.datetime import LocalizedDatetime
-from scs_core.data.datum import Decode
-from scs_core.data.modbus_crc import ModbusCRC
-
-from scs_core.particulate.opc_datum import OPCDatum
-
-from scs_dfe.climate.sht31 import SHT31
-
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
+
+from scs_dfe.particulate.opc_r1.opc_firmware_conf import OPCFirmwareConf
+from scs_dfe.particulate.opc_r1.opc_r1_datum import OPCR1Datum
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -28,11 +21,11 @@ class OPCR1(AlphasenseOPC):
     """
     classdocs
     """
-    SOURCE =                            'R1'
-
     MIN_SAMPLE_PERIOD =                  5.0        # seconds
     MAX_SAMPLE_PERIOD =                 10.0        # seconds
     DEFAULT_SAMPLE_PERIOD =             10.0        # seconds
+
+    DEFAULT_BUSY_TIMEOUT =               5.0        # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -55,13 +48,26 @@ class OPCR1(AlphasenseOPC):
     __CMD_GET_VERSION =                 0x12
     __CMD_GET_SERIAL =                  0x10
 
+    __CMD_GET_CONF =                    0x3c
+    __CMD_SET_CONF =                    0x3a
+    __CMD_SET_BIN_WEIGHTING_INDEX =     0x05
+
+    __CMD_SAVE_CONF =                   0x43
+    __CMD_SAVE_CONF_SEQUENCE =          [0x3F, 0x3c, 0x3f, 0x3c, 0x43]
+
+    __CMD_CHECK =                       0xcf
+
     __CMD_RESET =                       0x06
+
+    __RESPONSE_BUSY =                   0x31
+    __RESPONSE_READY =                  0xf3
 
     __SPI_CLOCK =                       300000      # Hz    was 488000
     __SPI_MODE =                        1
 
-    __DELAY_CMD =                       0.010
     __DELAY_TRANSFER =                  0.001
+    __DELAY_CMD =                       0.020
+    __DELAY_BUSY =                      0.100
 
     __LOCK_TIMEOUT =                    20.0
 
@@ -70,7 +76,7 @@ class OPCR1(AlphasenseOPC):
 
     @classmethod
     def source(cls):
-        return cls.SOURCE
+        return OPCR1Datum.SOURCE
 
 
     @classmethod
@@ -138,6 +144,7 @@ class OPCR1(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__wait_while_busy()
             self.__cmd(self.__CMD_RESET)
 
         finally:
@@ -153,58 +160,12 @@ class OPCR1(AlphasenseOPC):
             self._spi.open()
 
             # command...
+            self.__wait_while_busy()
             self.__cmd(self.__CMD_READ_HISTOGRAM)
-            chars = self.__read_bytes(64)
+            chars = self.__read_bytes(OPCR1Datum.CHARS)
 
-            # checksum...
-            required = Decode.unsigned_int(chars[62:64], '<')
-            actual = ModbusCRC.compute(chars[:62])
-
-            if required != actual:
-                raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
-
-            # time...
-            rec = LocalizedDatetime.now()
-
-            # bins...
-            bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 32, 2)]
-
-            # bin MToFs...
-            bin_1_mtof = chars[32]
-            bin_3_mtof = chars[33]
-            bin_5_mtof = chars[34]
-            bin_7_mtof = chars[35]
-
-            # sample flow rate...
-            sfr = Decode.float(chars[36:40], '<')
-
-            # temperature & humidity
-            raw_temp = Decode.unsigned_int(chars[40:42], '<')
-            raw_humid = Decode.unsigned_int(chars[42:44], '<')
-
-            sht = SHTDatum(SHT31.humid(raw_humid), SHT31.temp(raw_temp))
-
-            # period...
-            period = Decode.float(chars[44:48], '<')
-
-            # PMx...
-            try:
-                pm1 = Decode.float(chars[50:54], '<')
-            except TypeError:
-                pm1 = None
-
-            try:
-                pm2p5 = Decode.float(chars[54:58], '<')
-            except TypeError:
-                pm2p5 = None
-
-            try:
-                pm10 = Decode.float(chars[58:62], '<')
-            except TypeError:
-                pm10 = None
-
-            return OPCDatum(self.SOURCE, rec, pm1, pm2p5, pm10, period, bins,
-                            bin_1_mtof, bin_3_mtof, bin_5_mtof, bin_7_mtof, sfr=sfr, sht=sht)
+            # report...
+            return OPCR1Datum.construct(chars)
 
         finally:
             self._spi.close()
@@ -213,50 +174,13 @@ class OPCR1(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def firmware(self):
-        try:
-            self.obtain_lock()
-            self._spi.open()
-
-            # command...
-            self.__cmd(self.__CMD_GET_FIRMWARE)
-            chars = self.__read_bytes(60)
-
-            # report...
-            report = ''.join(chr(byte) for byte in chars)
-
-            return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
-
-        finally:
-            self._spi.close()
-            self.release_lock()
-
-
-    def version(self):
-        try:
-            self.obtain_lock()
-            self._spi.open()
-
-            # command...
-            self.__cmd(self.__CMD_GET_VERSION)
-
-            # report...
-            major = int(self.__read_byte())
-            minor = int(self.__read_byte())
-
-            return major, minor
-
-        finally:
-            self._spi.close()
-            self.release_lock()
-
-
     def serial_no(self):
         try:
             self.obtain_lock()
             self._spi.open()
 
             # command...
+            self.__wait_while_busy()
             self.__cmd(self.__CMD_GET_SERIAL)
             chars = self.__read_bytes(60)
 
@@ -274,7 +198,90 @@ class OPCR1(AlphasenseOPC):
             self.release_lock()
 
 
+    def version(self):
+        try:
+            self.obtain_lock()
+            self._spi.open()
+
+            # command...
+            self.__wait_while_busy()
+            self.__cmd(self.__CMD_GET_VERSION)
+
+            # report...
+            major = int(self.__read_byte())
+            minor = int(self.__read_byte())
+
+            return major, minor
+
+        finally:
+            self._spi.close()
+            self.release_lock()
+
+
+    def firmware(self):
+        try:
+            self.obtain_lock()
+            self._spi.open()
+
+            # command...
+            self.__wait_while_busy()
+            self.__cmd(self.__CMD_GET_FIRMWARE)
+            chars = self.__read_bytes(60)
+
+            # report...
+            report = ''.join(chr(byte) for byte in chars)
+
+            return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
+
+        finally:
+            self._spi.close()
+            self.release_lock()
+
+
     # ----------------------------------------------------------------------------------------------------------------
+
+    def get_firmware_conf(self):
+        try:
+            self.obtain_lock()
+            self._spi.open()
+
+            # command...
+            self.__wait_while_busy()
+            self.__cmd(self.__CMD_GET_CONF)
+            chars = self.__read_bytes(OPCFirmwareConf.CHARS)
+
+            # report...
+            conf = OPCFirmwareConf.construct(chars)
+
+            return conf
+
+        finally:
+            self._spi.close()
+            self.release_lock()
+
+
+    def set_firmware_conf(self, jdict):
+        raise NotImplementedError                       # set found to be unsafe
+
+
+    def commit_firmware_conf(self):
+        raise NotImplementedError                      # commit found to be unsafe
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __wait_while_busy(self, specified_timeout=None):
+        timeout = self.DEFAULT_BUSY_TIMEOUT if specified_timeout is None else specified_timeout
+        timeout_time = time.time() + timeout
+
+        self.__cmd(self.__CMD_CHECK)
+
+        while self.__read_byte() == self.__RESPONSE_BUSY:
+            if time.time() > timeout_time:
+                raise TimeoutError()
+
+            time.sleep(self.__DELAY_BUSY)
+
 
     def __cmd_power(self, cmd):
         try:
@@ -303,3 +310,13 @@ class OPCR1(AlphasenseOPC):
         time.sleep(self.__DELAY_TRANSFER)
 
         return chars[0]
+
+
+    def __write_bytes(self, chars):
+        for char in chars:
+            self.__write_byte(char)
+
+
+    def __write_byte(self, char):
+        self._spi.xfer([char])
+        time.sleep(self.__DELAY_CMD)

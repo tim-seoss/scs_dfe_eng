@@ -12,7 +12,8 @@ import time
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
 
-from scs_dfe.particulate.opc_r1.opc_r1 import OPCR1
+from scs_dfe.interface.interface_conf import InterfaceConf
+from scs_dfe.particulate.opc_conf import OPCConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
@@ -25,7 +26,13 @@ opc = None
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    opc = OPCR1(False, Host.opc_spi_bus(), Host.opc_spi_device())
+    # Interface...
+    interface_conf = InterfaceConf.load(Host)
+    interface = interface_conf.interface()
+
+    # OPC...
+    opc_conf = OPCConf.load(Host)
+    opc = opc_conf.opc(interface, Host)
     print(opc)
     print("-")
 
@@ -38,36 +45,33 @@ try:
     print(firmware)
     print("-")
 
-    time.sleep(1)
-
     print("version...")
     version = opc.version()
     print("major:[%d] minor:[%d]" % version)
     print("-")
 
-    time.sleep(1)
-
     print("serial...")
     serial = opc.serial_no()
-    print("type:[%s] number:[%s]" % serial)
+    print("serial: %s" % serial)
     print("-")
 
-    time.sleep(1)
+    print("firmware_conf...")
+    conf = opc.get_firmware_conf()
+    print(JSONify.dumps(conf))
+    print("-")
 
     print("on...")
     opc.operations_on()
     print("-")
 
     print("running...")
-    time.sleep(2)
-
     timer = IntervalTimer(10.0)
 
     opc.sample()                    # clear histograms and timer
 
     checkpoint = time.time()
 
-    for _ in timer.range(10):
+    for _ in timer.range(3):
         datum = opc.sample()
 
         now = time.time()
@@ -78,8 +82,6 @@ try:
         print("-")
 
         sys.stdout.flush()
-
-        # opc.reset()
 
 except KeyboardInterrupt:
     print("opc_r1_test: KeyboardInterrupt", file=sys.stderr)

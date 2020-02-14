@@ -240,10 +240,6 @@ class SPS30(OPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def firmware(self):
-        return self.serial_no()
-
-
     def version(self):
         r = self.__read(self.__CMD_READ_ARTICLE_CODE, 0, 48)
         version = ''.join(chr(byte) for byte in r)
@@ -256,6 +252,24 @@ class SPS30(OPC):
         serial_no = ''.join(chr(byte) for byte in r)
 
         return serial_no
+
+
+    def firmware(self):
+        return self.serial_no()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def get_firmware_conf(self):
+        raise NotImplementedError
+
+
+    def set_firmware_conf(self, jdict):
+        raise NotImplementedError
+
+
+    def commit_firmware_conf(self):
+        raise NotImplementedError
 
 
     # ----------------------------------------------------------------------------------------------------------------
