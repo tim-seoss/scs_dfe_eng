@@ -143,7 +143,7 @@ class OPCConf(PersistentJSONable):
 
 
     def discard_exegete(self, exegete):
-        self.__exegete_names.discard(exegete)
+        self.__exegete_names.discard(exegete)                   # does nothing if exegete not present
 
 
     # ----------------------------------------------------------------------------------------------------------------
