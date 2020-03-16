@@ -24,7 +24,7 @@ set_time = False
 
 # --------------------------------------------------------------------------------------------------------------------
 
-now = LocalizedDatetime.now()
+now = LocalizedDatetime.now().utc()
 print(now)
 print("-")
 

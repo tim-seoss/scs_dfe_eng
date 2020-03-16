@@ -230,7 +230,7 @@ class SPS30(OPC):
         tps = Decode.float(r[36:40], '>')
 
         # time...
-        rec = LocalizedDatetime.now()
+        rec = LocalizedDatetime.now().utc()
 
         # report...
         counts = SPSDatumCounts(pm0p5_count, pm1_count, pm2p5_count, pm4_count, pm10_count)

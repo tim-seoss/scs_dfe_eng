@@ -14,7 +14,7 @@ from scs_core.particulate.pmx_datum import PMxDatum
 
 # --------------------------------------------------------------------------------------------------------------------
 
-now = LocalizedDatetime.now()
+now = LocalizedDatetime.now().utc()
 
 pmx = PMxDatum(now, 11, 22, None, 33)
 print(pmx)
