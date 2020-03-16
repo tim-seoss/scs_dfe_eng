@@ -69,7 +69,7 @@ print("-")
 
 # --------------------------------------------------------------------------------------------------------------------
 
-now = LocalizedDatetime.now()
+now = LocalizedDatetime.now().utc()
 
 pmx = PMxDatum(now, 11, 22, None, 33)
 print(pmx)
@@ -78,7 +78,8 @@ print("-")
 
 # --------------------------------------------------------------------------------------------------------------------
 
-now = LocalizedDatetime.now()
+now = LocalizedDatetime.now().utc()
+
 print(now)
 print("-")
 
