@@ -40,7 +40,7 @@ class OPCN3Datum(OPCDatum):
             raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
 
         # time...
-        rec = LocalizedDatetime.now()
+        rec = LocalizedDatetime.now().utc()
 
         # bins...
         bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 48, 2)]

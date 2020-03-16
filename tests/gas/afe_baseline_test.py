@@ -19,7 +19,8 @@ baseline = AFEBaseline.construct_from_jdict(None)
 print(baseline)
 print("-")
 
-now = LocalizedDatetime.now()
+now = LocalizedDatetime.now().utc()
+
 baseline = AFEBaseline([
     SensorBaseline(now, 111, BaselineEnvironment(1.1, 2.2, 3.3)),
     SensorBaseline(now, 222, BaselineEnvironment(11.1, 22.2, 33.3)),

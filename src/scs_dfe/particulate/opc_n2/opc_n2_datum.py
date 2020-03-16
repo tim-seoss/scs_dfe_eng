@@ -28,7 +28,7 @@ class OPCN2Datum(OPCDatum):
             raise ValueError(chars)
 
         # time...
-        rec = LocalizedDatetime.now()
+        rec = LocalizedDatetime.now().utc()
 
         # bins...
         bins = [Decode.unsigned_int(chars[i:i + 2], '<') for i in range(0, 32, 2)]
