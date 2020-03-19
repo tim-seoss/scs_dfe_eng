@@ -66,8 +66,6 @@ class OPCConf(PersistentJSONable):
         """
         Constructor
         """
-        super().__init__()
-
         self.__model = model                                    # string
         self.__sample_period = int(sample_period)               # int
         self.__power_saving = bool(power_saving)                # bool
