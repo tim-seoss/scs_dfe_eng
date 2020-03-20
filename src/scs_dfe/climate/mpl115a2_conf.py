@@ -46,8 +46,6 @@ class MPL115A2Conf(PersistentJSONable):
         """
         Constructor
         """
-        super().__init__()
-
         self.__altitude = altitude              # int, "auto" or None
 
 
