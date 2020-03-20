@@ -21,6 +21,11 @@ from scs_dfe.particulate.opc_r1.opc_r1 import OPCR1
 
 from scs_dfe.particulate.sps_30.sps_30 import SPS30
 
+try:
+    from scs_exegesis.particulate.exegete_catalogue import ExegeteCatalogue
+except ImportError:
+    from scs_core.exegesis.particulate.exegete_catalogue import ExegeteCatalogue
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -74,6 +79,20 @@ class OPCConf(PersistentJSONable):
         self.__address = address                                # int
 
         self.__exegete_names = set(exegete_names)               # set of string
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def incompatible_exegetes(self):
+        incompatibles = []
+
+        for name in self.exegete_names:
+            exegete = ExegeteCatalogue.standard(name)
+
+            if exegete.opc() != self.model:
+                incompatibles.append(name)
+
+        return incompatibles
 
 
     # ----------------------------------------------------------------------------------------------------------------
