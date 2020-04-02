@@ -1,11 +1,11 @@
 """
-Created on 21 Aug 2019
+Created on 31 Mar 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 2
+STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
 
-https://github.com/south-coast-science/scs_rpz_header_t2_f1
+https://github.com/south-coast-science/scs_rpz_header_t3_f1
 """
 
 import time
@@ -21,7 +21,7 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class PZHBMCUt2f1(PZHBMCU):
+class PZHBMCUt3f1(PZHBMCU):
     """
     Constructor
     """
@@ -105,7 +105,7 @@ class PZHBMCUt2f1(PZHBMCU):
 
 
     def power_modem(self, enable):
-        self.__cmd(0, 'p', 'm', enable)
+        pass
 
 
     def power_ndir(self, enable):
@@ -171,4 +171,4 @@ class PZHBMCUt2f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PZHBMCUt2f1:{addr:0x%0.2x}" % self.addr
+        return "PZHBMCUt3f1:{addr:0x%0.2x}" % self.addr
