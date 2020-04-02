@@ -19,6 +19,7 @@ from scs_dfe.interface.pzhb.pzhb import PZHB
 from scs_dfe.interface.pzhb.pzhb_mcu_t0 import PZHBMCUt0
 from scs_dfe.interface.pzhb.pzhb_mcu_t1_f1 import PZHBMCUt1f1
 from scs_dfe.interface.pzhb.pzhb_mcu_t2_f1 import PZHBMCUt2f1
+from scs_dfe.interface.pzhb.pzhb_mcu_t3_f1 import PZHBMCUt3f1
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -36,7 +37,8 @@ class InterfaceConf(PersistentJSONable):
         'DFE/0x69',                 # Alpha BB Eng with RTC
         'PZHBt0',                   # Pi Zero Header Breakout (no microcontroller)
         'PZHBt1',                   # Pi Zero Header Breakout (type 1)
-        'PZHBt2'                    # Pi Zero Header Breakout (type 2)
+        'PZHBt2',                   # Pi Zero Header Breakout (type 2)
+        'PZHBt3'                    # Pi Zero Header Breakout (type 3)
     ]
 
     @classmethod
@@ -95,6 +97,9 @@ class InterfaceConf(PersistentJSONable):
 
         if self.model == 'PZHBt2':
             return PZHB(PZHBMCUt2f1(PZHBMCUt2f1.DEFAULT_ADDR))
+
+        if self.model == 'PZHBt3':
+            return PZHB(PZHBMCUt3f1(PZHBMCUt3f1.DEFAULT_ADDR))
 
         raise ValueError('unknown model: %s' % self.model)
 
