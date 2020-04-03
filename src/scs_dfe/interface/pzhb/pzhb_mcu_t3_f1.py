@@ -8,7 +8,6 @@ STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
 https://github.com/south-coast-science/scs_rpz_header_t3_f1
 """
 
-import sys
 import time
 
 from scs_core.data.datum import Decode
