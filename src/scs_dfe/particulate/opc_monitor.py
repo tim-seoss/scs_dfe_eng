@@ -19,8 +19,6 @@ from scs_dfe.particulate.opc import OPC
 from scs_host.lock.lock_timeout import LockTimeout
 
 
-# TODO: should be able to start and stop the OPC on very long sampling intervals
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class OPCMonitor(SynchronisedProcess):
