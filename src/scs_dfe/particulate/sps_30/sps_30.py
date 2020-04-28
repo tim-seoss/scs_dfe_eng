@@ -162,14 +162,6 @@ class SPS30(OPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def power_on(self):
-        pass
-
-
-    def power_off(self):
-        pass
-
-
     def operations_on(self):
         self.__write(self.__CMD_START_MEASUREMENT, self.__FAN_START_TIME, 0x03, 0x00)
 
