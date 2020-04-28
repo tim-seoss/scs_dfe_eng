@@ -55,6 +55,7 @@ class PZHBMCUt0(PZHBMCU):
     def power_gases(self, enable):
         pass
 
+
     def power_gps(self, enable):
         pass
 
