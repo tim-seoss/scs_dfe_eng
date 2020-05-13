@@ -141,7 +141,8 @@ class OPCFirmwareConf(JSONReport):
 
 
     def __eq__(self, other):
-        return self.bin_boundaries == other.bin_boundaries and \
+        try:
+            return self.bin_boundaries == other.bin_boundaries and \
                self.bin_boundaries_diameter == other.bin_boundaries_diameter and \
                self.bin_weightings == other.bin_weightings and \
                self.pm_diameter_a == other.pm_diameter_a and \
@@ -157,6 +158,9 @@ class OPCFirmwareConf(JSONReport):
                self.tof_to_sfr_factor == other.tof_to_sfr_factor and \
                self.pvp == other.pvp and \
                self.bin_weighting_index == other.bin_weighting_index
+
+        except AttributeError:
+            return False
 
 
     # ----------------------------------------------------------------------------------------------------------------
