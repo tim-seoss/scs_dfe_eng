@@ -44,6 +44,13 @@ class LEDState(JSONable):
         self.__colour1 = colour1                    # colour - long period
 
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        return self.__colour0 == other.__colour0 and self.__colour1 == other.__colour1
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def is_valid(self):
