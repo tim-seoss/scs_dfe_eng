@@ -43,7 +43,7 @@ class PAM7Q(GPS):
     __BOOT_DELAY =              0.500           # seconds
 
     __SERIAL_LOCK_TIMEOUT =     10.0
-    __SERIAL_COMMS_TIMEOUT =     1.0
+    __SERIAL_COMMS_TIMEOUT =    10.0
 
     __EOL =                     "\r\n"
 

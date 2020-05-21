@@ -86,10 +86,10 @@ class GPSConf(PersistentJSONable):
             return None
 
         if self.model == PAM7Q.SOURCE:
-            return PAM7Q(interface, host.gps_device())
+            return PAM7Q(interface, host.gps_device(), verbose=False)
 
         elif self.model == SAMM8Q.SOURCE:
-            return SAMM8Q(interface, host.gps_device())
+            return SAMM8Q(interface, host.gps_device(), verbose=False)
 
         else:
             raise ValueError('unknown model: %s' % self.model)
