@@ -49,7 +49,7 @@ class SAMM8Q(GPS):
     __BAUD_RATE =               9600
     __BOOT_DELAY =              0.500           # seconds
 
-    __SERIAL_LOCK_TIMEOUT =     5.0
+    __SERIAL_LOCK_TIMEOUT =     6.0
     __SERIAL_COMMS_TIMEOUT =    5.0
 
     __EOL =                     "\r\n"
