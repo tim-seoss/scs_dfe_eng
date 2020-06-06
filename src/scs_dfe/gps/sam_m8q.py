@@ -49,8 +49,8 @@ class SAMM8Q(GPS):
     __BAUD_RATE =               9600
     __BOOT_DELAY =              0.500           # seconds
 
-    __SERIAL_LOCK_TIMEOUT =     10.0
-    __SERIAL_COMMS_TIMEOUT =    10.0
+    __SERIAL_LOCK_TIMEOUT =     6.0
+    __SERIAL_COMMS_TIMEOUT =    5.0
 
     __EOL =                     "\r\n"
 
@@ -89,7 +89,10 @@ class SAMM8Q(GPS):
         self._serial.flush_input()
 
         while True:
-            sentence = self.__read_sentence()
+            try:
+                sentence = self.__read_sentence()
+            except TimeoutError:
+                return None
 
             if sentence.message_id in message_class.MESSAGE_IDS:
                 return message_class.construct(sentence)
