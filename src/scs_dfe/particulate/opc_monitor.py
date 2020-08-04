@@ -182,6 +182,14 @@ class OPCMonitor(SynchronisedProcess):
     # ----------------------------------------------------------------------------------------------------------------
     # data retrieval for client process...
 
+    def operations_on(self):
+        self.__opc.operations_on()
+
+
+    def operations_off(self):
+        self.__opc.operations_off()
+
+
     def firmware(self):
         return self.__opc.firmware()
 
