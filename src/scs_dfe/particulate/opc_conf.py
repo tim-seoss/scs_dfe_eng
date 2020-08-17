@@ -55,9 +55,10 @@ class OPCConf(PersistentJSONable):
         bus = jdict.get('bus')
         address = jdict.get('address')
 
+        inference = jdict.get('inf')
         exegete_names = jdict.get('exg', [])
 
-        return OPCConf(model, sample_period, power_saving, bus, address, exegete_names)
+        return OPCConf(model, sample_period, power_saving, bus, address, inference, exegete_names)
 
 
     @classmethod
@@ -67,7 +68,7 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, power_saving, bus, address, exegete_names):
+    def __init__(self, model, sample_period, power_saving, bus, address, inference, exegete_names):
         """
         Constructor
         """
@@ -78,6 +79,7 @@ class OPCConf(PersistentJSONable):
         self.__bus = bus                                        # int
         self.__address = address                                # int
 
+        self.__inference = inference                            # string
         self.__exegete_names = set(exegete_names)               # set of string
 
 
@@ -191,6 +193,11 @@ class OPCConf(PersistentJSONable):
 
 
     @property
+    def inference(self):
+        return self.__inference
+
+
+    @property
     def exegete_names(self):
         return sorted(self.__exegete_names)
 
@@ -210,6 +217,7 @@ class OPCConf(PersistentJSONable):
         if self.__address is not None:
             jdict['address'] = self.address
 
+        jdict['inf'] = self.inference
         jdict['exg'] = self.exegete_names
 
         return jdict
@@ -218,5 +226,7 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s, exegete_names:%s}" %  \
-               (self.model, self.sample_period, self.power_saving, self.bus, self.address, self.exegete_names)
+        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s, " \
+               "inference:%s, exegete_names:%s}" %  \
+               (self.model, self.sample_period, self.power_saving, self.bus, self.address,
+                self.inference, self.exegete_names)
