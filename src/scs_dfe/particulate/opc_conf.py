@@ -6,7 +6,8 @@ Created on 11 Jul 2017
 settings for OPCMonitor
 
 example JSON:
-{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1, "exg": ["iselutn2v1"]}
+{"model": "N2", "sample-period": 10, "power-saving": false, "bus": 0, "address": 1,
+"inf": "/home/scs/SCS/pipes/lambda-model-pmx-s1.uds", "exg": ["ISLin/Urban/N2/v1"]}
 """
 
 from collections import OrderedDict
