@@ -12,6 +12,8 @@ from collections import OrderedDict
 from scs_core.data.datum import Datum
 from scs_core.data.json import PersistentJSONable
 
+from scs_dfe.gas.scd30.scd30 import SCD30
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -48,6 +50,13 @@ class SCD30Conf(PersistentJSONable):
         """
         self.__sample_interval = Datum.int(sample_interval)                     # int       seconds
         self.__temperature_offset = Datum.float(temperature_offset, 1)          # float     °C
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @staticmethod
+    def scd30():
+        return SCD30(SCD30.DEFAULT_I2C_ADDR)
 
 
     # ----------------------------------------------------------------------------------------------------------------

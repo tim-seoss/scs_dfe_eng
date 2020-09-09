@@ -42,13 +42,13 @@ class SCD30(object):
 
     __CMD_START_PERIODIC_MEASUREMENT =      0x0010
     __CMD_STOP_PERIODIC_MEASUREMENT =       0x0104
+    __CMD_GET_DATA_READY =                  0x0202
     __CMD_READ_MEASUREMENT =                0x0300
     __CMD_MEASUREMENT_INTERVAL =            0x4600
-    __CMD_GET_DATA_READY =                  0x0202
     __CMD_TEMPERATURE_OFFSET =              0x5403
     __CMD_ALTITUDE =                        0x5102
-    __CMD_FORCED_RECALIBRATION =            0x5204
     __CMD_AUTO_SELF_CALIBRATION =           0x5306
+    __CMD_FORCED_RECALIBRATION =            0x5204
     __CMD_READ_SERIAL_NUMBER =              0xd033
     __CMD_READ_FIRMWARE_VERSION =           0xd100
     __CMD_RESET =                           0xd304
@@ -66,6 +66,13 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def null_datum(cls):
+        return SCD30Datum(None, None, None)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self, addr):
         """
         Constructor
@@ -76,6 +83,13 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
     # sample...
+
+    def sample(self):
+        while not self.get_data_ready():
+            time.sleep(0.1)
+
+        return self.read_measurement()
+
 
     def get_data_ready(self):
         try:
