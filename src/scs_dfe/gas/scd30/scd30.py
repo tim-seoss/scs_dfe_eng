@@ -54,7 +54,7 @@ class SCD30(object):
     __CMD_RESET =                           0xd304
 
     __SERIAL_NUM_WORDS =                    16
-    __WRITE_CMD_DELAY =                     0.004
+    __CMD_DELAY =                           0.004
     __WRITE_DELAY =                         0.2
 
     __CRC8_POLYNOMIAL =                     0x31
@@ -73,7 +73,7 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, addr):
+    def __init__(self, addr):           # TODO: remove addr
         """
         Constructor
         """
@@ -94,7 +94,7 @@ class SCD30(object):
     def get_data_ready(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_GET_DATA_READY)
+            self.__cmd(self.__CMD_GET_DATA_READY)
             words = self.__read_words(1)
 
         finally:
@@ -106,7 +106,7 @@ class SCD30(object):
     def read_measurement(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_READ_MEASUREMENT)
+            self.__cmd(self.__CMD_READ_MEASUREMENT)
             words = self.__read_words(6)
 
         finally:
@@ -128,12 +128,9 @@ class SCD30(object):
 
         ambient_pressure_mbar = 0 if ambient_pressure_kpa is None else int(ambient_pressure_kpa * 10.0)
 
-        chars = list(Encode.int(ambient_pressure_mbar, '>'))
-        chars.append(self.__crc(chars))
-
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_START_PERIODIC_MEASUREMENT, *chars)
+            self.__cmd(self.__CMD_START_PERIODIC_MEASUREMENT, arg=ambient_pressure_mbar)
 
             self.__ambient_pressure_kpa = ambient_pressure_kpa
 
@@ -144,7 +141,7 @@ class SCD30(object):
     def stop_periodic_measurement(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_STOP_PERIODIC_MEASUREMENT)
+            self.__cmd(self.__CMD_STOP_PERIODIC_MEASUREMENT)
 
         finally:
             self.release_lock()
@@ -153,7 +150,7 @@ class SCD30(object):
     def get_measurement_interval(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_MEASUREMENT_INTERVAL)
+            self.__cmd(self.__CMD_MEASUREMENT_INTERVAL)
             words = self.__read_words(1)
 
         finally:
@@ -166,13 +163,9 @@ class SCD30(object):
         if not (self.MIN_SAMPLING_INTERVAL <= interval <= self.MAX_SAMPLING_INTERVAL):
             raise ValueError(interval)
 
-        chars = list(Encode.int(interval, '>'))
-        chars.append(self.__crc(chars))
-
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_MEASUREMENT_INTERVAL, *chars)
-            time.sleep(self.__WRITE_DELAY)
+            self.__cmd(self.__CMD_MEASUREMENT_INTERVAL, arg=interval)
 
         finally:
             self.release_lock()
@@ -184,7 +177,7 @@ class SCD30(object):
     def get_temperature_offset(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_TEMPERATURE_OFFSET)
+            self.__cmd(self.__CMD_TEMPERATURE_OFFSET)
             words = self.__read_words(1)
 
         finally:
@@ -196,13 +189,9 @@ class SCD30(object):
     def set_temperature_offset(self, temp_offset):
         int_offset = int(round(temp_offset * 100))
 
-        chars = list(Encode.int(int_offset, '>'))
-        chars.append(self.__crc(chars))
-
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_TEMPERATURE_OFFSET, *chars)
-            time.sleep(self.__WRITE_DELAY)
+            self.__cmd(self.__CMD_TEMPERATURE_OFFSET, arg=int_offset)
 
         finally:
             self.release_lock()
@@ -214,7 +203,7 @@ class SCD30(object):
     def get_altitude(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_ALTITUDE)
+            self.__cmd(self.__CMD_ALTITUDE)
             words = self.__read_words(1)
 
         finally:
@@ -224,13 +213,9 @@ class SCD30(object):
 
 
     def set_altitude(self, altitude):
-        chars = list(Encode.int(altitude, '>'))
-        chars.append(self.__crc(chars))
-
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_ALTITUDE, *chars)
-            time.sleep(self.__WRITE_DELAY)
+            self.__cmd(self.__CMD_ALTITUDE, arg=altitude)
 
         finally:
             self.release_lock()
@@ -242,7 +227,7 @@ class SCD30(object):
     def get_auto_self_calib(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_AUTO_SELF_CALIBRATION)
+            self.__cmd(self.__CMD_AUTO_SELF_CALIBRATION)
             words = self.__read_words(1)
 
         finally:
@@ -254,13 +239,9 @@ class SCD30(object):
     def set_auto_self_calib(self, on):
         auto_self_calib = 1 if on else 0
 
-        chars = list(Encode.int(auto_self_calib, '>'))
-        chars.append(self.__crc(chars))
-
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_AUTO_SELF_CALIBRATION, *chars)
-            time.sleep(self.__WRITE_DELAY)
+            self.__cmd(self.__CMD_AUTO_SELF_CALIBRATION, arg=auto_self_calib)
 
         finally:
             self.release_lock()
@@ -272,7 +253,7 @@ class SCD30(object):
     def get_forced_calib(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_FORCED_RECALIBRATION)
+            self.__cmd(self.__CMD_FORCED_RECALIBRATION)
             words = self.__read_words(1)
 
         finally:
@@ -285,13 +266,9 @@ class SCD30(object):
         if not (self.MIN_FORCED_CALIB <= concentration_ppm <= self.MAX_FORCED_CALIB):
             raise ValueError(concentration_ppm)
 
-        chars = list(Encode.int(concentration_ppm, '>'))
-        chars.append(self.__crc(chars))
-
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_FORCED_RECALIBRATION, *chars)
-            time.sleep(self.__WRITE_DELAY)
+            self.__cmd(self.__CMD_FORCED_RECALIBRATION, arg=concentration_ppm)
 
         finally:
             self.release_lock()
@@ -303,7 +280,7 @@ class SCD30(object):
     def reset(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_RESET)
+            self.__cmd(self.__CMD_RESET)
             time.sleep(self.__WRITE_DELAY)
 
         finally:
@@ -316,7 +293,7 @@ class SCD30(object):
     def get_serial_no(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_READ_SERIAL_NUMBER)
+            self.__cmd(self.__CMD_READ_SERIAL_NUMBER)
             words = self.__read_words(16)
 
         finally:
@@ -328,7 +305,7 @@ class SCD30(object):
     def get_firmware_version(self):
         try:
             self.obtain_lock()
-            self.__write_cmd(self.__CMD_READ_FIRMWARE_VERSION)
+            self.__cmd(self.__CMD_READ_FIRMWARE_VERSION)
             words = self.__read_words(1)
 
         finally:
@@ -357,15 +334,21 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __write_cmd(self, cmd, *args):
+    def __cmd(self, cmd, arg=None):
+        if arg:
+            values = list(Encode.int(arg, '>'))
+            values.append(self.__crc(values))
+        else:
+            values = ()
+
         try:
             I2C.start_tx(self.addr)
-            I2C.write_addr16(cmd, *args)
-
+            I2C.write_addr16(cmd, *values)
         finally:
             I2C.end_tx()
 
-        time.sleep(self.__WRITE_CMD_DELAY)
+        delay = self.__CMD_DELAY if arg is None else self.__WRITE_DELAY
+        time.sleep(delay)
 
 
     def __read_words(self, word_count):
@@ -392,7 +375,6 @@ class SCD30(object):
         try:
             I2C.start_tx(self.addr)
             return I2C.read(char_count)
-
         finally:
             I2C.end_tx()
 
@@ -404,8 +386,8 @@ class SCD30(object):
     def __crc(self, word):
         crc = self.__CRC8_INIT
 
-        for char in word:
-            crc ^= char
+        for byte in word:
+            crc ^= byte
             for _ in range(8):
                 crc = 0xff & ((crc << 1) ^ self.__CRC8_POLYNOMIAL if crc & 0x80 else (crc << 1))
 
