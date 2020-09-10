@@ -90,7 +90,12 @@ class OPCConf(PersistentJSONable):
         incompatibles = []
 
         for name in self.exegete_names:
-            exegete = ExegeteCatalogue.standard(name)
+            try:
+                exegete = ExegeteCatalogue.standard(name)
+
+            except NotImplementedError:
+                incompatibles.append(name)
+                continue
 
             if exegete.opc() != self.model:
                 incompatibles.append(name)

@@ -58,6 +58,13 @@ class MPL115A2(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    @classmethod
+    def null_datum(cls):
+        return MPL115A2Datum(None, None, None, None)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def __init__(self, c25):
         """
         Constructor
@@ -85,7 +92,7 @@ class MPL115A2(object):
             self.release_lock()
 
 
-    def sample(self, altitude=None):
+    def sample(self, altitude=None, include_temp=True):
         try:
             self.obtain_lock()
 
@@ -99,7 +106,7 @@ class MPL115A2(object):
             # interpret...
             p_comp = self.__a0 + (self.__b1 + self.__c12 * t_adc) * p_adc + self.__b2 * t_adc
 
-            return MPL115A2Datum.construct(self.__c25, p_comp, t_adc, altitude)
+            return MPL115A2Datum.construct(self.__c25, p_comp, t_adc, altitude, include_temp=include_temp)
 
         finally:
             self.release_lock()
