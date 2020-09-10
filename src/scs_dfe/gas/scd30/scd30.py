@@ -54,8 +54,8 @@ class SCD30(object):
     __CMD_RESET =                           0xd304
 
     __SERIAL_NUM_WORDS =                    16
-    __CMD_DELAY =                           0.004
-    __WRITE_DELAY =                         0.2
+    __CMD_DELAY =                           0.01
+    __RESET_DELAY =                         0.4
 
     __CRC8_POLYNOMIAL =                     0x31
     __CRC8_INIT =                           0xff
@@ -281,7 +281,7 @@ class SCD30(object):
         try:
             self.obtain_lock()
             self.__cmd(self.__CMD_RESET)
-            time.sleep(self.__WRITE_DELAY)
+            time.sleep(self.__RESET_DELAY)
 
         finally:
             self.release_lock()
@@ -347,8 +347,7 @@ class SCD30(object):
         finally:
             I2C.end_tx()
 
-        delay = self.__CMD_DELAY if arg is None else self.__WRITE_DELAY
-        time.sleep(delay)
+        time.sleep(self.__CMD_DELAY)
 
 
     def __read_words(self, word_count):
