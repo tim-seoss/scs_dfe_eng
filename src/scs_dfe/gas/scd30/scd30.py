@@ -55,7 +55,7 @@ class SCD30(object):
 
     __SERIAL_NUM_WORDS =                    16
     __CMD_DELAY =                           0.01
-    __RESET_DELAY =                         0.4
+    __RESET_DELAY =                         2.0
 
     __CRC8_POLYNOMIAL =                     0x31
     __CRC8_INIT =                           0xff
@@ -294,7 +294,7 @@ class SCD30(object):
         try:
             self.obtain_lock()
             self.__cmd(self.__CMD_READ_SERIAL_NUMBER)
-            words = self.__read_words(16)
+            words = self.__read_words(self.__SERIAL_NUM_WORDS)
 
         finally:
             self.release_lock()
