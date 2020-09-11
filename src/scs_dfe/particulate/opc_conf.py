@@ -51,6 +51,7 @@ class OPCConf(PersistentJSONable):
 
         model = jdict.get('model')
         sample_period = jdict.get('sample-period')
+        restart_on_zeroes = jdict.get('restart-on-zeroes', True)
         power_saving = jdict.get('power-saving')
 
         bus = jdict.get('bus')
@@ -59,7 +60,7 @@ class OPCConf(PersistentJSONable):
         inference = jdict.get('inf')
         exegete_names = jdict.get('exg', [])
 
-        return OPCConf(model, sample_period, power_saving, bus, address, inference, exegete_names)
+        return OPCConf(model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names)
 
 
     @classmethod
@@ -69,19 +70,20 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, power_saving, bus, address, inference, exegete_names):
+    def __init__(self, model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names):
         """
         Constructor
         """
-        self.__model = model                                    # string
-        self.__sample_period = int(sample_period)               # int
-        self.__power_saving = bool(power_saving)                # bool
+        self.__model = model                                        # string
+        self.__sample_period = int(sample_period)                   # int
+        self.__restart_on_zeroes = bool(restart_on_zeroes)          # bool
+        self.__power_saving = bool(power_saving)                    # bool
 
-        self.__bus = bus                                        # int
-        self.__address = address                                # int
+        self.__bus = bus                                            # int
+        self.__address = address                                    # int
 
-        self.__inference = inference                            # string
-        self.__exegete_names = set(exegete_names)               # set of string
+        self.__inference = inference                                # string
+        self.__exegete_names = set(exegete_names)                   # set of string
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -189,6 +191,11 @@ class OPCConf(PersistentJSONable):
 
 
     @property
+    def restart_on_zeroes(self):
+        return self.__restart_on_zeroes
+
+
+    @property
     def bus(self):
         return self.__bus
 
@@ -215,6 +222,7 @@ class OPCConf(PersistentJSONable):
 
         jdict['model'] = self.model
         jdict['sample-period'] = self.sample_period
+        jdict['restart-on-zeroes'] = self.restart_on_zeroes
         jdict['power-saving'] = self.power_saving
 
         if self.__bus is not None:
@@ -232,7 +240,7 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{model:%s, sample_period:%s, power_saving:%s, bus:%s, address:%s, " \
+        return "OPCConf:{model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, bus:%s, address:%s, " \
                "inference:%s, exegete_names:%s}" %  \
-               (self.model, self.sample_period, self.power_saving, self.bus, self.address,
+               (self.model, self.sample_period, self.restart_on_zeroes, self.power_saving, self.bus, self.address,
                 self.inference, self.exegete_names)
