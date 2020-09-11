@@ -15,7 +15,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-conf = OPCConf("N2", 10, False, 0, 1, None, [])
+conf = OPCConf("N2", 10, True, False, 0, 1, None, [])
 print(conf)
 print("-")
 
