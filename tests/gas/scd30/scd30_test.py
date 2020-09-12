@@ -25,7 +25,7 @@ sampling_interval = 3
 try:
     I2C.open(Host.I2C_SENSORS)
 
-    sensor = SCD30(SCD30.DEFAULT_I2C_ADDR)
+    sensor = SCD30()
     print(sensor)
     print("-", file=sys.stderr)
 
@@ -37,6 +37,7 @@ try:
 
     firmware = sensor.get_firmware_version()
     print("firmware: %s" % str(firmware), file=sys.stderr)
+
 
     serial = sensor.get_serial_no()
     print("serial: %s" % str(serial), file=sys.stderr)
