@@ -56,7 +56,7 @@ class SCD30Conf(PersistentJSONable):
 
     @staticmethod
     def scd30():
-        return SCD30(SCD30.DEFAULT_I2C_ADDR)
+        return SCD30()
 
 
     # ----------------------------------------------------------------------------------------------------------------

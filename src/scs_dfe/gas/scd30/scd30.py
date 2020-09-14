@@ -25,8 +25,6 @@ class SCD30(object):
     classdocs
     """
 
-    DEFAULT_I2C_ADDR =                      0x61
-
     DEFAULT_AMBIENT_PRESSURE =              101.3                   # kPa
 
     MIN_SAMPLING_INTERVAL =                 2                       # seconds
@@ -39,6 +37,8 @@ class SCD30(object):
     MAX_PRESSURE =                          140.0                   # kPa
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    __I2C_ADDR =                            0x61
 
     __CMD_START_PERIODIC_MEASUREMENT =      0x0010
     __CMD_STOP_PERIODIC_MEASUREMENT =       0x0104
@@ -73,11 +73,11 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, addr):           # TODO: remove addr
+    def __init__(self):
         """
         Constructor
         """
-        self.__addr = addr
+        self.__addr = self.__I2C_ADDR
         self.__ambient_pressure_kpa = None
 
 
@@ -329,7 +329,7 @@ class SCD30(object):
 
     @property
     def __lock_name(self):
-        return self.__class__.__name__ + "-" + ("0x%02x" % self.addr)
+        return self.__class__.__name__ + "-" + ("0x%02x" % self.__I2C_ADDR)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -342,7 +342,7 @@ class SCD30(object):
             values = ()
 
         try:
-            I2C.start_tx(self.addr)
+            I2C.start_tx(self.__I2C_ADDR)
             I2C.write_addr16(cmd, *values)
         finally:
             I2C.end_tx()
@@ -372,8 +372,10 @@ class SCD30(object):
 
     def __read(self, char_count):
         try:
-            I2C.start_tx(self.addr)
-            return I2C.read(char_count)
+            I2C.start_tx(self.__I2C_ADDR)
+            chars = I2C.read(char_count)
+
+            return chars
         finally:
             I2C.end_tx()
 
@@ -396,11 +398,6 @@ class SCD30(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def addr(self):
-        return self.__addr
-
-
-    @property
     def ambient_pressure_kpa(self):
         return self.__ambient_pressure_kpa
 
@@ -408,4 +405,4 @@ class SCD30(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SCD30:{addr:0x%02x, ambient_pressure_kpa:%s}" % (self.addr, self.ambient_pressure_kpa)
+        return "SCD30:{ambient_pressure_kpa:%s}" % self.ambient_pressure_kpa
