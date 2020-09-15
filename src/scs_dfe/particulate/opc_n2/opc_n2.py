@@ -53,7 +53,7 @@ class OPCN2(AlphasenseOPC):
     __RESPONSE_READY =                  0xf3
 
 #    __SPI_CLOCK =                       325490      # Minimum Atmel SAM5 (Cube Main Board) SPI clock speed
-    __SPI_CLOCK =                       400000      # 400 kHz
+    __SPI_CLOCK =                       326000      # 400 kHz
     __SPI_MODE =                        1
 
     __DELAY_TRANSFER =                  0.001
