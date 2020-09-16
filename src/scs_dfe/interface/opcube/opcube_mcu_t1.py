@@ -5,7 +5,7 @@ Created on 31 Mar 2020
 
 STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
 
-https://github.com/south-coast-science/scs_rpz_header_t3_f1
+https://github.com/south-coast-science/scs_opcube_controller_t1
 """
 
 import time
@@ -13,7 +13,7 @@ import time
 from scs_core.data.datum import Decode
 
 from scs_dfe.interface.component.mcu_led import MCULED
-from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
+from scs_dfe.interface.opcube.opcube_mcu import OPCubeMCU
 
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
@@ -21,7 +21,7 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class PZHBMCUt3f1(PZHBMCU):
+class OPCubeMCUt1(OPCubeMCU):
     """
     Constructor
     """
@@ -49,16 +49,12 @@ class PZHBMCUt3f1(PZHBMCU):
         self.__cmd(0, 'h', 'i')
 
 
-    def button_enable(self):
-        self.__cmd(0, 'b', 'e')
+    def switch_state(self):
+        response = self.__cmd(1, 's', 's')
 
+        on = response == 1
 
-    def button_pressed(self):
-        response = self.__cmd(1, 'b', 'p')
-
-        button_pressed = response == 1
-
-        return button_pressed
+        return on
 
 
     def read_batt_v(self):
@@ -70,16 +66,8 @@ class PZHBMCUt3f1(PZHBMCU):
         return v_batt
 
 
-    def read_current_count(self):
-        response = self.__cmd(2, 'm', 'c')
-
-        c_current = Decode.unsigned_int(response[0:2], '<')
-
-        return c_current
-
-
     def version_ident(self):
-        response = self.__cmd(40, 'v', 'i')          # 40
+        response = self.__cmd(40, 'v', 'i')
 
         return ''.join([chr(byte) for byte in response]).strip()
 
@@ -105,7 +93,7 @@ class PZHBMCUt3f1(PZHBMCU):
 
 
     def power_modem(self, enable):
-        pass
+        self.__cmd(0, 'p', 'm', enable)
 
 
     def power_ndir(self, enable):
@@ -171,4 +159,4 @@ class PZHBMCUt3f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PZHBMCUt3f1:{addr:0x%0.2x}" % self.addr
+        return "OPCubeMCUt1:{addr:0x%0.2x}" % self.addr

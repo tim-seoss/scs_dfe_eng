@@ -12,7 +12,7 @@ import time
 
 from scs_core.data.datum import Decode
 
-from scs_dfe.interface.pzhb.mculed import MCULED
+from scs_dfe.interface.component.mcu_led import MCULED
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
 
 from scs_host.bus.i2c import I2C
