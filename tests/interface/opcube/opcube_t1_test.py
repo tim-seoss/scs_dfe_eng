@@ -38,22 +38,20 @@ try:
     print("-")
 
     print("LED...")
-    # header.led1(False)
-    # header.led2(False)
-
     on1 = True
     on2 = False
 
     for _ in range(10):
-        # header.led1(on1)
-        # header.led2(on2)
+        header.led1(on1)
+        header.led2(on2)
         on1 = not on1
         on2 = not on2
+
         time.sleep(0.5)
 
     # exit(0)
 
-    print("button...")
+    print("switch...")
 
     count = 0
 
@@ -65,6 +63,9 @@ try:
         print("switch state: %s" % switch_state)
 
         count += 1
+
+except KeyboardInterrupt:
+    print()
 
 finally:
     I2C.close()
