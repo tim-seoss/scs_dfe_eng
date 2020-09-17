@@ -12,7 +12,7 @@ import time
 
 from scs_core.data.datum import Decode
 
-from scs_dfe.interface.component.mcu_led import MCULED
+from scs_dfe.interface.pzhb.pzhb_led import PZHBLED
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
 
 from scs_host.bus.i2c import I2C
@@ -93,7 +93,7 @@ class PZHBMCUt2f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def led(self):
-        return MCULED(self)
+        return PZHBLED(self)
 
 
     def power_gases(self, enable):                  # switches digital component only

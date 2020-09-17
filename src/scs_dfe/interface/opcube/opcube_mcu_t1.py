@@ -12,7 +12,7 @@ import time
 
 from scs_core.data.datum import Decode
 
-from scs_dfe.interface.component.mcu_led import MCULED
+from scs_dfe.interface.opcube.opcube_led import OPCubeLED
 from scs_dfe.interface.opcube.opcube_mcu import OPCubeMCU
 
 from scs_host.bus.i2c import I2C
@@ -58,7 +58,7 @@ class OPCubeMCUt1(OPCubeMCU):
 
 
     def read_batt_v(self):
-        response = self.__cmd(2, 'm', 'b')
+        response = self.__cmd(2, 'm', 'v')
 
         c_batt = Decode.unsigned_int(response[0:2], '<')
         v_batt = 2.0 * 3.3 * c_batt / 4095
@@ -81,7 +81,7 @@ class OPCubeMCUt1(OPCubeMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def led(self):
-        return MCULED(self)
+        return OPCubeLED(self)
 
 
     def power_gases(self, enable):                  # switches digital component only
@@ -107,12 +107,10 @@ class OPCubeMCUt1(OPCubeMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def led1(self, on):
-        print("led1")
         self.__cmd(0, 'l', '1', on)                 # LED 1
 
 
     def led2(self, on):
-        print("led2")
         self.__cmd(0, 'l', '2', on)                 # LED 2
 
 
