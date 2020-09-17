@@ -107,10 +107,12 @@ class OPCubeMCUt1(OPCubeMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def led1(self, on):
+        print("led1")
         self.__cmd(0, 'l', '1', on)                 # LED 1
 
 
     def led2(self, on):
+        print("led2")
         self.__cmd(0, 'l', '2', on)                 # LED 2
 
 

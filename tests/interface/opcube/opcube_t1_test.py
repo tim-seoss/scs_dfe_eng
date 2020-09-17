@@ -38,12 +38,17 @@ try:
     print("-")
 
     print("LED...")
-    on = True
+    # header.led1(False)
+    # header.led2(False)
+
+    on1 = True
+    on2 = False
 
     for _ in range(10):
-        header.led1(on)
-        header.led2(on)
-        on = not on
+        # header.led1(on1)
+        # header.led2(on2)
+        on1 = not on1
+        on2 = not on2
         time.sleep(0.5)
 
     # exit(0)
@@ -52,11 +57,12 @@ try:
 
     count = 0
 
+
     while True:
         time.sleep(1)
 
         switch_state = header.switch_state()
-        print("switch state: %d" % switch_state)
+        print("switch state: %s" % switch_state)
 
         count += 1
 
