@@ -9,11 +9,11 @@ from scs_dfe.led.led import LED
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class MCULED(LED):
+class OPCubeLED(LED):
     """
     classdocs
     """
-    __MAPPING = {'0': [False, False], 'R': [True, True], 'A': [True, True], 'G': [True, True]}
+    __MAPPING = {'0': [False, False], 'R': [True, False], 'A': [True, True], 'G': [False, True]}
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -55,4 +55,4 @@ class MCULED(LED):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "MCULED:{colour:%s, mcu:%s}" % (self.__colour, self.__mcu)
+        return "OPCubeLED:{colour:%s, mcu:%s}" % (self.__colour, self.__mcu)

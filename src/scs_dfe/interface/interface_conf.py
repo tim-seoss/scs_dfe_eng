@@ -15,6 +15,9 @@ from scs_core.data.json import PersistentJSONable
 
 from scs_dfe.interface.dfe.dfe import DFE
 
+from scs_dfe.interface.opcube.opcube import OPCube
+from scs_dfe.interface.opcube.opcube_mcu_t1 import OPCubeMCUt1
+
 from scs_dfe.interface.pzhb.pzhb import PZHB
 from scs_dfe.interface.pzhb.pzhb_mcu_t0 import PZHBMCUt0
 from scs_dfe.interface.pzhb.pzhb_mcu_t1_f1 import PZHBMCUt1f1
@@ -35,6 +38,7 @@ class InterfaceConf(PersistentJSONable):
         'DFE',                      # Alpha Pi Eng, ignoring Pt1000
         'DFE/0x68',                 # Alpha Pi Eng, Alpha BB Eng without RTC
         'DFE/0x69',                 # Alpha BB Eng with RTC
+        'OPCubeT1',                 # OPCube controller (type 1)
         'PZHBt0',                   # Pi Zero Header Breakout (no microcontroller)
         'PZHBt1',                   # Pi Zero Header Breakout (type 1)
         'PZHBt2',                   # Pi Zero Header Breakout (type 2)
@@ -88,6 +92,9 @@ class InterfaceConf(PersistentJSONable):
 
         if self.model == 'DFE/0x69':
             return DFE(0x69)
+
+        if self.model == 'OPCubeT1':
+            return OPCube(OPCubeMCUt1(OPCubeMCUt1.DEFAULT_ADDR))
 
         if self.model == 'PZHBt0':
             return PZHB(PZHBMCUt0())
