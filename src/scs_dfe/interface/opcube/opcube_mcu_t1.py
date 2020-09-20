@@ -5,15 +5,17 @@ Created on 31 Mar 2020
 
 STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
 
-https://github.com/south-coast-science/scs_rpz_header_t3_f1
+https://github.com/south-coast-science/scs_opcube_controller_t1
+https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Projects/STM32F302R8-Nucleo/Examples/ADC/ADC_Sequencer/Src/main.c
+https://github.com/STMicroelectronics/STM32CubeL0/blob/master/Projects/NUCLEO-L031K6/Examples/ADC/ADC_DMA_Transfer/Src/main.c
 """
 
 import time
 
 from scs_core.data.datum import Decode
 
-from scs_dfe.interface.pzhb.pzhb_led import PZHBLED
-from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
+from scs_dfe.interface.opcube.opcube_led import OPCubeLED
+from scs_dfe.interface.opcube.opcube_mcu import OPCubeMCU
 
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
@@ -21,7 +23,7 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class PZHBMCUt3f1(PZHBMCU):
+class OPCubeMCUt1(OPCubeMCU):
     """
     Constructor
     """
@@ -49,37 +51,15 @@ class PZHBMCUt3f1(PZHBMCU):
         self.__cmd(0, 'h', 'i')
 
 
-    def button_enable(self):
-        self.__cmd(0, 'b', 'e')
+    def switch_state(self):
+        response = self.__cmd(1, 's', 's')
+        on = response == 1
 
-
-    def button_pressed(self):
-        response = self.__cmd(1, 'b', 'p')
-
-        button_pressed = response == 1
-
-        return button_pressed
-
-
-    def read_batt_v(self):
-        response = self.__cmd(2, 'm', 'b')
-
-        c_batt = Decode.unsigned_int(response[0:2], '<')
-        v_batt = 2.0 * 3.3 * c_batt / 4095
-
-        return v_batt
-
-
-    def read_current_count(self):
-        response = self.__cmd(2, 'm', 'c')
-
-        c_current = Decode.unsigned_int(response[0:2], '<')
-
-        return c_current
+        return on
 
 
     def version_ident(self):
-        response = self.__cmd(40, 'v', 'i')          # 40
+        response = self.__cmd(40, 'v', 'i')
 
         return ''.join([chr(byte) for byte in response]).strip()
 
@@ -92,8 +72,38 @@ class PZHBMCUt3f1(PZHBMCU):
 
     # ----------------------------------------------------------------------------------------------------------------
 
+    def read_temperature(self):
+        response = self.__cmd(4, 'm', 't')
+        temperature = Decode.float(response[0:4], '<')
+
+        return round(temperature, 1)
+
+
+    def read_temperature_count(self):
+        response = self.__cmd(2, 'm', 'c')
+        temperature_count = Decode.int(response[0:2], '<')
+
+        return temperature_count
+
+
+    def read_t30(self):
+        response = self.__cmd(2, 'm', '3')
+        t30 = Decode.int(response[0:2], '<')
+
+        return t30
+
+
+    def read_t130(self):
+        response = self.__cmd(2, 'm', '1')
+        t130 = Decode.int(response[0:2], '<')
+
+        return t130
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     def led(self):
-        return PZHBLED(self)
+        return OPCubeLED(self)
 
 
     def power_gases(self, enable):                  # switches digital component only
@@ -105,7 +115,7 @@ class PZHBMCUt3f1(PZHBMCU):
 
 
     def power_modem(self, enable):
-        pass
+        self.__cmd(0, 'p', 'm', enable)
 
 
     def power_ndir(self, enable):
@@ -119,11 +129,11 @@ class PZHBMCUt3f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def led1(self, on):
-        self.__cmd(0, 'l', '1', on)                 # LED 1
+        self.__cmd(0, 'l', '1', on)                 # LED 1: red
 
 
     def led2(self, on):
-        self.__cmd(0, 'l', '2', on)                 # LED 2
+        self.__cmd(0, 'l', '2', on)                 # LED 2: green
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -136,7 +146,6 @@ class PZHBMCUt3f1(PZHBMCU):
             I2C.start_tx(self.__addr)
 
             response = I2C.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
-
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
@@ -171,4 +180,4 @@ class PZHBMCUt3f1(PZHBMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PZHBMCUt3f1:{addr:0x%0.2x}" % self.addr
+        return "OPCubeMCUt1:{addr:0x%0.2x}" % self.addr
