@@ -6,6 +6,8 @@ Created on 31 Mar 2020
 STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
 
 https://github.com/south-coast-science/scs_opcube_controller_t1
+https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Projects/STM32F302R8-Nucleo/Examples/ADC/ADC_Sequencer/Src/main.c
+https://github.com/STMicroelectronics/STM32CubeL0/blob/master/Projects/NUCLEO-L031K6/Examples/ADC/ADC_DMA_Transfer/Src/main.c
 """
 
 import time
@@ -51,19 +53,9 @@ class OPCubeMCUt1(OPCubeMCU):
 
     def switch_state(self):
         response = self.__cmd(1, 's', 's')
-
         on = response == 1
 
         return on
-
-
-    def read_batt_v(self):
-        response = self.__cmd(2, 'm', 'v')
-
-        c_batt = Decode.unsigned_int(response[0:2], '<')
-        v_batt = 2.0 * 3.3 * c_batt / 4095
-
-        return v_batt
 
 
     def version_ident(self):
@@ -76,6 +68,36 @@ class OPCubeMCUt1(OPCubeMCU):
         response = self.__cmd(11, 'v', 't')
 
         return ''.join([chr(byte) for byte in response]).strip()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def read_temperature(self):
+        response = self.__cmd(4, 'm', 't')
+        temperature = Decode.float(response[0:4], '<')
+
+        return round(temperature, 1)
+
+
+    def read_temperature_count(self):
+        response = self.__cmd(2, 'm', 'c')
+        temperature_count = Decode.int(response[0:2], '<')
+
+        return temperature_count
+
+
+    def read_t30(self):
+        response = self.__cmd(2, 'm', '3')
+        t30 = Decode.int(response[0:2], '<')
+
+        return t30
+
+
+    def read_t130(self):
+        response = self.__cmd(2, 'm', '1')
+        t130 = Decode.int(response[0:2], '<')
+
+        return t130
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -107,11 +129,11 @@ class OPCubeMCUt1(OPCubeMCU):
     # ----------------------------------------------------------------------------------------------------------------
 
     def led1(self, on):
-        self.__cmd(0, 'l', '1', on)                 # LED 1
+        self.__cmd(0, 'l', '1', on)                 # LED 1: red
 
 
     def led2(self, on):
-        self.__cmd(0, 'l', '2', on)                 # LED 2
+        self.__cmd(0, 'l', '2', on)                 # LED 2: green
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -124,7 +146,6 @@ class OPCubeMCUt1(OPCubeMCU):
             I2C.start_tx(self.__addr)
 
             response = I2C.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
-
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
