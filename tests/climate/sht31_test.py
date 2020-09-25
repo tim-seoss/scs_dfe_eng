@@ -20,7 +20,7 @@ from scs_host.sys.host import Host
 I2C.open(Host.I2C_SENSORS)
 
 sht_conf = SHTConf.load(Host)
-sht = sht_conf.int_sht()
+sht = sht_conf.ext_sht()
 
 sht.reset()
 

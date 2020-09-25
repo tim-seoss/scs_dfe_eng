@@ -72,10 +72,10 @@ class SHT31(object):
     def reset(self):
         try:
             I2C.start_tx(self.__addr)
-            I2C.write16(SHT31.__CMD_RESET)
+            I2C.write16(self.__CMD_RESET)
             time.sleep(0.001)
 
-            I2C.write16(SHT31.__CMD_CLEAR)
+            I2C.write16(self.__CMD_CLEAR)
             time.sleep(0.001)
 
         finally:
@@ -88,13 +88,13 @@ class SHT31(object):
 
         try:
             I2C.start_tx(self.__addr)
-            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_SINGLE_HIGH, 6,
+            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(self.__CMD_READ_SINGLE_HIGH, 6,
                                                                             wait=self.MEASUREMENT_DURATION)
 
             raw_humid = (humid_msb << 8) | humid_lsb
             raw_temp = (temp_msb << 8) | temp_lsb
 
-            return SHTDatum(SHT31.humid(raw_humid), SHT31.temp(raw_temp))
+            return SHTDatum(self.humid(raw_humid), self.temp(raw_temp))
 
         finally:
             I2C.end_tx()
@@ -106,7 +106,7 @@ class SHT31(object):
     def status(self):
         try:
             I2C.start_tx(self.__addr)
-            status_msb, status_lsb, _ = I2C.read_cmd16(SHT31.__CMD_READ_STATUS, 3)
+            status_msb, status_lsb, _ = I2C.read_cmd16(self.__CMD_READ_STATUS, 3)
 
             return (status_msb << 8) | status_lsb
 
