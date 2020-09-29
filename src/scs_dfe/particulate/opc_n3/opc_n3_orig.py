@@ -70,8 +70,8 @@ class OPCN3(AlphasenseOPC):
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
 
-    __DELAY_TRANSFER =                  0.001       # 0.001
-    __DELAY_CMD =                       0.020       # 0.010
+    __DELAY_TRANSFER =                  0.001
+    __DELAY_CMD =                       0.010
     __DELAY_BUSY =                      0.100
 
     __LOCK_TIMEOUT =                    20.0
@@ -353,7 +353,7 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             self._spi.xfer([self.__CMD_POWER, cmd])
-            time.sleep(self.__DELAY_CMD)
+            # time.sleep(self.__DELAY_CMD)
 
         finally:
             self._spi.close()
@@ -361,10 +361,10 @@ class OPCN3(AlphasenseOPC):
 
     def __cmd(self, cmd):
         self._spi.xfer([cmd])
-        time.sleep(self.__DELAY_CMD)
+        # time.sleep(self.__DELAY_CMD)
 
         self._spi.xfer([cmd])
-        time.sleep(self.__DELAY_TRANSFER)
+        # time.sleep(self.__DELAY_TRANSFER)
 
 
     def __read_bytes(self, count):

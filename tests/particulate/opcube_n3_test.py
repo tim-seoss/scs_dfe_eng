@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Created on 4 Jul 2016
+Created on 24 Sep 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 """
 
 import sys
-import time
 
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
@@ -38,32 +37,33 @@ try:
     print("booting...")
     opc.power_on()
 
-    print("status...")
-    status = opc.status()
-    print(status)
-    print("-")
-
-    print("firmware...")
-    firmware = opc.firmware()
-    print(firmware)
-    print("-")
-
-    print("version...")
-    version = opc.version()
-    print("major:[%d] minor:[%d]" % version)
-    print("-")
-
-    print("serial...")
-    serial = opc.serial_no()
-    print("serial_no:%s" % serial)
-    print("-")
-
-    print("firmware_conf...")
-    conf = opc.get_firmware_conf()
-    print(JSONify.dumps(conf))
-    print("-")
+    # print("status...")
+    # status = opc.status()
+    # print(status)
+    # print("-")
+    #
+    # print("firmware...")
+    # firmware = opc.firmware()
+    # print(firmware)
+    # print("-")
+    #
+    # print("version...")
+    # version = opc.version()
+    # print("major:[%d] minor:[%d]" % version)
+    # print("-")
+    #
+    # print("serial...")
+    # serial = opc.serial_no()
+    # print("serial_no:%s" % serial)
+    # print("-")
+    #
+    # print("firmware_conf...")
+    # conf = opc.get_firmware_conf()
+    # print(JSONify.dumps(conf))
+    # print("-")
 
     print("on...")
+    input("> start:")
     opc.operations_on()
     print("-")
 
