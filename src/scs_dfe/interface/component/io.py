@@ -38,7 +38,7 @@ class IO(object):
 
     @classmethod
     def __lock_name(cls, func):
-        return cls.__name__ + "-" + func
+        return "%s-%s" % (cls.__name__, func)
 
 
     # ----------------------------------------------------------------------------------------------------------------
