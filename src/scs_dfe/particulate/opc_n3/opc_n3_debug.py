@@ -70,8 +70,8 @@ class OPCN3(AlphasenseOPC):
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
 
-    __DELAY_TRANSFER =                  0.001       # 0.001
-    __DELAY_CMD =                       0.020       # 0.010
+    __DELAY_TRANSFER =                  0.001
+    __DELAY_CMD =                       0.010
     __DELAY_BUSY =                      0.100
 
     __LOCK_TIMEOUT =                    20.0
@@ -154,7 +154,7 @@ class OPCN3(AlphasenseOPC):
     def reset(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -163,7 +163,7 @@ class OPCN3(AlphasenseOPC):
             time.sleep(self.__DELAY_TRANSFER)
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
@@ -172,7 +172,7 @@ class OPCN3(AlphasenseOPC):
     def sample(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -183,7 +183,7 @@ class OPCN3(AlphasenseOPC):
             return OPCN3Datum.construct(chars)
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
@@ -192,7 +192,7 @@ class OPCN3(AlphasenseOPC):
     def serial_no(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -209,14 +209,14 @@ class OPCN3(AlphasenseOPC):
             return pieces[1]
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
     def version(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -229,14 +229,14 @@ class OPCN3(AlphasenseOPC):
             return major, minor
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
     def status(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -249,14 +249,14 @@ class OPCN3(AlphasenseOPC):
             return status
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
     def firmware(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -269,7 +269,7 @@ class OPCN3(AlphasenseOPC):
             return report.strip('\0\xff')       # \0 - Raspberry Pi, \xff - BeagleBone
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
@@ -278,7 +278,7 @@ class OPCN3(AlphasenseOPC):
     def get_firmware_conf(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -291,17 +291,17 @@ class OPCN3(AlphasenseOPC):
             return conf
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
-    def set_firmware_conf(self, jdict):
+    def set_firmware_confs(self, jdict):
         conf = OPCFirmwareConf.construct_from_jdict(jdict)
         chars = conf.as_chars()
 
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # set conf...
             self.__wait_while_busy()
@@ -314,14 +314,14 @@ class OPCN3(AlphasenseOPC):
             self.__write_byte(conf.bin_weighting_index)
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
     def commit_firmware_conf(self):
         try:
             self.obtain_lock()
-            self._spi.open()
+            # self._spi.open()
 
             # command...
             self.__wait_while_busy()
@@ -329,7 +329,7 @@ class OPCN3(AlphasenseOPC):
             self.__write_bytes(self.__CMD_SAVE_CONF_SEQUENCE)
 
         finally:
-            self._spi.close()
+            # self._spi.close()
             self.release_lock()
 
 
@@ -341,7 +341,12 @@ class OPCN3(AlphasenseOPC):
 
         self.__cmd(self.__CMD_CHECK)
 
-        while self.__read_byte() == self.__RESPONSE_BUSY:
+        while True:
+            char = self.__read_byte()
+
+            if char != self.__RESPONSE_BUSY:
+                break
+
             if time.time() > timeout_time:
                 raise TimeoutError()
 
@@ -353,17 +358,24 @@ class OPCN3(AlphasenseOPC):
             self._spi.open()
 
             self._spi.xfer([self.__CMD_POWER, cmd])
-            time.sleep(self.__DELAY_CMD)
 
         finally:
             self._spi.close()
+            time.sleep(self.__DELAY_CMD)
+
 
 
     def __cmd(self, cmd):
+        self._spi.open()
         self._spi.xfer([cmd])
+        self._spi.close()
+
         time.sleep(self.__DELAY_CMD)
 
+        self._spi.open()
         self._spi.xfer([cmd])
+        self._spi.close()
+
         time.sleep(self.__DELAY_TRANSFER)
 
 
@@ -375,7 +387,9 @@ class OPCN3(AlphasenseOPC):
 
 
     def __read_byte(self):
+        self._spi.open()
         chars = self._spi.read_bytes(1)
+        self._spi.close()
         time.sleep(self.__DELAY_TRANSFER)
 
         return chars[0]

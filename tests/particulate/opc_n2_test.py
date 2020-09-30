@@ -47,6 +47,9 @@ try:
     time.sleep(1)
 
     print("on...")
+
+    input("start:")
+
     opc.operations_on()
     print("-")
 
