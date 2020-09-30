@@ -29,17 +29,18 @@ class OPCubeMCU(ABC):
 
 
     @abstractmethod
-    def read_batt_v(self):
-        pass
-
-
-    @abstractmethod
     def version_ident(self):
         pass
 
 
     @abstractmethod
     def version_tag(self):
+        pass
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def read_temperature(self):
         pass
 
 

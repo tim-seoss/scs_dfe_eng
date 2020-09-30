@@ -12,6 +12,7 @@ from scs_core.gas.afe_calib import AFECalib
 from scs_dfe.gas.isi.isi import ISI
 
 from scs_dfe.interface.interface import Interface
+from scs_dfe.interface.interface_status import InterfaceStatus
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -33,11 +34,11 @@ class OPCube(Interface):
     # ----------------------------------------------------------------------------------------------------------------
 
     def temp(self):
-        return None
+        return InterfaceStatus(self.__mcu.read_temperature())
 
 
     def null_datum(self):
-        return None
+        return InterfaceStatus(None)
 
 
     # ----------------------------------------------------------------------------------------------------------------
