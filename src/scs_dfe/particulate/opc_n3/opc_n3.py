@@ -353,8 +353,11 @@ class OPCN3(AlphasenseOPC):
         try:
             self._spi.open()
 
-            self._spi.xfer([self.__CMD_POWER, cmd])
+            self._spi.xfer([self.__CMD_POWER])
             time.sleep(self.__DELAY_CMD)
+
+            self._spi.xfer([cmd])
+            time.sleep(self.__DELAY_TRANSFER)
 
         finally:
             self._spi.close()
