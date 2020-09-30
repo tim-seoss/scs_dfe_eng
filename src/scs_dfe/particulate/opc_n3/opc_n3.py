@@ -71,7 +71,7 @@ class OPCN3(AlphasenseOPC):
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
 
-    __DELAY_TRANSFER =                  0.001       # 0.001
+    __DELAY_TRANSFER =                  0.020       # 0.001
     __DELAY_CMD =                       0.020       # 0.010
     __DELAY_BUSY =                      0.100
 
@@ -121,13 +121,13 @@ class OPCN3(AlphasenseOPC):
             self.obtain_lock()
 
             # fan...
-            for _ in range(2):
+            for _ in range(1):
                 self.__cmd_power(self.__CMD_FAN_ON)
 
             time.sleep(self.__FAN_START_TIME)
 
             # laser...
-            for _ in range(2):
+            for _ in range(1):
                 self.__cmd_power(self.__CMD_LASER_ON)
 
         finally:
@@ -139,11 +139,11 @@ class OPCN3(AlphasenseOPC):
             self.obtain_lock()
 
             # laser...
-            for _ in range(2):
+            for _ in range(1):
                 self.__cmd_power(self.__CMD_LASER_OFF)
 
             # fan...
-            for _ in range(2):
+            for _ in range(1):
                 self.__cmd_power(self.__CMD_FAN_OFF)
 
             time.sleep(self.__FAN_STOP_TIME)
@@ -355,6 +355,10 @@ class OPCN3(AlphasenseOPC):
 
             self._spi.xfer([self.__CMD_POWER])
             time.sleep(self.__DELAY_CMD)
+
+            chars = self._spi.read_bytes(1)
+            print(["0x%02x" % char for char in chars], file=sys.stderr)
+            sys.stderr.flush()
 
             self._spi.xfer([cmd])
             time.sleep(self.__DELAY_TRANSFER)

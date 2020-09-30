@@ -287,11 +287,24 @@ class OPCR1(AlphasenseOPC):
         try:
             self._spi.open()
 
-            self._spi.xfer([self.__CMD_POWER, cmd])
+            self._spi.xfer([self.__CMD_POWER])
             time.sleep(self.__DELAY_CMD)
+
+            self._spi.xfer([cmd])
+            time.sleep(self.__DELAY_TRANSFER)
 
         finally:
             self._spi.close()
+
+    # def __cmd_power(self, cmd):
+    #     try:
+    #         self._spi.open()
+    #
+    #         self._spi.xfer([self.__CMD_POWER, cmd])
+    #         time.sleep(self.__DELAY_CMD)
+    #
+    #     finally:
+    #         self._spi.close()
 
 
     def __cmd(self, cmd):
@@ -299,6 +312,7 @@ class OPCR1(AlphasenseOPC):
         time.sleep(self.__DELAY_CMD)
 
         self._spi.xfer([cmd])
+        time.sleep(self.__DELAY_TRANSFER)
 
 
     def __read_bytes(self, count):
