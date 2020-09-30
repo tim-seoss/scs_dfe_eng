@@ -7,7 +7,6 @@ Created on 4 Jul 2016
 """
 
 import sys
-import time
 
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
