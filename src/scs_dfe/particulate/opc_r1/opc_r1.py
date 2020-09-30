@@ -40,8 +40,8 @@ class OPCR1(AlphasenseOPC):
     __MAX_PERMITTED_ZERO_READINGS =     30
 
     __CMD_POWER =                       0x03
-    __CMD_PERIPHERALS_ON =              0x07
-    __CMD_PERIPHERALS_OFF =             0x00
+    __CMD_PERIPHERALS_ON =              0x01        # 0x07
+    __CMD_PERIPHERALS_OFF =             0x00        # 0x00
 
     __CMD_READ_HISTOGRAM =              0x30
 
@@ -61,7 +61,7 @@ class OPCR1(AlphasenseOPC):
     __CMD_RESET =                       0x06
 
     __RESPONSE_BUSY =                   0x31
-    __RESPONSE_READY =                  0xf3
+    __RESPONSE_READY =                  (0x00, 0xff, 0xf3)
 
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
