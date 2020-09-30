@@ -296,6 +296,7 @@ class OPCR1(AlphasenseOPC):
         finally:
             self._spi.close()
 
+
     def __cmd(self, cmd):
         self._spi.xfer([cmd])
         time.sleep(self.__DELAY_CMD)
