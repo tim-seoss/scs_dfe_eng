@@ -7,7 +7,6 @@ Firmware report:
 OPC-R1 FirmwareVer=2.10...................................BS
 """
 
-import sys
 import time
 
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
@@ -54,7 +53,7 @@ class OPCR1(AlphasenseOPC):
     __CMD_SET_BIN_WEIGHTING_INDEX =     0x05
 
     __CMD_SAVE_CONF =                   0x43
-    __CMD_SAVE_CONF_SEQUENCE =          [0x3F, 0x3c, 0x3f, 0x3c, 0x43]
+    __CMD_SAVE_CONF_SEQUENCE =          (0x3F, 0x3c, 0x3f, 0x3c, 0x43)
 
     __CMD_CHECK =                       0xcf
 
@@ -284,17 +283,12 @@ class OPCR1(AlphasenseOPC):
         try:
             self._spi.open()
 
-            response = self._spi.xfer([self.__CMD_POWER])
-            time.sleep(self.__DELAY_CMD)
+            for _ in range(2):
+                self._spi.xfer([self.__CMD_POWER])
+                time.sleep(self.__DELAY_CMD)
 
-            # print(["0x%02x" % char for char in response], file=sys.stderr)
-            # sys.stderr.flush()
-
-            response = self._spi.xfer([self.__CMD_POWER])
-            time.sleep(self.__DELAY_CMD)
-
-            # print(["0x%02x" % char for char in response], file=sys.stderr)
-            # sys.stderr.flush()
+                # print(["0x%02x" % char for char in response], file=sys.stderr)
+                # sys.stderr.flush()
 
             self._spi.xfer([cmd])
             time.sleep(self.__DELAY_TRANSFER)

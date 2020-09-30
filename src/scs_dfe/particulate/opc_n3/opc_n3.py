@@ -7,7 +7,6 @@ Firmware report:
 OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS
 """
 
-import sys
 import time
 
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
@@ -59,7 +58,7 @@ class OPCN3(AlphasenseOPC):
     __CMD_SET_BIN_WEIGHTING_INDEX =     0x05
 
     __CMD_SAVE_CONF =                   0x43
-    __CMD_SAVE_CONF_SEQUENCE =          [0x3F, 0x3c, 0x3f, 0x3c, 0x43]
+    __CMD_SAVE_CONF_SEQUENCE =          (0x3F, 0x3c, 0x3f, 0x3c, 0x43)
 
     __CMD_CHECK =                       0xcf
 
@@ -351,14 +350,11 @@ class OPCN3(AlphasenseOPC):
                 response = self._spi.xfer([self.__CMD_POWER])
                 time.sleep(self.__DELAY_CMD)
 
-                # chars = self._spi.read_bytes(1)
-                # print(["0x%02x" % char for char in chars], file=sys.stderr)
+                # print(["0x%02x" % char for char in response], file=sys.stderr)
                 # sys.stderr.flush()
 
                 if response[0] in self.__RESPONSE_READY:
                     break
-
-                # time.sleep(0.1)
 
             self._spi.xfer([cmd])
             time.sleep(self.__DELAY_TRANSFER)
@@ -376,12 +372,12 @@ class OPCN3(AlphasenseOPC):
 
 
     def __read_bytes(self, count):
-        chars = [self.__read_byte() for _ in range(count)]
+        response = [self.__read_byte() for _ in range(count)]
 
-        print(["0x%02x" % char for char in chars], file=sys.stderr)
-        sys.stderr.flush()
+        # print(["0x%02x" % char for char in response], file=sys.stderr)
+        # sys.stderr.flush()
 
-        return chars
+        return response
 
 
     def __read_byte(self):
