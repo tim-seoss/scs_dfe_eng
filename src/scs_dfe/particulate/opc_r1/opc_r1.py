@@ -40,8 +40,8 @@ class OPCR1(AlphasenseOPC):
     __MAX_PERMITTED_ZERO_READINGS =     30
 
     __CMD_POWER =                       0x03
-    __CMD_PERIPHERALS_ON =              0x01        # 0x07
-    __CMD_PERIPHERALS_OFF =             0x00        # 0x00
+    __CMD_PERIPHERALS_ON =              0x07
+    __CMD_PERIPHERALS_OFF =             0x00
 
     __CMD_READ_HISTOGRAM =              0x30
 
@@ -116,8 +116,7 @@ class OPCR1(AlphasenseOPC):
             self.obtain_lock()
 
             # peripherals...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_PERIPHERALS_ON)
+            self.__cmd_power(self.__CMD_PERIPHERALS_ON)
             time.sleep(self.__FAN_START_TIME)
 
         finally:
@@ -129,8 +128,7 @@ class OPCR1(AlphasenseOPC):
             self.obtain_lock()
 
             # peripherals...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
+            self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
             time.sleep(self.__FAN_STOP_TIME)
 
         finally:
@@ -286,35 +284,23 @@ class OPCR1(AlphasenseOPC):
         try:
             self._spi.open()
 
-            while True:
-                response = self._spi.xfer([self.__CMD_POWER])
-                time.sleep(self.__DELAY_CMD)
+            response = self._spi.xfer([self.__CMD_POWER])
+            time.sleep(self.__DELAY_CMD)
 
-                # chars = self._spi.read_bytes(1)
-                print(["0x%02x" % char for char in response], file=sys.stderr)
-                sys.stderr.flush()
+            # print(["0x%02x" % char for char in response], file=sys.stderr)
+            # sys.stderr.flush()
 
-                if response[0] in self.__RESPONSE_READY:
-                    break
+            response = self._spi.xfer([self.__CMD_POWER])
+            time.sleep(self.__DELAY_CMD)
 
-                # time.sleep(0.1)
+            # print(["0x%02x" % char for char in response], file=sys.stderr)
+            # sys.stderr.flush()
 
             self._spi.xfer([cmd])
             time.sleep(self.__DELAY_TRANSFER)
 
         finally:
             self._spi.close()
-
-    # def __cmd_power(self, cmd):
-    #     try:
-    #         self._spi.open()
-    #
-    #         self._spi.xfer([self.__CMD_POWER, cmd])
-    #         time.sleep(self.__DELAY_CMD)
-    #
-    #     finally:
-    #         self._spi.close()
-
 
     def __cmd(self, cmd):
         self._spi.xfer([cmd])
