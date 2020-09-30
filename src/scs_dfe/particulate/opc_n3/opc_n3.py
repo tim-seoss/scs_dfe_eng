@@ -120,13 +120,13 @@ class OPCN3(AlphasenseOPC):
         try:
             self.obtain_lock()
 
-            # laser...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_ON)
-
             # fan...
             for _ in range(2):
                 self.__cmd_power(self.__CMD_FAN_ON)
+
+            # laser...
+            for _ in range(2):
+                self.__cmd_power(self.__CMD_LASER_ON)
 
             time.sleep(self.__FAN_START_TIME)
 
