@@ -149,7 +149,7 @@ class PZHBMCUt1f1(PZHBMCU):
 
     @property
     def __lock_name(self):
-        return self.__class__.__name__ + "-" + ("0x%02x" % self.__addr)
+        return "%s-0x%02x" % (self.__class__.__name__, self.__addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
