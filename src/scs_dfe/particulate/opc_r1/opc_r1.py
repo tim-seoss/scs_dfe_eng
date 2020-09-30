@@ -116,8 +116,8 @@ class OPCR1(AlphasenseOPC):
             self.obtain_lock()
 
             # peripherals...
-            # for _ in range(2):
-            self.__cmd_power(self.__CMD_PERIPHERALS_ON)
+            for _ in range(2):
+                self.__cmd_power(self.__CMD_PERIPHERALS_ON)
             time.sleep(self.__FAN_START_TIME)
 
         finally:
@@ -129,8 +129,8 @@ class OPCR1(AlphasenseOPC):
             self.obtain_lock()
 
             # peripherals...
-            # for _ in range(2):
-            self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
+            for _ in range(2):
+                self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
             time.sleep(self.__FAN_STOP_TIME)
 
         finally:
