@@ -96,6 +96,9 @@ class OPCMonitor(SynchronisedProcess):
 
                     datum = self.__opc.sample()
 
+                    print("OPCMonitor.run: %s" % datum, file=sys.stderr)
+                    sys.stderr.flush()
+
                     if self.__conf.restart_on_zeroes and datum.is_zero():
                         self.__zero_count += 1
 

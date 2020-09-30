@@ -66,7 +66,7 @@ class OPCN3(AlphasenseOPC):
     __CMD_RESET =                       0x06
 
     __RESPONSE_BUSY =                   0x31
-    __RESPONSE_READY =                  0xf3
+    __RESPONSE_READY =                  (0x00, 0xff, 0xf3)
 
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
@@ -121,14 +121,11 @@ class OPCN3(AlphasenseOPC):
             self.obtain_lock()
 
             # fan...
-            for _ in range(1):
-                self.__cmd_power(self.__CMD_FAN_ON)
-
+            self.__cmd_power(self.__CMD_FAN_ON)
             time.sleep(self.__FAN_START_TIME)
 
             # laser...
-            for _ in range(1):
-                self.__cmd_power(self.__CMD_LASER_ON)
+            self.__cmd_power(self.__CMD_LASER_ON)
 
         finally:
             self.release_lock()
@@ -139,13 +136,10 @@ class OPCN3(AlphasenseOPC):
             self.obtain_lock()
 
             # laser...
-            for _ in range(1):
-                self.__cmd_power(self.__CMD_LASER_OFF)
+            self.__cmd_power(self.__CMD_LASER_OFF)
 
             # fan...
-            for _ in range(1):
-                self.__cmd_power(self.__CMD_FAN_OFF)
-
+            self.__cmd_power(self.__CMD_FAN_OFF)
             time.sleep(self.__FAN_STOP_TIME)
 
         finally:
@@ -353,12 +347,18 @@ class OPCN3(AlphasenseOPC):
         try:
             self._spi.open()
 
-            self._spi.xfer([self.__CMD_POWER])
-            time.sleep(self.__DELAY_CMD)
+            while True:
+                response = self._spi.xfer([self.__CMD_POWER])
+                time.sleep(self.__DELAY_CMD)
 
-            chars = self._spi.read_bytes(1)
-            print(["0x%02x" % char for char in chars], file=sys.stderr)
-            sys.stderr.flush()
+                # chars = self._spi.read_bytes(1)
+                # print(["0x%02x" % char for char in chars], file=sys.stderr)
+                # sys.stderr.flush()
+
+                if response[0] in self.__RESPONSE_READY:
+                    break
+
+                # time.sleep(0.1)
 
             self._spi.xfer([cmd])
             time.sleep(self.__DELAY_TRANSFER)
