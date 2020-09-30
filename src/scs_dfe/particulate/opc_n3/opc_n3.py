@@ -7,6 +7,7 @@ Firmware report:
 OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS
 """
 
+import sys
 import time
 
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
@@ -119,13 +120,13 @@ class OPCN3(AlphasenseOPC):
         try:
             self.obtain_lock()
 
-            # laser...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_ON)
-
             # fan...
             for _ in range(2):
                 self.__cmd_power(self.__CMD_FAN_ON)
+
+            # laser...
+            for _ in range(2):
+                self.__cmd_power(self.__CMD_LASER_ON)
 
             time.sleep(self.__FAN_START_TIME)
 
@@ -369,7 +370,9 @@ class OPCN3(AlphasenseOPC):
 
     def __read_bytes(self, count):
         chars = [self.__read_byte() for _ in range(count)]
-        print(["0x%02x" % char for char in chars])
+
+        print(["0x%02x" % char for char in chars], file=sys.stderr)
+        sys.stderr.flush()
 
         return chars
 
