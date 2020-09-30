@@ -66,7 +66,7 @@ class OPCR1(AlphasenseOPC):
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
 
-    __DELAY_TRANSFER =                  0.001
+    __DELAY_TRANSFER =                  0.020
     __DELAY_CMD =                       0.020
     __DELAY_BUSY =                      0.100
 
