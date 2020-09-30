@@ -30,7 +30,7 @@ class OPCR1(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       8.0         # seconds
+    __BOOT_TIME =                       4.0         # seconds
     __POWER_CYCLE_TIME =               10.0         # seconds
 
     __FAN_START_TIME =                  3.0         # seconds

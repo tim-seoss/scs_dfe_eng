@@ -30,7 +30,7 @@ class OPCN3(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       8.0         # seconds
+    __BOOT_TIME =                       4.0         # seconds
     __POWER_CYCLE_TIME =               10.0         # seconds
 
     __LASER_START_TIME =                1.0         # seconds

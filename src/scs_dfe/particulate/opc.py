@@ -77,13 +77,11 @@ class OPC(ABC):
 
     def power_on(self):
         self.__interface.power_opc(True)
-        self.__interface.power_ndir(True)
         time.sleep(self.boot_time())
 
 
     def power_off(self):
         self.__interface.power_opc(False)
-        self.__interface.power_ndir(False)
 
 
     # ----------------------------------------------------------------------------------------------------------------

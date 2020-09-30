@@ -39,7 +39,7 @@ class SPS30(OPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       8.0         # seconds
+    __BOOT_TIME =                       4.0         # seconds
     __POWER_CYCLE_TIME =                2.0         # seconds
 
     __FAN_START_TIME =                  2.0         # seconds
