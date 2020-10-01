@@ -50,7 +50,7 @@ class OPCN2(AlphasenseOPC):
     __CMD_CHECK =                       0xcf
 
     __RESPONSE_BUSY =                   0x31
-    __RESPONSE_READY =                  0xf3
+    __RESPONSE_NOT_BUSY =               (0x00, 0xff, 0xf3)
 
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
@@ -202,8 +202,24 @@ class OPCN2(AlphasenseOPC):
 
 
     def __cmd_power(self, cmd):
-        self._spi.xfer([self.__CMD_POWER, cmd])
-        time.sleep(self.__DELAY_CMD)
+        try:
+            self._spi.open()
+
+            while True:
+                response = self._spi.xfer([self.__CMD_POWER])
+                time.sleep(self.__DELAY_CMD)
+
+                # print(["0x%02x" % char for char in response], file=sys.stderr)
+                # sys.stderr.flush()
+
+                if response[0] in self.__RESPONSE_NOT_BUSY:
+                    break
+
+            self._spi.xfer([cmd])
+            time.sleep(self.__DELAY_TRANSFER)
+
+        finally:
+            self._spi.close()
 
 
     def __cmd(self, cmd):
