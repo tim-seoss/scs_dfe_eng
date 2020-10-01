@@ -184,7 +184,7 @@ class DS1338(object):
 
     @classmethod
     def __lock_name(cls):
-        return cls.__name__ + "-" + ("0x%02x" % cls.__ADDR)
+        return "%s-0x%02x" % (cls.__name__, cls.__ADDR)
 
 
     # ----------------------------------------------------------------------------------------------------------------

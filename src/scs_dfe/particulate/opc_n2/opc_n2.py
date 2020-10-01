@@ -29,7 +29,7 @@ class OPCN2(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                        5.0        # seconds
+    __BOOT_TIME =                        4.0        # seconds
     __START_TIME =                       5.0        # seconds
     __STOP_TIME =                        2.0        # seconds
     __POWER_CYCLE_TIME =                10.0        # seconds
