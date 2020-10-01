@@ -7,7 +7,6 @@ Firmware report:
 OPC-N3 Iss1.1 FirmwareVer=1.17a...........................BS
 """
 
-import sys
 import time
 
 from scs_dfe.particulate.alphasense_opc import AlphasenseOPC
@@ -31,7 +30,7 @@ class OPCN3(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       8.0         # seconds
+    __BOOT_TIME =                       4.0         # seconds
     __POWER_CYCLE_TIME =               10.0         # seconds
 
     __LASER_START_TIME =                1.0         # seconds
@@ -59,19 +58,19 @@ class OPCN3(AlphasenseOPC):
     __CMD_SET_BIN_WEIGHTING_INDEX =     0x05
 
     __CMD_SAVE_CONF =                   0x43
-    __CMD_SAVE_CONF_SEQUENCE =          [0x3F, 0x3c, 0x3f, 0x3c, 0x43]
+    __CMD_SAVE_CONF_SEQUENCE =          (0x3F, 0x3c, 0x3f, 0x3c, 0x43)
 
     __CMD_CHECK =                       0xcf
 
     __CMD_RESET =                       0x06
 
     __RESPONSE_BUSY =                   0x31
-    __RESPONSE_READY =                  0xf3
+    __RESPONSE_NOT_BUSY =               (0x00, 0xff, 0xf3)
 
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
 
-    __DELAY_TRANSFER =                  0.001       # 0.001
+    __DELAY_TRANSFER =                  0.020       # 0.001
     __DELAY_CMD =                       0.020       # 0.010
     __DELAY_BUSY =                      0.100
 
@@ -121,14 +120,11 @@ class OPCN3(AlphasenseOPC):
             self.obtain_lock()
 
             # fan...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_FAN_ON)
+            self.__cmd_power(self.__CMD_FAN_ON)
+            time.sleep(self.__FAN_START_TIME)
 
             # laser...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_ON)
-
-            time.sleep(self.__FAN_START_TIME)
+            self.__cmd_power(self.__CMD_LASER_ON)
 
         finally:
             self.release_lock()
@@ -139,13 +135,10 @@ class OPCN3(AlphasenseOPC):
             self.obtain_lock()
 
             # laser...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_LASER_OFF)
+            self.__cmd_power(self.__CMD_LASER_OFF)
 
             # fan...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_FAN_OFF)
-
+            self.__cmd_power(self.__CMD_FAN_OFF)
             time.sleep(self.__FAN_STOP_TIME)
 
         finally:
@@ -353,8 +346,18 @@ class OPCN3(AlphasenseOPC):
         try:
             self._spi.open()
 
-            self._spi.xfer([self.__CMD_POWER, cmd])
-            time.sleep(self.__DELAY_CMD)
+            while True:
+                response = self._spi.xfer([self.__CMD_POWER])
+                time.sleep(self.__DELAY_CMD)
+
+                # print(["0x%02x" % char for char in response], file=sys.stderr)
+                # sys.stderr.flush()
+
+                if response[0] in self.__RESPONSE_NOT_BUSY:
+                    break
+
+            self._spi.xfer([cmd])
+            time.sleep(self.__DELAY_TRANSFER)
 
         finally:
             self._spi.close()
@@ -369,12 +372,12 @@ class OPCN3(AlphasenseOPC):
 
 
     def __read_bytes(self, count):
-        chars = [self.__read_byte() for _ in range(count)]
+        response = [self.__read_byte() for _ in range(count)]
 
-        print(["0x%02x" % char for char in chars], file=sys.stderr)
-        sys.stderr.flush()
+        # print(["0x%02x" % char for char in response], file=sys.stderr)
+        # sys.stderr.flush()
 
-        return chars
+        return response
 
 
     def __read_byte(self):
