@@ -30,7 +30,7 @@ class OPCR1(AlphasenseOPC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    __BOOT_TIME =                       8.0         # seconds
+    __BOOT_TIME =                       4.0         # seconds
     __POWER_CYCLE_TIME =               10.0         # seconds
 
     __FAN_START_TIME =                  3.0         # seconds
@@ -53,19 +53,19 @@ class OPCR1(AlphasenseOPC):
     __CMD_SET_BIN_WEIGHTING_INDEX =     0x05
 
     __CMD_SAVE_CONF =                   0x43
-    __CMD_SAVE_CONF_SEQUENCE =          [0x3F, 0x3c, 0x3f, 0x3c, 0x43]
+    __CMD_SAVE_CONF_SEQUENCE =          (0x3F, 0x3c, 0x3f, 0x3c, 0x43)
 
     __CMD_CHECK =                       0xcf
 
     __CMD_RESET =                       0x06
 
     __RESPONSE_BUSY =                   0x31
-    __RESPONSE_READY =                  0xf3
+    __RESPONSE_NOT_BUSY =               (0x00, 0xff, 0xf3)
 
     __SPI_CLOCK =                       326000      # Minimum speed for OPCube
     __SPI_MODE =                        1
 
-    __DELAY_TRANSFER =                  0.001
+    __DELAY_TRANSFER =                  0.020
     __DELAY_CMD =                       0.020
     __DELAY_BUSY =                      0.100
 
@@ -115,9 +115,7 @@ class OPCR1(AlphasenseOPC):
             self.obtain_lock()
 
             # peripherals...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_PERIPHERALS_ON)
-
+            self.__cmd_power(self.__CMD_PERIPHERALS_ON)
             time.sleep(self.__FAN_START_TIME)
 
         finally:
@@ -129,9 +127,7 @@ class OPCR1(AlphasenseOPC):
             self.obtain_lock()
 
             # peripherals...
-            for _ in range(2):
-                self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
-
+            self.__cmd_power(self.__CMD_PERIPHERALS_OFF)
             time.sleep(self.__FAN_STOP_TIME)
 
         finally:
@@ -287,8 +283,15 @@ class OPCR1(AlphasenseOPC):
         try:
             self._spi.open()
 
-            self._spi.xfer([self.__CMD_POWER, cmd])
-            time.sleep(self.__DELAY_CMD)
+            for _ in range(2):
+                self._spi.xfer([self.__CMD_POWER])
+                time.sleep(self.__DELAY_CMD)
+
+                # print(["0x%02x" % char for char in response], file=sys.stderr)
+                # sys.stderr.flush()
+
+            self._spi.xfer([cmd])
+            time.sleep(self.__DELAY_TRANSFER)
 
         finally:
             self._spi.close()
@@ -299,6 +302,7 @@ class OPCR1(AlphasenseOPC):
         time.sleep(self.__DELAY_CMD)
 
         self._spi.xfer([cmd])
+        time.sleep(self.__DELAY_TRANSFER)
 
 
     def __read_bytes(self, count):
