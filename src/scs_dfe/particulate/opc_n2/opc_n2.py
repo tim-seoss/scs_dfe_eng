@@ -40,8 +40,8 @@ class OPCN2(AlphasenseOPC):
     __FAN_DOWN_TIME =                   2
 
     __CMD_POWER =                       0x03
-    __CMD_POWER_ON =                    0x00        # 0x03, 0x00
-    __CMD_POWER_OFF =                   0x01        # 0x03, 0x01
+    __CMD_POWER_ON =                    0x00
+    __CMD_POWER_OFF =                   0x01
 
     __CMD_CHECK_STATUS =                0xcf
     __CMD_READ_HISTOGRAM =              0x30
