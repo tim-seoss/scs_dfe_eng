@@ -9,7 +9,7 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 
 import time
 
-from scs_core.data.format import Format
+from scs_core.data.str import Str
 
 from scs_core.gas.afe.afe_datum import AFEDatum
 
@@ -220,7 +220,7 @@ class AFE(SensorInterface):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        sensors = Format.collection(self.__sensors)
+        sensors = Str.collection(self.__sensors)
 
         return "AFE:{pt1000:%s, sensors:%s, tconv:%0.3f, wrk_adc:%s, aux_adc:%s, pt1000_adc:%s}" % \
             (self.__pt1000, sensors, self.__tconv, self.__wrk_adc, self.__aux_adc, self.__pt1000_adc)

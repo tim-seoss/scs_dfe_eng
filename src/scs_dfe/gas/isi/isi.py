@@ -11,8 +11,7 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 
 import time
 
-from scs_core.data.format import Format
-
+from scs_core.data.str import Str
 from scs_core.gas.isi.isi_datum import ISIDatum
 
 from scs_dfe.gas.isi.dsi_t1_f16k import DSIt1f16K
@@ -140,6 +139,4 @@ class ISI(SensorInterface):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        sensors = Format.collection(self.__sensors)
-
-        return "ISI:{sensors:%s, adc:%s}" %  (sensors, self.__adc)
+        return "ISI:{sensors:%s, adc:%s}" %  (Str.collection(self.__sensors), self.__adc)
