@@ -11,7 +11,7 @@ otherwise the NO2 cross-sensitivity concentration will not be found.
 
 import time
 
-from scs_core.data.datum import Format
+from scs_core.data.format import Format
 
 from scs_core.gas.isi.isi_datum import ISIDatum
 
