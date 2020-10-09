@@ -14,6 +14,8 @@ from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
+# TODO: make PCA8574State MultiPersistentJSONable
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class PCA8574(object):
