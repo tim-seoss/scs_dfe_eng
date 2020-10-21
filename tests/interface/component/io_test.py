@@ -25,7 +25,7 @@ try:
     io = IO(None)
     print(io)
 
-    state = PCA8574State.load_from_file(filename)
+    state = PCA8574State.load(filename)
     print(state)
 
     print("led RED was:%s" % io.led_red)
@@ -37,7 +37,7 @@ try:
     print("led RED is:%s" % io.led_red)
     print("led GREEN is:%s" % io.led_green)
 
-    state = PCA8574State.load_from_file(filename)
+    state = PCA8574State.load(filename)
     print(state)
 
 finally:
