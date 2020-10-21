@@ -12,7 +12,7 @@ example JSON:
 
 from collections import OrderedDict
 
-from scs_core.data.json import PersistentJSONable
+from scs_core.data.json import MultiPersistentJSONable
 
 from scs_dfe.particulate.opc_monitor import OPCMonitor
 
@@ -30,7 +30,7 @@ except ImportError:
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class OPCConf(PersistentJSONable):
+class OPCConf(MultiPersistentJSONable):
     """
     classdocs
     """
@@ -38,14 +38,16 @@ class OPCConf(PersistentJSONable):
     __FILENAME = "opc_conf.json"
 
     @classmethod
-    def persistence_location(cls):
-        return cls.conf_dir(), cls.__FILENAME
+    def persistence_location(cls, name):
+        filename = cls.__FILENAME if name is None else '_'.join((name, cls.__FILENAME))
+
+        return cls.conf_dir(), filename
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct_from_jdict(cls, jdict):
+    def construct_from_jdict(cls, jdict, name=None):
         if not jdict:
             return None
 
@@ -60,7 +62,8 @@ class OPCConf(PersistentJSONable):
         inference = jdict.get('inf')
         exegete_names = jdict.get('exg', [])
 
-        return OPCConf(model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names)
+        return cls(model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names,
+                   name=name)
 
 
     @classmethod
@@ -70,10 +73,13 @@ class OPCConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names):
+    def __init__(self, model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names,
+                 name=None):
         """
         Constructor
         """
+        super().__init__(name)
+
         self.__model = model                                        # string
         self.__sample_period = int(sample_period)                   # int
         self.__restart_on_zeroes = bool(restart_on_zeroes)          # bool
@@ -240,7 +246,7 @@ class OPCConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "OPCConf:{model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, bus:%s, address:%s, " \
-               "inference:%s, exegete_names:%s}" %  \
-               (self.model, self.sample_period, self.restart_on_zeroes, self.power_saving, self.bus, self.address,
-                self.inference, self.exegete_names)
+        return "OPCConf:{name:%s, model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, " \
+               "bus:%s, address:%s, inference:%s, exegete_names:%s}" %  \
+               (self.name, self.model, self.sample_period, self.restart_on_zeroes, self.power_saving,
+                self.bus, self.address, self.inference, self.exegete_names)
