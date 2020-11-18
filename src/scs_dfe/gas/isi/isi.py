@@ -139,4 +139,6 @@ class ISI(SensorInterface):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "ISI:{sensors:%s, adc:%s}" %  (Str.collection(self.__sensors), self.__adc)
+        sensors = Str.collection(self.__sensors)
+
+        return "ISI:{sensors:%s, adc:%s}" %  (sensors, self.__adc)

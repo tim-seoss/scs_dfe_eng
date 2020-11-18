@@ -6,7 +6,7 @@ Created on 21 Jun 2017
 specifies which sensor interface board is present, if any
 
 example JSON:
-{"model": "DFE"}
+{"model": "DFE", "inf": "/home/scs/SCS/pipes/lambda-model-gas-s1.uds"}
 """
 
 from collections import OrderedDict
@@ -62,20 +62,22 @@ class InterfaceConf(PersistentJSONable):
     @classmethod
     def construct_from_jdict(cls, jdict):
         if not jdict:
-            return InterfaceConf(cls.DEFAULT_MODEL)
+            return InterfaceConf(cls.DEFAULT_MODEL, None)
 
         model = jdict.get('model')
+        inference = jdict.get('inf')
 
-        return InterfaceConf(model)
+        return InterfaceConf(model, inference)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model):
+    def __init__(self, model, inference):
         """
         Constructor
         """
-        self.__model = model
+        self.__model = model                                        # string
+        self.__inference = inference                                # string
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -118,12 +120,18 @@ class InterfaceConf(PersistentJSONable):
         return self.__model
 
 
+    @property
+    def inference(self):
+        return self.__inference
+
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def as_json(self):
         jdict = OrderedDict()
 
-        jdict['model'] = self.__model
+        jdict['model'] = self.model
+        jdict['inf'] = self.inference
 
         return jdict
 
@@ -131,4 +139,4 @@ class InterfaceConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "InterfaceConf:{model:%s}" % self.model
+        return "InterfaceConf:{model:%s, inference:%s}" % (self.model, self.inference)
