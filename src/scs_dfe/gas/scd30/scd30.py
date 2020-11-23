@@ -14,6 +14,8 @@ import time
 from scs_core.data.datum import Decode, Encode
 from scs_core.gas.scd30.scd30_datum import SCD30Datum
 
+from scs_dfe.gas.scd30.pca9543a import PCA9543A
+
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
@@ -77,6 +79,8 @@ class SCD30(object):
         """
         Constructor
         """
+        self.__selector = PCA9543A()
+
         self.__addr = self.__I2C_ADDR
         self.__ambient_pressure_kpa = None
 
@@ -321,9 +325,11 @@ class SCD30(object):
 
     def obtain_lock(self):
         Lock.acquire(self.__lock_name, self.__LOCK_TIMEOUT)
+        self.__selector.enable(True, False)
 
 
     def release_lock(self):
+        self.__selector.enable(False, False)
         Lock.release(self.__lock_name)
 
 
@@ -405,4 +411,4 @@ class SCD30(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SCD30:{ambient_pressure_kpa:%s}" % self.ambient_pressure_kpa
+        return "SCD30:{selector:%s, ambient_pressure_kpa:%s}" % (self.__selector, self.ambient_pressure_kpa)
