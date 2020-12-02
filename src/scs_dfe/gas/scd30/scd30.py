@@ -20,6 +20,8 @@ from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
+# TODO: check that sampling intervals work
+
 # --------------------------------------------------------------------------------------------------------------------
 
 class SCD30(object):
