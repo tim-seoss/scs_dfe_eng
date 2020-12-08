@@ -25,7 +25,7 @@ try:
     print(gas_sensors)
     print("-")
 
-    datum = interface.temp()
+    datum = interface.status()
     print(datum)
     print("-")
 
