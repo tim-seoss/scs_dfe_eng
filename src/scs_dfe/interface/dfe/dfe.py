@@ -56,7 +56,7 @@ class DFE(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def temp(self):
+    def status(self):
         if self.__temp_sensor is None:
             self.__temp_sensor = MCP9808(True)
 
