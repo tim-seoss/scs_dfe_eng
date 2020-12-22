@@ -35,11 +35,11 @@ try:
     board_sample = board.sample()
     print(board_sample)
 
-    mcu_sample = Host.mcu_temp()
-    print(mcu_sample)
+    host_status = Host.status()
+    print(host_status)
     print("-")
 
-    sys_temp = SystemTemp.construct(board_sample, mcu_sample)
+    sys_temp = SystemTemp.construct(board_sample, host_status)
     print(sys_temp)
 
     print(JSONify.dumps(sys_temp))
