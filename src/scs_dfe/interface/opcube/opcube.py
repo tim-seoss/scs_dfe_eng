@@ -33,7 +33,7 @@ class OPCube(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def temp(self):
+    def status(self):
         return InterfaceStatus(self.__mcu.read_temperature())
 
 
