@@ -62,22 +62,20 @@ class InterfaceConf(PersistentJSONable):
     @classmethod
     def construct_from_jdict(cls, jdict):
         if not jdict:
-            return InterfaceConf(cls.DEFAULT_MODEL, None)
+            return InterfaceConf(cls.DEFAULT_MODEL)
 
         model = jdict.get('model')
-        inference = jdict.get('inf')
 
-        return InterfaceConf(model, inference)
+        return InterfaceConf(model)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, inference):
+    def __init__(self, model):
         """
         Constructor
         """
         self.__model = model                                        # string
-        self.__inference = inference                                # string
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -120,18 +118,12 @@ class InterfaceConf(PersistentJSONable):
         return self.__model
 
 
-    @property
-    def inference(self):
-        return self.__inference
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def as_json(self):
         jdict = OrderedDict()
 
         jdict['model'] = self.model
-        jdict['inf'] = self.inference
 
         return jdict
 
@@ -139,4 +131,4 @@ class InterfaceConf(PersistentJSONable):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "InterfaceConf:{model:%s, inference:%s}" % (self.model, self.inference)
+        return "InterfaceConf:{model:%s, inference:%s}" % self.model
