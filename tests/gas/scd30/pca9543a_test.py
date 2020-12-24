@@ -8,14 +8,13 @@ Created on 20 Nov 2020
 
 from scs_dfe.gas.scd30.pca9543a import PCA9543A
 
-from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
+from scs_host.bus.i2c import SensorI2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     selector = PCA9543A()
     print(selector)
@@ -34,4 +33,4 @@ try:
     print(selector)
 
 finally:
-    I2C.close()
+    SensorI2C.close()

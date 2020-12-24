@@ -16,7 +16,7 @@ import time
 
 from scs_core.sys.eeprom_image import EEPROMImage
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 
@@ -38,24 +38,24 @@ class CAT24C32(object):
     @classmethod
     def __read_image(cls, addr, count):
         try:
-            I2C.start_tx(Host.DFE_EEPROM_ADDR)
+            SensorI2C.start_tx(Host.DFE_EEPROM_ADDR)
 
-            content = I2C.read_cmd16(addr, count)
+            content = SensorI2C.read_cmd16(addr, count)
 
             return EEPROMImage(content)
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     @classmethod
     def __write_image(cls, addr, values):       # max 32 values
         try:
-            I2C.start_tx(Host.DFE_EEPROM_ADDR)
+            SensorI2C.start_tx(Host.DFE_EEPROM_ADDR)
 
-            I2C.write_addr16(addr, *values)
+            SensorI2C.write_addr16(addr, *values)
             time.sleep(cls.__TWR)
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

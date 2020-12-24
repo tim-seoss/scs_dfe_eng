@@ -11,15 +11,14 @@ from scs_core.data.json import JSONify
 
 from scs_dfe.climate.mpl115a2 import MPL115A2
 
-from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
+from scs_host.bus.i2c import SensorI2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     # with calib & altitude...
     barometer = MPL115A2(MPL115A2Calib.DEFAULT_C25)
@@ -61,4 +60,4 @@ try:
     print(JSONify.dumps(datum))
 
 finally:
-    I2C.close()
+    SensorI2C.close()

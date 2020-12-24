@@ -16,7 +16,7 @@ from scs_core.gas.scd30.scd30_datum import SCD30Datum
 
 from scs_dfe.gas.scd30.pca9543a import PCA9543A
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.lock.lock import Lock
 
 
@@ -350,10 +350,10 @@ class SCD30(object):
             values = ()
 
         try:
-            I2C.start_tx(self.__I2C_ADDR)
-            I2C.write_addr16(cmd, *values)
+            SensorI2C.start_tx(self.__I2C_ADDR)
+            SensorI2C.write_addr16(cmd, *values)
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
         time.sleep(self.__CMD_DELAY)
 
@@ -380,12 +380,12 @@ class SCD30(object):
 
     def __read(self, char_count):
         try:
-            I2C.start_tx(self.__I2C_ADDR)
-            chars = I2C.read(char_count)
+            SensorI2C.start_tx(self.__I2C_ADDR)
+            chars = SensorI2C.read(char_count)
 
             return chars
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     def __crc_check(self, word, crc):

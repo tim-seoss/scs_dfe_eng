@@ -18,7 +18,7 @@ import time
 
 from scs_core.sys.eeprom_image import EEPROMImage
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 
@@ -44,41 +44,41 @@ class AT24MAC402(object):
     @classmethod
     def __read_array(cls, device_addr, memory_addr, count):
         try:
-            I2C.start_tx(Host.DFE_UID_ADDR)
+            SensorI2C.start_tx(Host.DFE_UID_ADDR)
 
-            # I2C.read(1)
+            # SensorI2C.read(1)
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
         try:
-            I2C.start_tx(Host.DFE_UID_ADDR)
+            SensorI2C.start_tx(Host.DFE_UID_ADDR)
 
-            return I2C.read_cmd(0x80, count)        # memory_addr,
+            return SensorI2C.read_cmd(0x80, count)        # memory_addr,
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     @classmethod
     def __read_image(cls, memory_addr, count):
         try:
-            I2C.start_tx(Host.DFE_EEPROM_ADDR)
+            SensorI2C.start_tx(Host.DFE_EEPROM_ADDR)
 
-            content = I2C.read_cmd(memory_addr, count)
+            content = SensorI2C.read_cmd(memory_addr, count)
 
             return EEPROMImage(content)
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     @classmethod
     def __write_image(cls, memory_addr, values):       # max 32 values
         try:
-            I2C.start_tx(Host.DFE_EEPROM_ADDR)
+            SensorI2C.start_tx(Host.DFE_EEPROM_ADDR)
 
-            I2C.write_addr(memory_addr, *values)
+            SensorI2C.write_addr(memory_addr, *values)
             time.sleep(cls.__TWR)
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

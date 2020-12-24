@@ -11,8 +11,7 @@ import time
 
 from scs_dfe.gas.isi.dsi_t1 import DSIt1
 
-from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
+from scs_host.bus.i2c import SensorI2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -24,7 +23,7 @@ print(controller)
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     ident = controller.version_ident()
     print("ident:[%s]" % ident)
@@ -63,4 +62,4 @@ except KeyboardInterrupt:
     print("-")
 
 finally:
-    I2C.close()
+    SensorI2C.close()

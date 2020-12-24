@@ -12,14 +12,13 @@ import time
 from scs_dfe.led.io_led import IOLED
 from scs_dfe.led.led import LED
 
-from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
+from scs_host.bus.i2c import UtilityI2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    UtilityI2C.open()
 
     led = IOLED()
     print(led)
@@ -50,4 +49,4 @@ try:
     print("-")
 
 finally:
-    I2C.close()
+    UtilityI2C.close()

@@ -10,8 +10,7 @@ import time
 
 from scs_dfe.gas.afe.ads1115 import ADS1115
 
-from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
+from scs_host.bus.i2c import SensorI2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -32,7 +31,7 @@ mux = sn4
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     wrk = ADS1115(ADS1115.ADDR_WRK, rate)
     print("wrk: %s" % wrk)
@@ -56,4 +55,4 @@ try:
     print("wrk v: %0.6f" % v_wrk)
 
 finally:
-    I2C.close()
+    SensorI2C.close()

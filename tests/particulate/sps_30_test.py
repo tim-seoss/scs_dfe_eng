@@ -14,14 +14,14 @@ from scs_core.sync.interval_timer import IntervalTimer
 
 from scs_dfe.particulate.sps_30.sps_30 import SPS30
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     opc = SPS30(True, Host.I2C_SENSORS, SPS30.DEFAULT_ADDR)
     print(opc)
@@ -87,4 +87,4 @@ except ValueError as ex:
     print(ex)
 
 finally:
-    I2C.close()
+    SensorI2C.close()

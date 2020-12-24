@@ -13,7 +13,7 @@ import time
 
 from scs_core.data.datum import Decode
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.lock.lock import Lock
 
 
@@ -97,16 +97,16 @@ class DSIt1f16K(object):
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
-            I2C.start_tx(self.__addr)
+            SensorI2C.start_tx(self.__addr)
 
-            response = I2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
+            response = SensorI2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
 
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
 
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
             self.release_lock()
 
 

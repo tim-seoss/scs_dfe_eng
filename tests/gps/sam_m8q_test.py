@@ -31,13 +31,13 @@ from scs_core.position.gps_datum import GPSDatum
 from scs_dfe.gps.sam_m8q import SAMM8Q
 from scs_dfe.interface.interface_conf import InterfaceConf
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import UtilityI2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-I2C.open(Host.I2C_SENSORS)
+UtilityI2C.open()
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -134,4 +134,4 @@ finally:
     # print("power down...")
     # gps.power_off()
 
-    I2C.close()
+    UtilityI2C.close()

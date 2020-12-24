@@ -11,7 +11,7 @@ import time
 from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.interface.opcube.opcube_mcu_t1 import OPCubeMCUt1
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ print("-")
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     ident = controller.version_ident()
     print("ident: [%s]" % ident)
@@ -85,4 +85,4 @@ except KeyboardInterrupt:
     print()
 
 finally:
-    I2C.close()
+    SensorI2C.close()

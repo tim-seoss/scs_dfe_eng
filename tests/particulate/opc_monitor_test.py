@@ -18,7 +18,7 @@ from scs_dfe.particulate.opc_conf import OPCConf
 from scs_dfe.particulate.opc_n2.opc_n2 import OPCN2
 from scs_dfe.particulate.opc_monitor import OPCMonitor
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     print(conf)
 
     try:
-        I2C.open(Host.I2C_SENSORS)
+        SensorI2C.open()
 
         monitor = OPCMonitor(OPCN2(False, Host.opc_spi_bus(), Host.opc_spi_device()), conf)
         print(monitor)
@@ -60,4 +60,4 @@ if __name__ == '__main__':
         if monitor:
             monitor.stop()
 
-        I2C.close()
+        SensorI2C.close()

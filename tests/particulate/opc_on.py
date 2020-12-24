@@ -10,14 +10,14 @@ import sys
 
 from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     opc = OPCN3(False, Host.opc_spi_bus(), Host.opc_spi_device())
     print(opc)
@@ -29,4 +29,4 @@ except KeyboardInterrupt:
     print("opc_on: KeyboardInterrupt", file=sys.stderr)
 
 finally:
-    I2C.close()
+    SensorI2C.close()

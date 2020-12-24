@@ -15,7 +15,7 @@ from scs_core.gas.sensor import Sensor
 from scs_dfe.gas.afe.afe import AFE
 from scs_dfe.interface.interface_conf import InterfaceConf
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 from scs_host.sys.host import Host
 
 
@@ -33,7 +33,7 @@ sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.fin
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    SensorI2C.open()
 
     pid = sensors[3]
     print(pid)
@@ -52,4 +52,4 @@ try:
         time.sleep(1)
 
 finally:
-    I2C.close()
+    SensorI2C.close()

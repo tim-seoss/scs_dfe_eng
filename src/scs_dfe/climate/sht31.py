@@ -12,7 +12,7 @@ import time
 
 from scs_core.climate.sht_datum import SHTDatum
 
-from scs_host.bus.i2c import I2C
+from scs_host.bus.i2c import SensorI2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -71,15 +71,15 @@ class SHT31(object):
 
     def reset(self):
         try:
-            I2C.start_tx(self.__addr)
-            I2C.write16(self.__CMD_RESET)
+            SensorI2C.start_tx(self.__addr)
+            SensorI2C.write16(self.__CMD_RESET)
             time.sleep(0.001)
 
-            I2C.write16(self.__CMD_CLEAR)
+            SensorI2C.write16(self.__CMD_CLEAR)
             time.sleep(0.001)
 
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     def sample(self):
@@ -87,9 +87,9 @@ class SHT31(object):
             return None
 
         try:
-            I2C.start_tx(self.__addr)
-            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = I2C.read_cmd16(self.__CMD_READ_SINGLE_HIGH, 6,
-                                                                            wait=self.MEASUREMENT_DURATION)
+            SensorI2C.start_tx(self.__addr)
+            temp_msb, temp_lsb, _, humid_msb, humid_lsb, _ = SensorI2C.read_cmd16(self.__CMD_READ_SINGLE_HIGH, 6,
+                                                                                  wait=self.MEASUREMENT_DURATION)
 
             raw_humid = (humid_msb << 8) | humid_lsb
             raw_temp = (temp_msb << 8) | temp_lsb
@@ -97,7 +97,7 @@ class SHT31(object):
             return SHTDatum(self.humid(raw_humid), self.temp(raw_temp))
 
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -105,13 +105,13 @@ class SHT31(object):
     @property
     def status(self):
         try:
-            I2C.start_tx(self.__addr)
-            status_msb, status_lsb, _ = I2C.read_cmd16(self.__CMD_READ_STATUS, 3)
+            SensorI2C.start_tx(self.__addr)
+            status_msb, status_lsb, _ = SensorI2C.read_cmd16(self.__CMD_READ_STATUS, 3)
 
             return (status_msb << 8) | status_lsb
 
         finally:
-            I2C.end_tx()
+            SensorI2C.end_tx()
 
 
     @property
