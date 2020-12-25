@@ -7,7 +7,7 @@ Created on 18 May 2017
 import struct
 import time
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
@@ -102,11 +102,11 @@ class MCP342X(object):
         returned value is voltage
         """
         try:
-            SensorI2C.start_tx(self.addr)
+            I2C.Sensors.start_tx(self.addr)
             v, config = self.__read()
 
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
         if config & MCP342X.__START:
@@ -124,7 +124,7 @@ class MCP342X(object):
         self.start_conversion()
 
         try:
-            SensorI2C.start_tx(self.addr)
+            I2C.Sensors.start_tx(self.addr)
 
             while True:
                 v, config = self.__read()
@@ -135,7 +135,7 @@ class MCP342X(object):
                 time.sleep(MCP342X.RATE_240)
 
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
         return v
@@ -145,7 +145,7 @@ class MCP342X(object):
 
     def __read(self):
         # get data...
-        msb, lsb, config = SensorI2C.read(3)
+        msb, lsb, config = I2C.Sensors.read(3)
 
         unsigned = (msb << 8) | lsb
 
@@ -159,11 +159,11 @@ class MCP342X(object):
 
     def __write(self, config):
         try:
-            SensorI2C.start_tx(self.addr)
-            SensorI2C.write(config)
+            I2C.Sensors.start_tx(self.addr)
+            I2C.Sensors.write(config)
 
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

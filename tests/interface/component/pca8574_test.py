@@ -10,13 +10,13 @@ import sys
 
 from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.component.pca8574 import PCA8574
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-SensorI2C.open()
+I2C.Sensors.open()
 
 try:
     io = PCA8574.construct(IO.ADDR, Host.lock_dir(), "dfe_io.json")
@@ -34,4 +34,4 @@ except KeyboardInterrupt:
     print("pca8574_test: terminated", file=sys.stderr)
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

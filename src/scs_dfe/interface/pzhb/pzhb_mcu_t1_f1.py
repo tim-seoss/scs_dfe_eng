@@ -16,7 +16,7 @@ from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
 from scs_dfe.led.io_led import IOLED
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
@@ -124,16 +124,16 @@ class PZHBMCUt1f1(PZHBMCU):
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
-            SensorI2C.start_tx(self.__addr)
+            I2C.Sensors.start_tx(self.__addr)
 
-            response = SensorI2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
+            response = I2C.Sensors.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
 
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
 
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
 

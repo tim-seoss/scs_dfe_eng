@@ -8,13 +8,13 @@ Created on 9 Dec 2019
 
 from scs_dfe.interface.dfe.dfe import MCP9808
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     sensor = MCP9808(True)
     print(sensor)
@@ -25,4 +25,4 @@ try:
     print("-")
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

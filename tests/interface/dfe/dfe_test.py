@@ -8,7 +8,7 @@ Created on 20 Jun 2019
 
 from scs_dfe.interface.dfe.dfe import DFE
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
@@ -19,7 +19,7 @@ print(interface)
 print("-")
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     gas_sensors = interface.gas_sensors(Host)
     print(gas_sensors)
@@ -30,4 +30,4 @@ try:
     print("-")
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

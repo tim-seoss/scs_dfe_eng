@@ -14,7 +14,7 @@ from scs_core.data.json import JSONify
 
 from scs_dfe.gas.scd30.scd30 import SCD30
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ from scs_host.bus.i2c import SensorI2C
 sampling_interval = 3
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     sensor = SCD30()
     print(sensor)
@@ -154,4 +154,4 @@ except KeyboardInterrupt:
     print()
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

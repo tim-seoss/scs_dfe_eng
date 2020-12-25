@@ -11,13 +11,13 @@ import time
 
 from scs_dfe.climate.sht_conf import SHTConf
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-SensorI2C.open()
+I2C.Sensors.open()
 
 sht_conf = SHTConf.load(Host)
 sht = sht_conf.ext_sht()
@@ -37,4 +37,4 @@ except KeyboardInterrupt:
     print("sh31_test: terminated", file=sys.stderr)
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

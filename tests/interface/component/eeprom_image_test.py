@@ -12,7 +12,7 @@ from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.interface.component.cat24c32 import CAT24C32
 
-from scs_host.bus.i2c import EEPROMI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -23,12 +23,12 @@ sp.call(['sudo', 'dtoverlay', 'i2c-gpio', 'i2c_gpio_sda=0', 'i2c_gpio_scl=1'])  
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    EEPROMI2C.open()
+    I2C.EEPROM.open()
 
     eeprom = CAT24C32()
 
 finally:
-    EEPROMI2C.close()
+    I2C.EEPROM.close()
 
 eeprom.image.formatted(32)
 print("-")

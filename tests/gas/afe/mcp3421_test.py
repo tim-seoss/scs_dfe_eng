@@ -10,7 +10,7 @@ import time
 
 from scs_dfe.gas.afe.mcp3421 import MCP3421
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ from scs_host.bus.i2c import SensorI2C
 temp = None
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     temp = MCP3421(MCP3421.GAIN_4, MCP3421.RATE_15)     # 16 bits
     print(temp)
@@ -43,4 +43,4 @@ finally:
     if temp:
         temp.release_lock()
 
-    SensorI2C.close()
+    I2C.Sensors.close()

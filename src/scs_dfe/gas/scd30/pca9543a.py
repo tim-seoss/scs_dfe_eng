@@ -7,7 +7,7 @@ Two-Channel I2C-Bus Switch With Interrupt Logic and Reset
 https://www.ti.com/product/PCA9543A
 """
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -36,18 +36,18 @@ class PCA9543A(object):
         ctrl = ch1_en | ch0_en
 
         try:
-            SensorI2C.start_tx(self.__addr)
-            SensorI2C.write(ctrl)
+            I2C.Sensors.start_tx(self.__addr)
+            I2C.Sensors.write(ctrl)
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     def read(self):
         try:
-            SensorI2C.start_tx(self.__addr)
-            ctrl = SensorI2C.read(1)
+            I2C.Sensors.start_tx(self.__addr)
+            ctrl = I2C.Sensors.read(1)
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
 
         return ctrl
 

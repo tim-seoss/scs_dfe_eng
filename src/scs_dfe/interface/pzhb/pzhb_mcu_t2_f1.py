@@ -15,7 +15,7 @@ from scs_core.data.datum import Decode
 from scs_dfe.interface.pzhb.pzhb_led import PZHBLED
 from scs_dfe.interface.pzhb.pzhb_mcu import PZHBMCU
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
@@ -133,16 +133,16 @@ class PZHBMCUt2f1(PZHBMCU):
 
         try:
             self.obtain_lock()
-            SensorI2C.start_tx(self.__addr)
+            I2C.Sensors.start_tx(self.__addr)
 
-            response = SensorI2C.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
+            response = I2C.Sensors.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
 
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
 
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
 

@@ -10,7 +10,7 @@ from scs_core.sys.eeprom_image import EEPROMImage
 
 from scs_dfe.interface.component.cat24c32 import CAT24C32
 
-from scs_host.bus.i2c import EEPROMI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
@@ -22,7 +22,7 @@ Host.enable_eeprom_access()
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    EEPROMI2C.open()
+    I2C.EEPROM.open()
 
     # hard-coded path...
     file_image = EEPROMImage.construct_from_file('/home/pi/hats/eepromutils/myhat.eep', CAT24C32.SIZE)
@@ -45,4 +45,4 @@ try:
     print("-")
 
 finally:
-    EEPROMI2C.close()
+    I2C.EEPROM.close()

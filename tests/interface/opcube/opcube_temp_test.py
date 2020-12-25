@@ -14,7 +14,7 @@ from scs_core.sync.interval_timer import IntervalTimer
 from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.interface.opcube.opcube_mcu_t1 import OPCubeMCUt1
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ timer = IntervalTimer(0.5)
 # run...
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     while timer.true():
         climate = sht.sample()
@@ -48,4 +48,4 @@ except KeyboardInterrupt:
     print(file=sys.stderr)
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

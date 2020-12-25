@@ -10,7 +10,7 @@ import time
 
 from scs_dfe.interface.pzhb.pzhb_mcu_t1_f1 import PZHBMCUt1f1
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ print(header)
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     ident = header.version_ident()
     print("ident: [%s]" % ident)
@@ -56,4 +56,4 @@ try:
         count += 1
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

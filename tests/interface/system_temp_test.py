@@ -12,14 +12,14 @@ from scs_core.sys.system_temp import SystemTemp
 
 from scs_dfe.interface.component.mcp9808 import MCP9808
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     # ------------------------------------------------------------------------------------------------------------
     # resources...
@@ -50,4 +50,4 @@ try:
 # end...
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

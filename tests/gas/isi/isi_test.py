@@ -19,7 +19,7 @@ from scs_dfe.climate.sht_conf import SHTConf
 from scs_dfe.gas.isi.isi import ISI
 from scs_dfe.interface.interface_conf import InterfaceConf
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
@@ -27,7 +27,7 @@ from scs_host.sys.host import Host
 
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     sht_conf = SHTConf.load(Host)
     sht = sht_conf.ext_sht()
@@ -89,4 +89,4 @@ try:
     print("-")
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()

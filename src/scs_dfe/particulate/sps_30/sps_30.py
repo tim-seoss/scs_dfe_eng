@@ -19,7 +19,7 @@ from scs_core.particulate.sps_datum import SPSDatum, SPSDatumCounts
 
 from scs_dfe.particulate.opc import OPC
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -290,13 +290,13 @@ class SPS30(OPC):
             self.obtain_lock()
 
             try:
-                SensorI2C.start_tx(self.__i2c_addr)
+                I2C.Sensors.start_tx(self.__i2c_addr)
 
-                encoded = SensorI2C.read_cmd16(command, count)
+                encoded = I2C.Sensors.read_cmd16(command, count)
                 values = self.__decode(encoded)
 
             finally:
-                SensorI2C.end_tx()
+                I2C.Sensors.end_tx()
 
             time.sleep(wait)
             return values
@@ -310,13 +310,13 @@ class SPS30(OPC):
             self.obtain_lock()
 
             try:
-                SensorI2C.start_tx(self.__i2c_addr)
+                I2C.Sensors.start_tx(self.__i2c_addr)
 
                 encoded = self.__encode(values)
-                SensorI2C.write_addr16(command, *encoded)
+                I2C.Sensors.write_addr16(command, *encoded)
 
             finally:
-                SensorI2C.end_tx()
+                I2C.Sensors.end_tx()
 
             time.sleep(wait)
 

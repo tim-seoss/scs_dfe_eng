@@ -14,7 +14,7 @@ from scs_core.sync.interval_timer import IntervalTimer
 from scs_dfe.interface.interface_conf import InterfaceConf
 from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
@@ -23,7 +23,7 @@ from scs_host.sys.host import Host
 opc = None
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     # Interface...
     interface_conf = InterfaceConf.load(Host)
@@ -108,4 +108,4 @@ finally:
         opc.power_off()
         print("-")
 
-    SensorI2C.close()
+    I2C.Sensors.close()

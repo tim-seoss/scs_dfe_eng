@@ -8,7 +8,7 @@ import time
 
 from scs_dfe.interface.interface_status import InterfaceStatus
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -47,19 +47,19 @@ class MCP9808(object):
     @classmethod
     def __write_config(cls, config):
         try:
-            SensorI2C.start_tx(cls.__ADDR)
-            SensorI2C.write(cls.__REG_CONFIG, config >> 8, config & 0xff)
+            I2C.Sensors.start_tx(cls.__ADDR)
+            I2C.Sensors.write(cls.__REG_CONFIG, config >> 8, config & 0xff)
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     @classmethod
     def __read_temp(cls):
         try:
-            SensorI2C.start_tx(cls.__ADDR)
-            msb, lsb = SensorI2C.read_cmd(cls.__REG_TEMP, 2)
+            I2C.Sensors.start_tx(cls.__ADDR)
+            msb, lsb = I2C.Sensors.read_cmd(cls.__REG_TEMP, 2)
         finally:
-            SensorI2C.end_tx()
+            I2C.Sensors.end_tx()
 
         # render voltage...
         unsigned_c = float(msb & 0x0f) * 16 + float(lsb) / 16

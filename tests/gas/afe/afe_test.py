@@ -21,7 +21,7 @@ from scs_dfe.gas.afe.pt1000 import Pt1000
 
 from scs_dfe.interface.interface_conf import InterfaceConf
 
-from scs_host.bus.i2c import SensorI2C
+from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
@@ -29,7 +29,7 @@ from scs_host.sys.host import Host
 
 
 try:
-    SensorI2C.open()
+    I2C.Sensors.open()
 
     interface_conf = InterfaceConf.load(Host)
     print(interface_conf)
@@ -102,4 +102,4 @@ try:
     print("-")
 
 finally:
-    SensorI2C.close()
+    I2C.Sensors.close()
