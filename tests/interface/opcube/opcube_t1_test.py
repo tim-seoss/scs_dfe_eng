@@ -29,7 +29,7 @@ print("-")
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     ident = controller.version_ident()
     print("ident: [%s]" % ident)
@@ -85,4 +85,4 @@ except KeyboardInterrupt:
     print()
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

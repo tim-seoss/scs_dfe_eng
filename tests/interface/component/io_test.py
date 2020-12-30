@@ -19,7 +19,7 @@ from scs_host.sys.host import Host
 
 filename = os.path.join(Host.lock_dir(), "dfe_io.json")
 
-I2C.open(Host.I2C_SENSORS)
+I2C.Sensors.open()
 
 try:
     io = IO(None)
@@ -41,4 +41,4 @@ try:
     print(state)
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

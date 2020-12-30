@@ -350,10 +350,10 @@ class SCD30(object):
             values = ()
 
         try:
-            I2C.start_tx(self.__I2C_ADDR)
-            I2C.write_addr16(cmd, *values)
+            I2C.Sensors.start_tx(self.__I2C_ADDR)
+            I2C.Sensors.write_addr16(cmd, *values)
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
         time.sleep(self.__CMD_DELAY)
 
@@ -380,12 +380,12 @@ class SCD30(object):
 
     def __read(self, char_count):
         try:
-            I2C.start_tx(self.__I2C_ADDR)
-            chars = I2C.read(char_count)
+            I2C.Sensors.start_tx(self.__I2C_ADDR)
+            chars = I2C.Sensors.read(char_count)
 
             return chars
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     def __crc_check(self, word, crc):

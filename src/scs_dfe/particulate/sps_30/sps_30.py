@@ -290,13 +290,13 @@ class SPS30(OPC):
             self.obtain_lock()
 
             try:
-                I2C.start_tx(self.__i2c_addr)
+                I2C.Sensors.start_tx(self.__i2c_addr)
 
-                encoded = I2C.read_cmd16(command, count)
+                encoded = I2C.Sensors.read_cmd16(command, count)
                 values = self.__decode(encoded)
 
             finally:
-                I2C.end_tx()
+                I2C.Sensors.end_tx()
 
             time.sleep(wait)
             return values
@@ -310,13 +310,13 @@ class SPS30(OPC):
             self.obtain_lock()
 
             try:
-                I2C.start_tx(self.__i2c_addr)
+                I2C.Sensors.start_tx(self.__i2c_addr)
 
                 encoded = self.__encode(values)
-                I2C.write_addr16(command, *encoded)
+                I2C.Sensors.write_addr16(command, *encoded)
 
             finally:
-                I2C.end_tx()
+                I2C.Sensors.end_tx()
 
             time.sleep(wait)
 

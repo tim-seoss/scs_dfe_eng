@@ -29,8 +29,7 @@ from scs_host.sys.host import Host
 
 
 try:
-    I2C.open(Host.I2C_SENSORS)
-
+    I2C.Sensors.open()
 
     interface_conf = InterfaceConf.load(Host)
     print(interface_conf)
@@ -103,4 +102,4 @@ try:
     print("-")
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

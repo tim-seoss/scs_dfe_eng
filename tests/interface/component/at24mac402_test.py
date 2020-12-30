@@ -20,10 +20,10 @@ Host.enable_eeprom_access()
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_EEPROM)
+    I2C.Sensors.open()
 
     eeprom = AT24MAC402()
     print(eeprom)
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

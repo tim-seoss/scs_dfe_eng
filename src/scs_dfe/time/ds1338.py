@@ -148,10 +148,10 @@ class DS1338(object):
     @classmethod
     def __read_reg(cls, addr):
         try:
-            I2C.start_tx(cls.__ADDR)
-            value = I2C.read_cmd(addr, 1)
+            I2C.Sensors.start_tx(cls.__ADDR)
+            value = I2C.Sensors.read_cmd(addr, 1)
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
         return value
 
@@ -164,10 +164,10 @@ class DS1338(object):
     @classmethod
     def __write_reg(cls, addr, value):
         try:
-            I2C.start_tx(cls.__ADDR)
-            I2C.write(addr, value)
+            I2C.Sensors.start_tx(cls.__ADDR)
+            I2C.Sensors.write(addr, value)
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

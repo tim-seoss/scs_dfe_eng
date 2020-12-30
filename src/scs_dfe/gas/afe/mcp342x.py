@@ -102,11 +102,11 @@ class MCP342X(object):
         returned value is voltage
         """
         try:
-            I2C.start_tx(self.addr)
+            I2C.Sensors.start_tx(self.addr)
             v, config = self.__read()
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
         if config & MCP342X.__START:
@@ -124,7 +124,7 @@ class MCP342X(object):
         self.start_conversion()
 
         try:
-            I2C.start_tx(self.addr)
+            I2C.Sensors.start_tx(self.addr)
 
             while True:
                 v, config = self.__read()
@@ -135,7 +135,7 @@ class MCP342X(object):
                 time.sleep(MCP342X.RATE_240)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
         return v
@@ -145,7 +145,7 @@ class MCP342X(object):
 
     def __read(self):
         # get data...
-        msb, lsb, config = I2C.read(3)
+        msb, lsb, config = I2C.Sensors.read(3)
 
         unsigned = (msb << 8) | lsb
 
@@ -159,11 +159,11 @@ class MCP342X(object):
 
     def __write(self, config):
         try:
-            I2C.start_tx(self.addr)
-            I2C.write(config)
+            I2C.Sensors.start_tx(self.addr)
+            I2C.Sensors.write(config)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

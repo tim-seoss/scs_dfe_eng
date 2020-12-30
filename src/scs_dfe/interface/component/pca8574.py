@@ -50,25 +50,25 @@ class PCA8574(object):
 
     def read(self):
         try:
-            I2C.start_tx(self.__addr)
-            byte = I2C.read(1)
+            I2C.Sensors.start_tx(self.__addr)
+            byte = I2C.Sensors.read(1)
 
         except RuntimeError:
             return None
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
         return byte
 
 
     def write(self, byte):
         try:
-            I2C.start_tx(self.__addr)
-            I2C.write(byte)
+            I2C.Sensors.start_tx(self.__addr)
+            I2C.Sensors.write(byte)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

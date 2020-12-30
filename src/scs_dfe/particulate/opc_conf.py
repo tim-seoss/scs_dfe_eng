@@ -6,8 +6,7 @@ Created on 11 Jul 2017
 settings for OPCMonitor
 
 example JSON:
-{"model": "N3", "sample-period": 10, "restart-on-zeroes": true, "power-saving": false,
-"inf": "/home/scs/SCS/pipes/lambda-model-pmx-s1.uds", "exg": []}
+{"model": "N3", "sample-period": 10, "restart-on-zeroes": true, "power-saving": false}
 """
 
 from collections import OrderedDict
@@ -21,11 +20,6 @@ from scs_dfe.particulate.opc_n3.opc_n3 import OPCN3
 from scs_dfe.particulate.opc_r1.opc_r1 import OPCR1
 
 from scs_dfe.particulate.sps_30.sps_30 import SPS30
-
-try:
-    from scs_exegesis.particulate.exegete_catalogue import ExegeteCatalogue
-except ImportError:
-    from scs_core.exegesis.particulate.exegete_catalogue import ExegeteCatalogue
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -59,11 +53,7 @@ class OPCConf(MultiPersistentJSONable):
         bus = jdict.get('bus')
         address = jdict.get('address')
 
-        inference = jdict.get('inf')
-        exegete_names = jdict.get('exg', [])
-
-        return cls(model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names,
-                   name=name)
+        return cls(model, sample_period, restart_on_zeroes, power_saving, bus, address, name=name)
 
 
     @classmethod
@@ -73,8 +63,7 @@ class OPCConf(MultiPersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, model, sample_period, restart_on_zeroes, power_saving, bus, address, inference, exegete_names,
-                 name=None):
+    def __init__(self, model, sample_period, restart_on_zeroes, power_saving, bus, address, name=None):
         """
         Constructor
         """
@@ -87,28 +76,6 @@ class OPCConf(MultiPersistentJSONable):
 
         self.__bus = bus                                            # int
         self.__address = address                                    # int
-
-        self.__inference = inference                                # string
-        self.__exegete_names = set(exegete_names)                   # set of string
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def incompatible_exegetes(self):
-        incompatibles = []
-
-        for name in self.exegete_names:
-            try:
-                exegete = ExegeteCatalogue.standard(name)
-
-            except NotImplementedError:
-                incompatibles.append(name)
-                continue
-
-            if exegete.opc() != self.model:
-                incompatibles.append(name)
-
-        return incompatibles
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -171,16 +138,6 @@ class OPCConf(MultiPersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def add_exegete(self, exegete):
-        self.__exegete_names.add(exegete)
-
-
-    def discard_exegete(self, exegete):
-        self.__exegete_names.discard(exegete)                   # does nothing if exegete not present
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
     @property
     def model(self):
         return self.__model
@@ -211,16 +168,6 @@ class OPCConf(MultiPersistentJSONable):
         return self.__address
 
 
-    @property
-    def inference(self):
-        return self.__inference
-
-
-    @property
-    def exegete_names(self):
-        return sorted(self.__exegete_names)
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     def as_json(self):
@@ -237,9 +184,6 @@ class OPCConf(MultiPersistentJSONable):
         if self.__address is not None:
             jdict['address'] = self.address
 
-        jdict['inf'] = self.inference
-        jdict['exg'] = self.exegete_names
-
         return jdict
 
 
@@ -247,6 +191,6 @@ class OPCConf(MultiPersistentJSONable):
 
     def __str__(self, *args, **kwargs):
         return "OPCConf:{name:%s, model:%s, sample_period:%s, restart_on_zeroes:%s, power_saving:%s, " \
-               "bus:%s, address:%s, inference:%s, exegete_names:%s}" %  \
+               "bus:%s, address:%s}" %  \
                (self.name, self.model, self.sample_period, self.restart_on_zeroes, self.power_saving,
-                self.bus, self.address, self.inference, self.exegete_names)
+                self.bus, self.address)

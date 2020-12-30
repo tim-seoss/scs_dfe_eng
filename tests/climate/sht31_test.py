@@ -17,7 +17,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-I2C.open(Host.I2C_SENSORS)
+I2C.Sensors.open()
 
 sht_conf = SHTConf.load(Host)
 sht = sht_conf.ext_sht()
@@ -37,4 +37,4 @@ except KeyboardInterrupt:
     print("sh31_test: terminated", file=sys.stderr)
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

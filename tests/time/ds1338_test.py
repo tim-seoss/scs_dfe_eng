@@ -14,7 +14,6 @@ from scs_core.data.rtc_datetime import RTCDatetime
 from scs_dfe.time.ds1338 import DS1338
 
 from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -33,7 +32,7 @@ print(rtc_datetime)
 print("-")
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     # clock...
     DS1338.init()
@@ -62,4 +61,4 @@ try:
     print("-")
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()
