@@ -33,7 +33,7 @@ sensors = (Sensor.find(Sensor.CODE_OX), Sensor.find(Sensor.CODE_NO2), Sensor.fin
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     pid = sensors[3]
     print(pid)
@@ -52,4 +52,4 @@ try:
         time.sleep(1)
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

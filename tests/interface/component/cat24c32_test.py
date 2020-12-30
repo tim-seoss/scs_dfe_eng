@@ -22,7 +22,7 @@ Host.enable_eeprom_access()
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_EEPROM)
+    I2C.EEPROM.open()
 
     # hard-coded path...
     file_image = EEPROMImage.construct_from_file('/home/pi/hats/eepromutils/myhat.eep', CAT24C32.SIZE)
@@ -45,4 +45,4 @@ try:
     print("-")
 
 finally:
-    I2C.close()
+    I2C.EEPROM.close()

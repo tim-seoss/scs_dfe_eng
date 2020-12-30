@@ -32,11 +32,11 @@ class MPL115A2Reg:
     @classmethod
     def convert(cls):
         try:
-            I2C.start_tx(MPL115A2Reg.__I2C_ADDR)
-            I2C.write(cls.__CMD_START_CONV, 0x00)
+            I2C.Sensors.start_tx(MPL115A2Reg.__I2C_ADDR)
+            I2C.Sensors.write(cls.__CMD_START_CONV, 0x00)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -68,13 +68,13 @@ class MPL115A2Reg:
 
     def __read_raw(self):
         try:
-            I2C.start_tx(self.__I2C_ADDR)
-            values = I2C.read_cmd(self.__reg_addr, 2)
+            I2C.Sensors.start_tx(self.__I2C_ADDR)
+            values = I2C.Sensors.read_cmd(self.__reg_addr, 2)
 
             return values[0] << 8 | values[1]
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------
