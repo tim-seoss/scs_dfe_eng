@@ -107,7 +107,7 @@ class GPSMonitor(SynchronisedProcess):
                 if datum.quality:
                     self.__averaging.append(datum)          # only append valid positional fixes
 
-                report = self.__averaging.compute()
+                report = self.__averaging.mid()
 
                 if report is None:
                     report = datum                          # provide current datum when there is no average
