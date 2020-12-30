@@ -146,7 +146,7 @@ try:
 
             sensor.start_periodic_measurement(pressure)
 
-        print("average: %s" % average.compute())
+        print("average: %s" % average.mid())
         print("-", file=sys.stderr)
 
 
