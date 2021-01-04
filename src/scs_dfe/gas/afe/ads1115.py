@@ -207,11 +207,11 @@ class ADS1115(object):
 
     def __read_config(self):
         try:
-            I2C.start_tx(self.__addr)
-            msb, lsb = I2C.read_cmd(ADS1115.__REG_CONFIG, 2)
+            I2C.Sensors.start_tx(self.__addr)
+            msb, lsb = I2C.Sensors.read_cmd(ADS1115.__REG_CONFIG, 2)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
         config = (msb << 8) | lsb
         return config
@@ -219,20 +219,20 @@ class ADS1115(object):
 
     def __write_config(self, config):
         try:
-            I2C.start_tx(self.__addr)
-            I2C.write(ADS1115.__REG_CONFIG, config >> 8, config & 0xff)
+            I2C.Sensors.start_tx(self.__addr)
+            I2C.Sensors.write(ADS1115.__REG_CONFIG, config >> 8, config & 0xff)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
 
     def __read_conv(self):
         try:
-            I2C.start_tx(self.__addr)
-            msb, lsb = I2C.read_cmd(ADS1115.__REG_CONV, 2)
+            I2C.Sensors.start_tx(self.__addr)
+            msb, lsb = I2C.Sensors.read_cmd(ADS1115.__REG_CONV, 2)
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
 
         # render voltage...
         unsigned = (msb << 8) | lsb

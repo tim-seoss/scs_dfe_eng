@@ -15,7 +15,6 @@ from scs_core.data.json import JSONify
 from scs_dfe.gas.scd30.scd30 import SCD30
 
 from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -23,7 +22,7 @@ from scs_host.sys.host import Host
 sampling_interval = 3
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     sensor = SCD30()
     print(sensor)
@@ -147,7 +146,7 @@ try:
 
             sensor.start_periodic_measurement(pressure)
 
-        print("average: %s" % average.compute())
+        print("average: %s" % average.mid())
         print("-", file=sys.stderr)
 
 
@@ -155,4 +154,4 @@ except KeyboardInterrupt:
     print()
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

@@ -9,13 +9,12 @@ Created on 9 Dec 2019
 from scs_dfe.interface.dfe.dfe import MCP9808
 
 from scs_host.bus.i2c import I2C
-from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     sensor = MCP9808(True)
     print(sensor)
@@ -26,4 +25,4 @@ try:
     print("-")
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

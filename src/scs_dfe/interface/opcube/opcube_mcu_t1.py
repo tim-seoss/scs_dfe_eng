@@ -143,15 +143,15 @@ class OPCubeMCUt1(OPCubeMCU):
 
         try:
             self.obtain_lock()
-            I2C.start_tx(self.__addr)
+            I2C.Utilities.start_tx(self.__addr)
 
-            response = I2C.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
+            response = I2C.Utilities.read_cmd(message, response_size, self.__SEND_WAIT_TIME)
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
 
         finally:
-            I2C.end_tx()
+            I2C.Utilities.end_tx()
             self.release_lock()
 
 

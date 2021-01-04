@@ -17,7 +17,7 @@ from scs_host.sys.host import Host
 # --------------------------------------------------------------------------------------------------------------------
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     opc = OPCN3(False, Host.opc_spi_bus(), Host.opc_spi_device())
     print(opc)
@@ -29,4 +29,4 @@ except KeyboardInterrupt:
     print("opc_off: KeyboardInterrupt", file=sys.stderr)
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

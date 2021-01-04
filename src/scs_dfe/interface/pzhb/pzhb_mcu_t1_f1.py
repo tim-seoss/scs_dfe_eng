@@ -124,16 +124,16 @@ class PZHBMCUt1f1(PZHBMCU):
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
-            I2C.start_tx(self.__addr)
+            I2C.Sensors.start_tx(self.__addr)
 
-            response = I2C.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
+            response = I2C.Sensors.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
 
             time.sleep(self.__SEND_WAIT_TIME)
 
             return response
 
         finally:
-            I2C.end_tx()
+            I2C.Sensors.end_tx()
             self.release_lock()
 
 

@@ -34,7 +34,7 @@ timer = IntervalTimer(0.5)
 # run...
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     while timer.true():
         climate = sht.sample()
@@ -48,4 +48,4 @@ except KeyboardInterrupt:
     print(file=sys.stderr)
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()

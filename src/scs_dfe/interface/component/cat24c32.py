@@ -38,24 +38,24 @@ class CAT24C32(object):
     @classmethod
     def __read_image(cls, addr, count):
         try:
-            I2C.start_tx(Host.DFE_EEPROM_ADDR)
+            I2C.EEPROM.start_tx(Host.DFE_EEPROM_ADDR)
 
-            content = I2C.read_cmd16(addr, count)
+            content = I2C.EEPROM.read_cmd16(addr, count)
 
             return EEPROMImage(content)
         finally:
-            I2C.end_tx()
+            I2C.EEPROM.end_tx()
 
 
     @classmethod
     def __write_image(cls, addr, values):       # max 32 values
         try:
-            I2C.start_tx(Host.DFE_EEPROM_ADDR)
+            I2C.EEPROM.start_tx(Host.DFE_EEPROM_ADDR)
 
-            I2C.write_addr16(addr, *values)
+            I2C.EEPROM.write_addr16(addr, *values)
             time.sleep(cls.__TWR)
         finally:
-            I2C.end_tx()
+            I2C.EEPROM.end_tx()
 
 
     # ----------------------------------------------------------------------------------------------------------------

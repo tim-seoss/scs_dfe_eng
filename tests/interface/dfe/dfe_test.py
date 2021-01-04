@@ -19,7 +19,7 @@ print(interface)
 print("-")
 
 try:
-    I2C.open(Host.I2C_SENSORS)
+    I2C.Sensors.open()
 
     gas_sensors = interface.gas_sensors(Host)
     print(gas_sensors)
@@ -30,4 +30,4 @@ try:
     print("-")
 
 finally:
-    I2C.close()
+    I2C.Sensors.close()
