@@ -1,6 +1,5 @@
 # scs_dfe_eng
-Environmental sampling abstractions for the South Coast Science digital front-end (DFE) board for Raspberry Pi
-and BeagleBone Black.
+Environmental sampling abstractions for the South Coast Science digital front-end boards
 
 _Contains library classes only._
 
