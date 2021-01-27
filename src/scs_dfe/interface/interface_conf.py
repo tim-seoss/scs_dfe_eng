@@ -9,10 +9,7 @@ example JSON:
 {"model": "DFE", "inf": "/home/scs/SCS/pipes/lambda-model-gas-s1.uds"}
 """
 
-from collections import OrderedDict
-
-from scs_core.data.json import PersistentJSONable
-
+from scs_core.interface.interface_conf import InterfaceConf as AbstractInterfaceConf
 from scs_dfe.interface.dfe.dfe import DFE
 
 from scs_dfe.interface.opcube.opcube import OPCube
@@ -27,7 +24,7 @@ from scs_dfe.interface.pzhb.pzhb_mcu_t3_f1 import PZHBMCUt3f1
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class InterfaceConf(PersistentJSONable):
+class InterfaceConf(AbstractInterfaceConf):
     """
     classdocs
     """
@@ -50,23 +47,16 @@ class InterfaceConf(PersistentJSONable):
         return cls.__MODELS
 
 
-    __FILENAME = "interface_conf.json"
-
-    @classmethod
-    def persistence_location(cls):
-        return cls.conf_dir(), cls.__FILENAME
-
-
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
     def construct_from_jdict(cls, jdict):
         if not jdict:
-            return InterfaceConf(cls.DEFAULT_MODEL)
+            return cls(cls.DEFAULT_MODEL)
 
         model = jdict.get('model')
 
-        return InterfaceConf(model)
+        return cls(model)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -75,7 +65,7 @@ class InterfaceConf(PersistentJSONable):
         """
         Constructor
         """
-        self.__model = model                                        # string
+        super().__init__(model)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -113,22 +103,5 @@ class InterfaceConf(PersistentJSONable):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    @property
-    def model(self):
-        return self.__model
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    def as_json(self):
-        jdict = OrderedDict()
-
-        jdict['model'] = self.model
-
-        return jdict
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
     def __str__(self, *args, **kwargs):
-        return "InterfaceConf:{model:%s, inference:%s}" % self.model
+        return "InterfaceConf(dfe):{model:%s}" % self.model
