@@ -50,7 +50,7 @@ class InterfaceConf(AbstractInterfaceConf):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct_from_jdict(cls, jdict):
+    def construct_from_jdict(cls, jdict, default=True):
         if not jdict:
             return cls(cls.DEFAULT_MODEL)
 
