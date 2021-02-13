@@ -60,6 +60,14 @@ class PZHBMCU(ABC):
         pass
 
 
+    def power_all(self, enable):
+        self.power_gases(enable)
+        self.power_gps(enable)
+        self.power_ndir(enable)
+        self.power_opc(enable)
+        self.power_modem(enable)
+
+
     @abstractmethod
     def power_gases(self, enable):
         pass

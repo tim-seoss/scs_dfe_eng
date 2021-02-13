@@ -3,7 +3,7 @@ Created on 31 Mar 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
+STMicro controller for the OPCube processor card, type 1
 
 https://github.com/south-coast-science/scs_opcube_controller_t1
 https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Projects/STM32F302R8-Nucleo/Examples/ADC/ADC_Sequencer/Src/main.c
