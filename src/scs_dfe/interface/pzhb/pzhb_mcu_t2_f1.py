@@ -96,24 +96,24 @@ class PZHBMCUt2f1(PZHBMCU):
         return PZHBLED(self)
 
 
-    def power_gases(self, enable):                  # switches digital component only
-        self.__cmd(0, 'p', 'g', enable)
+    def power_gases(self, on):                  # switches digital component only
+        self.__cmd(0, 'p', 'g', on)
 
 
-    def power_gps(self, enable):
-        self.__cmd(0, 'p', 'p', enable)
+    def power_gps(self, on):
+        self.__cmd(0, 'p', 'p', on)
 
 
-    def power_modem(self, enable):
-        self.__cmd(0, 'p', 'm', enable)
+    def power_modem(self, on):
+        self.__cmd(0, 'p', 'm', on)
 
 
-    def power_ndir(self, enable):
-        self.__cmd(0, 'p', 'n', enable)
+    def power_ndir(self, on):
+        self.__cmd(0, 'p', 'n', on)
 
 
-    def power_opc(self, enable):
-        self.__cmd(0, 'p', 'o', enable)
+    def power_opc(self, on):
+        self.__cmd(0, 'p', 'o', on)
 
 
     # ----------------------------------------------------------------------------------------------------------------
