@@ -53,25 +53,25 @@ class Interface(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
-    def power_gases(self, enable):                  # switches digital component only
+    def power_gases(self, on):                  # switches digital component only
         pass
 
 
     @abstractmethod
-    def power_gps(self, enable):
+    def power_gps(self, on):
         pass
 
 
     @abstractmethod
-    def power_modem(self, enable):
+    def power_modem(self, on):
         pass
 
 
     @abstractmethod
-    def power_ndir(self, enable):
+    def power_ndir(self, on):
         pass
 
 
     @abstractmethod
-    def power_opc(self, enable):
+    def power_opc(self, on):
         pass

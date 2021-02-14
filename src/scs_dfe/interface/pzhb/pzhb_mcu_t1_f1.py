@@ -99,23 +99,23 @@ class PZHBMCUt1f1(PZHBMCU):
         return IOLED()
 
 
-    def power_gases(self, enable):                  # switches digital component only
+    def power_gases(self, on):                  # switches digital component only
         pass
 
 
-    def power_gps(self, enable):
-        self.__io.gps_power = enable
+    def power_gps(self, on):
+        self.__io.gps_power = on
 
 
-    def power_ndir(self, enable):
-        self.__io.ndir_power = enable
+    def power_ndir(self, on):
+        self.__io.ndir_power = on
 
 
-    def power_opc(self, enable):
-        self.__io.opc_power = enable
+    def power_opc(self, on):
+        self.__io.opc_power = on
 
 
-    def power_modem(self, enable):
+    def power_modem(self, on):
         pass
 
 

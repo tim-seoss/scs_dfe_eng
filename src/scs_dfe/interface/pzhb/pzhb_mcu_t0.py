@@ -52,23 +52,23 @@ class PZHBMCUt0(PZHBMCU):
         return None
 
 
-    def power_gases(self, enable):
+    def power_gases(self, on):
         pass
 
 
-    def power_gps(self, enable):
+    def power_gps(self, on):
         pass
 
 
-    def power_modem(self, enable):
+    def power_modem(self, on):
         pass
 
 
-    def power_ndir(self, enable):
+    def power_ndir(self, on):
         pass
 
 
-    def power_opc(self, enable):
+    def power_opc(self, on):
         pass
 
 
