@@ -3,7 +3,7 @@ Created on 16 Sep 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-An abstract OPCube controller MCU
+An abstract OPCube controller
 """
 
 from abc import ABC, abstractmethod
@@ -51,26 +51,34 @@ class OPCubeMCU(ABC):
         pass
 
 
+    def power_all(self, on):
+        self.power_gases(on)
+        self.power_gps(on)
+        self.power_ndir(on)
+        self.power_opc(on)
+        self.power_modem(on)
+
+
     @abstractmethod
-    def power_gases(self, enable):
+    def power_gases(self, on):
         pass
 
 
     @abstractmethod
-    def power_gps(self, enable):
+    def power_gps(self, on):
         pass
 
 
     @abstractmethod
-    def power_ndir(self, enable):
+    def power_ndir(self, on):
         pass
 
 
     @abstractmethod
-    def power_opc(self, enable):
+    def power_opc(self, on):
         pass
 
 
     @abstractmethod
-    def power_modem(self, enable):
+    def power_modem(self, on):
         pass

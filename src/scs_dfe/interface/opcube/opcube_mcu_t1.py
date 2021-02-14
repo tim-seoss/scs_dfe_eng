@@ -3,7 +3,7 @@ Created on 31 Mar 2020
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-STMicro controller for Raspberry Pi Zero Header Breakout board (PZHB) Type 3
+STMicro controller for the OPCube processor card, type 1
 
 https://github.com/south-coast-science/scs_opcube_controller_t1
 https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Projects/STM32F302R8-Nucleo/Examples/ADC/ADC_Sequencer/Src/main.c
@@ -106,24 +106,24 @@ class OPCubeMCUt1(OPCubeMCU):
         return OPCubeLED(self)
 
 
-    def power_gases(self, enable):                  # switches digital component only
-        self.__cmd(0, 'p', 'g', enable)
+    def power_gases(self, on):                  # switches digital component only
+        self.__cmd(0, 'p', 'g', on)
 
 
-    def power_gps(self, enable):
-        self.__cmd(0, 'p', 'p', enable)
+    def power_gps(self, on):
+        self.__cmd(0, 'p', 'p', on)
 
 
-    def power_modem(self, enable):
-        self.__cmd(0, 'p', 'm', enable)
+    def power_modem(self, on):
+        self.__cmd(0, 'p', 'm', on)
 
 
-    def power_ndir(self, enable):
-        self.__cmd(0, 'p', 'n', enable)
+    def power_ndir(self, on):
+        self.__cmd(0, 'p', 'n', on)
 
 
-    def power_opc(self, enable):
-        self.__cmd(0, 'p', 'o', enable)
+    def power_opc(self, on):
+        self.__cmd(0, 'p', 'o', on)
 
 
     # ----------------------------------------------------------------------------------------------------------------

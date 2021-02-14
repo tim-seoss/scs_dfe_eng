@@ -69,24 +69,24 @@ class OPCube(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def power_gases(self, enable):
-        return self.__mcu.power_gases(enable)
+    def power_gases(self, on):
+        return self.__mcu.power_gases(on)
 
 
-    def power_gps(self, enable):
-        return self.__mcu.power_gps(enable)
+    def power_gps(self, on):
+        return self.__mcu.power_gps(on)
 
 
-    def power_modem(self, enable):
-        return self.__mcu.power_modem(enable)
+    def power_modem(self, on):
+        return self.__mcu.power_modem(on)
 
 
-    def power_ndir(self, enable):
-        return self.__mcu.power_ndir(enable)
+    def power_ndir(self, on):
+        return self.__mcu.power_ndir(on)
 
 
-    def power_opc(self, enable):
-        return self.__mcu.power_opc(enable)
+    def power_opc(self, on):
+        return self.__mcu.power_opc(on)
 
 
     # ----------------------------------------------------------------------------------------------------------------
