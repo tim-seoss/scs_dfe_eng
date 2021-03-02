@@ -19,26 +19,27 @@ from scs_host.bus.i2c import I2C
 
 # --------------------------------------------------------------------------------------------------------------------
 
+scd30 = None
 sampling_interval = 3
 
 try:
     I2C.Sensors.open()
 
-    sensor = SCD30()
-    print(sensor)
+    scd30 = SCD30()
+    print(scd30)
     print("-", file=sys.stderr)
 
-    # sensor.reset()
+    # scd30.reset()
 
 
     # ----------------------------------------------------------------------------------------------------------------
-    # sensor...
+    # scd30...
 
-    firmware = sensor.get_firmware_version()
+    firmware = scd30.get_firmware_version()
     print("firmware: %s" % str(firmware), file=sys.stderr)
 
 
-    serial = sensor.get_serial_no()
+    serial = scd30.get_serial_no()
     print("serial: %s" % str(serial), file=sys.stderr)
     print("-", file=sys.stderr)
 
@@ -46,12 +47,12 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
     # temperature_offset...
 
-    temperature_offset = sensor.get_temperature_offset()
+    temperature_offset = scd30.get_temperature_offset()
     print("old temperature_offset: %s" % temperature_offset, file=sys.stderr)
 
-    # sensor.set_temperature_offset(0.0)
+    scd30.set_temperature_offset(0.0)
 
-    temperature_offset = sensor.get_temperature_offset()
+    temperature_offset = scd30.get_temperature_offset()
     print("new temperature_offset: %s" % temperature_offset, file=sys.stderr)
     print("-", file=sys.stderr)
 
@@ -59,37 +60,38 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
     # altitude...
 
-    altitude = sensor.get_altitude()
+    altitude = scd30.get_altitude()
     print("old altitude: %s" % altitude, file=sys.stderr)
 
-    # sensor.set_altitude(100)
-    #
-    # altitude = sensor.get_altitude()
-    # print("new altitude: %s" % altitude, file=sys.stderr)
-    # print("-", file=sys.stderr)
+    scd30.set_altitude(100)
+
+    altitude = scd30.get_altitude()
+    print("new altitude: %s" % altitude, file=sys.stderr)
+    print("-", file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # forced_calib...
 
-    forced_calib = sensor.get_forced_calib()
+    forced_calib = scd30.get_forced_calib()
     print("old forced_calib: %s" % forced_calib, file=sys.stderr)
 
-    # sensor.set_forced_calib(1000)
+    scd30.set_forced_calib(1000)
 
-    # forced_calib = sensor.get_forced_calib()
-    # print("new forced_calib: %s" % forced_calib, file=sys.stderr)
+    forced_calib = scd30.get_forced_calib()
+    print("new forced_calib: %s" % forced_calib, file=sys.stderr)
     print("-", file=sys.stderr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # auto_self_calib...
-    auto_self_calib = sensor.get_auto_self_calib()
+
+    auto_self_calib = scd30.get_auto_self_calib()
     print("old auto_self_calib: %s" % auto_self_calib, file=sys.stderr)
 
-    sensor.set_auto_self_calib(True)
+    scd30.set_auto_self_calib(True)
 
-    auto_self_calib = sensor.get_auto_self_calib()
+    auto_self_calib = scd30.get_auto_self_calib()
     print("new auto_self_calib: %s" % auto_self_calib, file=sys.stderr)
     print("-", file=sys.stderr)
 
@@ -97,23 +99,23 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
     # ready...
 
-    ready = sensor.get_data_ready()
+    ready = scd30.get_data_ready()
     print("ready: %s" % ready, file=sys.stderr)
     print("-", file=sys.stderr)
 
     if ready:
-        measurement = sensor.read_measurement()         # discard reading from previous test
+        measurement = scd30.read_measurement()         # discard reading from previous test
 
 
     # ----------------------------------------------------------------------------------------------------------------
     # interval...
 
-    interval = sensor.get_measurement_interval()
+    interval = scd30.get_measurement_interval()
     print("old interval: %s" % interval, file=sys.stderr)
 
-    sensor.set_measurement_interval(sampling_interval)
+    scd30.set_measurement_interval(sampling_interval)
 
-    interval = sensor.get_measurement_interval()
+    interval = scd30.get_measurement_interval()
     print("new interval: %s" % interval, file=sys.stderr)
     print("-", file=sys.stderr)
 
@@ -121,22 +123,22 @@ try:
     # ----------------------------------------------------------------------------------------------------------------
     # run...
 
-    # sensor.stop_periodic_measurement()
+    scd30.stop_periodic_measurement()
 
     for pressure in (90, 100, 110, None):
         print("pressure: %s" % pressure, file=sys.stderr)
 
         average = Average()
 
-        sensor.start_periodic_measurement(pressure)
+        scd30.start_periodic_measurement(ambient_pressure_kpa=pressure)
 
         for _ in range(10):
             start_time = time.time()
 
-            while not sensor.get_data_ready():
+            while not scd30.get_data_ready():
                 time.sleep(0.1)
 
-            measurement = sensor.read_measurement()
+            measurement = scd30.read_measurement()
             end_time = time.time() - start_time
 
             print("%0.1f: %s" % (end_time, JSONify.dumps(measurement.as_json())))
@@ -144,7 +146,7 @@ try:
 
             average.append(measurement)
 
-            sensor.start_periodic_measurement(pressure)
+            scd30.start_periodic_measurement(ambient_pressure_kpa=pressure)
 
         print("average: %s" % average.mid())
         print("-", file=sys.stderr)
@@ -154,4 +156,7 @@ except KeyboardInterrupt:
     print()
 
 finally:
+    if scd30:
+        scd30.stop_periodic_measurement()
+
     I2C.Sensors.close()
