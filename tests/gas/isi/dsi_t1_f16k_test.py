@@ -10,11 +10,15 @@ import sys
 import time
 
 from scs_dfe.gas.isi.dsi_t1_f16k import DSIt1f16K
+from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
+
+interface = None
 
 controller = DSIt1f16K(DSIt1f16K.DEFAULT_ADDR)
 print(controller)
@@ -24,6 +28,14 @@ print(controller)
 
 try:
     I2C.Sensors.open()
+
+    interface_conf = InterfaceConf.load(Host)
+    print(interface_conf)
+
+    interface = interface_conf.interface()
+    print(interface)
+
+    interface.power_gases(True)
 
     ident = controller.version_ident()
     print("ident:[%s]" % ident)
@@ -62,4 +74,7 @@ except KeyboardInterrupt:
     print("-")
 
 finally:
+    if interface:
+        interface.power_gases(True)
+
     I2C.Sensors.close()
