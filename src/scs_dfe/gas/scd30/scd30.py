@@ -20,8 +20,6 @@ from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
-# TODO: check that sampling intervals work
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class SCD30(object):
@@ -129,10 +127,13 @@ class SCD30(object):
     # period...
 
     def start_periodic_measurement(self, ambient_pressure_kpa=None):
-        if ambient_pressure_kpa and not (self.MIN_PRESSURE <= ambient_pressure_kpa <= self.MAX_PRESSURE):
+        if ambient_pressure_kpa is None:
+            ambient_pressure_kpa = self.DEFAULT_AMBIENT_PRESSURE
+
+        if not (self.MIN_PRESSURE <= ambient_pressure_kpa <= self.MAX_PRESSURE):
             raise ValueError(ambient_pressure_kpa)
 
-        ambient_pressure_mbar = 0 if ambient_pressure_kpa is None else int(ambient_pressure_kpa * 10.0)
+        ambient_pressure_mbar = int(ambient_pressure_kpa * 10.0)
 
         try:
             self.obtain_lock()
@@ -328,10 +329,12 @@ class SCD30(object):
     def obtain_lock(self):
         Lock.acquire(self.__lock_name, self.__LOCK_TIMEOUT)
         self.__selector.enable(True, False)
+        time.sleep(0.001)
 
 
     def release_lock(self):
         self.__selector.enable(False, False)
+        time.sleep(0.001)
         Lock.release(self.__lock_name)
 
 
