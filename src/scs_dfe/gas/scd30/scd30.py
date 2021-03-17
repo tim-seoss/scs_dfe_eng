@@ -331,6 +331,7 @@ class SCD30(object):
         self.__selector.enable(True, False)
         time.sleep(0.001)
 
+
     def release_lock(self):
         self.__selector.enable(False, False)
         time.sleep(0.001)
