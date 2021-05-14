@@ -10,9 +10,7 @@ https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Projects/STM32F302
 https://github.com/STMicroelectronics/STM32CubeL0/blob/master/Projects/NUCLEO-L031K6/Examples/ADC/ADC_DMA_Transfer/Src/main.c
 """
 
-import sys
 import time
-import traceback
 
 from scs_core.data.datum import Decode
 
@@ -109,8 +107,8 @@ class OPCubeMCUt1(OPCubeMCU):
 
 
     def power_gases(self, on):                  # switches digital component only
-        print("*** power_gases: %s" % on, file=sys.stderr)
-        traceback.print_stack()
+        # print("*** power_gases: %s" % on, file=sys.stderr)
+        # traceback.print_stack()
 
         self.__cmd(0, 'p', 'g', on)
 
