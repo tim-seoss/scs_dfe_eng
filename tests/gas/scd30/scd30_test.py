@@ -12,9 +12,12 @@ import time
 from scs_core.data.average import Average
 from scs_core.data.json import JSONify
 
+from scs_core.gas.scd30.scd30_baseline import SCD30Baseline
+
 from scs_dfe.gas.scd30.scd30 import SCD30
 
 from scs_host.bus.i2c import I2C
+from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -25,8 +28,12 @@ sampling_interval = 3
 try:
     I2C.Sensors.open()
 
-    scd30 = SCD30()
+    baseline = SCD30Baseline.load(Host)
+    print(baseline)
+
+    scd30 = SCD30(baseline)
     print(scd30)
+
     print("-", file=sys.stderr)
 
     # scd30.reset()
