@@ -75,13 +75,14 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self):
+    def __init__(self, baseline):
         """
         Constructor
         """
         self.__selector = PCA9543A()
 
         self.__addr = self.__I2C_ADDR
+        self.__baseline = baseline
         self.__ambient_pressure_kpa = None
 
 
@@ -120,7 +121,9 @@ class SCD30(object):
         temp = Decode.float(words[2] + words[3], '>')
         humid = Decode.float(words[4] + words[5], '>')
 
-        return SCD30Datum(co2, temp, humid)
+        corrected_co2 = co2 + self.__baseline
+
+        return SCD30Datum(corrected_co2, temp, humid)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -416,4 +419,5 @@ class SCD30(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "SCD30:{selector:%s, ambient_pressure_kpa:%s}" % (self.__selector, self.ambient_pressure_kpa)
+        return "SCD30:{selector:%s, baseline:%s, ambient_pressure_kpa:%s}" % \
+               (self.__selector, self.__baseline, self.ambient_pressure_kpa)

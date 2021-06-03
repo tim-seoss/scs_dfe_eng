@@ -7,9 +7,12 @@ example JSON:
 {"sample-interval": 2, "temp-offset": 0.0}
 """
 
+from scs_core.gas.scd30.scd30_baseline import SCD30Baseline
 from scs_core.gas.scd30.scd30_conf import SCD30Conf as AbstractSCD30Conf
 
 from scs_dfe.gas.scd30.scd30 import SCD30
+
+from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -32,7 +35,9 @@ class SCD30Conf(AbstractSCD30Conf):
 
     @staticmethod
     def scd30():
-        return SCD30()
+        baseline = SCD30Baseline.load(Host)
+
+        return SCD30(baseline)
 
 
     # ----------------------------------------------------------------------------------------------------------------
