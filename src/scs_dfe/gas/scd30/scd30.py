@@ -12,7 +12,9 @@ https://github.com/Sensirion/embedded-scd/releases/tag/2.1.0
 import time
 
 from scs_core.data.datum import Decode, Encode
+
 from scs_core.gas.scd30.scd30_datum import SCD30Datum
+from scs_core.gas.scd30.scd30_baseline import SCD30Baseline
 
 from scs_dfe.gas.scd30.pca9543a import PCA9543A
 
@@ -75,15 +77,15 @@ class SCD30(object):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, baseline):
+    def __init__(self, baseline: SCD30Baseline):
         """
         Constructor
         """
-        self.__selector = PCA9543A()
+        self.__selector = PCA9543A()                    # PCA9543A
 
-        self.__addr = self.__I2C_ADDR
-        self.__baseline = baseline
-        self.__ambient_pressure_kpa = None
+        self.__addr = self.__I2C_ADDR                   # int
+        self.__baseline = baseline                      # SCD30Baseline
+        self.__ambient_pressure_kpa = None              # float
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -121,7 +123,7 @@ class SCD30(object):
         temp = Decode.float(words[2] + words[3], '>')
         humid = Decode.float(words[4] + words[5], '>')
 
-        corrected_co2 = co2 + self.__baseline
+        corrected_co2 = co2 + self.__baseline.sensor_baseline.offset
 
         return SCD30Datum(corrected_co2, temp, humid)
 
