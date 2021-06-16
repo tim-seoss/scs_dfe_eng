@@ -19,9 +19,9 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DSIt1(object):
+class DSIPIDT1(object):
     """
-    South Coast Science DSI t1 f1 microcontroller
+    South Coast Science DSI Electrochem Type 1 microcontroller
     """
 
     DEFAULT_ADDR =          0x30
@@ -107,7 +107,7 @@ class DSIt1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def obtain_lock(self):
-        Lock.acquire(self.__lock_name, DSIt1.__LOCK_TIMEOUT)
+        Lock.acquire(self.__lock_name, self.__LOCK_TIMEOUT)
 
 
     def release_lock(self):
@@ -129,4 +129,4 @@ class DSIt1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DSIt1:{addr:0x%0.2x}" % self.addr
+        return "DSIPIDT1:{addr:0x%0.2x}" % self.addr
