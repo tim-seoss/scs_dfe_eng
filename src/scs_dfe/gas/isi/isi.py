@@ -14,7 +14,7 @@ import time
 from scs_core.data.str import Str
 from scs_core.gas.isi.isi_datum import ISIDatum
 
-from scs_dfe.gas.isi.dsi_t1_f16k import DSIt1f16K
+from scs_dfe.gas.isi.dsi_elc_t1_f16k import DSIElcT1f16K
 from scs_dfe.gas.sensor_interface import SensorInterface
 
 
@@ -46,7 +46,7 @@ class ISI(SensorInterface):
         Constructor
         """
         self.__sensors = sensors
-        self.__adc = DSIt1f16K(DSIt1f16K.DEFAULT_ADDR)
+        self.__adc = DSIElcT1f16K(DSIElcT1f16K.DEFAULT_ADDR)
 
 
     # ----------------------------------------------------------------------------------------------------------------
