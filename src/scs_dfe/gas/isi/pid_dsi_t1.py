@@ -3,7 +3,7 @@ Created on 27 May 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Digital Single Interface (DSI) Type 1
+South Coast Science PID Digital Single Interface (DSI) Type 1
 
 Compatible with:
 https://github.com/south-coast-science/scs_dsi_t1_f1
@@ -28,7 +28,7 @@ class PIDDSIt1(DSI):
 
     DEFAULT_ADDR =          0x30
 
-    CONVERSION_TIME =       0.1             # seconds
+    CONVERSION_TIME =       0.1                 # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ class PIDDSIt1(DSI):
         """
         Constructor
         """
-        self.__addr = addr
+        super().__init__(addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ class PIDDSIt1(DSI):
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
-            I2C.Sensors.start_tx(self.__addr)
+            I2C.Sensors.start_tx(self.addr)
 
             response = I2C.Sensors.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
 
@@ -126,14 +126,7 @@ class PIDDSIt1(DSI):
 
     @property
     def __lock_name(self):
-        return "%s-0x%02x" % (self.__class__.__name__, self.__addr)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def addr(self):
-        return self.__addr
+        return "%s-0x%02x" % (self.__class__.__name__, self.addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
