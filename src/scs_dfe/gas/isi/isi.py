@@ -14,10 +14,11 @@ import time
 from scs_core.data.str import Str
 from scs_core.gas.isi.isi_datum import ISIDatum
 
-from scs_dfe.gas.isi.dsi_elc_t1_f16k import DSIElcT1f16K
+from scs_dfe.gas.isi.elc_dsi_t1_f16k import ElcDSIt1f16K
 from scs_dfe.gas.sensor_interface import SensorInterface
 
 
+# TODO: rename as Gas Sensor Interface
 # TODO: use config to specify which type of DSI is being used
 # TODO: ISI requires multiple DSIt1 instances to support multiple sensors
 
@@ -45,8 +46,8 @@ class ISI(SensorInterface):
         """
         Constructor
         """
-        self.__sensors = sensors
-        self.__adc = DSIElcT1f16K(DSIElcT1f16K.DEFAULT_ADDR)
+        self.__sensors = sensors                                        # array of Sensor
+        self.__adc = ElcDSIt1f16K(ElcDSIt1f16K.DEFAULT_ADDR)            # DSI
 
 
     # ----------------------------------------------------------------------------------------------------------------

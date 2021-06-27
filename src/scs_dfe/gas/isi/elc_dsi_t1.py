@@ -13,15 +13,17 @@ import time
 
 from scs_core.data.datum import Decode
 
+from scs_dfe.gas.isi.dsi import DSI
+
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DSIPIDT1(object):
+class ElcDSIt1(DSI):
     """
-    South Coast Science DSI Electrochem Type 1 microcontroller
+    South Coast Science electrochemical DSI Type 1 microcontroller
     """
 
     DEFAULT_ADDR =          0x30
@@ -48,6 +50,10 @@ class DSIPIDT1(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def power_sensor(self, on):
+        pass
+
 
     def start_conversion(self):
         response = self.__cmd(ord('s'), 1)
@@ -129,4 +135,4 @@ class DSIPIDT1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DSIPIDT1:{addr:0x%0.2x}" % self.addr
+        return "ElcDSIt1:{addr:0x%0.2x}" % self.addr

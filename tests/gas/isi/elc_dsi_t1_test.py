@@ -9,7 +9,7 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.isi.dsi_elc_t1_f16k import DSIElcT1f16K
+from scs_dfe.gas.isi.elc_dsi_t1 import ElcDSIt1
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
@@ -18,9 +18,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-interface = None
-
-controller = DSIElcT1f16K(DSIElcT1f16K.DEFAULT_ADDR)
+controller = ElcDSIt1(ElcDSIt1.DEFAULT_ADDR)
 print(controller)
 
 
@@ -49,8 +47,8 @@ try:
         controller.start_conversion()
         time.sleep(0.1)
 
-        c_wrk, c_aux = controller.read_conversion_count()
-        print('{"wrk": %d, "aux": %d}' % (c_wrk, c_aux))
+        c_wrk, c_aux = controller.read_conversion_voltage()
+        print('{"wrk": %f, "aux": %f}' % (c_wrk, c_aux))
 
         sys.stdout.flush()
 
@@ -74,7 +72,4 @@ except KeyboardInterrupt:
     print("-")
 
 finally:
-    if interface:
-        interface.power_gases(True)
-
     I2C.Sensors.close()

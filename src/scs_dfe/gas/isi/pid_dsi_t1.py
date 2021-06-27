@@ -3,15 +3,17 @@ Created on 27 May 2019
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Digital Single Interface (DSI) Type 1 on 16K ROM MCU
+Digital Single Interface (DSI) Type 1
 
 Compatible with:
-https://github.com/south-coast-science/scs_dsi_t2_f1
+https://github.com/south-coast-science/scs_dsi_t1_f1
 """
 
 import time
 
 from scs_core.data.datum import Decode
+
+from scs_dfe.gas.isi.dsi import DSI
 
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
@@ -19,14 +21,15 @@ from scs_host.lock.lock import Lock
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DSIElcT1f16K(object):
+class PIDDSIt1(DSI):
     """
-    South Coast Science DSI Electrochem Type 1 (16K) microcontroller
+    South Coast Science PID DSI Type 1 microcontroller
     """
 
     DEFAULT_ADDR =          0x30
 
     CONVERSION_TIME =       0.1             # seconds
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -35,9 +38,6 @@ class DSIElcT1f16K(object):
 
     __SEND_WAIT_TIME =      0.010               # seconds
     __LOCK_TIMEOUT =        2.0
-
-    __SAMPLE_MAX_VOLTAGE =  3.3
-    __SAMPLE_MAX_COUNT =    65535
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -50,6 +50,14 @@ class DSIElcT1f16K(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def power_sensor(self, on):
+        cmd = '1' if on else '0'
+        response = self.__cmd(ord(cmd), 1)
+
+        if response != self.__RESPONSE_ACK:
+            raise RuntimeError("response: %s" % response)
+
 
     def start_conversion(self):
         response = self.__cmd(ord('s'), 1)
@@ -68,10 +76,10 @@ class DSIElcT1f16K(object):
 
 
     def read_conversion_voltage(self):
-        c_wrk, c_aux = self.read_conversion_count()
+        response = self.__cmd(ord('v'), 8)
 
-        v_wrk = self.__voltage_conversion(c_wrk)
-        v_aux = self.__voltage_conversion(c_aux)
+        v_aux = Decode.float(response[0:4], '<')            # CS0
+        v_wrk = Decode.float(response[4:8], '<')            # CS1
 
         return round(v_wrk, 5), round(v_aux, 5)
 
@@ -89,10 +97,6 @@ class DSIElcT1f16K(object):
 
 
     # ----------------------------------------------------------------------------------------------------------------
-
-    def __voltage_conversion(self, count):
-        return self.__SAMPLE_MAX_VOLTAGE * count / self.__SAMPLE_MAX_COUNT
-
 
     def __cmd(self, cmd, response_size):
         try:
@@ -135,4 +139,4 @@ class DSIElcT1f16K(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DSIElcT1f16K:{addr:0x%0.2x}" % self.addr
+        return "PIDDSIt1:{addr:0x%0.2x}" % self.addr
