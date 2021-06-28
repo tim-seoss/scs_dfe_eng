@@ -26,9 +26,9 @@ class PIDDSIt1(DSI):
     South Coast Science PID DSI Type 1 microcontroller
     """
 
-    DEFAULT_ADDR =          0x30
+    DEFAULT_ADDR =          0x3c
 
-    CONVERSION_TIME =       0.1                 # seconds
+    CONVERSION_TIME =       0.05                # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -67,21 +67,19 @@ class PIDDSIt1(DSI):
 
 
     def read_conversion_count(self):
-        response = self.__cmd(ord('c'), 4)
+        response = self.__cmd(ord('c'), 2)
 
-        c_aux = Decode.unsigned_int(response[0:2], '<')     # CS0
-        c_wrk = Decode.unsigned_int(response[2:4], '<')     # CS1
+        count = Decode.unsigned_int(response[0:2], '<')
 
-        return c_wrk, c_aux
+        return count
 
 
     def read_conversion_voltage(self):
-        response = self.__cmd(ord('v'), 8)
+        response = self.__cmd(ord('v'), 4)
 
-        v_aux = Decode.float(response[0:4], '<')            # CS0
-        v_wrk = Decode.float(response[4:8], '<')            # CS1
+        v = Decode.float(response[0:4], '<')
 
-        return round(v_wrk, 5), round(v_aux, 5)
+        return round(v, 5)
 
 
     def version_ident(self):
