@@ -9,16 +9,17 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.isi.dsi_pid_t1 import DSIPIDT1
+from scs_dfe.gas.isi.pid_dsi_t1 import PIDDSIt1
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
+# TODO: test lamp on / off
 # --------------------------------------------------------------------------------------------------------------------
 
-controller = DSIPIDT1(DSIPIDT1.DEFAULT_ADDR)
+controller = PIDDSIt1(PIDDSIt1.DEFAULT_ADDR)
 print(controller)
 
 

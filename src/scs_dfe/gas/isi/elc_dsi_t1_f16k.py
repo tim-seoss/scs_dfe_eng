@@ -13,20 +13,22 @@ import time
 
 from scs_core.data.datum import Decode
 
+from scs_dfe.gas.isi.dsi import DSI
+
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DSIElcT1f16K(object):
+class ElcDSIt1f16K(DSI):
     """
-    South Coast Science DSI Electrochem Type 1 (16K) microcontroller
+    South Coast Science electrochemical DSI Type 1 (16K ROM) microcontroller
     """
 
     DEFAULT_ADDR =          0x30
 
-    CONVERSION_TIME =       0.1             # seconds
+    CONVERSION_TIME =       0.1                 # seconds
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -46,10 +48,14 @@ class DSIElcT1f16K(object):
         """
         Constructor
         """
-        self.__addr = addr
+        super().__init__(addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def power_sensor(self, on):
+        pass
+
 
     def start_conversion(self):
         response = self.__cmd(ord('s'), 1)
@@ -97,7 +103,7 @@ class DSIElcT1f16K(object):
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
-            I2C.Sensors.start_tx(self.__addr)
+            I2C.Sensors.start_tx(self.addr)
 
             response = I2C.Sensors.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
 
@@ -122,17 +128,10 @@ class DSIElcT1f16K(object):
 
     @property
     def __lock_name(self):
-        return "%s-0x%02x" % (self.__class__.__name__, self.__addr)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def addr(self):
-        return self.__addr
+        return "%s-0x%02x" % (self.__class__.__name__, self.addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DSIElcT1f16K:{addr:0x%0.2x}" % self.addr
+        return "ElcDSIt1f16K:{addr:0x%0.2x}" % self.addr
