@@ -3,7 +3,7 @@ Created on 10 Jul 2016
 
 @author: Bruno Beloff (bruno.beloff@southcoastscience.com)
 
-Integrated Electrochem Interface (ISI)
+Integrated Sensor Interface (ISI)
 
 Warning: If an Ox sensor is present, the NO2 sensor must have a lower sensor number (SN) than the Ox sensor,
 otherwise the NO2 cross-sensitivity concentration will not be found.
@@ -14,12 +14,13 @@ import time
 from scs_core.data.str import Str
 from scs_core.gas.isi.isi_datum import ISIDatum
 
-from scs_dfe.gas.isi.dsi_t1_f16k import DSIt1f16K
+
+from scs_dfe.gas.isi.elc_dsi_t1_f16k import ElcDSIt1f16K
+from scs_dfe.gas.isi.pid_dsi_t1 import PIDDSIt1
 from scs_dfe.gas.sensor_interface import SensorInterface
 
 
-# TODO: use config to specify which type of DSI is being used
-# TODO: ISI requires multiple DSIt1 instances to support multiple sensors
+# TODO: ISI requires multiple DSI instances to support multiple sensors
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -29,6 +30,16 @@ class ISI(SensorInterface):
     """
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def __dsi(cls, sensor):
+        class_name = sensor.__class__.__name__
+
+        if class_name == 'PID':
+            return PIDDSIt1(PIDDSIt1.DEFAULT_ADDR)
+
+        return ElcDSIt1f16K(ElcDSIt1f16K.DEFAULT_ADDR)
+
 
     @classmethod
     def __no2_sample(cls, samples):
@@ -45,8 +56,8 @@ class ISI(SensorInterface):
         """
         Constructor
         """
-        self.__sensors = sensors
-        self.__adc = DSIt1f16K(DSIt1f16K.DEFAULT_ADDR)
+        self.__sensors = sensors                                        # array of Sensor
+        self.__adc = self.__dsi(self.__sensors[0])                      # DSI
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -123,7 +134,10 @@ class ISI(SensorInterface):
 
     # noinspection PyUnusedLocal
     def sample_raw_wrk(self, sensor_index, gain_index):
-        return None
+        self.__adc.start_conversion()
+        time.sleep(self.__adc.CONVERSION_TIME)
+
+        return self.__adc.read_conversion_voltage()
 
 
     # ----------------------------------------------------------------------------------------------------------------

@@ -108,7 +108,7 @@ class PZHBMCUt2f1(PZHBMCU):
         self.__cmd(0, 'p', 'm', on)
 
 
-    def power_ndir(self, on):
+    def power_ndir(self, on):                   # WARNING: this crashes the MCU on versions prior to 002.001.008
         self.__cmd(0, 'p', 'n', on)
 
 

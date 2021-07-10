@@ -9,7 +9,7 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.isi.dsi_t1_f16k import DSIt1f16K
+from scs_dfe.gas.isi.elc_dsi_t1_f16k import ElcDSIt1f16K
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
@@ -20,7 +20,7 @@ from scs_host.sys.host import Host
 
 interface = None
 
-controller = DSIt1f16K(DSIt1f16K.DEFAULT_ADDR)
+controller = ElcDSIt1f16K(ElcDSIt1f16K.DEFAULT_ADDR)
 print(controller)
 
 
