@@ -13,20 +13,22 @@ import time
 
 from scs_core.data.datum import Decode
 
+from scs_dfe.gas.isi.dsi import DSI
+
 from scs_host.bus.i2c import I2C
 from scs_host.lock.lock import Lock
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class DSIt1(object):
+class ElcDSIt1(DSI):
     """
-    South Coast Science DSI t1 f1 microcontroller
+    South Coast Science electrochemical DSI Type 1 microcontroller
     """
 
     DEFAULT_ADDR =          0x30
 
-    CONVERSION_TIME =       0.1             # seconds
+    CONVERSION_TIME =       0.1                 # seconds
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -44,10 +46,14 @@ class DSIt1(object):
         """
         Constructor
         """
-        self.__addr = addr
+        super().__init__(addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
+
+    def power_sensor(self, on):
+        pass
+
 
     def start_conversion(self):
         response = self.__cmd(ord('s'), 1)
@@ -91,7 +97,7 @@ class DSIt1(object):
     def __cmd(self, cmd, response_size):
         try:
             self.obtain_lock()
-            I2C.Sensors.start_tx(self.__addr)
+            I2C.Sensors.start_tx(self.addr)
 
             response = I2C.Sensors.read_cmd(cmd, response_size, self.__SEND_WAIT_TIME)
 
@@ -107,7 +113,7 @@ class DSIt1(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def obtain_lock(self):
-        Lock.acquire(self.__lock_name, DSIt1.__LOCK_TIMEOUT)
+        Lock.acquire(self.__lock_name, self.__LOCK_TIMEOUT)
 
 
     def release_lock(self):
@@ -116,17 +122,10 @@ class DSIt1(object):
 
     @property
     def __lock_name(self):
-        return "%s-0x%02x" % (self.__class__.__name__, self.__addr)
-
-
-    # ----------------------------------------------------------------------------------------------------------------
-
-    @property
-    def addr(self):
-        return self.__addr
+        return "%s-0x%02x" % (self.__class__.__name__, self.addr)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "DSIt1:{addr:0x%0.2x}" % self.addr
+        return "ElcDSIt1:{addr:0x%0.2x}" % self.addr

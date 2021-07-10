@@ -9,16 +9,17 @@ Created on 27 May 2019
 import sys
 import time
 
-from scs_dfe.gas.isi.dsi_t1 import DSIt1
+from scs_dfe.gas.isi.pid_dsi_t1 import PIDDSIt1
 from scs_dfe.interface.interface_conf import InterfaceConf
 
 from scs_host.bus.i2c import I2C
 from scs_host.sys.host import Host
 
 
+# TODO: test lamp on / off
 # --------------------------------------------------------------------------------------------------------------------
 
-controller = DSIt1(DSIt1.DEFAULT_ADDR)
+controller = PIDDSIt1(PIDDSIt1.DEFAULT_ADDR)
 print(controller)
 
 
@@ -43,12 +44,14 @@ try:
 
     print("-")
 
+    # controller.power_sensor(True)
+
     for _ in range(5):
         controller.start_conversion()
         time.sleep(0.1)
 
-        c_wrk, c_aux = controller.read_conversion_voltage()
-        print('{"wrk": %f, "aux": %f}' % (c_wrk, c_aux))
+        count = controller.read_conversion_count()
+        print('{count: %d}' % count)
 
         sys.stdout.flush()
 
@@ -61,8 +64,8 @@ try:
 
         time.sleep(0.1)
 
-        v_wrk, v_aux = controller.read_conversion_voltage()
-        print('{"wrk": %0.5f, "aux": %0.5f}' % (v_wrk, v_aux))
+        v = controller.read_conversion_voltage()
+        print('{v: %0.5f}' % v)
 
         sys.stdout.flush()
 

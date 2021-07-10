@@ -6,9 +6,9 @@ Created on 13 Feb 2020
 
 from scs_core.climate.sht_datum import SHTDatum
 
+from scs_core.data.crc import modbus_crc
 from scs_core.data.datetime import LocalizedDatetime
 from scs_core.data.datum import Decode
-from scs_core.data.modbus_crc import ModbusCRC
 
 from scs_core.particulate.opc_datum import OPCDatum
 
@@ -34,7 +34,7 @@ class OPCN3Datum(OPCDatum):
 
         # checksum...
         required = Decode.unsigned_int(chars[84:86], '<')
-        actual = ModbusCRC.compute(chars[:84])
+        actual = modbus_crc(chars[:84])
 
         if required != actual:
             raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
