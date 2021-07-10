@@ -30,7 +30,7 @@ class MPL115A2(object):
     NXP MPL115A2 digital barometer - orchestration
     """
 
-    # ----------------------------------------------------------------------------------------------------------------
+    NAME =              'MPL'
 
     __CONVERSION_TIME = 0.005                                   # seconds
 

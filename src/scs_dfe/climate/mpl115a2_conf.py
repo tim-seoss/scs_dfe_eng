@@ -13,6 +13,7 @@ from scs_core.climate.mpl115a2_conf import MPL115A2Conf as AbstractMPL115A2Conf
 from scs_dfe.climate.mpl115a2 import MPL115A2
 
 
+# TODO: remove this class
 # --------------------------------------------------------------------------------------------------------------------
 
 class MPL115A2Conf(AbstractMPL115A2Conf):
