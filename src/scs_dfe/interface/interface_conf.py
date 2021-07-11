@@ -50,7 +50,7 @@ class InterfaceConf(AbstractInterfaceConf):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct_from_jdict(cls, jdict, shell=False):
+    def construct_from_jdict(cls, jdict, skeleton=False):
         if not jdict:
             return cls(cls.DEFAULT_MODEL) if shell else None
 
