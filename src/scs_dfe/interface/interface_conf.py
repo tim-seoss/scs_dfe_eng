@@ -52,7 +52,7 @@ class InterfaceConf(AbstractInterfaceConf):
     @classmethod
     def construct_from_jdict(cls, jdict, skeleton=False):
         if not jdict:
-            return cls(cls.DEFAULT_MODEL) if skeleton else None
+            return cls(cls.DEFAULT_MODEL)       # always return the default
 
         model = jdict.get('model')
 
