@@ -117,7 +117,7 @@ class PCA8574State(JSONReport):
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod
-    def construct_from_jdict(cls, jdict, default=True):
+    def construct_from_jdict(cls, jdict, skeleton=False):
         byte = int(jdict.get('byte') if jdict else '0xff', 16)
 
         return PCA8574State(byte)

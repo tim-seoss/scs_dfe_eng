@@ -63,7 +63,7 @@ class OPCFirmwareConf(JSONReport):
 
 
     @classmethod
-    def construct_from_jdict(cls, jdict, default=True):
+    def construct_from_jdict(cls, jdict, skeleton=False):
         if jdict is None:
             return None
 

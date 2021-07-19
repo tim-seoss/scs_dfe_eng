@@ -35,7 +35,7 @@ class SCD30Conf(AbstractSCD30Conf):
 
     @staticmethod
     def scd30():
-        baseline = SCD30Baseline.load(Host)
+        baseline = SCD30Baseline.load(Host, skeleton=True)
 
         return SCD30(baseline)
 
