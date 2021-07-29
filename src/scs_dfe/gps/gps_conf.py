@@ -53,10 +53,10 @@ class GPSConf(AbstractGPSConf):
             return None
 
         if self.model == PAM7Q.SOURCE:
-            return PAM7Q(interface, host.gps_device(), verbose=False)
+            return PAM7Q(interface, host.gps_device())
 
         elif self.model == SAMM8Q.SOURCE:
-            return SAMM8Q(interface, host.gps_device(), verbose=False)
+            return SAMM8Q(interface, host.gps_device())
 
         else:
             raise ValueError('unknown model: %s' % self.model)
