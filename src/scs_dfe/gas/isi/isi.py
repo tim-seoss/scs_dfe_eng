@@ -21,7 +21,6 @@ from scs_dfe.gas.sensor_interface import SensorInterface
 
 
 # TODO: ISI requires multiple DSI instances to support multiple sensors
-
 # --------------------------------------------------------------------------------------------------------------------
 
 class ISI(SensorInterface):
@@ -62,6 +61,10 @@ class ISI(SensorInterface):
 
     # ----------------------------------------------------------------------------------------------------------------
     # business methods...
+
+    def adc_versions(self):
+        return (self.__adc.version_ident(), )
+
 
     def sample(self, sht_datum):
         # gases...

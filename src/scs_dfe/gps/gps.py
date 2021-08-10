@@ -52,7 +52,7 @@ class GPS(ABC):
         """
         self.__interface = interface
 
-        self._serial = HostSerial(uart, self.baud_rate(), False)
+        self._serial = HostSerial(uart, self.baud_rate())
         self._verbose = verbose
 
 
