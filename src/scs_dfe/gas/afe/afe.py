@@ -63,6 +63,10 @@ class AFE(SensorInterface):
     # ----------------------------------------------------------------------------------------------------------------
     # business methods...
 
+    def adc_versions(self):
+        return ('ADS1115', )
+
+
     def sample(self, sht_datum=None):
         # temperature...
         pt1000_datum = self.sample_pt1000()

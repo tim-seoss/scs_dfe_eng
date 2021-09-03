@@ -20,6 +20,11 @@ class SensorInterface(ABC):
     # business methods...
 
     @abstractmethod
+    def adc_versions(self):
+        pass
+
+
+    @abstractmethod
     def sample(self, sht_datum):
         pass
 
