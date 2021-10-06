@@ -18,12 +18,12 @@ from scs_core.gas.afe.afe_datum import AFEDatum
 from scs_dfe.gas.afe.ads1115 import ADS1115
 from scs_dfe.gas.afe.mcp342x import MCP342X
 
-from scs_dfe.gas.sensor_interface import SensorInterface
+from scs_dfe.gas.gas_sensor_interface import GasSensorInterface
 
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class AFE(SensorInterface):
+class AFE(GasSensorInterface):
     """
     Alphasense Analogue Front-End (AFE) with Ti ADS1115 ADC (gases), Microchip Technology MCP342X ADC (Pt1000 temp)
     """
