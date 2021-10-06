@@ -86,7 +86,7 @@ print("-")
 
 # --------------------------------------------------------------------------------------------------------------------
 
-sample = Sample(tag, now, values={'afe': afe, 'pmx': pmx})
+sample = Sample(tag, now, 1, values={'afe': afe, 'pmx': pmx})
 print(sample)
 print("-")
 

@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 
 # --------------------------------------------------------------------------------------------------------------------
 
-class SensorInterface(ABC):
+class GasSensorInterface(ABC):
     """
     classdocs
     """

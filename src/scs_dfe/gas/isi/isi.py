@@ -15,15 +15,16 @@ from scs_core.data.str import Str
 from scs_core.gas.isi.isi_datum import ISIDatum
 
 
+from scs_dfe.gas.gas_sensor_interface import GasSensorInterface
+
 from scs_dfe.gas.isi.elc_dsi_t1_f16k import ElcDSIt1f16K
 from scs_dfe.gas.isi.pid_dsi_t1 import PIDDSIt1
-from scs_dfe.gas.sensor_interface import SensorInterface
 
 
 # TODO: ISI requires multiple DSI instances to support multiple sensors
 # --------------------------------------------------------------------------------------------------------------------
 
-class ISI(SensorInterface):
+class ISI(GasSensorInterface):
     """
     South Coast Science integrated sensor interface, using DSI gas sensors
     """
