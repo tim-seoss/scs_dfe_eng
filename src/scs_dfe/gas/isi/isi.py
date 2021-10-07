@@ -29,6 +29,12 @@ class ISI(GasSensorInterface):
     South Coast Science integrated sensor interface, using DSI gas sensors
     """
 
+    __SRC = 'SD1'               # SCS digital single interface with no temperature report
+
+    @classmethod
+    def src(cls):
+        return cls.__SRC
+
     # ----------------------------------------------------------------------------------------------------------------
 
     @classmethod

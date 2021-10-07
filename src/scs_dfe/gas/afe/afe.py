@@ -27,10 +27,17 @@ class AFE(GasSensorInterface):
     """
     Alphasense Analogue Front-End (AFE) with Ti ADS1115 ADC (gases), Microchip Technology MCP342X ADC (Pt1000 temp)
     """
+
+    __SRC = 'AFE'               # Alphasense analogue front end
+
+    @classmethod
+    def src(cls):
+        return cls.__SRC
+
+    # ----------------------------------------------------------------------------------------------------------------
+
     __RATE = ADS1115.RATE_8
-
     __MUX = (ADS1115.MUX_A3_GND, ADS1115.MUX_A2_GND, ADS1115.MUX_A1_GND, ADS1115.MUX_A0_GND)
-
 
     # ----------------------------------------------------------------------------------------------------------------
 
