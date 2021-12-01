@@ -33,8 +33,8 @@ class OPCN3Datum(OPCDatum):
             raise ValueError(chars)
 
         # checksum...
-        required = Decode.unsigned_int(chars[84:86], '<')
-        actual = modbus_crc(chars[:84])
+        actual = Decode.unsigned_int(chars[84:86], '<')
+        required = modbus_crc(chars[:84])
 
         if required != actual:
             raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
