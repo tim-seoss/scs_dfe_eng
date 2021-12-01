@@ -91,8 +91,8 @@ class SPS30(OPC):
             group = chars[i:i + 2]
             decoded.extend(group)
 
-            required_crc = cls.__crc(group)
             actual_crc = chars[i + 2]
+            required_crc = cls.__crc(group)
 
             if actual_crc != required_crc:
                 raise ValueError("bad checksum: required: 0x%02x actual: 0x%02x" % (required_crc, actual_crc))

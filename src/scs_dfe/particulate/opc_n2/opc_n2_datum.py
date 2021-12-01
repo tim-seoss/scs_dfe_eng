@@ -43,8 +43,8 @@ class OPCN2Datum(OPCDatum):
         period = Decode.float(chars[44:48], '<')
 
         # checksum...
-        required = Decode.unsigned_int(chars[48:50], '<')
-        actual = sum(bins) % 65536
+        actual = Decode.unsigned_int(chars[48:50], '<')
+        required = sum(bins) % 65536
 
         if required != actual:
             raise ValueError("bad checksum: required: 0x%04x actual: 0x%04x" % (required, actual))
