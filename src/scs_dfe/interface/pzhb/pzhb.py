@@ -45,8 +45,11 @@ class PZHB(Interface):
     def gas_sensors(self, host):
         # sensors...
         afe_calib = AFECalib.load(host)
-        afe_baseline = AFEBaseline.load(host, skeleton=True)
 
+        if afe_calib is None:
+            return None
+
+        afe_baseline = AFEBaseline.load(host, skeleton=True)
         sensors = afe_calib.sensors(afe_baseline)
 
         return ISI(sensors)
