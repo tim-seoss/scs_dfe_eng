@@ -75,8 +75,11 @@ class DFE(Interface):
 
         # sensors...
         afe_calib = AFECalib.load(host)
-        afe_baseline = AFEBaseline.load(host, skeleton=True)
 
+        if afe_calib is None:
+            return None
+
+        afe_baseline = AFEBaseline.load(host, skeleton=True)
         sensors = afe_calib.sensors(afe_baseline)
 
         return AFE(self, pt1000, sensors)
