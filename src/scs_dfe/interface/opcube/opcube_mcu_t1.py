@@ -123,8 +123,10 @@ class OPCubeMCUt1(OPCubeMCU):
 
 
     def power_opc(self, on):
-        self.__cmd(0, 'p', 'o', on)
+        if not on:                              # TODO: test only! remove as soon as possible!
+            return
 
+        self.__cmd(0, 'p', 'o', on)
 
     # ----------------------------------------------------------------------------------------------------------------
 
