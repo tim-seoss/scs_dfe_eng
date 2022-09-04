@@ -51,17 +51,17 @@ class DFE(Interface):
         """
         self.__pt1000_addr = pt1000_addr                                # int
 
-        self.__temp_sensor = None
-        self.__io = IO(self.__IO_ACTIVE_HIGH)
+        self._temp_sensor = None
+        self._io = IO(self.__IO_ACTIVE_HIGH)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def status(self):
-        if self.__temp_sensor is None:
-            self.__temp_sensor = MCP9808(True)
+        if self._temp_sensor is None:
+            self._temp_sensor = MCP9808(True)
 
-        return self.__temp_sensor.sample()
+        return self._temp_sensor.sample()
 
 
     def null_datum(self):
@@ -115,7 +115,7 @@ class DFE(Interface):
 
 
     def power_gps(self, on):
-        self.__io.gps_power = on
+        self._io.gps_power = on
 
 
     def power_modem(self, on):
@@ -123,11 +123,11 @@ class DFE(Interface):
 
 
     def power_ndir(self, on):
-        self.__io.ndir_power = on
+        self._io.ndir_power = on
 
 
     def power_opc(self, on):
-        self.__io.opc_power = on
+        self._io.opc_power = on
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class DFE(Interface):
     def __str__(self, *args, **kwargs):
         addr_str = self.__pt1000_addr_str(self.__pt1000_addr)
 
-        return "DFE:{pt1000_addr:%s, temp_sensor:%s, io:%s}" %  (addr_str, self.__temp_sensor, self.__io)
+        return "DFE:{pt1000_addr:%s, temp_sensor:%s, io:%s}" %  (addr_str, self._temp_sensor, self._io)
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -172,4 +172,4 @@ class ISIDFE(DFE):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "ISIDFE:{temp_sensor:%s, io:%s}" %  (self.__temp_sensor, self.__io)
+        return "ISIDFE:{temp_sensor:%s, io:%s}" %  (self._temp_sensor, self._io)
