@@ -14,7 +14,7 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-interface = DFE(None)
+interface = DFE()
 print(interface)
 print("-")
 
