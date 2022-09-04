@@ -13,6 +13,7 @@ from scs_core.gas.afe.pt1000_calib import Pt1000Calib
 from scs_dfe.gas.afe.afe import AFE
 from scs_dfe.gas.afe.mcp342x import MCP342X
 from scs_dfe.gas.afe.pt1000 import Pt1000
+from scs_dfe.gas.isi.isi import ISI
 
 from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.component.mcp9808 import MCP9808
@@ -44,7 +45,7 @@ class DFE(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, pt1000_addr):
+    def __init__(self, pt1000_addr=None):
         """
         Constructor
         """
@@ -135,3 +136,40 @@ class DFE(Interface):
         addr_str = self.__pt1000_addr_str(self.__pt1000_addr)
 
         return "DFE:{pt1000_addr:%s, temp_sensor:%s, io:%s}" %  (addr_str, self.__temp_sensor, self.__io)
+
+
+# --------------------------------------------------------------------------------------------------------------------
+
+class ISIDFE(DFE):
+    """
+    classdocs
+    """
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self):
+        """
+        Constructor
+        """
+        super().__init__()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def gas_sensors(self, host):
+        # sensors...
+        afe_calib = AFECalib.load(host)
+
+        if afe_calib is None:
+            return None
+
+        afe_baseline = AFEBaseline.load(host, skeleton=True)
+        sensors = afe_calib.sensors(afe_baseline)
+
+        return ISI(sensors)
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __str__(self, *args, **kwargs):
+        return "ISIDFE:{temp_sensor:%s, io:%s}" %  (self.__temp_sensor, self.__io)
