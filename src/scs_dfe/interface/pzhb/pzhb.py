@@ -42,7 +42,7 @@ class PZHB(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gas_sensors(self, host):
+    def gas_sensor_interface(self, host):
         # sensors...
         afe_calib = AFECalib.load(host)
 

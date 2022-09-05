@@ -6,9 +6,6 @@ Created on 16 Sep 2020
 An OPCube controller
 """
 
-from scs_core.gas.afe_baseline import AFEBaseline
-from scs_core.gas.afe_calib import AFECalib
-
 from scs_dfe.gas.isi.isi import ISI
 
 from scs_dfe.interface.interface import Interface
@@ -43,17 +40,8 @@ class OPCube(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gas_sensors(self, host):
-        # sensors...
-        afe_calib = AFECalib.load(host)
-
-        if afe_calib is None:
-            return None
-
-        afe_baseline = AFEBaseline.load(host, skeleton=True)
-        sensors = afe_calib.sensors(afe_baseline)
-
-        return ISI(sensors)
+    def gas_sensor_interface(self, host):
+        return ISI(self._gas_sensors(host))
 
 
     def pt1000(self, host):
