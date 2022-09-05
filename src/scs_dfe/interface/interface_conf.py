@@ -6,11 +6,11 @@ Created on 21 Jun 2017
 specifies which sensor interface board is present, if any
 
 example JSON:
-{"model": "DFE", "inf": "/home/scs/SCS/pipes/lambda-model-gas-s1.uds"}
+{"model": "DFE"}
 """
 
 from scs_core.interface.interface_conf import InterfaceConf as AbstractInterfaceConf
-from scs_dfe.interface.dfe.dfe import DFE
+from scs_dfe.interface.dfe.dfe import DFE, ISIDFE
 
 from scs_dfe.interface.opcube.opcube import OPCube
 from scs_dfe.interface.opcube.opcube_mcu_t1 import OPCubeMCUt1
@@ -32,10 +32,11 @@ class InterfaceConf(AbstractInterfaceConf):
     DEFAULT_MODEL = 'DFE'           # provides backwards compatibility
 
     __MODELS = [
-        'DFE',                      # Alpha Pi Eng, ignoring Pt1000
+        'DFE',                      # Praxis/Urban, ignoring Pt1000
+        'DFE/ISI',                  # Praxis/Urban, using DSI board
         'DFE/0x68',                 # Alpha Pi Eng, Alpha BB Eng without RTC
         'DFE/0x69',                 # Alpha BB Eng with RTC
-        'OPCubeT1',                 # OPCube controller (type 1)
+        'OPCubeT1',                 # Praxis/Cube controller (type 1)
         'PZHBt0',                   # Pi Zero Header Breakout (no microcontroller)
         'PZHBt1',                   # Pi Zero Header Breakout (type 1)
         'PZHBt2',                   # Pi Zero Header Breakout (type 2)
@@ -75,13 +76,16 @@ class InterfaceConf(AbstractInterfaceConf):
             return None
 
         if self.model == 'DFE':
-            return DFE(None)
+            return DFE()
+
+        if self.model == 'DFE/ISI':
+            return ISIDFE()
 
         if self.model == 'DFE/0x68':
-            return DFE(0x68)
+            return DFE(pt1000_addr=0x68)
 
         if self.model == 'DFE/0x69':
-            return DFE(0x69)
+            return DFE(pt1000_addr=0x69)
 
         if self.model == 'OPCubeT1':
             return OPCube(OPCubeMCUt1(OPCubeMCUt1.DEFAULT_ADDR))

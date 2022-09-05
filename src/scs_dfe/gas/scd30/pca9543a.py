@@ -59,4 +59,9 @@ class PCA9543A(object):
     # ----------------------------------------------------------------------------------------------------------------
 
     def __str__(self, *args, **kwargs):
-        return "PCA9543A:{addr:0x%02x, ctrl:0x%02x}" % (self.__addr, self.read())
+        try:
+            ctrl = "0x%02x" % self.read()
+        except OSError:
+            ctrl = None
+
+        return "PCA9543A:{addr:0x%02x, ctrl:%s}" % (self.__addr, ctrl)

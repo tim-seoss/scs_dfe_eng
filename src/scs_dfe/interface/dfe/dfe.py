@@ -6,13 +6,12 @@ Created on 20 Jun 2019
 A digital front-end (DFE) sensor interface
 """
 
-from scs_core.gas.afe_baseline import AFEBaseline
-from scs_core.gas.afe_calib import AFECalib
 from scs_core.gas.afe.pt1000_calib import Pt1000Calib
 
 from scs_dfe.gas.afe.afe import AFE
 from scs_dfe.gas.afe.mcp342x import MCP342X
 from scs_dfe.gas.afe.pt1000 import Pt1000
+from scs_dfe.gas.isi.isi import ISI
 
 from scs_dfe.interface.component.io import IO
 from scs_dfe.interface.component.mcp9808 import MCP9808
@@ -44,23 +43,23 @@ class DFE(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, pt1000_addr):
+    def __init__(self, pt1000_addr=None):
         """
         Constructor
         """
         self.__pt1000_addr = pt1000_addr                                # int
 
-        self.__temp_sensor = None
-        self.__io = IO(self.__IO_ACTIVE_HIGH)
+        self._temp_sensor = None
+        self._io = IO(self.__IO_ACTIVE_HIGH)
 
 
     # ----------------------------------------------------------------------------------------------------------------
 
     def status(self):
-        if self.__temp_sensor is None:
-            self.__temp_sensor = MCP9808(True)
+        if self._temp_sensor is None:
+            self._temp_sensor = MCP9808(True)
 
-        return self.__temp_sensor.sample()
+        return self._temp_sensor.sample()
 
 
     def null_datum(self):
@@ -69,17 +68,11 @@ class DFE(Interface):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def gas_sensors(self, host):
+    def gas_sensor_interface(self, host):
         # Pt1000...
         pt1000 = self.pt1000(host)
 
-        # sensors...
-        afe_calib = AFECalib.load(host)
-        afe_baseline = AFEBaseline.load(host, skeleton=True)
-
-        sensors = afe_calib.sensors(afe_baseline)
-
-        return AFE(self, pt1000, sensors)
+        return AFE(self, pt1000, self._gas_sensors(host))
 
 
     def pt1000(self, host):
@@ -111,7 +104,7 @@ class DFE(Interface):
 
 
     def power_gps(self, on):
-        self.__io.gps_power = on
+        self._io.gps_power = on
 
 
     def power_modem(self, on):
@@ -119,11 +112,11 @@ class DFE(Interface):
 
 
     def power_ndir(self, on):
-        self.__io.ndir_power = on
+        self._io.ndir_power = on
 
 
     def power_opc(self, on):
-        self.__io.opc_power = on
+        self._io.opc_power = on
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -131,4 +124,32 @@ class DFE(Interface):
     def __str__(self, *args, **kwargs):
         addr_str = self.__pt1000_addr_str(self.__pt1000_addr)
 
-        return "DFE:{pt1000_addr:%s, temp_sensor:%s, io:%s}" %  (addr_str, self.__temp_sensor, self.__io)
+        return "DFE:{pt1000_addr:%s, temp_sensor:%s, io:%s}" %  (addr_str, self._temp_sensor, self._io)
+
+
+# --------------------------------------------------------------------------------------------------------------------
+
+class ISIDFE(DFE):
+    """
+    classdocs
+    """
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __init__(self):
+        """
+        Constructor
+        """
+        super().__init__()
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def gas_sensor_interface(self, host):
+        return ISI(self._gas_sensors(host))
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    def __str__(self, *args, **kwargs):
+        return "ISIDFE:{temp_sensor:%s, io:%s}" %  (self._temp_sensor, self._io)

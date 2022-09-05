@@ -107,9 +107,6 @@ class OPCubeMCUt1(OPCubeMCU):
 
 
     def power_gases(self, on):                  # switches digital component only
-        # print("*** power_gases: %s" % on, file=sys.stderr)
-        # traceback.print_stack()
-
         self.__cmd(0, 'p', 'g', on)
 
 
@@ -126,8 +123,10 @@ class OPCubeMCUt1(OPCubeMCU):
 
 
     def power_opc(self, on):
-        self.__cmd(0, 'p', 'o', on)
+        # if not on:                              # TODO: test only! remove as soon as possible!
+        #     return
 
+        self.__cmd(0, 'p', 'o', on)
 
     # ----------------------------------------------------------------------------------------------------------------
 

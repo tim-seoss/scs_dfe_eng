@@ -14,15 +14,15 @@ from scs_host.sys.host import Host
 
 # --------------------------------------------------------------------------------------------------------------------
 
-interface = DFE(None)
+interface = DFE()
 print(interface)
 print("-")
 
 try:
     I2C.Sensors.open()
 
-    gas_sensors = interface.gas_sensors(Host)
-    print(gas_sensors)
+    gas_sensor_interface = interface.gas_sensor_interface(Host)
+    print(gas_sensor_interface)
     print("-")
 
     datum = interface.status()

@@ -37,8 +37,8 @@ class SCD30(object):
     MIN_FORCED_CALIB =                      400                     # ppm
     MAX_FORCED_CALIB =                      2000                    # ppm
 
-    MIN_PRESSURE =                          70.0                    # kPa
-    MAX_PRESSURE =                          140.0                   # kPa
+    MIN_PRESSURE =                          70.0                    # kPa   (use is suspended)
+    MAX_PRESSURE =                          140.0                   # kPa   (use is suspended)
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -135,8 +135,8 @@ class SCD30(object):
         if ambient_pressure_kpa is None:
             ambient_pressure_kpa = self.DEFAULT_AMBIENT_PRESSURE
 
-        if not (self.MIN_PRESSURE <= ambient_pressure_kpa <= self.MAX_PRESSURE):
-            raise ValueError(ambient_pressure_kpa)
+        # if not (self.MIN_PRESSURE <= ambient_pressure_kpa <= self.MAX_PRESSURE):
+        #     raise ValueError(ambient_pressure_kpa)
 
         ambient_pressure_mbar = int(ambient_pressure_kpa * 10.0)
 
