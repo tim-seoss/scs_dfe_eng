@@ -136,14 +136,19 @@ class ISI(GasSensorInterface):
     # electrochem callbacks...
 
     def sample_raw_wrk_aux(self, sensor_index, gain_index):
+        if sensor_index > 0:
+            raise KeyError(sensor_index)            # TODO: fix this for multiple DSIs
+
         self.__adc.start_conversion()
         time.sleep(self.__adc.CONVERSION_TIME)
 
         return self.__adc.read_conversion_voltage()
 
 
-    # noinspection PyUnusedLocal
     def sample_raw_wrk(self, sensor_index, gain_index):
+        if sensor_index > 0:
+            raise KeyError(sensor_index)            # TODO: fix this for multiple DSIs
+
         self.__adc.start_conversion()
         time.sleep(self.__adc.CONVERSION_TIME)
 

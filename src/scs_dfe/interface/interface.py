@@ -8,6 +8,9 @@ An abstract system interface
 
 from abc import ABC, abstractmethod
 
+from scs_core.gas.afe_baseline import AFEBaseline
+from scs_core.gas.afe_calib import AFECalib
+
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -15,6 +18,22 @@ class Interface(ABC):
     """
     classdocs
     """
+
+
+    # ----------------------------------------------------------------------------------------------------------------
+
+    @classmethod
+    def _gas_sensors(cls, host):
+        afe_calib = AFECalib.load(host)
+
+        if afe_calib is None:
+            return None
+
+        afe_baseline = AFEBaseline.load(host, skeleton=True)
+        sensors = afe_calib.sensors(afe_baseline)
+
+        return sensors
+
 
     # ----------------------------------------------------------------------------------------------------------------
 
@@ -31,7 +50,7 @@ class Interface(ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @abstractmethod
-    def gas_sensors(self, host):
+    def gas_sensor_interface(self, host):
         pass
 
 
