@@ -24,7 +24,6 @@ class Interface(ABC):
 
     @classmethod
     def _gas_sensors(cls, host):
-        # sensors...
         afe_calib = AFECalib.load(host)
 
         if afe_calib is None:
