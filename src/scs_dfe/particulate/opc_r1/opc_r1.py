@@ -306,7 +306,7 @@ class OPCR1(AlphasenseOPC):
 
 
     def __read_bytes(self, count):
-        return [self.__read_byte() for _ in range(count)]
+        return (self.__read_byte() for _ in range(count))
 
 
     def __read_byte(self):
