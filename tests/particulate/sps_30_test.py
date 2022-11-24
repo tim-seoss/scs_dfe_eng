@@ -11,9 +11,7 @@ import time
 
 from scs_core.data.json import JSONify
 from scs_core.sync.interval_timer import IntervalTimer
-
 from scs_dfe.particulate.sps_30.sps_30 import SPS30
-
 from scs_host.bus.i2c import I2C
 
 
@@ -83,7 +81,7 @@ except KeyboardInterrupt:
     print("sps_30_test: KeyboardInterrupt", file=sys.stderr)
 
 except ValueError as ex:
-    print(ex)
+    print(repr(ex))
 
 finally:
     I2C.Sensors.close()
