@@ -87,6 +87,9 @@ try:
 
     # ----------------------------------------------------------------------------------------------------------------
 
+except RuntimeError as ex:
+    logger.error(repr(ex))
+
 finally:
     if gps:
         gps.close()
