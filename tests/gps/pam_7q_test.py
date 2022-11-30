@@ -36,7 +36,7 @@ interface = conf.interface()
 print(interface)
 print("-")
 
-gps = PAM7Q(interface, Host.gps_device(), True)
+gps = PAM7Q(interface, Host.gps_device())
 print(gps)
 print("-")
 

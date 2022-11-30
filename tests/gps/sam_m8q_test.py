@@ -48,7 +48,7 @@ print(interface)
 print("-")
 
 
-gps = SAMM8Q(interface, Host.gps_device(), True)
+gps = SAMM8Q(interface, Host.gps_device())
 print(gps)
 print("-")
 
