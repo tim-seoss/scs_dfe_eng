@@ -17,7 +17,10 @@ $GLGSV,1,1,00*65
 $GNGLL,5049.38023,N,00007.38608,W,103953.00,A,D*6D
 """
 
+import logging
 import sys
+
+from scs_core.position.gps_datum import GPSDatum
 
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gpgll import GPGLL
@@ -26,7 +29,7 @@ from scs_core.position.nmea.gpgsv import GPGSV
 from scs_core.position.nmea.gprmc import GPRMC
 from scs_core.position.nmea.gpvtg import GPVTG
 
-from scs_core.position.gps_datum import GPSDatum
+from scs_core.sys.logging import Logging
 
 from scs_dfe.gps.sam_m8q import SAMM8Q
 from scs_dfe.interface.interface_conf import InterfaceConf
@@ -36,6 +39,9 @@ from scs_host.sys.host import Host
 
 
 # --------------------------------------------------------------------------------------------------------------------
+
+Logging.config('sam_m8q_test', level=logging.DEBUG)
+logger = Logging.getLogger()
 
 I2C.Utilities.open()
 
