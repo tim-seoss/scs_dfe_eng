@@ -41,10 +41,10 @@ Logging.config('ring_test')
 logger = Logging.getLogger()
 
 try:
-    I2C.Utilities.open()
-
     # ----------------------------------------------------------------------------------------------------------------
     # resources...
+
+    I2C.Utilities.open()
 
     # SHTConf...
     sht_conf = SHTConf.load(Host)
@@ -79,10 +79,10 @@ except OSError as ex:
 finally:
     I2C.Utilities.close()
 
+try:
     # ----------------------------------------------------------------------------------------------------------------
     # climate...
 
-try:
     I2C.Utilities.open()
 
     try:
@@ -109,13 +109,14 @@ except OSError as ex:
     exit(1)
 
 finally:
+    logger.error("-")
     I2C.Utilities.close()
 
 try:
-    I2C.Utilities.open()
-
     # ----------------------------------------------------------------------------------------------------------------
     # LED...
+
+    I2C.Utilities.open()
 
     led = IOLED()
 
@@ -136,4 +137,3 @@ except OSError as ex:
 
 finally:
     I2C.Utilities.close()
-

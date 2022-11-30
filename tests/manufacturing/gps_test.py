@@ -13,9 +13,9 @@ import time
 
 from scs_core.data.json import JSONify
 
+from scs_core.position.gps_datum import GPSDatum
 from scs_core.position.nmea.gpgga import GPGGA
 from scs_core.position.nmea.gprmc import GPRMC
-from scs_core.position.gps_datum import GPSDatum
 
 from scs_core.sys.logging import Logging
 
@@ -78,9 +78,6 @@ try:
     logger.info("RMC: %s" % rmc)
     logger.info("GGA: %s" % gga)
     logger.info("-")
-
-
-    # ----------------------------------------------------------------------------------------------------------------
 
     logger.info("RMC position: %s, %s  time: %s" % (rmc.loc.deg_lat(), rmc.loc.deg_lng(), rmc.datetime.as_iso8601()))
     logger.info("GGA position: %s, %s" % (gga.loc.deg_lat(), gga.loc.deg_lng()))
