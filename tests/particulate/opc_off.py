@@ -26,7 +26,7 @@ try:
     opc.power_off()
 
 except KeyboardInterrupt:
-    print("opc_off: KeyboardInterrupt", file=sys.stderr)
+    print(file=sys.stderr)
 
 finally:
     I2C.Sensors.close()

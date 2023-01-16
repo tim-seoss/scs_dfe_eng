@@ -75,7 +75,7 @@ try:
         sys.stdout.flush()
 
 except KeyboardInterrupt:
-    print("opc_n2_test: KeyboardInterrupt", file=sys.stderr)
+    print(file=sys.stderr)
 
 finally:
     print("off...")
