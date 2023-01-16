@@ -78,7 +78,7 @@ try:
 
 
 except KeyboardInterrupt:
-    print("sps_30_test: KeyboardInterrupt", file=sys.stderr)
+    print(file=sys.stderr)
 
 except ValueError as ex:
     print(repr(ex))
