@@ -186,6 +186,7 @@ class OPCN2(AlphasenseOPC):
     def commit_firmware_conf(self):
         raise NotImplementedError
 
+
     # ----------------------------------------------------------------------------------------------------------------
 
     def __wait_while_busy(self, specified_timeout=None):
@@ -228,7 +229,7 @@ class OPCN2(AlphasenseOPC):
 
 
     def __read_bytes(self, count):
-        return (self.__read_byte() for _ in range(count))
+        return [self.__read_byte() for _ in range(count)]
 
 
     def __read_byte(self):
