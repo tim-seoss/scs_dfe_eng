@@ -41,7 +41,9 @@ class OPCube(Interface):
     # ----------------------------------------------------------------------------------------------------------------
 
     def gas_sensor_interface(self, host):
-        return ISI(self._gas_sensors(host))
+        sensors = self._gas_sensors(host)
+
+        return None if sensors is None else ISI(sensors)
 
 
     def pt1000(self, host):
