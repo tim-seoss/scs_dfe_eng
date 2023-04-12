@@ -13,6 +13,7 @@ import time
 
 from scs_core.data.str import Str
 from scs_core.gas.afe.afe_datum import AFEDatum
+
 from scs_dfe.gas.afe.ads1115 import ADS1115
 from scs_dfe.gas.afe.mcp342x import MCP342X
 from scs_dfe.gas.gas_sensor_interface import GasSensorInterface
