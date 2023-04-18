@@ -57,12 +57,12 @@ class AFE(GasSensorInterface):
         self.__pt1000 = pt1000
         self.__sensors = sensors
 
-        self.__wrk_adc = ADS1115(ADS1115.ADDR_WRK, AFE.__RATE) if sensors else None
-        self.__aux_adc = ADS1115(ADS1115.ADDR_AUX, AFE.__RATE) if sensors else None
+        self.__wrk_adc = None if not sensors else ADS1115(ADS1115.ADDR_WRK, AFE.__RATE)
+        self.__aux_adc = None if not sensors else ADS1115(ADS1115.ADDR_AUX, AFE.__RATE) if sensors else None
 
         self.__pt1000_adc = None if pt1000 is None else interface.pt1000_adc(MCP342X.GAIN_4, MCP342X.RATE_15)
 
-        self.__tconv = self.__wrk_adc.tconv
+        self.__tconv = None if self.__wrk_adc is None else self.__wrk_adc.tconv
 
 
     # ----------------------------------------------------------------------------------------------------------------
