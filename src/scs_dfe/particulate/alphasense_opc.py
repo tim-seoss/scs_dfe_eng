@@ -37,13 +37,13 @@ class AlphasenseOPC(OPC, ABC):
 
     # ----------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, interface, spi_bus, spi_device, spi_mode, spi_clock):
+    def __init__(self, interface, spi_dev_path, spi_mode, spi_clock):
         """
         Constructor
         """
         super().__init__(interface)
 
-        self._spi = SPI(spi_bus, spi_device, spi_mode, spi_clock)
+        self._spi = SPI(spi_dev_path, spi_mode, spi_clock)
 
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -71,13 +71,8 @@ class AlphasenseOPC(OPC, ABC):
     # ----------------------------------------------------------------------------------------------------------------
 
     @property
-    def bus(self):
-        return self._spi.bus
-
-
-    @property
-    def address(self):
-        return self._spi.device
+    def dev_path(self):
+        return self._spi.dev_path
 
 
     # ----------------------------------------------------------------------------------------------------------------

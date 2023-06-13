@@ -167,13 +167,7 @@ class OPC(ABC):
 
     @property
     @abstractmethod
-    def bus(self):
-        pass
-
-
-    @property
-    @abstractmethod
-    def address(self):
+    def dev_path(self):
         pass
 
 
